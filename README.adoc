@@ -7,5 +7,4 @@
 * JAX-RS
 
 
-
 Obs: continua configurando aqui PJ
