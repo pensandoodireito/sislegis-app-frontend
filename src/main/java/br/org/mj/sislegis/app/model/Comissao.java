@@ -24,6 +24,9 @@ public class Comissao implements Serializable
    @Version
    @Column(name = "version")
    private int version;
+   
+   @Column(name = "sigla")
+   private String sigla;
 
    public Long getId()
    {
@@ -43,6 +46,14 @@ public class Comissao implements Serializable
    public void setVersion(final int version)
    {
       this.version = version;
+   }
+
+   public String getSigla() {
+	  return sigla;
+   }
+
+   public void setSigla(String sigla) {
+	  this.sigla = sigla;
    }
 
    @Override

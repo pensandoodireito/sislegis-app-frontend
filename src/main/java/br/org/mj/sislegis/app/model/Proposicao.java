@@ -35,10 +35,13 @@ public class Proposicao implements Serializable
    private Integer idProposicao;
 
    @Column
+   private String tipo;
+   
+   @Column
    private String ano;
 
    @Column
-   private Integer numero;
+   private String numero;
 
    @Column
    @Temporal(TemporalType.DATE)
@@ -113,6 +116,16 @@ public class Proposicao implements Serializable
    {
       this.idProposicao = idProposicao;
    }
+   
+   public String getTipo()
+   {
+      return tipo;
+   }
+
+   public void setTipo(String tipo)
+   {
+      this.tipo = tipo;
+   }
 
    public String getAno()
    {
@@ -124,12 +137,12 @@ public class Proposicao implements Serializable
       this.ano = ano;
    }
 
-   public Integer getNumero()
+   public String getNumero()
    {
       return numero;
    }
 
-   public void setNumero(Integer numero)
+   public void setNumero(String numero)
    {
       this.numero = numero;
    }
