@@ -1,0 +1,36 @@
+<header ng-switch on="$location.path().indexOf('/Reuniaos/new') > -1">
+    <h3 ng-switch-when="true">Create a new Reuniao</h3>
+    <h3 ng-switch-when="false">View or edit Reuniao</h3>
+</header>
+<form id="ReuniaoForm" name="ReuniaoForm" class="form-horizontal" role="form">
+    <div ng-show="displayError" class="alert alert-danger">
+        <strong>Error!</strong> Something broke. Retry, or cancel and start afresh.
+    </div>
+    
+
+    <div class="form-group" ng-class="{'has-error': ReuniaoForm.data.$invalid}">
+        <label for="data" class="col-sm-2 control-label">Data</label>
+        <div id="dataControls" class="col-sm-10">
+            <date id="data" name="data" ng-model="reuniao.data" placeholder="Enter the Reuniao Data"></date>
+            <span class="help-block error" ng-show="ReuniaoForm.data.$error.dateFormat">does not match format "yyyy-MM-dd" (e.g. 2013-12-01)</span>
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': ReuniaoForm.listaProposicao.$invalid}">
+        <label for="listaProposicao" class="col-sm-2 control-label">Lista Proposicao</label>
+        <div id="listaProposicaoControls" class="col-sm-10">
+            <select id="listaProposicao" name="listaProposicao" multiple class="form-control" ng-model="listaProposicaoSelection" ng-options="l.text for l in listaProposicaoSelectionList">
+                <option value="">Choose a Lista Proposicao</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button id="saveReuniao" name="saveReuniao" class="btn btn-primary" ng-disabled="isClean() || ReuniaoForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Save</button>
+            <button id="cancel" name="cancel" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancel</button>
+            <button id="deleteReuniao" name="deleteReuniao" class="btn btn-danger" ng-show="reuniao.id" ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+        </div>
+    </div>
+</form>

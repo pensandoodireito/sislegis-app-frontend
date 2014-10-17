@@ -1,4 +1,0 @@
-sislegis-app
-============
-
-Aplicação SISLEGIS
