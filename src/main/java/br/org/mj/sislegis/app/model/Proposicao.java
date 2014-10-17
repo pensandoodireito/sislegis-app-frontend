@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @XmlRootElement
-public class Proposicao implements Serializable
+public class Proposicao implements AbstractEntity
 {
 
    private static final long serialVersionUID = 7949894944142814382L;

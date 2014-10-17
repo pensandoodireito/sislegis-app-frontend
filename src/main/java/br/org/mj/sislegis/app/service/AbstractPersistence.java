@@ -1,16 +1,15 @@
 package br.org.mj.sislegis.app.service;
 
-import javax.persistence.EntityManager;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.core.Response;
+import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
 import br.org.mj.sislegis.app.model.AbstractEntity;
 
 
 
 
 /**
- * 
  * @author raphael.santos
  */
 public abstract class AbstractPersistence<T extends AbstractEntity, PK extends Number> {
@@ -40,7 +39,13 @@ public abstract class AbstractPersistence<T extends AbstractEntity, PK extends N
 
 	public void deleteById(Long id){
 		getEntityManager().remove(getEntityManager().find(entityClass, id));
-   }
+	}
+	
+	public List<T> listAll(){
+		CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+		cq.select(cq.from(entityClass));
+		return getEntityManager().createQuery(cq).getResultList();
+	}
 	
 	protected abstract EntityManager getEntityManager();
 	
