@@ -1,1 +1,11 @@
-== Aplicação SISLEGIS
+= Aplicação SISLEGIS
+
+== Tecnologias
+* JBoss Forge
+* AngularJS
+* Hibernate
+* JAX-RS
+
+
+
+Obs: continua configurando aqui PJ
