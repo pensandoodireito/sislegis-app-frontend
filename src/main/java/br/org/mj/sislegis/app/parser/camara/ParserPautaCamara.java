@@ -14,7 +14,7 @@ public class ParserPautaCamara {
 		ParserPautaCamara parser = new ParserPautaCamara();
 
 		// TODO: Informação que vem do filtro
-		Integer idComissao = 2003;
+		Long idComissao = 2003L;
 		String datIni = "20130603";
 		String datFim = "20130607";
 
@@ -22,7 +22,7 @@ public class ParserPautaCamara {
 				.toString());
 	}
 
-	public List<Proposicao> getProposicoes(Integer idComissao, String datIni,
+	public List<Proposicao> getProposicoes(Long idComissao, String datIni,
 			String datFim) throws Exception {
 		String wsURL = "http://www.camara.gov.br/SitCamaraWS/Orgaos.asmx/ObterPauta?IDOrgao="
 				+ idComissao + "&datIni=" + datIni + "&datFim=" + datFim;
@@ -30,7 +30,7 @@ public class ParserPautaCamara {
 
 		XStream xstream = new XStream();
 		xstream.ignoreUnknownElements();
-		
+
 		PautaBean pauta = new PautaBean();
 
 		config(xstream);

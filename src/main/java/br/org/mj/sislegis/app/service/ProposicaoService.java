@@ -10,5 +10,6 @@ import br.org.mj.sislegis.app.model.Proposicao;
 @Local
 public interface ProposicaoService extends Service<Proposicao> {
 
-	public List<Proposicao> buscarProposicoes(Map parametros);
+	public List<Proposicao> buscarProposicoesPautaCamara(Map parametros)throws Exception;
+	public List<Proposicao> buscarProposicoesPautaSenado(Map parametros)throws Exception;
 }

@@ -10,6 +10,7 @@ import br.org.mj.sislegis.app.model.Comissao;
 @Local
 public interface ComissaoService extends Service<Comissao> {
 	
-	public List<Comissao> listarComissoesCamara(Integer startPosition, Integer maxResult)throws Exception;
+	public List<Comissao> listarComissoesCamara()throws Exception;
+	public List<Comissao> listarComissoesSenado()throws Exception;
 
 }

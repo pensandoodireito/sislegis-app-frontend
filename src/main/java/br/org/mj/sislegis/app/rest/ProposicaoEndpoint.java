@@ -1,5 +1,6 @@
 package br.org.mj.sislegis.app.rest;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,18 +37,28 @@ public class ProposicaoEndpoint {
 
 	@GET
 	@Produces("application/json")
-	public List<Proposicao> buscarProposicoes(@QueryParam("texto")String texto, 
-			@QueryParam("origem")String origem,
-			@QueryParam("data")String data) {
+	public List<Proposicao> buscarProposicoesPautaCamara(@QueryParam("idComissao")Long idComissao, 
+			@QueryParam("data")Date data) throws Exception {
 		
 		Map<String, Object> parametros = new HashMap<String, Object>();
-		parametros.put("texto", texto);
+		parametros.put("idComissao", idComissao);
 		parametros.put("data", data);
-		parametros.put("origem", origem);
 		
-		return proposicaoService.buscarProposicoes(parametros);
+		return proposicaoService.buscarProposicoesPautaCamara(parametros);
 	}
 
+	@GET
+	@Produces("application/json")
+	public List<Proposicao> buscarProposicoesPautaSenado(@QueryParam("siglaComissao")String siglaComissao, 
+			@QueryParam("data")Date data) throws Exception {
+		
+		Map<String, Object> parametros = new HashMap<String, Object>();
+		parametros.put("siglaComissao", siglaComissao);
+		parametros.put("data", data);
+		
+		return proposicaoService.buscarProposicoesPautaSenado(parametros);
+	}
+	
 	@POST
 	@Consumes("application/json")
 	public Response create(Proposicao entity) {
