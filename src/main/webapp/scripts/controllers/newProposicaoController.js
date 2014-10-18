@@ -8,7 +8,7 @@ angular.module('sislegisapp').controller('NewProposicaoController', function ($s
         $scope.listaReuniaoSelectionList = $.map(items, function(item) {
             return ( {
                 value : item.id,
-                text : item.id
+                text : item.data
             });
         });
     });

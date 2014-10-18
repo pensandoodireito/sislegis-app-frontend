@@ -7,4 +7,25 @@
 * JAX-RS
 
 
+== Ferramentas
+* Maven
+* Bower
+* Grunt
+
+
+== Configurar front-end
+
+. Instalar o npm (https://www.npmjs.org/[Node Package Modules])
+
+ $ sudo yum install npm
+
+. Instalar o http://bower.io/[Bower]
+
+ $ sudo npm install -g bower
+
+. Instalar o http://gruntjs.com/[Grunt]
+
+ $ sudo npm install -g grunt-cli
+
+
 Obs: continua configurando aqui PJ
