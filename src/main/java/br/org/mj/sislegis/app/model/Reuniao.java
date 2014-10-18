@@ -1,25 +1,32 @@
 package br.org.mj.sislegis.app.model;
 
 import javax.persistence.Entity;
+
 import java.io.Serializable;
+
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
 import javax.persistence.Version;
+
 import java.lang.Override;
 import java.util.Date;
+
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import java.util.Set;
 import java.util.HashSet;
+
 import br.org.mj.sislegis.app.model.Proposicao;
+
 import javax.persistence.ManyToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @XmlRootElement
-public class Reuniao implements Serializable
+public class Reuniao implements AbstractEntity
 {
 
    private static final long serialVersionUID = -3187796439185752162L;

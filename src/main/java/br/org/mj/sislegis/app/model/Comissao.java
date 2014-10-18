@@ -1,18 +1,22 @@
 package br.org.mj.sislegis.app.model;
 
 import javax.persistence.Entity;
+
 import java.io.Serializable;
+
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
 import javax.persistence.Version;
+
 import java.lang.Override;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @XmlRootElement
-public class Comissao implements Serializable
+public class Comissao implements AbstractEntity
 {
 
    private static final long serialVersionUID = -9103342334603175569L;
@@ -24,6 +28,9 @@ public class Comissao implements Serializable
    @Version
    @Column(name = "version")
    private int version;
+   
+   @Column(name = "sigla")
+   private String sigla;
 
    public Long getId()
    {
@@ -43,6 +50,14 @@ public class Comissao implements Serializable
    public void setVersion(final int version)
    {
       this.version = version;
+   }
+
+   public String getSigla() {
+	  return sigla;
+   }
+
+   public void setSigla(String sigla) {
+	  this.sigla = sigla;
    }
 
    @Override
