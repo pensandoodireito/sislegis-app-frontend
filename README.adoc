@@ -23,9 +23,15 @@
 
  $ sudo npm install -g bower
 
-. Instalar o http://gruntjs.com/[Grunt]
+. Executar o Bower dentro de src/main/webapp/
 
- $ sudo npm install -g grunt-cli
+ $ bower install
+
+== TODO
+
+. Remover todos arquivos que nao iremos precisar para enxugar o projeto. (js, css, etc)
+
+. Consertar erro de relacionamento entre as entidades que usam ManyToMany.
 
 
 Obs: continua configurando aqui PJ
