@@ -1,6 +1,5 @@
 package br.org.mj.sislegis.app.model;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,6 +54,10 @@ public class Proposicao implements AbstractEntity
 
    @ManyToMany(mappedBy = "listaProposicao")
    private Set<Reuniao> listaReuniao = new HashSet<Reuniao>();
+   
+   public String getSigla(){
+	   return getTipo()+" "+getNumero()+"/"+getAno();
+   }
 
    public Long getId()
    {

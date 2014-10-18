@@ -26,8 +26,7 @@
     <div class="form-group" ng-class="{'has-error': ProposicaoForm.numero.$invalid}">
         <label for="numero" class="col-sm-2 control-label">Numero</label>
         <div id="numeroControls" class="col-sm-10">
-            <input id="numero" name="numero" type="number" class="form-control" ng-model="proposicao.numero" placeholder="Enter the Proposicao Numero"></input>
-            <span class="help-block error" ng-show="ProposicaoForm.numero.$error.number">not a number</span>
+            <input id="numero" name="numero" type="text" class="form-control" ng-model="proposicao.numero" placeholder="Enter the Proposicao Numero"></input>
         </div>
     </div>
 

@@ -1,0 +1,139 @@
+//Contains All variables
+//-----------------------
+
+//Layout
+//Side bar and logo width
+@left-side-width: 350px;
+
+// ---------------------------------------------------------------
+//Colors
+@light-blue: #3c8dbc; //Primary
+@red: #f56954;        //Danger
+@green: #00a65a;      //Success
+@aqua: #00c0ef;       //Info
+@yellow: #f39c12;     //Warning
+@blue: #0073b7;
+@navy:  #001F3F;
+@teal:  #39CCCC;
+@olive: #3D9970;
+@lime:  #01FF70;
+@orange:  #FF851B;
+@fuchsia: #F012BE;
+@purple:  #932ab6;
+@maroon:  #85144B;
+@black: #222;
+@gray: #eaeaec;
+
+// ---------------------------------------------------------------
+//Link colors (Aka: <a> tags)
+@link-color: @light-blue;
+@link-hover-color: lighten(@link-color, 15%);
+
+// ---------------------------------------------------------------
+//Body background (Affects main content background only)
+@body-bg: #f9f9f9;
+
+// ---------------------------------------------------------------
+//Table striped color
+@table-striped-color: #f3f4f5;
+
+// ---------------------------------------------------------------
+//Sidebar skins
+//skin blue (light) sidebar vars
+@sidebar-light-bg: #f4f4f4;
+@sidebar-light-hover-bg: #f9f9f9;
+@sidebar-light-font: #555;
+@sidebar-light-border: #dbdbdb;
+
+// ---------------------------------------------------------------
+//Screen widths - Same as bootstrap default settings
+@screen-xs: 480px;
+@screen-sm: 767px;
+@screen-md: 992px;
+@screen-lg: 1200px;
+//When the logo should go to the top of the screen
+@screen-header-collapse: 560px; 
+
+// ---------------------------------------------------------------
+//BOXES
+@box-border-color: #f4f4f4;
+@box-border-radius: 3px;
+@box-footer-bg: #fff;
+
+// ---------------------------------------------------------------
+//FORMS
+@input-radius: 0px;
+
+// ---------------------------------------------------------------
+//BUTTONS
+//Border radius for non flat buttons
+@btn-border-radius: 3px;
+
+// ---------------------------------------------------------------
+//CHAT widget
+@attachment-border-radius: 3px;
+
+// ---------------------------------------------------------------
+// Glyphicons do bootstrap
+@icon-font-path:          "../../../fonts/glyphicons/";
+
+// Caminhos para as fontes:
+@font-path-sislegis:  "../../../fonts/";
+
+// Caminhos para a fonte opensans:
+@font-path-opensans: "opensans/";
+
+// caminho das imagens
+@image-path-sislegis: "../../../images/";
+
+
+// ---------------------------------------------------------------
+// Fontes, tamanhos e tipos:
+
+@font-family-sans-serif:  "opensans","Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-family-serif:       Georgia, "Times New Roman", Times, serif;
+//** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
+@font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
+@font-family-base:        @font-family-sans-serif;
+
+@font-size-base:          12px;
+@font-size-large:         ceil((@font-size-base * 1.25)); // ~18px
+@font-size-small:         ceil((@font-size-base * 0.85)); // ~12px
+
+@font-size-h1:            floor((@font-size-base * 2.6)); // ~36px
+@font-size-h2:            floor((@font-size-base * 2.15)); // ~30px
+@font-size-h3:            ceil((@font-size-base * 1.7)); // ~24px
+@font-size-h4:            ceil((@font-size-base * 1.25)); // ~18px
+@font-size-h5:            @font-size-base;
+@font-size-h6:            ceil((@font-size-base * 0.85)); // ~12px
+
+//** Unit-less `line-height` for use in components like buttons.
+@line-height-base:        1.428571429; // 20/14
+
+// ---------------------------------------------------------------
+//** Computed "line-height" (`font-size` * `line-height`) for use with `margin`, `padding`, etc.
+@line-height-computed:    floor((@font-size-base * @line-height-base)); // ~20px
+
+// ---------------------------------------------------------------
+//** By default, this inherits from the `<body>`.
+@headings-font-family:    inherit;
+@headings-font-weight:    100;
+@headings-line-height:    1.1;
+@headings-color:          inherit; 
+
+
+// ---------------------------------------------------------------
+// Margins e paddings, abaixo segue o valor-base para todo o resto.
+@margin-xs:   5px;
+@margin-sm:  10px;
+@margin-md:  15px;
+@margin-lg:  30px;
+@margin-xl:  50px;
+
+// ---------------------------------------------------------------
+// Valores escalonáveis para os tamnhos de telas:
+
+@margin-scale-xs: 0.75;
+@margin-scale-sm: 0.75;
+@margin-scale-md: 1;
+@margin-scale-lg: 1.5;

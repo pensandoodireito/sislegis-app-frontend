@@ -28,11 +28,13 @@
             <thead>
                 <tr>
                     <th>Data</th>
+                    <th>Acoes</th>
                 </tr>
             </thead>
             <tbody id="search-results-body">
                 <tr ng-repeat="result in searchResults | searchFilter:searchResults | startFrom:currentPage*pageSize | limitTo:pageSize">
                     <td><a href="#/Reuniaos/edit/{{result.id}}">{{result.data| date:'mediumDate'}}</a></td>
+                    <td><a href="#/Reuniaos/gerenciar/{{result.id}}">Gerenciar</a></td>
                 </tr>
             </tbody>
         </table>
