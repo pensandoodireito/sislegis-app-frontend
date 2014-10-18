@@ -11,6 +11,7 @@ import com.thoughtworks.xstream.XStream;
 
 import br.org.mj.sislegis.app.model.Comissao;
 import br.org.mj.sislegis.app.parser.camara.ParserComissoesCamara;
+import br.org.mj.sislegis.app.parser.senado.ParserComissoesSenado;
 import br.org.mj.sislegis.app.service.AbstractPersistence;
 import br.org.mj.sislegis.app.service.ComissaoService;
 
@@ -22,20 +23,22 @@ implements ComissaoService {
     private EntityManager em;
 	
 	public ComissaoServiceEjb() {
-		// TODO Auto-generated constructor stub
 		super(Comissao.class);
 	}
 
 	@Override
 	protected EntityManager getEntityManager() {
-		// TODO Auto-generated method stub
 		return em;
 	}
 
 	@Override
-	public List<Comissao> listarComissoesCamara(Integer startPosition, Integer maxResult) throws Exception {
-		// TODO Auto-generated method stub
+	public List<Comissao> listarComissoesCamara() throws Exception {
 		return new ParserComissoesCamara().getComissoes();
+	}
+
+	@Override
+	public List<Comissao> listarComissoesSenado() throws Exception {
+		return new ParserComissoesSenado().getComissoes();
 	}
 
 
