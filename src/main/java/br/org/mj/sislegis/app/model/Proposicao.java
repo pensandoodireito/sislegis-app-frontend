@@ -17,199 +17,159 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @XmlRootElement
-public class Proposicao implements AbstractEntity
-{
+public class Proposicao implements AbstractEntity {
 
-   private static final long serialVersionUID = 7949894944142814382L;
+	private static final long serialVersionUID = 7949894944142814382L;
 
-   @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
-   @Column(name = "id", updatable = false, nullable = false)
-   private Long id;
-   @Version
-   @Column(name = "version")
-   private int version;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id", updatable = false, nullable = false)
+	private Long id;
 
-   @Column
-   private Integer idProposicao;
+	@Column
+	private Integer idProposicao;
 
-   @Column
-   private String tipo;
-   
-   @Column
-   private String ano;
+	@Column
+	private String tipo;
 
-   @Column
-   private String numero;
+	@Column
+	private String ano;
 
-   @Column
-   @Temporal(TemporalType.DATE)
-   private Date dataApresentacao;
+	@Column
+	private String numero;
 
-   @Column
-   private String ementa;
+	@Column
+	@Temporal(TemporalType.DATE)
+	private Date dataApresentacao;
 
-   @Column
-   private String autor;
+	@Column
+	private String ementa;
 
-   @ManyToMany(mappedBy = "listaProposicao")
-   private Set<Reuniao> listaReuniao = new HashSet<Reuniao>();
-   
-   public String getSigla(){
-	   return getTipo()+" "+getNumero()+"/"+getAno();
-   }
+	@Column
+	private String autor;
 
-   public Long getId()
-   {
-      return this.id;
-   }
+	@ManyToMany(mappedBy = "listaProposicao")
+	private Set<Reuniao> listaReuniao = new HashSet<Reuniao>();
 
-   public void setId(final Long id)
-   {
-      this.id = id;
-   }
+	public String getSigla() {
+		return getTipo() + " " + getNumero() + "/" + getAno();
+	}
 
-   public int getVersion()
-   {
-      return this.version;
-   }
+	public Long getId() {
+		return this.id;
+	}
 
-   public void setVersion(final int version)
-   {
-      this.version = version;
-   }
+	public void setId(final Long id) {
+		this.id = id;
+	}
 
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (this == obj)
-      {
-         return true;
-      }
-      if (!(obj instanceof Proposicao))
-      {
-         return false;
-      }
-      Proposicao other = (Proposicao) obj;
-      if (id != null)
-      {
-         if (!id.equals(other.id))
-         {
-            return false;
-         }
-      }
-      return true;
-   }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Proposicao)) {
+			return false;
+		}
+		Proposicao other = (Proposicao) obj;
+		if (id != null) {
+			if (!id.equals(other.id)) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-   @Override
-   public int hashCode()
-   {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((id == null) ? 0 : id.hashCode());
-      return result;
-   }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
 
-   public Integer getIdProposicao()
-   {
-      return idProposicao;
-   }
+	public Integer getIdProposicao() {
+		return idProposicao;
+	}
 
-   public void setIdProposicao(Integer idProposicao)
-   {
-      this.idProposicao = idProposicao;
-   }
-   
-   public String getTipo()
-   {
-      return tipo;
-   }
+	public void setIdProposicao(Integer idProposicao) {
+		this.idProposicao = idProposicao;
+	}
 
-   public void setTipo(String tipo)
-   {
-      this.tipo = tipo;
-   }
+	public String getTipo() {
+		return tipo;
+	}
 
-   public String getAno()
-   {
-      return ano;
-   }
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
 
-   public void setAno(String ano)
-   {
-      this.ano = ano;
-   }
+	public String getAno() {
+		return ano;
+	}
 
-   public String getNumero()
-   {
-      return numero;
-   }
+	public void setAno(String ano) {
+		this.ano = ano;
+	}
 
-   public void setNumero(String numero)
-   {
-      this.numero = numero;
-   }
+	public String getNumero() {
+		return numero;
+	}
 
-   public Date getDataApresentacao()
-   {
-      return dataApresentacao;
-   }
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
 
-   public void setDataApresentacao(Date dataApresentacao)
-   {
-      this.dataApresentacao = dataApresentacao;
-   }
+	public Date getDataApresentacao() {
+		return dataApresentacao;
+	}
 
-   public String getEmenta()
-   {
-      return ementa;
-   }
+	public void setDataApresentacao(Date dataApresentacao) {
+		this.dataApresentacao = dataApresentacao;
+	}
 
-   public void setEmenta(String ementa)
-   {
-      this.ementa = ementa;
-   }
+	public String getEmenta() {
+		return ementa;
+	}
 
-   public String getAutor()
-   {
-      return autor;
-   }
+	public void setEmenta(String ementa) {
+		this.ementa = ementa;
+	}
 
-   public void setAutor(String autor)
-   {
-      this.autor = autor;
-   }
+	public String getAutor() {
+		return autor;
+	}
 
-   @Override
-   public String toString()
-   {
-      String result = getClass().getSimpleName() + " ";
-      if (id != null)
-         result += "id: " + id;
-      result += ", version: " + version;
-      if (idProposicao != null)
-         result += ", idProposicao: " + idProposicao;
-      if (ano != null && !ano.trim().isEmpty())
-         result += ", ano: " + ano;
-      if (numero != null)
-         result += ", numero: " + numero;
-      if (dataApresentacao != null)
-         result += ", dataApresentacao: " + dataApresentacao;
-      if (ementa != null && !ementa.trim().isEmpty())
-         result += ", ementa: " + ementa;
-      if (autor != null && !autor.trim().isEmpty())
-         result += ", autor: " + autor;
-      return result;
-   }
+	public void setAutor(String autor) {
+		this.autor = autor;
+	}
 
-   public Set<Reuniao> getListaReuniao()
-   {
-      return listaReuniao;
-   }
+	@Override
+	public String toString() {
+		String result = getClass().getSimpleName() + " ";
+		if (id != null)
+			result += "id: " + id;
+		if (idProposicao != null)
+			result += ", idProposicao: " + idProposicao;
+		if (ano != null && !ano.trim().isEmpty())
+			result += ", ano: " + ano;
+		if (numero != null)
+			result += ", numero: " + numero;
+		if (dataApresentacao != null)
+			result += ", dataApresentacao: " + dataApresentacao;
+		if (ementa != null && !ementa.trim().isEmpty())
+			result += ", ementa: " + ementa;
+		if (autor != null && !autor.trim().isEmpty())
+			result += ", autor: " + autor;
+		return result;
+	}
 
-   public void setListaReuniao(Set<Reuniao> listaReuniao)
-   {
-      this.listaReuniao = listaReuniao;
-   }
+	public Set<Reuniao> getListaReuniao() {
+		return listaReuniao;
+	}
+
+	public void setListaReuniao(Set<Reuniao> listaReuniao) {
+		this.listaReuniao = listaReuniao;
+	}
 
 }

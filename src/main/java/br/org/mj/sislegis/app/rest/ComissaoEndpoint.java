@@ -55,12 +55,14 @@ public class ComissaoEndpoint {
 		return Response.ok(entity).build();
 	}
 	@GET
+	@Path("/comissoesCamara")
 	@Produces("application/json")
 	public List<Comissao> listarComissoesCamara() throws Exception {
 		return comissaoService.listarComissoesCamara();
 	}
 
 	@GET
+	@Path("/comissoesSenado")
 	@Produces("application/json")
 	public List<Comissao> listarComissoesSenado() throws Exception {
 		return comissaoService.listarComissoesCamara();
