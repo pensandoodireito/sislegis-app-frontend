@@ -27,13 +27,15 @@ angular.module('sislegisapp').controller('SearchComissaoController', function($s
     };
     
     
-    $scope.buscarProposicao = function(){
+    $scope.buscarProposicao = function() {
     	$http({
     		  method:'GET',
-    		  url : 'rest/proposicaos/buscarProposicoesPautaCamara',
-	      	    params: {'idComissao' : $scope.origem.id,
-	    	        'data': $scope.dataReuniao
-	    	    }
+    		  url : ($scope.origem.value == 'C') ? "rest/proposicaos/proposicoesPautaCamara" : "rest/proposicaos/proposicoesPautaSenado",
+	      	  params: {
+	      		  'idComissao' : $scope.comissao.id, // usado para a camara
+	      		  'siglaComissao' : $scope.comissao.sigla, // usado para o senado
+	    	      'data': $scope.dataReuniao.split("-").join("/")  //formata a data para o WS receber corretamente o parametro (caso do chrome)
+	    	  }
     		}).success(function (data) {
     			$scope.proposicoes = data;
 	    });
@@ -55,8 +57,7 @@ angular.module('sislegisapp').controller('SearchComissaoController', function($s
         }else if(origemSelecionada=='C'){
             $http.get('rest/comissaos/comissoesCamara').
             success(function(data) {
-                $scope.comissoes = data;
-            });        	
+                $scope.comissoes = data;            });        	
         }
         		
     };    

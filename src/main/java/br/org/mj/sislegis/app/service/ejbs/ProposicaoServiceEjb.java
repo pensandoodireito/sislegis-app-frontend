@@ -36,8 +36,8 @@ implements ProposicaoService{
 	@Override
 	public List<Proposicao> buscarProposicoesPautaCamara(Map parametros) throws Exception {
 		Long idComissao = (Long)parametros.get("idComissao");
-		String dataIni = Conversores.dateToString((Date)parametros.get("data"));
-		String dataFim = SislegisUtil.getDataAtual();
+		String dataIni = Conversores.dateToString((Date)parametros.get("data"), "yyyyMMdd");
+		String dataFim = Conversores.dateToString(new Date(), "yyyyMMdd");//SislegisUtil.getDataAtual();
 		
 		return new ParserPautaCamara().getProposicoes(idComissao, dataIni, dataFim);
 	}
@@ -45,8 +45,8 @@ implements ProposicaoService{
 	@Override
 	public List<Proposicao> buscarProposicoesPautaSenado(Map parametros) throws Exception {
 		String siglaComissao = (String)parametros.get("siglaComissao");
-		String data = Conversores.dateToString((Date)parametros.get("data"));
-		return new ParserPautaSenado().getProposicoes(siglaComissao, data);
+		String dataIni = Conversores.dateToString((Date)parametros.get("data"), "yyyyMMdd");
+		return new ParserPautaSenado().getProposicoes(siglaComissao, dataIni);
 	}
 
 	
