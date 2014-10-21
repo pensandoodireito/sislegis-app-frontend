@@ -84,7 +84,7 @@ public class ParserPautaSenado {
 }
 
 class ListaReunioes {
-	protected List<ReuniaoBean> reunioes;
+	protected List<ReuniaoBean> reunioes = new ArrayList<ReuniaoBean>();
 
 	protected List<ReuniaoBean> getReunioes() {
 		return reunioes;
@@ -93,7 +93,7 @@ class ListaReunioes {
 
 class ReuniaoBean {
 	protected Integer codigo;
-	protected List<ParteBean> partes;
+	protected List<ParteBean> partes = new ArrayList<ParteBean>();
 	
 	protected Integer getCodigo() {
 		return codigo;
@@ -120,7 +120,7 @@ class ReuniaoBean {
 }
 
 class ParteBean {
-	protected List<ItemBean> itens;
+	protected List<ItemBean> itens = new ArrayList<ItemBean>();
 
 	protected List<ItemBean> getItens() {
 		return itens;
