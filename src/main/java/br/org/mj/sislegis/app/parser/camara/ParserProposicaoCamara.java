@@ -10,11 +10,11 @@ public class ParserProposicaoCamara {
 	
 	public static void main(String[] args) throws Exception {
 		ParserProposicaoCamara parser = new ParserProposicaoCamara();
-		Integer idProposicao = 562039; // TODO: Informação que vem do filtro
+		Long idProposicao = 562039L; // TODO: Informação que vem do filtro
 		System.out.println(parser.getProposicao(idProposicao).toString());
 	}
 	
-	public Proposicao getProposicao(Integer idProposicao) throws Exception {
+	public Proposicao getProposicao(Long idProposicao) throws Exception {
 		String wsURL = "http://www.camara.gov.br/SitCamaraWS/Proposicoes.asmx/ObterProposicaoPorID?idProp="+idProposicao;
 		URL url = new URL(wsURL);
 		

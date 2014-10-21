@@ -11,11 +11,11 @@ public class ParserProposicaoSenado {
 	
 	public static void main(String[] args) throws Exception {
 		ParserProposicaoSenado parser = new ParserProposicaoSenado();
-		Integer idProposicao = 24257; // TODO: Informação que vem do filtro
+		Long idProposicao = 24257L; // TODO: Informação que vem do filtro
 		System.out.println(parser.getProposicao(idProposicao).toString());
 	}
 	
-	public Proposicao getProposicao(Integer idProposicao) throws Exception {
+	public Proposicao getProposicao(Long idProposicao) throws Exception {
 		String wsURL = "http://legis.senado.leg.br/dadosabertos/materia/"+idProposicao;
 		URL url = new URL(wsURL);
 		

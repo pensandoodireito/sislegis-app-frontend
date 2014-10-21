@@ -38,7 +38,15 @@ angular.module('sislegisapp').controller('SearchComissaoController', function($s
 	    	  }
     		}).success(function (data) {
     			$scope.proposicoes = data;
+    			$scope.comissaoProposicao = $scope.comissao.sigla;
 	    });
+    };
+    
+    $scope.detalharProposicao = function(){
+        $http.get('rest/comissaos/comissoesSenado').
+        success(function(data) {
+            $scope.proposicao = data;
+        });
     }
     
     
