@@ -36,7 +36,7 @@ public class ProposicaoEndpoint {
 	private Service<Proposicao> service;
 
 	@GET
-	@Path("/proposicoesPautaCamara")
+	@Path("/buscarProposicoesPautaCamara")
 	@Produces("application/json")
 	public List<Proposicao> buscarProposicoesPautaCamara(@QueryParam("idComissao")Long idComissao, 
 			@QueryParam("data")Date data) throws Exception {

@@ -17,12 +17,49 @@ angular.module('sislegisapp').controller('SearchComissaoController', function($s
         }
         return max;
     };
+    
+
 
     $scope.performSearch = function() {
         $scope.searchResults = ComissaoResource.queryAll(function(){
             $scope.numberOfPages();
         });
     };
+    
+    
+    $scope.buscarProposicao = function(){
+    	$http({
+    		  method:'GET',
+    		  url : 'rest/proposicaos/buscarProposicoesPautaCamara',
+	      	    params: {'idComissao' : $scope.origem.id,
+	    	        'data': $scope.dataReuniao
+	    	    }
+    		}).success(function (data) {
+    			$scope.proposicoes = data;
+	    });
+    }
+    
+    
+    $scope.origens = [
+        {value: 'C', displayName: 'Câmara'},
+        {value: 'S', displayName: 'Senado'}
+     ];  
+    
+    $scope.selectOrigemComissoes = function() {
+    	var origemSelecionada = $scope.origem.value;
+        if(origemSelecionada=='S'){
+            $http.get('rest/comissaos/comissoesSenado').
+            success(function(data) {
+                $scope.comissoes = data;
+            });
+        }else if(origemSelecionada=='C'){
+            $http.get('rest/comissaos/comissoesCamara').
+            success(function(data) {
+                $scope.comissoes = data;
+            });        	
+        }
+        		
+    };    
     
     $scope.previous = function() {
        if($scope.currentPage > 0) {
