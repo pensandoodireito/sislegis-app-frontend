@@ -1,5 +1,8 @@
 package br.org.mj.sislegis.app.rest;
 
+import java.io.Serializable;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -8,11 +11,21 @@ import javax.persistence.NoResultException;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
+
 import br.org.mj.sislegis.app.model.Reuniao;
+import br.org.mj.sislegis.app.util.Conversores;
 
 /**
  * 
@@ -52,6 +65,36 @@ public class ReuniaoEndpoint
    {
       TypedQuery<Reuniao> findByIdQuery = em.createQuery("SELECT DISTINCT r FROM Reuniao r LEFT JOIN FETCH r.listaProposicao WHERE r.id = :entityId ORDER BY r.id", Reuniao.class);
       findByIdQuery.setParameter("entityId", id);
+      Reuniao entity;
+      try
+      {
+         entity = findByIdQuery.getSingleResult();
+      }
+      catch (NoResultException nre)
+      {
+         entity = null;
+      }
+      if (entity == null)
+      {
+         return Response.status(Status.NOT_FOUND).build();
+      }
+      return Response.ok(entity).build();
+   }
+   
+   @GET
+   @Path("/findByData")
+   @Produces("application/json")
+   public Response findByData(@QueryParam("data")String data) {
+	  Date date = null; 
+	  try {
+		date = Conversores.stringToDate(data, "yyyyMMdd");
+	  } catch (ParseException e) {
+		e.printStackTrace();
+		return Response.status(Status.BAD_REQUEST).build();
+	  }
+	  System.out.println(date);
+      TypedQuery<Reuniao> findByIdQuery = em.createQuery("SELECT DISTINCT r FROM Reuniao r LEFT JOIN FETCH r.listaProposicao WHERE r.data = :data ORDER BY r.id", Reuniao.class);
+      findByIdQuery.setParameter("data", date);
       Reuniao entity;
       try
       {
