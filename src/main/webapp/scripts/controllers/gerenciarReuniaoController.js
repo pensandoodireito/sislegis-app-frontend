@@ -1,10 +1,32 @@
 
 
-angular.module('sislegisapp').controller('GerenciarReuniaoController', function($scope, $routeParams, $location, ReuniaoResource , ProposicaoResource) {
+angular.module('sislegisapp').controller('GerenciarReuniaoController', function($scope, $routeParams, $location, $modal, $log, ReuniaoResource, ProposicaoResource) {
     var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
     
+    $scope.items = ['item1', 'item2', 'item3'];
+    
+    $scope.open = function (size) {
+
+        var modalInstance = $modal.open({
+          templateUrl: 'modal-buscar-proposicao.html',
+          controller: 'ModalBuscarProposicaoController',
+          size: size,
+          resolve: {
+            items: function () {
+              return $scope.items;
+            }
+          }
+        });
+        
+        modalInstance.result.then(function (selectedItem) {
+            $scope.selected = selectedItem;
+          }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+          });
+    };
+        
     $scope.get = function() {
         var successCallback = function(data){
             self.original = data;
@@ -83,6 +105,5 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
     	$scope.selectedProposicao = ProposicaoResource.get({ProposicaoId: id});
     	
     }
-    
     $scope.get();
 });

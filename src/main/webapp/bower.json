@@ -1,17 +1,28 @@
 {
-  "name": "sislegis",
-  "version": "0.0.0",
-  "homepage": "https://github.com/guilhermehott/sislegis-app",
+  "name": "sislegisapp",
+  "version": "0.1.0",
+  "homepage": "https://github.com/pensandoodireito/sislegis-app",
   "authors": [
-    "Guilherme Hott <guilhermehott@gmail.com>"
+    "Guilherme Hott <guilhermehott@gmail.com>",
+    "Aman Rathie <amanrathie@gmail.com>",
+    "Raphael Augusto <raphaelbsb1@gmail.com>",
+    "Christiano Lins <christianolins@gmail.com>",
+    "Thiago Sousa <thiago.sousa.lopes@gmail.com>"
   ],
   "license": "MIT",
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components",
     "lib",
     "test",
     "tests"
+  ],
+  "dependencies": {
+    "angular": ">=1",
+    "angular-i18n": "~1.3.0",
+    "angular-bootstrap": "~0.11.2"
+  },
+  "moduleType": [
+    "node"
   ]
 }
