@@ -21,28 +21,22 @@
 			</div>
 
 
-			<div class="list-group rol-vert height-full" 
-				ng-repeat="item in reuniao.listaProposicao">
+			<div class="list-group rol-vert height-full" ng-repeat="item in reuniao.listaProposicao">
 
-				<a href="#" class="list-group-item">
+				<a href="javascript:;" class="list-group-item" ng-click="getProposicao(item.id)">
 					<button type="button" class="close">
 						<span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
 					</button>
-					<h4 class="list-group-item-heading" ng-model="item.sigla"></h4>
+					<h4 class="list-group-item-heading">{{item.sigla}}</h4>
 					<div class="list-group-item-text">
-						<p ng-model="item.ementa"></p>
+						<p>{{item.ementa}}</p>
 						<p class="fontsize-sm">
 							<strong>Autor:</strong>{{item.autor}}
-						</p>
-						<p class="fontsize-sm">
-							<strong>Situação:</strong>{{item.situacao}}
 						</p>
 					</div>
 				</a>
 			</div>
 			<!-- /item -->
-
-
 
 		</div>
 	</div>
@@ -57,8 +51,8 @@
 			</div>
 			<hr>
 			<div class="panel-body rol-vert height-full">
-				<h3 ng-model="proposicao.sigla"></h3>
-				<p class="divider-top" ng-model="proposicao.ementa"></p>
+				<h3>{{selectedProposicao.sigla}}</h3>
+				<p class="divider-top">{{selectedProposicao.ementa}}</p>
 			</div>
 		</div>
 	</div>
