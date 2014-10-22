@@ -71,7 +71,6 @@ implements ProposicaoService{
 
 	@Override
 	public Proposicao detalharProposicaoCamaraWS(Long id) throws Exception {
-		// TODO Auto-generated method stub
 		return parserProposicaoCamara.getProposicao(id);
 	}
 	
