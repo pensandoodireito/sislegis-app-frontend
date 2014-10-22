@@ -1,6 +1,7 @@
 angular.module('sislegisapp').controller('ModalBuscarProposicaoController', function($scope, $http, $routeParams, $location, $modalInstance, ProposicaoResource, dataReuniao, listaProposicaoSelecao) {
     var self = this;
     $scope.disabled = false;
+    $scope.showDetalhamentoProposicao =false;
     $scope.$location = $location;
     
     $scope.comissao = new Object();
@@ -26,20 +27,25 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
     
 
     $scope.buscarProposicao = function() {
+    	var curr_date = ('0' + ($scope.campoData.getDate())).slice(-2);
+        var curr_month = ('0' + ($scope.campoData.getMonth()+1)).slice(-2); // Adicionando o 0 manualmente quando o mes tem apenas 1 digito
+        var curr_year = $scope.campoData.getFullYear();
+        var formattedDate = curr_date + "/" + curr_month + "/" + curr_year;
     	$http({
     		  method:'GET',
     		  url : ($scope.origem.value == 'C') ? "rest/proposicaos/proposicoesPautaCamara" : "rest/proposicaos/proposicoesPautaSenado",
 	      	  params: {
 	      		  'idComissao' : $scope.comissao.id, // usado para a camara
 	      		  'siglaComissao' : $scope.comissao.sigla, // usado para o senado
-	    	      'data': $scope.dataReuniao.split("-").join("/")  //formata a data para o WS receber corretamente o parametro (caso do chrome)
+	    	      'data':formattedDate
 	    	  }
     		}).success(function (data) {
-      			console.log(data);
     			$scope.proposicoes = data;
     			$scope.comissaoProposicao = $scope.comissao.sigla;
 	    });
     };
+    
+
     
     $scope.detalharProposicao = function(idProposicao){
     	$http({
@@ -51,6 +57,7 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
   		}).success(function (data) {
   			console.log(data);
   			$scope.detalheProposicao = data;
+  			$scope.showDetalhamentoProposicao =true;
 	    });
     };
   
@@ -66,6 +73,8 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
     
     $scope.salvar = function() {
     	ProposicaoResource.save($scope.listaProposicaoSelecao);
+    	alert('Registros salvos com sucesso');
+    	$modalInstance.close($scope.listaProposicaoSelecao);
     };
     
     $scope.origens = [
@@ -87,4 +96,26 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
         }
         		
     }; 
+    
+
+    // CALENDARIO
+    $scope.setCalendar = function() {
+		$scope.openCalendar = function($event) {
+			$event.preventDefault();
+			$event.stopPropagation();
+	
+			$scope.opened = true;
+		};
+
+		$scope.dateOptions = {
+			formatYear : 'yy',
+			startingDay : 1
+		};
+
+		$scope.format = 'dd/MM/yyyy';
+    }
+    
+    $scope.setCalendar();   
+    
+    
 });

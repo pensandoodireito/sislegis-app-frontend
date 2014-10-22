@@ -3,7 +3,7 @@
 	<button type="button" class="close" data-dismiss="modal" ng-click="ok()">
 		<span aria-hidden="true">&times;</span> <span class="sr-only">Fechar</span>
 	</button>
-	<h4 class="modal-title" id="myModalLabel">Buscar / Adicionar proposições</h4>
+	<h4 class="modal-title" id="myModalLabel">Buscar / Adicionar proposições </h4>
 </div>
 <div class="modal-body">
 	<div class="row">
@@ -11,19 +11,16 @@
 			<form id="BuscarProposicaoForm" name="BuscarProposicaoForm" role="form">
 				<div class="form-inline" role="form">
 					<div class="input-group">
-						<input type="date" class="form-control" ng-model="dataReuniao" required>
-						<!-- 					<span class="input-group-addon"><i class="fa fa-calendar"></i> </span> -->
+						<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="campoData" date-type="string" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close" />
+							<span class="input-group-btn">
+				            	<button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+				            </span>
 					</div>
 					<div class="form-group">
 						<div class="input-group">
 							<select ng-change="selectOrigemComissoes()" ng-model="origem" ng-options="origem.displayName for origem in origens" class="form-control" required></select>
 						</div>
 					</div>
-					<!-- 				<div class="form-group"> -->
-					<!-- 					<div class="input-group"> -->
-					<!-- 						<input class="form-control" type="text" placeholder="Texto, título ou nome"> -->
-					<!-- 					</div> -->
-					<!-- 				</div> -->
 					<div class="form-group">
 						<div class="input-group">
 							<select ng-model="comissao" ng-options="comissao.sigla for comissao in comissoes" class="form-control" required></select>
@@ -42,7 +39,7 @@
 				<div class="panel-heading">
 					<div class="form-group">
 						<div class="input-group">
-							Proposições <input ng-model="buscaPalavraChave" placeholder="Filtrar por palavra chave" style="margin-left: 15px">
+							Proposições <input ng-show="proposicoes.length" ng-model="buscaPalavraChave" placeholder="Filtrar por palavra chave" style="margin-left: 15px">
 						</div>
 					</div>
 				</div>
@@ -66,6 +63,7 @@
 
 					</div>
 				</div>
+
 			</div>
 
 			<!-- /item -->
@@ -74,13 +72,13 @@
 			<div class="panel panel-default">
 				<div class="panel-heading clearfix">
 					Detalhamento
-					<button type="button" class="btn btn-success btn-xs pull-right" ng-click="adicionarProposicao(detalheProposicao)" title="Adicionar proposição">
+					<button type="button" class="btn btn-success btn-xs pull-right" ng-show="showDetalhamentoProposicao" ng-click="adicionarProposicao(detalheProposicao)" title="Adicionar proposição">
 						<i class="fa fa-plus"></i>
 					</button>
 				</div>
 
 				<div class="panel-body rol-vert line-9">
-					<div class="fontsize-sm">
+					<div class="fontsize-sm" ng-show="showDetalhamentoProposicao">
 
 						<h3>{{detalheProposicao.sigla}}</h3>
 						<p class="divider-top">{{detalheProposicao.ementa}}</p>
