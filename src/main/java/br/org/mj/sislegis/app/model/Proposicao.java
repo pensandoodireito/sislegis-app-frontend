@@ -47,6 +47,9 @@ public class Proposicao implements AbstractEntity {
 
 	@Column
 	private String autor;
+	
+	@Column
+	private char origem;
 
 	@ManyToMany(mappedBy = "listaProposicao")
 	private Set<Reuniao> listaReuniao = new HashSet<Reuniao>();
@@ -170,6 +173,14 @@ public class Proposicao implements AbstractEntity {
 
 	public void setListaReuniao(Set<Reuniao> listaReuniao) {
 		this.listaReuniao = listaReuniao;
+	}
+
+	public char getOrigem() {
+		return origem;
+	}
+
+	public void setOrigem(char origem) {
+		this.origem = origem;
 	}
 
 }
