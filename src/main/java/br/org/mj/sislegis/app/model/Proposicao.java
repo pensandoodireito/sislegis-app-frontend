@@ -1,18 +1,14 @@
 package br.org.mj.sislegis.app.model;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Version;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -50,9 +46,6 @@ public class Proposicao implements AbstractEntity {
 	
 	@Column
 	private char origem;
-
-	@ManyToMany(mappedBy = "listaProposicao")
-	private Set<Reuniao> listaReuniao = new HashSet<Reuniao>();
 
 	public String getSigla() {
 		return getTipo() + " " + getNumero() + "/" + getAno();
@@ -165,14 +158,6 @@ public class Proposicao implements AbstractEntity {
 		if (autor != null && !autor.trim().isEmpty())
 			result += ", autor: " + autor;
 		return result;
-	}
-
-	public Set<Reuniao> getListaReuniao() {
-		return listaReuniao;
-	}
-
-	public void setListaReuniao(Set<Reuniao> listaReuniao) {
-		this.listaReuniao = listaReuniao;
 	}
 
 	public char getOrigem() {
