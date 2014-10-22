@@ -1,6 +1,7 @@
 package br.org.mj.sislegis.app.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -46,9 +48,18 @@ public class Proposicao implements AbstractEntity {
 	
 	@Column
 	private char origem;
+	
+	@Transient
+	private String sigla;
 
 	public String getSigla() {
-		return getTipo() + " " + getNumero() + "/" + getAno();
+		if(Objects.isNull(sigla))
+			sigla = getTipo() + " " + getNumero() + "/" + getAno();
+		return sigla;
+	}
+
+	public void setSigla(String sigla) {
+		this.sigla = sigla;
 	}
 
 	public Long getId() {

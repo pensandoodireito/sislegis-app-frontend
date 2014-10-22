@@ -3,7 +3,6 @@
 angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap'])
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider
-//    .when('/modal-buscar-proposicao',{templateUrl:'views/modal-buscar-proposicao.html',controller:'ModalBuscarProposicaoController'})
     .when('/Reuniaos/gerenciar',{templateUrl:'views/Reuniao/gerenciar.html',controller:'GerenciarReuniaoController'})
     .when('/Reuniaos/gerenciar/:ReuniaoId',{templateUrl:'views/Reuniao/gerenciar.html',controller:'GerenciarReuniaoController'})
 
