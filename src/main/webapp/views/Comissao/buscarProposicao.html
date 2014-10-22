@@ -31,8 +31,8 @@
                     <tr ng-show="proposicoes.length">
 				        <td><input ng-model="buscaPalavraChave"  placeholder="Buscar"></td>
 				    </tr>	            
-	                <tr ng-repeat="result in proposicoes | filter:buscaPalavraChave" >
-	                    <td><b>{{comissaoProposicao}}</b><br/><a href="#" ng-click="detalharProposicao()">{{result.ementa}}</a></td>
+	                <tr ng-model="proposicao" ng-repeat="proposicao in proposicoes | filter:buscaPalavraChave" >
+	                    <td><b>{{comissaoProposicao}}</b><br/><a href="#/buscarProposicao" ng-click="detalharProposicao(proposicao.idProposicao)">{{proposicao.ementa}}</a></td>
 	                </tr>
                     <tr ng-hide="proposicoes.length">
 				        <td>Sem resultado </td>

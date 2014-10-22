@@ -42,12 +42,17 @@ angular.module('sislegisapp').controller('SearchComissaoController', function($s
 	    });
     };
     
-    $scope.detalharProposicao = function(){
-        $http.get('rest/comissaos/comissoesSenado').
-        success(function(data) {
-            $scope.proposicao = data;
-        });
-    }
+    $scope.detalharProposicao = function(idProposicao){
+    	$http({
+  		  method:'GET',
+  		  url : ($scope.origem.value == 'C') ? "rest/proposicaos/detalharProposicaoCamaraWS" : "rest/proposicaos/detalharProposicaoSenadoWS",
+	      	  params: {
+	      		  'id' : idProposicao // id proposicao
+	    	  }
+  		}).success(function (data) {
+  			$scope.detalheProposicao = data;
+	    });
+    };
     
     
     $scope.origens = [
