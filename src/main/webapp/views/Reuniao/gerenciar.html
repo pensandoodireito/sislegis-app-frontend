@@ -1,4 +1,4 @@
-<h3>Reuniao {{reuniao.data | date:'mediumDate'}}</h3>
+<h3>Gerenciar Reuniao</h3>
 
 <div class="row">
 	<div class="col-sm-4" id="listagem-proposicoes">
@@ -6,7 +6,7 @@
 			<div class="panel-heading clearfix">
 				<div class="pull-left">Proposições</div>
 				<div class="pull-right">
-					<button type="button" class="btn btn-primary btn-sm">Buscar proposições</button>
+					<button type="button" class="btn btn-primary btn-sm" ng-click="open()">Buscar proposições</button>
 				</div>
 			</div>
 
@@ -58,24 +58,120 @@
 	</div>
 </div>
 
-
-
-<!-- Modal -->
+<!-- Modal buscar proposição -->
 <div class="modal fade" id="modalProposicao" tabindex="-1" role="dialog" aria-labelledby="modalProposicao" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
+	<div class="modal-dialog modal-lg">
+		<script type="text/ng-template" id="modal-buscar-proposicao.html">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" ng-click="ok()">
+					<span aria-hidden="true">&times;</span> <span class="sr-only">Fechar</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">Buscar / Adicionar proposições</h4>
+			</div>
+			<div class="modal-body">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="form-inline" role="form">
+						<div class="input-group">
+							<input type="text" class="form-control"> <span class="input-group-addon"><i class="fa fa-calendar"></i> </span>
+						</div>
+						<div class="form-group">
+							<div class="input-group">
+								<input class="form-control" type="text" placeholder="Texto, título ou nome">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="input-group">
+								<select class="form-control">
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option>5</option>
+								</select>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-default">
+							<i class="fa fa-search"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="row mt-md">
+				<div class="col-sm-5">
+					<div class="panel panel-default">
+						<div class="panel-heading">Proposições</div>
+						<div class="line-9 rol-vert">
+							<div class="list-group">
+
+								<a href="#" class="list-group-item">
+									<button type="button" class="close">
+										<span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
+									</button>
+									<h4 class="list-group-item-heading">PRL 1 CCJC => PL 5542/2009</h4>
+									<div class="list-group-item-text clearfix">
+										<p>Reduz a zero as alíquotas da Contribuição para o PIS/PASEP, da COFINS, da Contribuição para o PIS/Pasep-Importação</p>
+										<p class="fontsize-sm">
+											<strong>Autor:</strong>TRIBUNAL SUPERIOR DO TRABALHO
+										</p>
+										<p class="fontsize-sm">
+											<strong>Situação:</strong>Transformado na Lei Ordinária
+										</p>
+										<div class="pull-right">
+											<button type="button" class="btn btn-success btn-xs" title="Adicionar proposição">
+												<i class="fa fa-plus"></i>
+											</button>
+										</div>
+									</div>
+								</a>
+
+							</div>
+						</div>
+					</div>
+
+					<!-- /item -->
+				</div>
+				<div class="col-sm-5">
+					<div class="panel panel-default">
+						<div class="panel-heading clearfix">
+							Detalhamento
+							<button type="button" class="btn btn-success btn-xs pull-right" title="Adicionar proposição">
+								<i class="fa fa-plus"></i>
+							</button>
+						</div>
+
+						<div class="panel-body rol-vert line-9">
+							<div class="fontsize-sm">
+
+								<h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h3>
+								<p class="divider-top"></p>
+							</div>
+						</div>
+					</div>
+					<!-- /item -->
+				</div>
+				<div class="col-sm-2">
+					<ul class="list-group fontsize-sm">
+						<li class="list-group-item">Selecionados:</li>
+						<li class="list-group-item">
+							<button type="button" class="close">
+								<span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
+							</button> 0000/000 - 0000
+						</li>
+
+						<li class="list-group-item">
+							<button type="button" class="close">
+								<span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
+							</button> 0000/000 - 0000
+						</li>
+
+
+					</ul>
+				</div>
+			</div>
+		</div>
+    </script>
+	</div>
 </div>
+<!-- /Modal  buscar proposição -->
 
