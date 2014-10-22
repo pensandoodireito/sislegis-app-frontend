@@ -101,6 +101,9 @@ angular.module('sislegisapp').controller('MontarReuniaoController', function($sc
         }
     });
     
-    
+    $scope.getProposicao = function(id) {
+    	$scope.selectedProposicao = ProposicaoResource.get({ProposicaoId: id});
+    	
+    }
     $scope.get();
 });

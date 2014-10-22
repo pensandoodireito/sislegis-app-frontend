@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -22,6 +23,12 @@ implements ComissaoService {
 	@PersistenceContext
     private EntityManager em;
 	
+	@Inject
+	private ParserComissoesSenado parserComissoesSenado;
+	
+	@Inject
+	private ParserComissoesCamara parserComissoesCamara;
+	
 	public ComissaoServiceEjb() {
 		super(Comissao.class);
 	}
@@ -33,12 +40,12 @@ implements ComissaoService {
 
 	@Override
 	public List<Comissao> listarComissoesCamara() throws Exception {
-		return new ParserComissoesCamara().getComissoes();
+		return parserComissoesCamara.getComissoes();
 	}
 
 	@Override
 	public List<Comissao> listarComissoesSenado() throws Exception {
-		return new ParserComissoesSenado().getComissoes();
+		return parserComissoesSenado.getComissoes();
 	}
 
 

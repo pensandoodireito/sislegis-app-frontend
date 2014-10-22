@@ -12,10 +12,12 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 import br.org.mj.sislegis.app.model.Comissao;
+import br.org.mj.sislegis.app.model.Proposicao;
 import br.org.mj.sislegis.app.service.ComissaoService;
 import br.org.mj.sislegis.app.service.Service;
 
@@ -65,8 +67,16 @@ public class ComissaoEndpoint {
 	@Path("/comissoesSenado")
 	@Produces("application/json")
 	public List<Comissao> listarComissoesSenado() throws Exception {
-		return comissaoService.listarComissoesCamara();
+		return comissaoService.listarComissoesSenado();
 	}
+	
+	@GET
+	@Produces("application/json")
+	public List<Comissao> listAll(@QueryParam("start") Integer startPosition,
+			@QueryParam("max") Integer maxResult) {
+		final List<Comissao> results = service.listAll();
+		return results;
+	}	
 
 	
 	@PUT

@@ -18,6 +18,10 @@ public class Conversores {
 	public static String dateToString(Date date) {
 		return getSimpleDateFormat("dd/MM/yyyy").format(date);
 	}
+	
+	public static String dateToString(Date date, String format) {
+		return getSimpleDateFormat(format).format(date);
+	}
 
 	/**
 	 * Converte uma String para Date conforme o <code>locale</code> configurado.

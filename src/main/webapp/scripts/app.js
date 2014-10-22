@@ -8,7 +8,7 @@ angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap'])
 
 	//TODO remover 
       .when('/',{templateUrl:'views/landing.html',controller:'LandingPageController'})
-      .when('/Comissaos',{templateUrl:'views/Comissao/search.html',controller:'SearchComissaoController'})
+      .when('/buscarProposicao',{templateUrl:'views/Comissao/buscarProposicao.html',controller:'SearchComissaoController'})
       .when('/Comissaos/new',{templateUrl:'views/Comissao/detail.html',controller:'NewComissaoController'})
       .when('/Comissaos/edit/:ComissaoId',{templateUrl:'views/Comissao/detail.html',controller:'EditComissaoController'})
       .when('/Proposicaos',{templateUrl:'views/Proposicao/search.html',controller:'SearchProposicaoController'})
@@ -17,7 +17,8 @@ angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap'])
       .when('/Reuniaos',{templateUrl:'views/Reuniao/search.html',controller:'SearchReuniaoController'})
       .when('/Reuniaos/new',{templateUrl:'views/Reuniao/detail.html',controller:'NewReuniaoController'})
       .when('/Reuniaos/edit/:ReuniaoId',{templateUrl:'views/Reuniao/detail.html',controller:'EditReuniaoController'})
-      
+      .when('/Reuniaos/gerenciar',{templateUrl:'views/Reuniao/gerenciar.html',controller:'GerenciarReuniaoController'})
+      .when('/Reuniaos/gerenciar/:ReuniaoId',{templateUrl:'views/Reuniao/gerenciar.html',controller:'GerenciarReuniaoController'})
       .otherwise({
         redirectTo: '/'
       });

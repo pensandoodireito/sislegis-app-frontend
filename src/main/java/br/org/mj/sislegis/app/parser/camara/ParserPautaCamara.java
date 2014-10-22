@@ -65,7 +65,7 @@ class PautaBean {
 	protected String dataInicial;
 	protected String dataFinal;
 
-	protected List<ReuniaoBean> reunioes;
+	protected List<ReuniaoBean> reunioes = new ArrayList<ReuniaoBean>();
 
 	protected List<ReuniaoBean> getReunioes() {
 		return reunioes;
@@ -73,7 +73,7 @@ class PautaBean {
 }
 
 class ReuniaoBean {
-	protected List<Proposicao> proposicoes;
+	protected List<Proposicao> proposicoes = new ArrayList<Proposicao>();
 
 	protected List<Proposicao> getProposicoes() {
 		return proposicoes;

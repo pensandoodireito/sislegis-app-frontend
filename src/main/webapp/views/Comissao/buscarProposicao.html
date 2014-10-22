@@ -1,0 +1,62 @@
+<div class="panel-heading clearfix">
+	<div class="pull-left">Buscar / Adicionar Proposições</div>
+</div>
+
+   
+<div class="form-group">
+	Data: 
+		<input type="date" id="idData" name="dataReuniao" ng-model="dataReuniao" placeholder="dd/mm/yyyy" required />
+	Origem:
+ 		<select ng-change="selectOrigemComissoes()" ng-model="origem" ng-options="origem.displayName for origem in origens"></select>				
+	Comissões:
+		<select ng-model="comissao" ng-options="comissao.sigla for comissao in comissoes"></select>	      
+  
+     	<a id="Buscar" name="Buscar" class="btn btn-primary" ng-click="buscarProposicao()"><span class="glyphicon glyphicon-search"></span> Buscar</a>
+
+</div>
+
+<div class="row">
+	<div class="col-sm-4" id="listagem-proposicoes">
+		<div class="list-group rol-vert height-full">
+	        <table class="table table-responsive table-bordered table-striped clearfix">
+	            <thead>
+	                <tr>
+	                    <th>
+	                    	Proposições
+	                    </th>
+	                </tr> 
+	                </div>               
+	            </thead>
+	            <tbody id="search-results-body">
+                    <tr ng-show="proposicoes.length">
+				        <td><input ng-model="buscaPalavraChave"  placeholder="Buscar"></td>
+				    </tr>	            
+	                <tr ng-repeat="result in proposicoes | filter:buscaPalavraChave" >
+	                    <td><b>{{comissaoProposicao}}</b><br/><a href="#" ng-click="detalharProposicao()">{{result.ementa}}</a></td>
+	                </tr>
+                    <tr ng-hide="proposicoes.length">
+				        <td>Sem resultado </td>
+				    </tr>
+	            </tbody>
+	        </table>
+		</div>
+	</div>
+	<div class="col-sm-8">
+		<div class="panel panel-default ">
+			<div class="panel-heading">Detalhamento</div>
+			<div class="pt-sm pb-sm">
+				<div class="col-xs-5">
+					
+				</div>
+				<div class="col-xs-5"></div>
+			</div>
+			<hr>
+			<div class="panel-body rol-vert height-full">
+				<h3 ng-model="proposicao.sigla"></h3>
+				<p class="divider-top" ng-model="proposicao.ementa"></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+

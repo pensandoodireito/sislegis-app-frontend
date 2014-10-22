@@ -45,7 +45,7 @@ public class ProposicaoEndpoint {
 		parametros.put("idComissao", idComissao);
 		parametros.put("data", data);
 		
-		return proposicaoService.buscarProposicoesPautaCamara(parametros);
+		return proposicaoService.buscarProposicoesPautaCamaraWS(parametros);
 	}
 
 	@GET
@@ -58,8 +58,16 @@ public class ProposicaoEndpoint {
 		parametros.put("siglaComissao", siglaComissao);
 		parametros.put("data", data);
 		
-		return proposicaoService.buscarProposicoesPautaSenado(parametros);
+		return proposicaoService.buscarProposicoesPautaSenadoWS(parametros);
 	}
+
+	@GET
+	@Path("/proposicoesPautaSenado/{id:[0-9][0-9]*}")
+	@Produces("application/json")
+	public Proposicao detalharProposicaoCamaraWS(@PathParam("id") Long id) throws Exception {
+		return proposicaoService.detalharProposicaoCamaraWS(id);
+	}
+	
 	
 	@POST
 	@Consumes("application/json")
