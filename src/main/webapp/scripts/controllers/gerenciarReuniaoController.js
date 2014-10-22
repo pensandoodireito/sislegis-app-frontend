@@ -30,7 +30,7 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
           });
     };
         
-    $scope.get = function() {
+    /*$scope.get = function() {
         var successCallback = function(data){
             self.original = data;
             $scope.reuniao = new ReuniaoResource(self.original);
@@ -60,7 +60,7 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
             $location.path("/Reuniaos");
         };
         ReuniaoResource.get({ReuniaoId:$routeParams.ReuniaoId}, successCallback, errorCallback);
-    };
+    };*/
 
     $scope.isClean = function() {
         return angular.equals(self.original, $scope.reuniao);
@@ -127,17 +127,13 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
 	    })
 	    .error(function (data) {
 			alert('Nenhuma reunião encontrada na data');
-		});	
+		});
     });
     
-    $scope.get();
+   // $scope.get();
     
     // CALENDARIO
     $scope.setCalendar = function() {
-		$scope.clear = function() {
-			$scope.reuniao.data = null;
-		};
-
 		$scope.openCalendar = function($event) {
 			$event.preventDefault();
 			$event.stopPropagation();
