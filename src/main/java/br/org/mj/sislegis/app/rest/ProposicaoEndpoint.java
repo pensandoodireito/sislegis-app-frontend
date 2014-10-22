@@ -62,12 +62,18 @@ public class ProposicaoEndpoint {
 	}
 
 	@GET
-	@Path("/proposicoesPautaSenado/{id:[0-9][0-9]*}")
+	@Path("/detalharProposicaoCamaraWS")
 	@Produces("application/json")
-	public Proposicao detalharProposicaoCamaraWS(@PathParam("id") Long id) throws Exception {
+	public Proposicao detalharProposicaoCamaraWS(@QueryParam("id") Long id) throws Exception {
 		return proposicaoService.detalharProposicaoCamaraWS(id);
 	}
-	
+
+	@GET
+	@Path("/detalharProposicaoSenadoWS")
+	@Produces("application/json")
+	public Proposicao detalharProposicaoSenadoWS(@QueryParam("id") Long id) throws Exception {
+		return proposicaoService.detalharProposicaoSenadoWS(id);
+	}
 	
 	@POST
 	@Consumes("application/json")
