@@ -12,15 +12,17 @@
 
 			<div class="row pt-sm pb-sm">
 				<div class="col-xs-5 text-right">Data para a reunião:</div>
-
-				<div class="col-xs-5 datas-picker">
-					<div class="input-group date">
-						<input type="date" class="form-control" ng-model="reuniao.data"> 
-<!-- 						<span class="input-group-addon"><i class="fa fa-calendar"></i> </span> -->
-					</div>
-				</div>
+				    <div class="row">
+				        <div class="col-md-6">
+				            <p class="input-group">
+				              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="reuniao.data" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close" />
+				              <span class="input-group-btn">
+				                <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+				              </span>
+				            </p>
+				        </div>
+				    </div>
 			</div>
-
 
 			<div class="list-group rol-vert height-full" ng-repeat="item in reuniao.listaProposicao">
 
