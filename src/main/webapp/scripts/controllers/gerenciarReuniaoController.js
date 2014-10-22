@@ -1,6 +1,6 @@
 
 
-angular.module('sislegisapp').controller('GerenciarReuniaoController', function($scope, $routeParams, $location, $modal, $log, ReuniaoResource, ProposicaoResource) {
+angular.module('sislegisapp').controller('GerenciarReuniaoController', function($scope, $http, $routeParams, $location, $modal, $log, ReuniaoResource, ProposicaoResource) {
     var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
@@ -30,7 +30,7 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
           });
     };
         
-    $scope.get = function() {
+    /*$scope.get = function() {
         var successCallback = function(data){
             self.original = data;
             $scope.reuniao = new ReuniaoResource(self.original);
@@ -60,7 +60,7 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
             $location.path("/Reuniaos");
         };
         ReuniaoResource.get({ReuniaoId:$routeParams.ReuniaoId}, successCallback, errorCallback);
-    };
+    };*/
 
     $scope.isClean = function() {
         return angular.equals(self.original, $scope.reuniao);
@@ -108,5 +108,46 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
     	$scope.selectedProposicao = ProposicaoResource.get({ProposicaoId: id});
     	
     }
-    $scope.get();
+    
+    $scope.$watch("reuniao.data", function() {
+    	var curr_date = $scope.reuniao.data.getDate();
+        var curr_month = ('0' + ($scope.reuniao.data.getMonth()+1)).slice(-2); // Adicionando o 0 manualmente quando o mes tem apenas 1 digito
+        var curr_year = $scope.reuniao.data.getFullYear();
+        var formattedDate = curr_year + "" + curr_month + "" + curr_date;
+
+		$http({
+		  method:'GET',
+		  url : "rest/reuniaos/findByData",
+	  	  params: {
+	  		  'data' : formattedDate // id proposicao
+		  }
+		})
+		.success(function (data) {
+		    $scope.reuniao.listaProposicao = data.listaProposicao;
+	    })
+	    .error(function (data) {
+			alert('Nenhuma reunião encontrada na data');
+		});
+    });
+    
+   // $scope.get();
+    
+    // CALENDARIO
+    $scope.setCalendar = function() {
+		$scope.openCalendar = function($event) {
+			$event.preventDefault();
+			$event.stopPropagation();
+	
+			$scope.opened = true;
+		};
+
+		$scope.dateOptions = {
+			formatYear : 'yy',
+			startingDay : 1
+		};
+
+		$scope.format = 'dd/MM/yyyy';
+    }
+    
+    $scope.setCalendar();
 });

@@ -36,6 +36,10 @@ public class Conversores {
 	public static Date stringToDate(String string) throws ParseException {
 		return getSimpleDateFormat("dd/MM/yyyy").parse(string);
 	}
+	
+	public static Date stringToDate(String string, String format) throws ParseException {
+		return getSimpleDateFormat(format).parse(string);
+	}
 
 	public static SimpleDateFormat getSimpleDateFormat(String mascara) {
 		SimpleDateFormat format = new SimpleDateFormat(mascara);
