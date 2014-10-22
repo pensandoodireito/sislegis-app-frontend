@@ -27,9 +27,7 @@ public class Reuniao implements AbstractEntity
    @GeneratedValue(strategy = GenerationType.AUTO)
    @Column(name = "id", updatable = false, nullable = false)
    private Long id;
-   @Version
-   @Column(name = "version")
-   private int version;
+
 
    @Column
    @Temporal(TemporalType.DATE)
@@ -48,15 +46,6 @@ public class Reuniao implements AbstractEntity
       this.id = id;
    }
 
-   public int getVersion()
-   {
-      return this.version;
-   }
-
-   public void setVersion(final int version)
-   {
-      this.version = version;
-   }
 
    @Override
    public boolean equals(Object obj)
@@ -105,7 +94,6 @@ public class Reuniao implements AbstractEntity
       String result = getClass().getSimpleName() + " ";
       if (id != null)
          result += "id: " + id;
-      result += ", version: " + version;
       if (data != null)
          result += ", data: " + data;
       return result;

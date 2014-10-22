@@ -57,7 +57,7 @@
 							<div class="list-group-item-text clearfix">
 								<p>{{proposicao.ementa}}</p>
 								<div class="pull-right">
-									<button type="button" class="btn btn-success btn-xs" title="Adicionar proposição">
+									<button type="button" class="btn btn-success btn-xs" ng-click="adicionarProposicao(proposicao)" title="Adicionar proposição">
 										<i class="fa fa-plus"></i>
 									</button>
 								</div>
@@ -74,7 +74,7 @@
 			<div class="panel panel-default">
 				<div class="panel-heading clearfix">
 					Detalhamento
-					<button type="button" class="btn btn-success btn-xs pull-right" title="Adicionar proposição">
+					<button type="button" class="btn btn-success btn-xs pull-right" ng-click="adicionarProposicao(detalheProposicao)" title="Adicionar proposição">
 						<i class="fa fa-plus"></i>
 					</button>
 				</div>
@@ -98,20 +98,19 @@
 		<div class="col-sm-2">
 			<ul class="list-group fontsize-sm">
 				<li class="list-group-item">Selecionados:</li>
-				<li class="list-group-item">
-					<button type="button" class="close">
-						<span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
-					</button> 0000/000 - 0000
-				</li>
-
-				<li class="list-group-item">
-					<button type="button" class="close">
-						<span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
-					</button> 0000/000 - 0000
-				</li>
-
+				<div class="llist-group-item" ng-model="proposicaoAdd" ng-repeat="proposicaoAdd in listaProposicaoSelecao">
+					<li class="list-group-item">
+						<button type="button" class="close" ng-click="removerProposicao(proposicaoAdd)">
+							<span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
+						</button> {{proposicaoAdd.sigla}}
+					</li>
+	
+				</div>
 
 			</ul>
+		</div>
+		<div class="pull-right">
+			<button type="button" class="btn btn-primary btn-sm" ng-click="salvar()">Adicionar Selecionados</button>
 		</div>
 	</div>
 </div>

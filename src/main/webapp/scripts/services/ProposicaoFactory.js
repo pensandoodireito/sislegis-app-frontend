@@ -3,7 +3,8 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource){
     		{
     		'queryAll':{method:'GET',isArray:true},
     		'query':{method:'GET',isArray:false},
-    		'update':{method:'PUT'}
+    		'update':{method:'PUT'},
+    		'salvarProposicoes':{method:'PUT',isArray:true}
     		});
     return resource;
 });

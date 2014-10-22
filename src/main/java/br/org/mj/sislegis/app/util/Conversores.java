@@ -1,5 +1,9 @@
 package br.org.mj.sislegis.app.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,7 +22,7 @@ public class Conversores {
 	public static String dateToString(Date date) {
 		return getSimpleDateFormat("dd/MM/yyyy").format(date);
 	}
-	
+
 	public static String dateToString(Date date, String format) {
 		return getSimpleDateFormat(format).format(date);
 	}
@@ -37,6 +41,28 @@ public class Conversores {
 		SimpleDateFormat format = new SimpleDateFormat(mascara);
 		format.setLenient(false);
 		return format;
+	}
+
+	public static String clobToString(java.sql.Clob data) {
+		final StringBuilder sb = new StringBuilder();
+
+		try {
+			final Reader reader = data.getCharacterStream();
+			final BufferedReader br = new BufferedReader(reader);
+
+			int b;
+			while (-1 != (b = br.read())) {
+				sb.append((char) b);
+			}
+
+			br.close();
+		} catch (SQLException e) {
+			return e.toString();
+		} catch (IOException e) {
+			return e.toString();
+		}
+
+		return sb.toString();
 	}
 
 }

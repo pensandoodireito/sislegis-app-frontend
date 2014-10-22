@@ -77,6 +77,13 @@ public class ProposicaoEndpoint {
 	
 	@POST
 	@Consumes("application/json")
+	public void salvarProposicoes(List<Proposicao> listaProposicoesSelecionados){
+		proposicaoService.salvarListaProposicao(listaProposicoesSelecionados);
+		List<Proposicao> lista= proposicaoService.listAll();
+	}
+	
+	@POST
+	@Consumes("application/json")
 	public Response create(Proposicao entity) {
 		service.save(entity);
 		return Response.created(

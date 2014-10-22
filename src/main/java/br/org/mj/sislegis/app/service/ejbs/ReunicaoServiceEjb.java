@@ -17,12 +17,6 @@ implements Service<Reuniao>{
 	public ReunicaoServiceEjb(){
 		super(Reuniao.class);
 	}
-	
-	@Override
-	public List<Reuniao> listAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Reuniao findById(Long id) {
@@ -35,6 +29,7 @@ implements Service<Reuniao>{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 	
 	
 

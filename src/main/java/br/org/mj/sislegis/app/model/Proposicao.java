@@ -1,17 +1,22 @@
 package br.org.mj.sislegis.app.model;
 
+import java.sql.Clob;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import br.org.mj.sislegis.app.util.Conversores;
 
 @Entity
 @XmlRootElement
@@ -41,7 +46,7 @@ public class Proposicao implements AbstractEntity {
 	private Date dataApresentacao;
 
 	@Column
-	private String ementa;
+	private Clob ementaClob;
 
 	@Column
 	private String autor;
@@ -49,8 +54,14 @@ public class Proposicao implements AbstractEntity {
 	@Column
 	private char origem;
 	
+	@ManyToMany(mappedBy = "listaProposicao")
+	public Set<Reuniao> listaReunioes;
+	
 	@Transient
 	private String sigla;
+	
+	@Transient
+	private String ementa;
 
 	public String getSigla() {
 		if(Objects.isNull(sigla))
@@ -136,7 +147,7 @@ public class Proposicao implements AbstractEntity {
 	}
 
 	public String getEmenta() {
-		return ementa;
+		return ementaClob==null?ementa:Conversores.clobToString(ementaClob);
 	}
 
 	public void setEmenta(String ementa) {
@@ -178,5 +189,22 @@ public class Proposicao implements AbstractEntity {
 	public void setOrigem(char origem) {
 		this.origem = origem;
 	}
+
+	public Set<Reuniao> getListaReunioes() {
+		return listaReunioes;
+	}
+
+	public void setListaReunioes(Set<Reuniao> listaReunioes) {
+		this.listaReunioes = listaReunioes;
+	}
+
+	public Clob getEmentaClob() {
+		return ementaClob;
+	}
+
+	public void setEmentaClob(Clob ementaClob) {
+		this.ementaClob = ementaClob;
+	}
+
 
 }

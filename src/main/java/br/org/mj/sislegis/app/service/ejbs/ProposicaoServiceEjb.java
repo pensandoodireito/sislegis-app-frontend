@@ -1,6 +1,8 @@
 package br.org.mj.sislegis.app.service.ejbs;
 
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -8,8 +10,10 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.sql.rowset.serial.SerialClob;
 
 import br.org.mj.sislegis.app.model.Proposicao;
+import br.org.mj.sislegis.app.model.Reuniao;
 import br.org.mj.sislegis.app.parser.camara.ParserPautaCamara;
 import br.org.mj.sislegis.app.parser.camara.ParserProposicaoCamara;
 import br.org.mj.sislegis.app.parser.senado.ParserPautaSenado;
@@ -52,7 +56,7 @@ implements ProposicaoService{
 	public List<Proposicao> buscarProposicoesPautaCamaraWS(Map parametros) throws Exception {
 		Long idComissao = (Long)parametros.get("idComissao");
 		String dataIni = Conversores.dateToString((Date)parametros.get("data"), "yyyyMMdd");
-		String dataFim = Conversores.dateToString(SislegisUtil.getDate(), "yyyyMMdd");//SislegisUtil.getDataAtual();
+		String dataFim = Conversores.dateToString(SislegisUtil.getDate(), "yyyyMMdd");
 		return parserPautaCamara.getProposicoes(idComissao, dataIni, dataFim);
 	}
 
@@ -72,6 +76,27 @@ implements ProposicaoService{
 	@Override
 	public Proposicao detalharProposicaoCamaraWS(Long id) throws Exception {
 		return parserProposicaoCamara.getProposicao(id);
+	}
+
+	@Override
+	public void salvarListaProposicao(List<Proposicao> lista) {
+		for(Proposicao p: lista){
+			if(p.getListaReunioes()==null)
+				p.setListaReunioes(new HashSet<Reuniao>());
+			
+			Reuniao reuniao = new Reuniao();
+			reuniao.setData(SislegisUtil.getDate());
+			
+			try {
+				p.getListaReunioes().add(reuniao);
+				p.setEmentaClob(new SerialClob(p.getEmenta().toCharArray()));
+				save(p);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 	}
 	
 	

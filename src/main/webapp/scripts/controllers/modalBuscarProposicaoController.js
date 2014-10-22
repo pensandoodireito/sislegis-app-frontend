@@ -9,7 +9,7 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
 //      item: $scope.items[0]
 //    };
     
-    $scope.listaProposicaoSelecao = listaProposicaoSelecao;
+    $scope.listaProposicaoSelecao = [];
     $scope.listaProposicaoPesquisa = {};
     
     $scope.pesquisar = function () {
@@ -53,7 +53,20 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
   			$scope.detalheProposicao = data;
 	    });
     };
+  
+    $scope.adicionarProposicao = function(proposicao){
+    	$scope.listaProposicaoSelecao.push(proposicao);
+    };    
+
+    $scope.removerProposicao = function(proposicao){
+    	var index = $scope.listaProposicaoSelecao.indexOf(proposicao)
+    	$scope.listaProposicaoSelecao.splice(index, 1);
+    }; 
     
+    
+    $scope.salvar = function() {
+    	ProposicaoResource.save($scope.listaProposicaoSelecao);
+    };
     
     $scope.origens = [
         {value: 'C', displayName: 'Câmara'},
