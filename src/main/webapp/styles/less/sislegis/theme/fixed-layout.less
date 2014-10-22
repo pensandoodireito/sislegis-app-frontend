@@ -1,0 +1,79 @@
+// Esta classe torna tudo fixo (topo, e menu esquerdo) e deixa o body om rolagem
+.fixed {
+    #barra-brasil {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+    > .header {
+        position: fixed;
+        top: 32px;
+    }
+    #menu-principal {
+        position: fixed;
+        top: 82px;
+        z-index: 999;
+        width: 100%;
+    }
+    .box-fixed {
+        position: fixed;
+        bottom: 0;
+        top: 132px;
+        float: none !important;
+        padding: 0;
+        display: block;
+        overflow: auto;
+        overflow-x: hidden;
+        .panel {
+            border-radius: 0;
+            -webkit-box-shadow: 0;
+            box-shadow: 0;
+        }
+        .panel-heading {
+            //padding: 10px 15px;
+            border-bottom: 0;
+            border-top-right-radius: 0;
+            border-top-left-radius: 0;
+        }
+    }
+    .box-content {
+        margin-left: 35%;
+        margin-top: 130px;
+    }
+    .btnShowSideBar{ display:none;}
+    /* collapsed sidebar styles */
+}
+
+
+@media screen and (max-width: 767px) {
+    .fixed {
+        position: relative;
+        -webkit-transition: all 0.25s ease-out;
+        -moz-transition: all 0.25s ease-out;
+        transition: all 0.25s ease-out;
+        #barra-brasil, #menu-principal, .header {
+            position: relative !important;
+            top:0 !important;
+        }
+        .box-fixed {
+            display: none;
+        }
+        .active {
+        	display:block;
+            position: absolute;
+            top: 237px;
+			width: 95%;
+			height: auto;
+			z-index: 1;
+			-webkit-transition: all 0.25s ease-out;
+        	-moz-transition: all 0.25s ease-out;
+        	transition: all 0.25s ease-out;
+        }
+        .box-content {
+            margin-left: 0;
+            margin-top: 20px;
+        }
+        .btnShowSideBar{ display:block;}
+    }
+}

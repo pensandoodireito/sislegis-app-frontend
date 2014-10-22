@@ -4,13 +4,17 @@
 */
 
 html, body {
-    // overflow-x: hidden!important;
+    overflow-x: hidden!important;
     font-family: @font-family-sans-serif;
     -webkit-font-smoothing: antialiased;
-    height: 100%;
     min-height: 100%;
     background: @body-bg;
 }
+
+#barra-brasil {
+background-color: #696969 !important;
+}
+
 
 a {
     color: @link-color;
@@ -20,12 +24,11 @@ a:hover, a:active, a:focus {
     text-decoration: none;
     color: @link-hover-color;
 }
-/* Layouts 
+// Layouts 
 .wrapper {
     min-height: 100%;
     .clearfix();    
 }
-*/
 
 // ---------------------------------------------------------------
 /* Header */
@@ -87,23 +90,9 @@ body > .header {
     the sidebar and the navbar will automatically become poisitioned fixed
 */
 body.fixed {
-    > .header, .left-side, .navbar-top {
+    > .left-side {
         position: fixed;
     }
-    > .header {
-        top: 0;
-        right: 0;
-        left: 0;
-    }
-    .navbar-top {
-        left: 0;
-        right: 0;
-    }
-
-    .wrapper {
-        margin-top: 50px;
-    }
-
 }
 
 // ---------------------------------------------------------------
@@ -526,10 +515,16 @@ Gradient Background colors
 
 // ---------------------------------------------------------------
 /* Dividers */
-.divider-top{ margin-top:10px; padding-top:10px; border-top:1px solid #ccc; }
-.divider-right{ margin-right:10px; padding-right:10px; border-right:1px solid #ccc;}
-.divider-bottom{ margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #ccc;}
-.divider-left{margin-left:10px; padding-left:10px; border-left:1px solid #ccc;}
+.divider-top{ margin-top:10px; padding-top:10px; border-top:1px solid #ddd; }
+.divider-right{ margin-right:10px; padding-right:10px; border-right:1px solid #ddd;}
+.divider-bottom{ margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #ddd;}
+.divider-left{margin-left:10px; padding-left:10px; border-left:1px solid #ddd;}
+
+// ---------------------------------------------------------------
+.list-line-zebra ul li:nth-child(odd) {
+   background-color: #ccc;
+   border-bottom: 1px solid #ddd;
+}
 
 
 
