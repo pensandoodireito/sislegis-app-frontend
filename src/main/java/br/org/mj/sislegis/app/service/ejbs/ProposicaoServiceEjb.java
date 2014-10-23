@@ -132,6 +132,7 @@ implements ProposicaoService{
 		proposicaoJSON.setId(proposicao.getId());
 		proposicaoJSON.setIdProposicao(proposicao.getIdProposicao());
 		proposicaoJSON.setSigla(proposicao.getSigla());
+		proposicaoJSON.setAutor(proposicao.getAutor());
 		return proposicaoJSON;
 	}
 
