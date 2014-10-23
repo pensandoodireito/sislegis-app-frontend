@@ -30,7 +30,8 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
     	var curr_date = ('0' + ($scope.campoData.getDate())).slice(-2);
         var curr_month = ('0' + ($scope.campoData.getMonth()+1)).slice(-2); // Adicionando o 0 manualmente quando o mes tem apenas 1 digito
         var curr_year = $scope.campoData.getFullYear();
-        var formattedDate = curr_date + "/" + curr_month + "/" + curr_year;
+        var formattedDate = curr_year + "" + curr_month + "" + curr_date
+        
     	$http({
     		  method:'GET',
     		  url : ($scope.origem.value == 'C') ? "rest/proposicaos/proposicoesPautaCamara" : "rest/proposicaos/proposicoesPautaSenado",

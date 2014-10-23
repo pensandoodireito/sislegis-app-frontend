@@ -82,14 +82,16 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
     };
 
     $scope.remove = function() {
-        var successCallback = function() {
+        /*var successCallback = function() {
             $location.path("/Reuniaos");
             $scope.displayError = false;
         };
         var errorCallback = function() {
             $scope.displayError=true;
-        }; 
-        $scope.reuniao.$remove(successCallback, errorCallback);
+        };*/
+        alert($scope.reuniao.id);
+        ReuniaoResource.remove({ReuniaoId:$scope.reuniao.id})
+        //$scope.reuniao.$remove({ReuniaoId:$scope.reuniao.id}, successCallback, errorCallback); // TODO: testar
     };
     
     $scope.listaProposicaoSelection = $scope.listaProposicaoSelection || [];
@@ -119,10 +121,11 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
 		  method:'GET',
 		  url : "rest/reuniaos/findByData",
 	  	  params: {
-	  		  'data' : formattedDate // id proposicao
+	  		  'data' : formattedDate
 		  }
 		})
 		.success(function (data) {
+			$scope.reuniao = data;
 		    $scope.reuniao.listaProposicao = data.listaProposicao;
 	    })
 	    .error(function (data) {
