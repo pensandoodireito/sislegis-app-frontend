@@ -23,6 +23,7 @@ import br.org.mj.sislegis.app.model.Proposicao;
 import br.org.mj.sislegis.app.model.ProposicaoJSON;
 import br.org.mj.sislegis.app.service.ProposicaoService;
 import br.org.mj.sislegis.app.service.Service;
+import br.org.mj.sislegis.app.util.Conversores;
 
 /**
  * 
@@ -41,11 +42,12 @@ public class ProposicaoEndpoint {
 	@Path("/proposicoesPautaCamara")
 	@Produces("application/json")
 	public List<Proposicao> buscarProposicoesPautaCamara(@QueryParam("idComissao")Long idComissao, 
-			@QueryParam("data")Date data) throws Exception {
+			@QueryParam("data")String data) throws Exception {
 		
+		Date formattedDate = Conversores.stringToDate(data, "yyyyMMdd");
 		Map<String, Object> parametros = new HashMap<String, Object>();
 		parametros.put("idComissao", idComissao);
-		parametros.put("data", data);
+		parametros.put("data", formattedDate);
 		
 		List<Proposicao> lista = proposicaoService.buscarProposicoesPautaCamaraWS(parametros);
 		for(Proposicao proposicao:lista){
@@ -58,11 +60,12 @@ public class ProposicaoEndpoint {
 	@Path("/proposicoesPautaSenado")
 	@Produces("application/json")
 	public List<Proposicao> buscarProposicoesPautaSenado(@QueryParam("siglaComissao")String siglaComissao, 
-			@QueryParam("data")Date data) throws Exception {
+			@QueryParam("data")String data) throws Exception {
 		
+		Date formattedDate = Conversores.stringToDate(data, "yyyyMMdd");
 		Map<String, Object> parametros = new HashMap<String, Object>();
 		parametros.put("siglaComissao", siglaComissao);
-		parametros.put("data", data);
+		parametros.put("data", formattedDate);
 		
 		List<Proposicao> lista = proposicaoService.buscarProposicoesPautaSenadoWS(parametros);
 		for(Proposicao proposicao:lista){

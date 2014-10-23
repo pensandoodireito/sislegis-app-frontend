@@ -24,7 +24,10 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
         });
         
         modalInstance.result.then(function (listaProposicaoSelecao) {
-        	$scope.reuniao.listaProposicao = listaProposicaoSelecao;
+        	if(!$scope.reuniao.listaProposicao){
+        		$scope.reuniao.listaProposicao = [];
+        	}
+        	$scope.reuniao.listaProposicao = $scope.reuniao.listaProposicao.concat(listaProposicaoSelecao);
           }, function () {
             $log.info('Modal dismissed at: ' + new Date());
           });
@@ -82,14 +85,16 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
     };
 
     $scope.remove = function() {
-        var successCallback = function() {
+        /*var successCallback = function() {
             $location.path("/Reuniaos");
             $scope.displayError = false;
         };
         var errorCallback = function() {
             $scope.displayError=true;
-        }; 
-        $scope.reuniao.$remove(successCallback, errorCallback);
+        };*/
+        alert($scope.reuniao.id);
+        ReuniaoResource.remove({ReuniaoId:$scope.reuniao.id})
+        //$scope.reuniao.$remove({ReuniaoId:$scope.reuniao.id}, successCallback, errorCallback); // TODO: testar
     };
     
     $scope.listaProposicaoSelection = $scope.listaProposicaoSelection || [];
@@ -119,11 +124,12 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
 		  method:'GET',
 		  url : "rest/reuniaos/findByData",
 	  	  params: {
-	  		  'data' : formattedDate // id proposicao
+	  		  'data' : formattedDate
 		  }
 		})
 		.success(function (data) {
 		    $scope.listaProposicao = data;
+
 	    })
 	    .error(function (data) {
 			alert('Nenhuma reunião encontrada na data');

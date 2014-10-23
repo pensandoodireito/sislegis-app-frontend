@@ -55,8 +55,9 @@ public class Proposicao implements AbstractEntity {
 	@Column
 	private char origem;
 	
-	@ManyToMany(mappedBy = "listaProposicao", cascade=CascadeType.ALL)
-	public Set<Reuniao> listaReunioes;
+
+	@ManyToMany(mappedBy = "listaProposicao")
+	private Set<Reuniao> listaReunioes;
 	
 	@Transient
 	private String sigla;
