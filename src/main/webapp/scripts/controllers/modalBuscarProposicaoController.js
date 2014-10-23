@@ -6,9 +6,6 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
     
     $scope.comissao = new Object();
     $scope.dataReuniao = dataReuniao;
-//    $scope.selected = {
-//      item: $scope.items[0]
-//    };
     
     $scope.listaProposicaoSelecao = [];
     $scope.listaProposicaoPesquisa = {};
@@ -31,24 +28,39 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
         var curr_month = ('0' + ($scope.campoData.getMonth()+1)).slice(-2); // Adicionando o 0 manualmente quando o mes tem apenas 1 digito
         var curr_year = $scope.campoData.getFullYear();
         var formattedDate = curr_year + "" + curr_month + "" + curr_date
+
+        $('#spinner').show();
         
-    	$http({
-    		  method:'GET',
-    		  url : ($scope.origem.value == 'C') ? "rest/proposicaos/proposicoesPautaCamara" : "rest/proposicaos/proposicoesPautaSenado",
-	      	  params: {
-	      		  'idComissao' : $scope.comissao.id, // usado para a camara
-	      		  'siglaComissao' : $scope.comissao.sigla, // usado para o senado
-	    	      'data':formattedDate
-	    	  }
-    		}).success(function (data) {
-    			$scope.proposicoes = data;
-    			$scope.comissaoProposicao = $scope.comissao.sigla;
-	    });
+        var successCallback = function(sucess){
+			$scope.proposicoes = sucess;
+			$scope.comissaoProposicao = $scope.comissao.sigla;
+			$('#spinner').hide();
+        };
+        var errorCallback = function() {
+    		$('#spinner').hide();
+        };
+        
+        if($scope.origem.value == 'C'){
+        	ProposicaoResource.buscarCamara(
+        			{
+        				idComissao : $scope.comissao.id,
+        				siglaComissao : $scope.comissao.sigla,
+        				data:formattedDate
+        			}, successCallback, errorCallback);
+        }else{
+        	ProposicaoResource.buscarSenado(
+        			{
+        				idComissao : $scope.comissao.id, // usado para a camara
+        				siglaComissao : $scope.comissao.sigla, // usado para o senado
+        				data:formattedDate
+        			}, successCallback, errorCallback);
+        }
     };
     
 
     
     $scope.detalharProposicao = function(idProposicao){
+        $('#spinner').show();
     	$http({
   		  method:'GET',
   		  url : ($scope.origem.value == 'C') ? "rest/proposicaos/detalharProposicaoCamaraWS" : "rest/proposicaos/detalharProposicaoSenadoWS",
@@ -59,7 +71,10 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
   			console.log(data);
   			$scope.detalheProposicao = data;
   			$scope.showDetalhamentoProposicao =true;
-	    });
+            $('#spinner').hide();
+        }).error(function(error){
+            $('#spinner').hide();
+        });        	
     };
   
     $scope.adicionarProposicao = function(proposicao){
@@ -73,9 +88,17 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
     
     
     $scope.salvar = function() {
-    	ProposicaoResource.save($scope.listaProposicaoSelecao);
-    	alert('Registros salvos com sucesso');
-    	$modalInstance.close($scope.listaProposicaoSelecao);
+		$('#spinner').show();
+        
+        var successCallback = function(sucess){
+			$('#spinner').hide();
+			$modalInstance.close($scope.listaProposicaoSelecao);
+        };
+        var errorCallback = function() {
+        	alert('erro');
+    		$('#spinner').hide();
+        };
+    	ProposicaoResource.save($scope.listaProposicaoSelecao, successCallback, errorCallback);
     };
     
     $scope.origens = [
@@ -84,16 +107,24 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
      ];  
     
     $scope.selectOrigemComissoes = function() {
+        $('#spinner').show();
     	var origemSelecionada = $scope.origem.value;
         if(origemSelecionada=='S'){
             $http.get('rest/comissaos/comissoesSenado').
             success(function(data) {
                 $scope.comissoes = data;
-            });
+                $('#spinner').hide();
+            }).error(function(error){
+                $('#spinner').hide();
+            });        	
         }else if(origemSelecionada=='C'){
             $http.get('rest/comissaos/comissoesCamara').
             success(function(data) {
-                $scope.comissoes = data;});        	
+                $scope.comissoes = data;
+                $('#spinner').hide();
+            }).error(function(error){
+                $('#spinner').hide();
+            });        	
         }
         		
     }; 

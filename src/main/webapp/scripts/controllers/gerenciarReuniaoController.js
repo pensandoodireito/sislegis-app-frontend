@@ -24,7 +24,10 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
         });
         
         modalInstance.result.then(function (listaProposicaoSelecao) {
-        	$scope.reuniao.listaProposicao = listaProposicaoSelecao;
+        	if(!$scope.reuniao.listaProposicao){
+        		$scope.reuniao.listaProposicao = [];
+        	}
+        	$scope.reuniao.listaProposicao = $scope.reuniao.listaProposicao.concat(listaProposicaoSelecao);
           }, function () {
             $log.info('Modal dismissed at: ' + new Date());
           });

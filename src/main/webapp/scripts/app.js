@@ -7,7 +7,6 @@ angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap'])
     .when('/Reuniaos/gerenciar/:ReuniaoId',{templateUrl:'views/Reuniao/gerenciar.html',controller:'GerenciarReuniaoController'})
 
 	//TODO remover 
-      .when('/',{templateUrl:'views/landing.html',controller:'LandingPageController'})
       .when('/buscarProposicao',{templateUrl:'views/Comissao/buscarProposicao.html',controller:'SearchComissaoController'})
       .when('/Comissaos/new',{templateUrl:'views/Comissao/detail.html',controller:'NewComissaoController'})
       .when('/Comissaos/edit/:ComissaoId',{templateUrl:'views/Comissao/detail.html',controller:'EditComissaoController'})
@@ -20,13 +19,10 @@ angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap'])
       
 
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/Reuniaos/gerenciar'
       });
   }])
   
-  //TODO remover 
-  .controller('LandingPageController', function LandingPageController() {
-  })
   .controller('NavController', function NavController($scope, $location) {
     $scope.matchesRoute = function(route) {
         var path = $location.path();
