@@ -123,7 +123,7 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
 		  }
 		})
 		.success(function (data) {
-		    $scope.reuniao.listaProposicao = data.listaProposicao;
+		    $scope.listaProposicao = data;
 	    })
 	    .error(function (data) {
 			alert('Nenhuma reunião encontrada na data');

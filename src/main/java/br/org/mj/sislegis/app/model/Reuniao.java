@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Version;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -33,7 +33,7 @@ public class Reuniao implements AbstractEntity
    @Temporal(TemporalType.DATE)
    private Date data;
 
-   @ManyToMany(fetch=FetchType.EAGER)
+   @ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
    private Set<Proposicao> listaProposicao = new HashSet<Proposicao>();
 
    public Long getId()

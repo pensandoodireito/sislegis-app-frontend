@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.OptimisticLockException;
@@ -24,7 +25,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
+import br.org.mj.sislegis.app.model.Proposicao;
+import br.org.mj.sislegis.app.model.ProposicaoJSON;
 import br.org.mj.sislegis.app.model.Reuniao;
+import br.org.mj.sislegis.app.service.ProposicaoService;
+import br.org.mj.sislegis.app.service.Service;
 import br.org.mj.sislegis.app.util.Conversores;
 
 /**
@@ -37,6 +42,12 @@ public class ReuniaoEndpoint
    @PersistenceContext(unitName = "sislegis-app-persistence-unit")
    private EntityManager em;
 
+   @Inject
+   private Service<Reuniao> service;
+   
+   @Inject
+   private ProposicaoService proposicaoService;
+   
    @POST
    @Consumes("application/json")
    public Response create(Reuniao entity)
@@ -84,47 +95,25 @@ public class ReuniaoEndpoint
    @GET
    @Path("/findByData")
    @Produces("application/json")
-   public Response findByData(@QueryParam("data")String data) {
+   public List<ProposicaoJSON> findByData(@QueryParam("data")String data) {
 	  Date date = null; 
 	  try {
 		date = Conversores.stringToDate(data, "yyyyMMdd");
 	  } catch (ParseException e) {
 		e.printStackTrace();
-		return Response.status(Status.BAD_REQUEST).build();
 	  }
 	  System.out.println(date);
-      TypedQuery<Reuniao> findByIdQuery = em.createQuery("SELECT DISTINCT r FROM Reuniao r LEFT JOIN FETCH r.listaProposicao WHERE r.data = :data ORDER BY r.id", Reuniao.class);
-      findByIdQuery.setParameter("data", date);
-      Reuniao entity;
-      try
-      {
-         entity = findByIdQuery.getSingleResult();
-      }
-      catch (NoResultException nre)
-      {
-         entity = null;
-      }
-      if (entity == null)
-      {
-         return Response.status(Status.NOT_FOUND).build();
-      }
-      return Response.ok(entity).build();
+	  List<ProposicaoJSON> lista = proposicaoService.buscarProposicoesPorDataReuniao(date);
+	  
+
+      return lista;
    }
 
    @GET
    @Produces("application/json")
-   public List<Reuniao> listAll(@QueryParam("start") Integer startPosition, @QueryParam("max") Integer maxResult)
+   public List<Reuniao> listAll() 
    {
-      TypedQuery<Reuniao> findAllQuery = em.createQuery("SELECT DISTINCT r FROM Reuniao r LEFT JOIN FETCH r.listaProposicao ORDER BY r.id", Reuniao.class);
-      if (startPosition != null)
-      {
-         findAllQuery.setFirstResult(startPosition);
-      }
-      if (maxResult != null)
-      {
-         findAllQuery.setMaxResults(maxResult);
-      }
-      final List<Reuniao> results = findAllQuery.getResultList();
+	   List<Reuniao> results = service.listAll();
       return results;
    }
 

@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 import br.org.mj.sislegis.app.model.Proposicao;
+import br.org.mj.sislegis.app.model.ProposicaoJSON;
 import br.org.mj.sislegis.app.service.ProposicaoService;
 import br.org.mj.sislegis.app.service.Service;
 
@@ -34,6 +35,7 @@ public class ProposicaoEndpoint {
 
 	@Inject
 	private Service<Proposicao> service;
+	
 
 	@GET
 	@Path("/proposicoesPautaCamara")
@@ -45,7 +47,11 @@ public class ProposicaoEndpoint {
 		parametros.put("idComissao", idComissao);
 		parametros.put("data", data);
 		
-		return proposicaoService.buscarProposicoesPautaCamaraWS(parametros);
+		List<Proposicao> lista = proposicaoService.buscarProposicoesPautaCamaraWS(parametros);
+		for(Proposicao proposicao:lista){
+			proposicao.setOrigem('C');
+		}
+		return lista;
 	}
 
 	@GET
@@ -58,7 +64,11 @@ public class ProposicaoEndpoint {
 		parametros.put("siglaComissao", siglaComissao);
 		parametros.put("data", data);
 		
-		return proposicaoService.buscarProposicoesPautaSenadoWS(parametros);
+		List<Proposicao> lista = proposicaoService.buscarProposicoesPautaSenadoWS(parametros);
+		for(Proposicao proposicao:lista){
+			proposicao.setOrigem('S');
+		}
+		return lista;
 	}
 
 	@GET
@@ -101,14 +111,13 @@ public class ProposicaoEndpoint {
 	@Path("/{id:[0-9][0-9]*}")
 	@Produces("application/json")
 	public Response findById(@PathParam("id") Long id) {
-		return Response.ok(service.findById(id)).build();
+		return Response.ok(proposicaoService.buscarPorId(id)).build();
 	}
 
 	@GET
 	@Produces("application/json")
-	public List<Proposicao> listAll(@QueryParam("start") Integer startPosition,
-			@QueryParam("max") Integer maxResult) {
-		final List<Proposicao> results = service.listAll();
+	public List<ProposicaoJSON> listAll() {
+		List<ProposicaoJSON> results = proposicaoService.listarTodos();
 		return results;
 	}
 
@@ -125,4 +134,13 @@ public class ProposicaoEndpoint {
 
 		return Response.noContent().build();
 	}
+	
+/*   @GET
+   @Path("/findByData")
+   @Produces("application/json")
+   public List<ProposicaoJSON> findByData(@QueryParam("data")String data) {
+	   
+	   List<ProposicaoJSON> lista = proposicaoService.
+	   return lista;
+   }*/
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -54,7 +55,7 @@ public class Proposicao implements AbstractEntity {
 	@Column
 	private char origem;
 	
-	@ManyToMany(mappedBy = "listaProposicao")
+	@ManyToMany(mappedBy = "listaProposicao", cascade=CascadeType.ALL)
 	public Set<Reuniao> listaReunioes;
 	
 	@Transient
