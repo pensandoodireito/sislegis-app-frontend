@@ -2,6 +2,7 @@ package br.org.mj.sislegis.app.rest;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import javax.ws.rs.core.UriBuilder;
 
 import br.org.mj.sislegis.app.model.Proposicao;
 import br.org.mj.sislegis.app.model.ProposicaoJSON;
+import br.org.mj.sislegis.app.model.Reuniao;
 import br.org.mj.sislegis.app.service.ProposicaoService;
 import br.org.mj.sislegis.app.service.Service;
 import br.org.mj.sislegis.app.util.Conversores;
@@ -52,6 +54,7 @@ public class ProposicaoEndpoint {
 		List<Proposicao> lista = proposicaoService.buscarProposicoesPautaCamaraWS(parametros);
 		for(Proposicao proposicao:lista){
 			proposicao.setOrigem('C');
+			proposicao.setListaReunioes(new HashSet<Reuniao>());
 		}
 		return lista;
 	}
@@ -70,6 +73,7 @@ public class ProposicaoEndpoint {
 		List<Proposicao> lista = proposicaoService.buscarProposicoesPautaSenadoWS(parametros);
 		for(Proposicao proposicao:lista){
 			proposicao.setOrigem('S');
+			proposicao.setListaReunioes(new HashSet<Reuniao>());
 		}
 		return lista;
 	}
@@ -138,12 +142,4 @@ public class ProposicaoEndpoint {
 		return Response.noContent().build();
 	}
 	
-/*   @GET
-   @Path("/findByData")
-   @Produces("application/json")
-   public List<ProposicaoJSON> findByData(@QueryParam("data")String data) {
-	   
-	   List<ProposicaoJSON> lista = proposicaoService.
-	   return lista;
-   }*/
 }

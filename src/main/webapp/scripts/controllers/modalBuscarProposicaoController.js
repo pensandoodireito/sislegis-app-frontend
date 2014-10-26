@@ -1,11 +1,11 @@
-angular.module('sislegisapp').controller('ModalBuscarProposicaoController', function($scope, $http, $routeParams, $location, $modalInstance, ProposicaoResource, dataReuniao, listaProposicaoSelecao) {
+angular.module('sislegisapp').controller('ModalBuscarProposicaoController', function($scope, $http, $routeParams, $location, $modalInstance, ProposicaoResource, reuniao, listaProposicaoSelecao) {
     var self = this;
     $scope.disabled = false;
     $scope.showDetalhamentoProposicao =false;
     $scope.$location = $location;
     
     $scope.comissao = new Object();
-    $scope.dataReuniao = dataReuniao;
+    $scope.reuniao = reuniao;
     
     $scope.listaProposicaoSelecao = [];
     $scope.listaProposicaoPesquisa = {};
@@ -78,6 +78,7 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
     };
   
     $scope.adicionarProposicao = function(proposicao){
+    	proposicao.listaReunioes.push($scope.reuniao);
     	$scope.listaProposicaoSelecao.push(proposicao);
     };    
 

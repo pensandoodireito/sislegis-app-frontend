@@ -8,14 +8,19 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
     $scope.reuniao = new ReuniaoResource();
     
     $scope.open = function () {
-
+    	
+    	if($scope.reuniao.data == null){
+    		alert('Selecione a data da reunião')
+    		return;
+    	}
+    	
         var modalInstance = $modal.open({
           templateUrl: 'views/modal-buscar-proposicao.html',
           controller: 'ModalBuscarProposicaoController',
           size: 'lg',
           resolve: {
-            dataReuniao: function () {
-              return $scope.reuniao.data;
+            reuniao: function () {
+            	return $scope.reuniao;
             },
             listaProposicaoSelecao: function (){
             	return $scope.reuniao.listaProposicao;
@@ -33,37 +38,6 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
           });
     };
         
-    /*$scope.get = function() {
-        var successCallback = function(data){
-            self.original = data;
-            $scope.reuniao = new ReuniaoResource(self.original);
-            ProposicaoResource.queryAll(function(items) {
-                $scope.listaProposicaoSelectionList = $.map(items, function(item) {
-                    var wrappedObject = {
-                        id : item.id
-                    };
-                    var labelObject = {
-                        value : item.id,
-                        text : item.id
-                    };
-                    if($scope.reuniao.listaProposicao){
-                        $.each($scope.reuniao.listaProposicao, function(idx, element) {
-                            if(item.id == element.id) {
-                                $scope.listaProposicaoSelection.push(labelObject);
-                                $scope.reuniao.listaProposicao.push(wrappedObject);
-                            }
-                        });
-                        self.original.listaProposicao = $scope.reuniao.listaProposicao;
-                    }
-                    return labelObject;
-                });
-            });
-        };
-        var errorCallback = function() {
-            $location.path("/Reuniaos");
-        };
-        ReuniaoResource.get({ReuniaoId:$routeParams.ReuniaoId}, successCallback, errorCallback);
-    };*/
 
     $scope.isClean = function() {
         return angular.equals(self.original, $scope.reuniao);
@@ -119,24 +93,12 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
         var curr_month = ('0' + ($scope.reuniao.data.getMonth()+1)).slice(-2); // Adicionando o 0 manualmente quando o mes tem apenas 1 digito
         var curr_year = $scope.reuniao.data.getFullYear();
         var formattedDate = curr_year + "" + curr_month + "" + curr_date;
+        
+        
+        $scope.listaProposicao = ReuniaoResource.buscarReuniaoPorData({data : formattedDate});
 
-		$http({
-		  method:'GET',
-		  url : "rest/reuniaos/findByData",
-	  	  params: {
-	  		  'data' : formattedDate
-		  }
-		})
-		.success(function (data) {
-		    $scope.listaProposicao = data;
-
-	    })
-	    .error(function (data) {
-			alert('Nenhuma reunião encontrada na data');
-		});
     });
     
-   // $scope.get();
     
     // CALENDARIO
     $scope.setCalendar = function() {
