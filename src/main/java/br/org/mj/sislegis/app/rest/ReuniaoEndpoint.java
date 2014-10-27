@@ -1,9 +1,10 @@
 package br.org.mj.sislegis.app.rest;
 
+
+
 import java.util.Date;
 import java.util.List;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.OptimisticLockException;
 import javax.ws.rs.Consumes;
@@ -25,9 +26,9 @@ import br.org.mj.sislegis.app.service.Service;
 import br.org.mj.sislegis.app.util.Conversores;
 
 
-@Stateless
 @Path("/reuniaos")
 public class ReuniaoEndpoint {
+
 	@Inject
 	private Service<Reuniao> service;
 
@@ -60,10 +61,10 @@ public class ReuniaoEndpoint {
 	@GET
 	@Path("/findByData")
 	@Produces("application/json")
+
 	public List<ProposicaoJSON> findByData(@QueryParam("data") String data) throws Exception {
 		Date formattedDate = Conversores.stringToDate(data, "yyyyMMdd");
 		List<ProposicaoJSON> lista = proposicaoService.buscarProposicoesPorDataReuniao(formattedDate);
-
 		return lista;
 	}
 

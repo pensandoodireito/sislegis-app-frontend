@@ -33,7 +33,7 @@ public class Reuniao implements AbstractEntity
    @Temporal(TemporalType.DATE)
    private Date data;
 
-   @ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+   @ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy = "listaReunioes")
    private Set<Proposicao> listaProposicao = new HashSet<Proposicao>();
 
    public Long getId()

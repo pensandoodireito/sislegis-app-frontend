@@ -2,8 +2,8 @@ package br.org.mj.sislegis.app.service.ejbs;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +12,15 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Root;
 import javax.sql.rowset.serial.SerialClob;
+import javax.sql.rowset.serial.SerialException;
 
 import br.org.mj.sislegis.app.model.Proposicao;
 import br.org.mj.sislegis.app.model.ProposicaoJSON;
@@ -94,15 +102,11 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 				if (p.getOrigem() == 'C') {
 					proposicao = detalharProposicaoCamaraWS(Long.valueOf(p
 							.getIdProposicao()));
-					proposicao.setEmentaClob(new SerialClob(proposicao
-							.getEmenta().toCharArray()));
-					proposicao.setListaReunioes(p.getListaReunioes());
+					populaProposicao(p, proposicao);
 				} else if (p.getOrigem() == 'S') {
 					proposicao = detalharProposicaoSenadoWS(Long.valueOf(p
 							.getIdProposicao()));
-					proposicao.setEmentaClob(new SerialClob(proposicao
-							.getEmenta().toCharArray()));
-					proposicao.setListaReunioes(p.getListaReunioes());
+					populaProposicao(p, proposicao);
 				}
 				save(proposicao);
 			} catch (SQLException e) {
@@ -113,6 +117,13 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 			}
 
 		}
+	}
+
+	private void populaProposicao(Proposicao p, Proposicao proposicao)
+			throws SerialException, SQLException {
+		proposicao.setEmentaClob(new SerialClob(proposicao.getEmenta()
+				.toCharArray()));
+		proposicao.setListaReunioes(p.getListaReunioes());
 	}
 
 	@Override
@@ -149,22 +160,24 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 
 	@Override
 	public List<ProposicaoJSON> buscarProposicoesPorDataReuniao(Date dataReuniao) {
-		// TODO Auto-generated method stub
-		Query q = em
-				.createNativeQuery(
-						"SELECT  p.* "
-								+ "FROM Proposicao p LEFT JOIN Reuniao_Proposicao rp on rp.listaProposicao_id = p.id "
-								+ " LEFT JOIN Reuniao r on r.id = rp.listaReunioes_id "
-								+ " ORDER BY p.id", Proposicao.class);
-		// q.setParameter("data", Conversores.dateToString(dataReuniao,
-		// "dd/mm/yyyy"));
-		List<Object> listaProposicaos = q.getResultList();
+
 		List<ProposicaoJSON> listaProposicaoJSON = new ArrayList<ProposicaoJSON>();
-		for (Object obj : listaProposicaos) {
-			Proposicao proposicao = (Proposicao) obj;
+
+		Query query = em
+				.createNativeQuery("select p.* from Proposicao p "
+						+ "inner join Reuniao_Proposicao rp "
+						+ "on p.id = rp.PROPOSICAO_ID "
+						+ "inner join Reuniao r on rp.REUNIAO_ID = r.id "
+						+ "where r.data = :P_DATA", Proposicao.class);
+		query.setParameter("P_DATA", Conversores.dateToString(dataReuniao, "yyyy-MM-dd"));  
+
+		List<Proposicao> listaProposicoes = query.getResultList();
+		for (Object obj : listaProposicoes) {
+			Proposicao proposicao = (Proposicao)obj;
 			ProposicaoJSON proposicaoJSON = populaProposicaoJSON(proposicao);
 			listaProposicaoJSON.add(proposicaoJSON);
 		}
+
 		return listaProposicaoJSON;
 
 	}
