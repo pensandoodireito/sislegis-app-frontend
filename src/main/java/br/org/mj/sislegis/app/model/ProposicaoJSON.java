@@ -2,6 +2,8 @@ package br.org.mj.sislegis.app.model;
 
 import java.util.Date;
 
+import br.org.mj.sislegis.app.enumerated.Origem;
+
 
 public class ProposicaoJSON {
 	
@@ -22,6 +24,10 @@ public class ProposicaoJSON {
 	private String autor;
 	
 	private String ementa;
+	
+	private Origem origem;
+	
+	private String sigla;
 	
 	public String getEmenta() {
 		return ementa;
@@ -87,13 +93,6 @@ public class ProposicaoJSON {
 		this.autor = autor;
 	}
 
-	public char getOrigem() {
-		return origem;
-	}
-
-	public void setOrigem(char origem) {
-		this.origem = origem;
-	}
 
 	public String getSigla() {
 		return sigla;
@@ -103,8 +102,13 @@ public class ProposicaoJSON {
 		this.sigla = sigla;
 	}
 
-	private char origem;
 	
-	private String sigla;
+	public Origem getOrigem() {
+		return origem;
+	}
+
+	public void setOrigem(Origem origem) {
+		this.origem = origem;
+	}
 
 }

@@ -20,6 +20,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
+import br.org.mj.sislegis.app.enumerated.Origem;
 import br.org.mj.sislegis.app.model.Proposicao;
 import br.org.mj.sislegis.app.model.ProposicaoJSON;
 import br.org.mj.sislegis.app.model.Reuniao;
@@ -53,7 +54,7 @@ public class ProposicaoEndpoint {
 		
 		List<Proposicao> lista = proposicaoService.buscarProposicoesPautaCamaraWS(parametros);
 		for(Proposicao proposicao:lista){
-			proposicao.setOrigem('C');
+			proposicao.setOrigem(Origem.CAMARA);
 			proposicao.setListaReunioes(new HashSet<Reuniao>());
 		}
 		return lista;
@@ -72,7 +73,7 @@ public class ProposicaoEndpoint {
 		
 		List<Proposicao> lista = proposicaoService.buscarProposicoesPautaSenadoWS(parametros);
 		for(Proposicao proposicao:lista){
-			proposicao.setOrigem('S');
+			proposicao.setOrigem(Origem.SENADO);
 			proposicao.setListaReunioes(new HashSet<Reuniao>());
 		}
 		return lista;

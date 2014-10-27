@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +22,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import br.org.mj.sislegis.app.enumerated.Origem;
 import br.org.mj.sislegis.app.util.Conversores;
 
 @Entity
@@ -28,9 +31,6 @@ public class Proposicao implements AbstractEntity {
 
 	private static final long serialVersionUID = 7949894944142814382L;
 	
-	public final static char ORIGEM_CAMARA = 'C';
-	public final static char ORIGEM_SENADO = 'S';
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", updatable = false, nullable = false)
@@ -58,8 +58,9 @@ public class Proposicao implements AbstractEntity {
 	@Column
 	private String autor;
 	
+	@Enumerated(EnumType.STRING)
 	@Column
-	private char origem;
+	private Origem origem;
 	
 
 	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
@@ -216,15 +217,12 @@ public class Proposicao implements AbstractEntity {
 		return result;
 	}
 
-	public String getOrigemDesc() {
-		return origem == ORIGEM_CAMARA ? "Câmara" : "Senado";
-	}
 	
-	public char getOrigem() {
+	public Origem getOrigem() {
 		return origem;
 	}
 
-	public void setOrigem(char origem) {
+	public void setOrigem(Origem origem) {
 		this.origem = origem;
 	}
 

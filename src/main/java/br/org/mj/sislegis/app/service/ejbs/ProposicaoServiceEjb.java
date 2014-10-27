@@ -2,7 +2,6 @@ package br.org.mj.sislegis.app.service.ejbs;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -12,19 +11,12 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Root;
 import javax.sql.rowset.serial.SerialClob;
 import javax.sql.rowset.serial.SerialException;
 
+import br.org.mj.sislegis.app.enumerated.Origem;
 import br.org.mj.sislegis.app.model.Proposicao;
 import br.org.mj.sislegis.app.model.ProposicaoJSON;
-import br.org.mj.sislegis.app.model.Reuniao;
 import br.org.mj.sislegis.app.parser.camara.ParserPautaCamara;
 import br.org.mj.sislegis.app.parser.camara.ParserProposicaoCamara;
 import br.org.mj.sislegis.app.parser.senado.ParserPautaSenado;
@@ -99,11 +91,11 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 			try {
 
 				Proposicao proposicao = null;
-				if (p.getOrigem() == 'C') {
+				if (p.getOrigem().equals(Origem.CAMARA)) {
 					proposicao = detalharProposicaoCamaraWS(Long.valueOf(p
 							.getIdProposicao()));
 					populaProposicao(p, proposicao);
-				} else if (p.getOrigem() == 'S') {
+				} else if (p.getOrigem().equals(Origem.SENADO)) {
 					proposicao = detalharProposicaoSenadoWS(Long.valueOf(p
 							.getIdProposicao()));
 					populaProposicao(p, proposicao);
@@ -124,6 +116,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 		proposicao.setEmentaClob(new SerialClob(proposicao.getEmenta()
 				.toCharArray()));
 		proposicao.setListaReunioes(p.getListaReunioes());
+		proposicao.setOrigem(p.getOrigem());
 	}
 
 	@Override
@@ -149,6 +142,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 		proposicaoJSON.setIdProposicao(proposicao.getIdProposicao());
 		proposicaoJSON.setSigla(proposicao.getSigla());
 		proposicaoJSON.setAutor(proposicao.getAutor());
+		proposicaoJSON.setOrigem(proposicao.getOrigem());
 		return proposicaoJSON;
 	}
 
