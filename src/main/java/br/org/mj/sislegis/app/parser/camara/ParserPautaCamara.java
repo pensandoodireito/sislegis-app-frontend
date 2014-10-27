@@ -15,8 +15,8 @@ public class ParserPautaCamara {
 
 		// TODO: Informação que vem do filtro
 		Long idComissao = 2003L;
-		String datIni = "20130603";
-		String datFim = "20130607";
+		String datIni = "20140702";
+		String datFim = "20140702";
 
 		System.out.println(parser.getProposicoes(idComissao, datIni, datFim)
 				.toString());
@@ -40,13 +40,17 @@ public class ParserPautaCamara {
 		List<Proposicao> proposicoes = new ArrayList<Proposicao>();
 
 		for (ReuniaoBean reuniao : pauta.getReunioes()) {
+			// adiciona dados da comissao
+			int seqOrdemPauta = 1;
+			for (Proposicao proposicao : reuniao.getProposicoes()) {
+				proposicao.setSeqOrdemPauta(seqOrdemPauta++);
+				proposicao.setComissao(pauta.getOrgao());
+			}
+			
 			proposicoes.addAll(reuniao.getProposicoes());
 		}
 		
-		// adiciona dados da comissao
-		for (Proposicao proposicao : proposicoes) {
-			proposicao.setComissao(pauta.getOrgao());
-		}
+		
 
 		return proposicoes;
 	}
