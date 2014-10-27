@@ -1,10 +1,8 @@
 package br.org.mj.sislegis.app.rest;
 
-
-
-import java.util.Date;
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.OptimisticLockException;
 import javax.ws.rs.Consumes;
@@ -19,28 +17,25 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import br.org.mj.sislegis.app.model.ProposicaoJSON;
-import br.org.mj.sislegis.app.model.Reuniao;
-import br.org.mj.sislegis.app.service.ProposicaoService;
+import br.org.mj.sislegis.app.model.Encaminhamento;
 import br.org.mj.sislegis.app.service.Service;
-import br.org.mj.sislegis.app.util.Conversores;
 
-
-@Path("/reuniaos")
-public class ReuniaoEndpoint {
-
+/**
+ * 
+ */
+@Stateless
+@Path("/encaminhamentos")
+public class EncaminhamentoEndpoint {
+	
 	@Inject
-	private Service<Reuniao> service;
-
-	@Inject
-	private ProposicaoService proposicaoService;
+	private Service<Encaminhamento> service;
 
 	@POST
 	@Consumes("application/json")
-	public Response create(Reuniao entity) {
+	public Response create(Encaminhamento entity) {
 		service.save(entity);
 		return Response.created(
-				UriBuilder.fromResource(ReuniaoEndpoint.class)
+				UriBuilder.fromResource(EncaminhamentoEndpoint.class)
 						.path(String.valueOf(entity.getId())).build()).build();
 	}
 
@@ -59,26 +54,17 @@ public class ReuniaoEndpoint {
 	}
 
 	@GET
-	@Path("/findByData")
 	@Produces("application/json")
-
-	public List<ProposicaoJSON> findByData(@QueryParam("data") String data) throws Exception {
-		Date formattedDate = Conversores.stringToDate(data, "yyyyMMdd");
-		List<ProposicaoJSON> lista = proposicaoService.buscarProposicoesPorDataReuniao(formattedDate);
-		return lista;
-	}
-
-	@GET
-	@Produces("application/json")
-	public List<Reuniao> listAll() {
-		List<Reuniao> results = service.listAll();
-		return results;
+	public List<Encaminhamento> listAll(
+			@QueryParam("start") Integer startPosition,
+			@QueryParam("max") Integer maxResult) {
+		return service.listAll();
 	}
 
 	@PUT
 	@Path("/{id:[0-9][0-9]*}")
 	@Consumes("application/json")
-	public Response update(Reuniao entity) {
+	public Response update(Encaminhamento entity) {
 		try {
 			entity = service.save(entity);
 		} catch (OptimisticLockException e) {

@@ -8,9 +8,12 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -56,7 +59,11 @@ public class Proposicao implements AbstractEntity {
 	private char origem;
 	
 
-	@ManyToMany(mappedBy = "listaProposicao")
+	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinTable(name = "Reuniao_Proposicao", joinColumns = { 
+			@JoinColumn(name = "PROPOSICAO_ID", nullable = false, updatable = false) }, 
+			inverseJoinColumns = { @JoinColumn(name = "REUNIAO_ID", 
+					nullable = false, updatable = false) })
 	private Set<Reuniao> listaReunioes;
 	
 	@Transient

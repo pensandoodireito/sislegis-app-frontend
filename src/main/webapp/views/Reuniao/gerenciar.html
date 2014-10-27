@@ -4,7 +4,7 @@
 			<div class="panel-heading clearfix">
 				<div class="pull-left">Proposições</div>
 				<div class="pull-right">
-					<button type="button" class="btn btn-primary btn-sm" ng-click="open()">Buscar proposições</button>
+					<button type="button" class="btn btn-primary btn-sm" ng-click="open()" ng-disabled="!reuniao.data">Buscar proposições</button>
 				</div>
 			</div>
 
@@ -13,7 +13,7 @@
 				    <div class="row">
 				        <div class="col-md-6">
 				            <p class="input-group">
-				              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="reuniao.data" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close" />
+				              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="reuniao.data" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close" readonly/>
 				              <span class="input-group-btn">
 				                <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 				              </span>
