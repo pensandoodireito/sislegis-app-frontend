@@ -60,10 +60,10 @@ public class Proposicao implements AbstractEntity {
 	@ManyToMany(mappedBy = "listaProposicao")
 	private Set<Reuniao> listaReunioes;
 	
-	@Transient
+	@Column
 	private String comissao;
 	
-	@Transient
+	@Column
 	private Integer seqOrdemPauta;
 	
 	@Transient
@@ -204,6 +204,8 @@ public class Proposicao implements AbstractEntity {
 			result += ", ementa: " + ementa;
 		if (autor != null && !autor.trim().isEmpty())
 			result += ", autor: " + autor;
+		if (seqOrdemPauta != null)
+			result += ", seqOrdemPauta: " + seqOrdemPauta;
 		return result;
 	}
 
