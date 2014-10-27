@@ -42,6 +42,11 @@ public class ParserPautaCamara {
 		for (ReuniaoBean reuniao : pauta.getReunioes()) {
 			proposicoes.addAll(reuniao.getProposicoes());
 		}
+		
+		// adiciona dados da comissao
+		for (Proposicao proposicao : proposicoes) {
+			proposicao.setComissao(pauta.getOrgao());
+		}
 
 		return proposicoes;
 	}
@@ -69,6 +74,10 @@ class PautaBean {
 
 	protected List<ReuniaoBean> getReunioes() {
 		return reunioes;
+	}
+
+	protected String getOrgao() {
+		return orgao;
 	}
 }
 

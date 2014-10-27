@@ -27,6 +27,9 @@ import br.org.mj.sislegis.app.util.Conversores;
 public class Proposicao implements AbstractEntity {
 
 	private static final long serialVersionUID = 7949894944142814382L;
+	
+	public final static char ORIGEM_CAMARA = 'C';
+	public final static char ORIGEM_SENADO = 'S';
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -65,6 +68,12 @@ public class Proposicao implements AbstractEntity {
 			inverseJoinColumns = { @JoinColumn(name = "REUNIAO_ID", 
 					nullable = false, updatable = false) })
 	private Set<Reuniao> listaReunioes;
+	
+	@Transient
+	private String comissao;
+	
+	@Transient
+	private Integer seqOrdemPauta;
 	
 	@Transient
 	private String sigla;
@@ -170,6 +179,22 @@ public class Proposicao implements AbstractEntity {
 	public void setAutor(String autor) {
 		this.autor = autor;
 	}
+	
+	public String getComissao() {
+		return comissao;
+	}
+
+	public void setComissao(String comissao) {
+		this.comissao = comissao;
+	}
+
+	public Integer getSeqOrdemPauta() {
+		return seqOrdemPauta;
+	}
+
+	public void setSeqOrdemPauta(Integer seqOrdemPauta) {
+		this.seqOrdemPauta = seqOrdemPauta;
+	}
 
 	@Override
 	public String toString() {
@@ -191,6 +216,10 @@ public class Proposicao implements AbstractEntity {
 		return result;
 	}
 
+	public String getOrigemDesc() {
+		return origem == ORIGEM_CAMARA ? "Câmara" : "Senado";
+	}
+	
 	public char getOrigem() {
 		return origem;
 	}

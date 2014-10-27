@@ -16,8 +16,7 @@ public class ParserPautaSenado {
 		// TODO: Informação que vem do filtro
 		String siglaComissao = "CAE";
 		String datIni = "20140801";
-		
-		System.	out.println(parser.getProposicoes(siglaComissao, datIni).toString());
+		System.out.println(parser.getProposicoes(siglaComissao, datIni).toString());
 	}
 	
 	public List<Proposicao> getProposicoes(String siglaComissao, String datIni) throws Exception {
@@ -29,11 +28,13 @@ public class ParserPautaSenado {
 		configReuniao(xstreamReuniao);
 
 		for (ReuniaoBean bean : getReunioes(siglaComissao, datIni)) {
+			
 			String wsURLReuniao = "http://legis.senado.leg.br/dadosabertos/reuniao/"+bean.getCodigo();
 			URL url = new URL(wsURLReuniao);
 			ReuniaoBean reuniao = new ReuniaoBean();
 			
 			xstreamReuniao.fromXML(url, reuniao);
+
 			proposicoes.addAll(reuniao.getProposicoes());
 		}
 		
@@ -67,14 +68,19 @@ public class ParserPautaSenado {
 	
 	private void configReuniao(XStream xstream) {
 		xstream.alias("Reuniao", ReuniaoBean.class);
+		xstream.alias("Comissao", ComissaoBean.class);
 		xstream.alias("Parte", ParteBean.class);
 		xstream.alias("Item", ItemBean.class);
 		xstream.alias("Materia", Proposicao.class);
 		
 		xstream.aliasField("Partes", ReuniaoBean.class, "partes");
+		xstream.aliasField("Comissoes", ReuniaoBean.class, "comissoes");
 		xstream.aliasField("Codigo", ReuniaoBean.class, "codigo");
+		xstream.aliasField("Sigla", ComissaoBean.class, "sigla");
+		xstream.aliasField("Nome", ComissaoBean.class, "nome");
 		xstream.aliasField("Itens", ParteBean.class, "itens");
 		xstream.aliasField("Materia", ItemBean.class, "proposicao");
+		xstream.aliasField("SeqOrdemPauta", ItemBean.class, "seqOrdemPauta");
 		xstream.aliasField("Codigo", Proposicao.class, "idProposicao");
 		xstream.aliasField("Subtipo", Proposicao.class, "tipo");
 		xstream.aliasField("Numero", Proposicao.class, "numero");
@@ -93,6 +99,7 @@ class ListaReunioes {
 
 class ReuniaoBean {
 	protected Integer codigo;
+	protected List<ComissaoBean> comissoes = new ArrayList<ComissaoBean>();
 	protected List<ParteBean> partes = new ArrayList<ParteBean>();
 	
 	protected Integer getCodigo() {
@@ -103,6 +110,10 @@ class ReuniaoBean {
 		return partes;
 	}
 	
+	protected List<ComissaoBean> getComissoes() {
+		return comissoes;
+	}
+
 	protected List<Proposicao> getProposicoes() {
 		List<Proposicao> materias = new ArrayList<Proposicao>();
 		
@@ -110,13 +121,25 @@ class ReuniaoBean {
 			List<ItemBean> itens = parteBean.getItens();
 		
 			for (ItemBean itemBean : itens) {
+				itemBean.getProposicao().setComissao(comissoes.get(0).getSigla() + " - " + comissoes.get(0).getNome());
 				materias.add(itemBean.getProposicao());
 			}
 		}
 		
 		return materias;
 	}
+}
+
+class ComissaoBean {
+	protected String sigla;
+	protected String nome;
 	
+	protected String getSigla() {
+		return sigla;
+	}
+	protected String getNome() {
+		return nome;
+	}
 }
 
 class ParteBean {
@@ -132,9 +155,15 @@ class ParteBean {
 }
 
 class ItemBean {
+	protected Integer seqOrdemPauta;
 	protected Proposicao proposicao;
 
 	protected Proposicao getProposicao() {
+		proposicao.setSeqOrdemPauta(seqOrdemPauta);
 		return proposicao;
+	}
+
+	protected Integer getSeqOrdemPauta() {
+		return seqOrdemPauta;
 	}
 }
