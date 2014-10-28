@@ -3,6 +3,7 @@ package br.org.mj.sislegis.app.parser.senado;
 import java.net.URL;
 import java.util.List;
 
+import br.org.mj.sislegis.app.enumerated.Origem;
 import br.org.mj.sislegis.app.model.Proposicao;
 
 import com.thoughtworks.xstream.XStream;
@@ -28,7 +29,12 @@ public class ParserProposicaoSenado {
 
 		xstream.fromXML(url, detalheMateria);
 		
-		return ! detalheMateria.getProposicoes().isEmpty() ? detalheMateria.getProposicoes().get(0) : null;
+		Proposicao proposicao = new Proposicao();
+		
+		proposicao = detalheMateria.getProposicoes().isEmpty() ? proposicao : detalheMateria.getProposicoes().get(0);
+		proposicao.setOrigem(Origem.SENADO);
+		
+		return proposicao;
 	}
 	
 	private static void config(XStream xstream) {

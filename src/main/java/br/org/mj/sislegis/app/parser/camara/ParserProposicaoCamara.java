@@ -2,6 +2,7 @@ package br.org.mj.sislegis.app.parser.camara;
 
 import java.net.URL;
 
+import br.org.mj.sislegis.app.enumerated.Origem;
 import br.org.mj.sislegis.app.model.Proposicao;
 
 import com.thoughtworks.xstream.XStream;
@@ -26,6 +27,8 @@ public class ParserProposicaoCamara {
 		config(xstream);
 
 		xstream.fromXML(url, proposicao);
+		
+		proposicao.setOrigem(Origem.CAMARA);
 		
 		return proposicao;
 	}

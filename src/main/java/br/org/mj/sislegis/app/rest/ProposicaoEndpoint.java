@@ -53,8 +53,7 @@ public class ProposicaoEndpoint {
 		parametros.put("data", formattedDate);
 		
 		List<Proposicao> lista = proposicaoService.buscarProposicoesPautaCamaraWS(parametros);
-		for(Proposicao proposicao:lista){
-			proposicao.setOrigem(Origem.CAMARA);
+		for (Proposicao proposicao:lista) {
 			proposicao.setListaReunioes(new HashSet<Reuniao>());
 		}
 		return lista;
@@ -72,8 +71,7 @@ public class ProposicaoEndpoint {
 		parametros.put("data", formattedDate);
 		
 		List<Proposicao> lista = proposicaoService.buscarProposicoesPautaSenadoWS(parametros);
-		for(Proposicao proposicao:lista){
-			proposicao.setOrigem(Origem.SENADO);
+		for (Proposicao proposicao:lista) {
 			proposicao.setListaReunioes(new HashSet<Reuniao>());
 		}
 		return lista;

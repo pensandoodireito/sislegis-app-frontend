@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.org.mj.sislegis.app.enumerated.Origem;
 import br.org.mj.sislegis.app.model.Proposicao;
 
 import com.thoughtworks.xstream.XStream;
@@ -45,6 +46,7 @@ public class ParserPautaCamara {
 			for (Proposicao proposicao : reuniao.getProposicoes()) {
 				proposicao.setSeqOrdemPauta(seqOrdemPauta++);
 				proposicao.setComissao(pauta.getOrgao());
+				proposicao.setOrigem(Origem.CAMARA);
 			}
 			
 			proposicoes.addAll(reuniao.getProposicoes());

@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.org.mj.sislegis.app.enumerated.Origem;
 import br.org.mj.sislegis.app.model.Proposicao;
 
 import com.thoughtworks.xstream.XStream;
@@ -122,6 +123,7 @@ class ReuniaoBean {
 		
 			for (ItemBean itemBean : itens) {
 				itemBean.getProposicao().setComissao(comissoes.get(0).getSigla() + " - " + comissoes.get(0).getNome());
+				itemBean.getProposicao().setOrigem(Origem.SENADO);
 				materias.add(itemBean.getProposicao());
 			}
 		}
