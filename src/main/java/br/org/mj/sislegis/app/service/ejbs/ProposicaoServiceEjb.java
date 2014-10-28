@@ -116,16 +116,20 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 		proposicao.setEmentaClob(new SerialClob(proposicao.getEmenta()
 				.toCharArray()));
 		proposicao.setListaReunioes(p.getListaReunioes());
-		proposicao.setOrigem(p.getOrigem());
-		proposicao.setSeqOrdemPauta(p.getSeqOrdemPauta());
-		proposicao.setAno(p.getAno());
-		proposicao.setComissao(p.getComissao());
-		proposicao.setAutor(p.getAutor());
-		proposicao.setDataApresentacao(p.getDataApresentacao());
-		proposicao.setLinkPauta(p.getLinkPauta());
-		proposicao.setLinkProposicao(p.getLinkProposicao());
-		proposicao.setNumero(p.getNumero());
-		proposicao.setTipo(p.getTipo());
+		proposicao.setOrigem(isNull(p.getOrigem())?proposicao.getOrigem():p.getOrigem());
+		proposicao.setSeqOrdemPauta(isNull(p.getSeqOrdemPauta())?proposicao.getSeqOrdemPauta():p.getSeqOrdemPauta());
+		proposicao.setAno(isNull(p.getAno())?proposicao.getAno():p.getAno());
+		proposicao.setComissao(isNull(p.getComissao())?proposicao.getComissao():p.getComissao());
+		proposicao.setAutor(isNull(p.getAutor())?proposicao.getAutor():p.getAutor());
+		proposicao.setDataApresentacao(isNull(p.getDataApresentacao())?proposicao.getDataApresentacao():p.getDataApresentacao());
+		proposicao.setLinkPauta(isNull(p.getLinkPauta())?proposicao.getLinkPauta():p.getLinkPauta());
+		proposicao.setLinkProposicao(isNull(p.getLinkProposicao())?proposicao.getLinkProposicao():p.getLinkProposicao());
+		proposicao.setNumero(isNull(p.getNumero())?proposicao.getNumero():p.getNumero());
+		proposicao.setTipo(isNull(p.getTipo())?proposicao.getTipo():p.getTipo());
+	}
+	
+	public boolean isNull(Object obj){
+		return obj==null?true:false;
 	}
 
 	@Override
