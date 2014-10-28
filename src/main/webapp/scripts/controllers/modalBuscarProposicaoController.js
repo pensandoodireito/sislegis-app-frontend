@@ -31,7 +31,9 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
 
         $('#spinner').show();
         
-        var successCallback = function(sucess){
+        var successCallback = function(sucess) {
+        	$scope.detalheProposicao = null;
+    		$scope.showDetalhamentoProposicao = false;
 			$scope.proposicoes = sucess;
 			$scope.comissaoProposicao = $scope.comissao.sigla;
 			$('#spinner').hide();
@@ -56,9 +58,7 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
         			}, successCallback, errorCallback);
         }
     };
-    
-
-    
+   
     $scope.detalharProposicao = function(idProposicao){
         $('#spinner').show();
     	$http({
