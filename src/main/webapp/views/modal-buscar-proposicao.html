@@ -45,7 +45,9 @@
 				</div>
 				<div class="line-9 rol-vert">
 					<div class="list-group" ng-model="proposicao" ng-repeat="proposicao in proposicoes | filter:buscaPalavraChave">
-
+						<p>
+							<strong>Link da pauta: </strong> <a href="{{proposicao.linkPauta}}" target="_blank">Abrir</a>
+						</p>
 						<a href="javascript:;" class="list-group-item" ng-click="detalharProposicao(proposicao.idProposicao)">
 							<button type="button" class="close">
 								<span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
@@ -69,7 +71,6 @@
 								</div>
 							</div>
 						</a>
-
 					</div>
 				</div>
 

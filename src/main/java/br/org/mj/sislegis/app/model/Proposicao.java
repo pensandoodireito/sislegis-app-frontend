@@ -84,6 +84,9 @@ public class Proposicao implements AbstractEntity {
 	
 	@Transient
 	private String linkProposicao;
+	
+	@Transient
+	private String linkPauta;
 
 	public String getSigla() {
 		if(Objects.isNull(sigla))
@@ -101,31 +104,6 @@ public class Proposicao implements AbstractEntity {
 
 	public void setId(final Long id) {
 		this.id = id;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof Proposicao)) {
-			return false;
-		}
-		Proposicao other = (Proposicao) obj;
-		if (id != null) {
-			if (!id.equals(other.id)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
 	}
 
 	public Integer getIdProposicao() {
@@ -199,29 +177,6 @@ public class Proposicao implements AbstractEntity {
 	public void setSeqOrdemPauta(Integer seqOrdemPauta) {
 		this.seqOrdemPauta = seqOrdemPauta;
 	}
-
-	@Override
-	public String toString() {
-		String result = getClass().getSimpleName() + " ";
-		if (id != null)
-			result += "id: " + id;
-		if (idProposicao != null)
-			result += ", idProposicao: " + idProposicao;
-		if (ano != null && !ano.trim().isEmpty())
-			result += ", ano: " + ano;
-		if (numero != null)
-			result += ", numero: " + numero;
-		if (dataApresentacao != null)
-			result += ", dataApresentacao: " + dataApresentacao;
-		if (ementa != null && !ementa.trim().isEmpty())
-			result += ", ementa: " + ementa;
-		if (autor != null && !autor.trim().isEmpty())
-			result += ", autor: " + autor;
-		if (seqOrdemPauta != null)
-			result += ", seqOrdemPauta: " + seqOrdemPauta;
-		return result;
-	}
-
 	
 	public Origem getOrigem() {
 		return origem;
@@ -254,4 +209,60 @@ public class Proposicao implements AbstractEntity {
 	public void setLinkProposicao(String linkProposicao) {
 		this.linkProposicao = linkProposicao;
 	}
+
+	public String getLinkPauta() {
+		return linkPauta;
+	}
+
+	public void setLinkPauta(String linkPauta) {
+		this.linkPauta = linkPauta;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Proposicao)) {
+			return false;
+		}
+		Proposicao other = (Proposicao) obj;
+		if (id != null) {
+			if (!id.equals(other.id)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+	
+	@Override
+	public String toString() {
+		String result = getClass().getSimpleName() + " ";
+		if (id != null)
+			result += "id: " + id;
+		if (idProposicao != null)
+			result += ", idProposicao: " + idProposicao;
+		if (ano != null && !ano.trim().isEmpty())
+			result += ", ano: " + ano;
+		if (numero != null)
+			result += ", numero: " + numero;
+		if (dataApresentacao != null)
+			result += ", dataApresentacao: " + dataApresentacao;
+		if (ementa != null && !ementa.trim().isEmpty())
+			result += ", ementa: " + ementa;
+		if (autor != null && !autor.trim().isEmpty())
+			result += ", autor: " + autor;
+		if (seqOrdemPauta != null)
+			result += ", seqOrdemPauta: " + seqOrdemPauta;
+		return result;
+	}
+
 }

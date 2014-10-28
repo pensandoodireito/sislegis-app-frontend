@@ -48,6 +48,7 @@ public class ParserPautaCamara {
 				proposicao.setComissao(pauta.getOrgao());
 				proposicao.setOrigem(Origem.CAMARA);
 				proposicao.setLinkProposicao("http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao="+proposicao.getIdProposicao());
+				proposicao.setLinkPauta("http://www.camara.leg.br/internet/ordemdodia/ordemDetalheReuniaoCom.asp?codReuniao="+reuniao.getCodReuniao());
 			}
 			
 			proposicoes.addAll(reuniao.getProposicoes());
@@ -89,8 +90,13 @@ class PautaBean {
 }
 
 class ReuniaoBean {
+	protected Integer codReuniao;
 	protected List<Proposicao> proposicoes = new ArrayList<Proposicao>();
 
+	protected Integer getCodReuniao() {
+		return codReuniao;
+	}
+	
 	protected List<Proposicao> getProposicoes() {
 		return proposicoes;
 	}
