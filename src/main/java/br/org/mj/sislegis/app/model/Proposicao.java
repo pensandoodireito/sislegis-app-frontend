@@ -81,6 +81,9 @@ public class Proposicao implements AbstractEntity {
 	
 	@Transient
 	private String ementa;
+	
+	@Transient
+	private String link;
 
 	public String getSigla() {
 		if(Objects.isNull(sigla))
@@ -244,5 +247,11 @@ public class Proposicao implements AbstractEntity {
 		this.ementaClob = ementaClob;
 	}
 
+	public String getLink() {
+		return link;
+	}
 
+	public void setLink(String link) {
+		this.link = link;
+	}
 }
