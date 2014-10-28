@@ -24,8 +24,8 @@
 
 			<div class="list-group rol-vert height-full" ng-repeat="item in listaProposicao">
 
-				<a href="javascript:;" class="list-group-item" ng-click="getProposicao(item.id)">
-					<button type="button" class="close">
+					<a href="javascript:;" class="list-group-item" ng-click="getProposicao(item.id)">
+					<button type="button" class="close" ng-click="removerProposicao(item.id)">
 						<span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
 					</button>
 					<h4 class="list-group-item-heading">{{item.sigla}}</h4>
@@ -61,13 +61,13 @@
 			</div> -->
 			<hr>
 			<div class="panel-body rol-vert height-full">
-				<h3><a href="{{detalheProposicao.linkProposicao}}" target="_blank">{{detalheProposicao.sigla}}</a></h3>
-				<p class="divider-top">{{detalheProposicao.ementa}}</p>
+				<h3><a href="{{detalheProposicao.linkProposicao}}" target="_blank">{{selectedProposicao.sigla}}</a></h3>
+				<p class="divider-top">{{selectedProposicao.ementa}}</p>
 				<p class="fontsize-sm">
-					<strong>Autor:  </strong>{{detalheProposicao.autor}}
+					<strong>Autor:  </strong>{{selectedProposicao.autor}}
 				</p>
 				<p class="fontsize-sm">
-					<strong>Origem:  </strong>{{detalheProposicao.origem}}
+					<strong>Origem:  </strong>{{selectedProposicao.origem}}
 				</p>
 				<p class="fontsize-sm">
 					<strong>Link da proposição:  </strong> 

@@ -92,8 +92,9 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
 		$('#spinner').show();
         
         var successCallback = function(sucess){
+        	$modalInstance.close();
 			$('#spinner').hide();
-			$modalInstance.close($scope.listaProposicaoSelecao);
+			
         };
         var errorCallback = function() {
         	alert('erro');

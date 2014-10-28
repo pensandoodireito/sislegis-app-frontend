@@ -117,6 +117,15 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 				.toCharArray()));
 		proposicao.setListaReunioes(p.getListaReunioes());
 		proposicao.setOrigem(p.getOrigem());
+		proposicao.setSeqOrdemPauta(p.getSeqOrdemPauta());
+		proposicao.setAno(p.getAno());
+		proposicao.setComissao(p.getComissao());
+		proposicao.setAutor(p.getAutor());
+		proposicao.setDataApresentacao(p.getDataApresentacao());
+		proposicao.setLinkPauta(p.getLinkPauta());
+		proposicao.setLinkProposicao(p.getLinkProposicao());
+		proposicao.setNumero(p.getNumero());
+		proposicao.setTipo(p.getTipo());
 	}
 
 	@Override
@@ -143,6 +152,8 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 		proposicaoJSON.setSigla(proposicao.getSigla());
 		proposicaoJSON.setAutor(proposicao.getAutor());
 		proposicaoJSON.setOrigem(proposicao.getOrigem());
+		proposicaoJSON.setComissao(proposicao.getComissao());
+		proposicaoJSON.setSeqOrdemPauta(proposicao.getSeqOrdemPauta());
 		return proposicaoJSON;
 	}
 

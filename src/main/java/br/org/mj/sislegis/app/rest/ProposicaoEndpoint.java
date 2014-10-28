@@ -109,7 +109,7 @@ public class ProposicaoEndpoint {
 	@DELETE
 	@Path("/{id:[0-9][0-9]*}")
 	public Response deleteById(@PathParam("id") Long id) {
-		service.deleteById(id);
+		proposicaoService.deleteById(id);
 		return Response.noContent().build();
 	}
 

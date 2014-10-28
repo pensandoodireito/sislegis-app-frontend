@@ -29,6 +29,28 @@ public class ProposicaoJSON {
 	
 	private String sigla;
 	
+	private String comissao;
+	
+	private Integer seqOrdemPauta;
+	
+	public String getComissao() {
+		return comissao;
+	}
+
+	public void setComissao(String comissao) {
+		this.comissao = comissao;
+	}
+
+	public Integer getSeqOrdemPauta() {
+		return seqOrdemPauta;
+	}
+
+	public void setSeqOrdemPauta(Integer seqOrdemPauta) {
+		this.seqOrdemPauta = seqOrdemPauta;
+	}
+
+	
+	
 	public String getEmenta() {
 		return ementa;
 	}
