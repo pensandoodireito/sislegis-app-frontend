@@ -29,7 +29,7 @@ public class ParserProposicaoCamara {
 		xstream.fromXML(url, proposicao);
 		
 		proposicao.setOrigem(Origem.CAMARA);
-		proposicao.setLink("http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao="+proposicao.getIdProposicao());
+		proposicao.setLinkProposicao("http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao="+proposicao.getIdProposicao());
 		
 		return proposicao;
 	}

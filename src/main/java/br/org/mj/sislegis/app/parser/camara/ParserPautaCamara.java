@@ -47,7 +47,7 @@ public class ParserPautaCamara {
 				proposicao.setSeqOrdemPauta(seqOrdemPauta++);
 				proposicao.setComissao(pauta.getOrgao());
 				proposicao.setOrigem(Origem.CAMARA);
-				proposicao.setLink("http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao="+proposicao.getIdProposicao());
+				proposicao.setLinkProposicao("http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao="+proposicao.getIdProposicao());
 			}
 			
 			proposicoes.addAll(reuniao.getProposicoes());

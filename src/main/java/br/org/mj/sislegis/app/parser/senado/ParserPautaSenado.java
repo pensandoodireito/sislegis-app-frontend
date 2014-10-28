@@ -124,7 +124,7 @@ class ReuniaoBean {
 			for (ItemBean itemBean : itens) {
 				itemBean.getProposicao().setComissao(comissoes.get(0).getSigla() + " - " + comissoes.get(0).getNome());
 				itemBean.getProposicao().setOrigem(Origem.SENADO);
-				itemBean.getProposicao().setLink("http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate="+itemBean.getProposicao().getIdProposicao());
+				itemBean.getProposicao().setLinkProposicao("http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate="+itemBean.getProposicao().getIdProposicao());
 				materias.add(itemBean.getProposicao());
 			}
 		}

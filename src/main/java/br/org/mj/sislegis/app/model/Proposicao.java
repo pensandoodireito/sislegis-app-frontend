@@ -83,7 +83,7 @@ public class Proposicao implements AbstractEntity {
 	private String ementa;
 	
 	@Transient
-	private String link;
+	private String linkProposicao;
 
 	public String getSigla() {
 		if(Objects.isNull(sigla))
@@ -247,11 +247,11 @@ public class Proposicao implements AbstractEntity {
 		this.ementaClob = ementaClob;
 	}
 
-	public String getLink() {
-		return link;
+	public String getLinkProposicao() {
+		return linkProposicao;
 	}
 
-	public void setLink(String link) {
-		this.link = link;
+	public void setLinkProposicao(String linkProposicao) {
+		this.linkProposicao = linkProposicao;
 	}
 }

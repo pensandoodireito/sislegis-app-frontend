@@ -33,7 +33,7 @@ public class ParserProposicaoSenado {
 		
 		proposicao = detalheMateria.getProposicoes().isEmpty() ? proposicao : detalheMateria.getProposicoes().get(0);
 		proposicao.setOrigem(Origem.SENADO);
-		proposicao.setLink("http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate="+proposicao.getIdProposicao());
+		proposicao.setLinkProposicao("http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate="+proposicao.getIdProposicao());
 		
 		return proposicao;
 	}
