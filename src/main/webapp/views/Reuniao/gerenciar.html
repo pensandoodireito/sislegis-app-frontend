@@ -52,28 +52,30 @@
 	</div>
 	<div class="col-sm-8">
 		<div class="panel panel-default ">
-			<div class="panel-heading">Detalhamento</div>
-<!-- 			<div class="pt-sm pb-sm">
-				<div class="col-xs-5">
-					<a href="#" data-toggle="modal" data-target="#modalProposicao"><i class="fa fa-comment"></i> 3 comentários</a> (clique para adicionar)
+			<div class="panel-heading">Detalhamento da Proposição</div>
+				<div ng-show="selectedProposicao">	
+					<!-- <div class="pt-sm pb-sm">
+						<div class="col-xs-5">
+							<a href="#" data-toggle="modal" data-target="#modalProposicao"><i class="fa fa-comment"></i> 3 comentários</a> (clique para adicionar)
+						</div>
+						<div class="col-xs-5"></div>
+					</div> -->
+					<hr>
+					<div class="panel-body rol-vert height-full">
+						<h3><a href="{{detalheProposicao.linkProposicao}}" target="_blank">{{selectedProposicao.sigla}}</a></h3>
+						<p class="divider-top">{{selectedProposicao.ementa}}</p>
+						<p class="fontsize-sm">
+							<strong>Autor:  </strong>{{selectedProposicao.autor}}
+						</p>
+						<p class="fontsize-sm">
+							<strong>Origem:  </strong>{{selectedProposicao.origem}}
+						</p>
+						<p class="fontsize-sm">
+							<strong>Link da proposição:  </strong> 
+							<a href="{{detalheProposicao.linkProposicao}}" target="_blank">Abrir</a>
+						</p>
+					</div>
 				</div>
-				<div class="col-xs-5"></div>
-			</div> -->
-			<hr>
-			<div class="panel-body rol-vert height-full">
-				<h3><a href="{{detalheProposicao.linkProposicao}}" target="_blank">{{selectedProposicao.sigla}}</a></h3>
-				<p class="divider-top">{{selectedProposicao.ementa}}</p>
-				<p class="fontsize-sm">
-					<strong>Autor:  </strong>{{selectedProposicao.autor}}
-				</p>
-				<p class="fontsize-sm">
-					<strong>Origem:  </strong>{{selectedProposicao.origem}}
-				</p>
-				<p class="fontsize-sm">
-					<strong>Link da proposição:  </strong> 
-					<a href="{{detalheProposicao.linkProposicao}}" target="_blank">Abrir</a>
-				</p>
-			</div>
 		</div>
 	</div>
 </div>
