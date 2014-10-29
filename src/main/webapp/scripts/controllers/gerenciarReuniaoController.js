@@ -32,7 +32,7 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
         	if(!$scope.reuniao.listaProposicao){
         		$scope.reuniao.listaProposicao = [];
         	}
-        	$scope.reuniao.listaProposicao = $scope.reuniao.listaProposicao.concat(listaProposicaoSelecao);
+        	$scope.listaProposicao = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
           }, function () {
             $log.info('Modal dismissed at: ' + new Date());
           });
@@ -97,24 +97,21 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
     	if(confirm("Deseja realmente excluir esse registro?")){
         	ProposicaoResource.remove({ProposicaoId: id})
         	$scope.listaProposicao = [];
-        	
-        	var curr_date = $scope.reuniao.data.getDate();
-            var curr_month = ('0' + ($scope.reuniao.data.getMonth()+1)).slice(-2); // Adicionando o 0 manualmente quando o mes tem apenas 1 digito
-            var curr_year = $scope.reuniao.data.getFullYear();
-            var formattedDate = curr_year + "" + curr_month + "" + curr_date;
-        	$scope.listaProposicao = ReuniaoResource.buscarReuniaoPorData({data : formattedDate});
+        	$scope.listaProposicao = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
     	}
 
     }; 
     
-    $scope.$watch("reuniao.data", function() {
+    
+    $scope.dataFormatada = function(){
     	var curr_date = $scope.reuniao.data.getDate();
         var curr_month = ('0' + ($scope.reuniao.data.getMonth()+1)).slice(-2); // Adicionando o 0 manualmente quando o mes tem apenas 1 digito
         var curr_year = $scope.reuniao.data.getFullYear();
-        var formattedDate = curr_year + "" + curr_month + "" + curr_date;
-        
-        
-        $scope.listaProposicao = ReuniaoResource.buscarReuniaoPorData({data : formattedDate});
+        return curr_year + "" + curr_month + "" + curr_date;
+    };
+    
+    $scope.$watch("reuniao.data", function() {
+        $scope.listaProposicao = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
 
     });
     
