@@ -97,6 +97,7 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
     	if(confirm("Deseja realmente excluir esse registro?")){
         	ProposicaoResource.remove({ProposicaoId: id})
         	$scope.listaProposicao = [];
+        	$scope.selectedProposicao = null;
         	$scope.listaProposicao = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
     	}
 
