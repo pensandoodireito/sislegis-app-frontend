@@ -27,17 +27,13 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
         var formattedDate = $filter('date')(new Date($scope.campoData),
                                     'MM/dd/yyyy');
 
-        $('#spinner').show();
-        
         var successCallback = function(sucess) {
         	$scope.detalheProposicao = null;
     		$scope.showDetalhamentoProposicao = false;
 			$scope.proposicoes = sucess;
 			$scope.comissaoProposicao = $scope.comissao.sigla;
-			$('#spinner').hide();
         };
         var errorCallback = function() {
-    		$('#spinner').hide();
         };
         
         if($scope.origem.value == 'C'){
@@ -58,7 +54,6 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
     };
    
     $scope.detalharProposicao = function(idProposicao){
-        $('#spinner').show();
     	$http({
   		  method:'GET',
   		  url : ($scope.origem.value == 'C') ? "rest/proposicaos/detalharProposicaoCamaraWS" : "rest/proposicaos/detalharProposicaoSenadoWS",
@@ -69,9 +64,7 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
   			console.log(data);
   			$scope.detalheProposicao = data;
   			$scope.showDetalhamentoProposicao =true;
-            $('#spinner').hide();
         }).error(function(error){
-            $('#spinner').hide();
         });        	
     };
   
@@ -87,16 +80,13 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
     
     
     $scope.salvar = function() {
-		$('#spinner').show();
         
         var successCallback = function(sucess){
         	$modalInstance.close();
-			$('#spinner').hide();
 			
         };
         var errorCallback = function() {
         	alert('erro');
-    		$('#spinner').hide();
         };
     	ProposicaoResource.save($scope.listaProposicaoSelecao, successCallback, errorCallback);
     };
