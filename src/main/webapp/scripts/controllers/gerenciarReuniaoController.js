@@ -111,7 +111,9 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
     };
     
     $scope.$watch("reuniao.data", function() {
-        $scope.listaProposicao = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
+    	if(!angular.isUndefined($scope.reuniao.data)){
+    		$scope.listaProposicao = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
+    	}
 
     });
     
