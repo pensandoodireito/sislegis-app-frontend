@@ -1,6 +1,7 @@
 package br.org.mj.sislegis.app.model;
 
 import java.util.Date;
+import java.util.Set;
 
 import br.org.mj.sislegis.app.enumerated.Origem;
 
@@ -33,6 +34,12 @@ public class ProposicaoJSON {
 	
 	private Integer seqOrdemPauta;
 	
+	private Set<Reuniao> listaReunioes;
+	
+	private Posicionamento posicionamento;
+	
+	private String tags;
+	
 	public String getComissao() {
 		return comissao;
 	}
@@ -49,8 +56,6 @@ public class ProposicaoJSON {
 		this.seqOrdemPauta = seqOrdemPauta;
 	}
 
-	
-	
 	public String getEmenta() {
 		return ementa;
 	}
@@ -133,4 +138,27 @@ public class ProposicaoJSON {
 		this.origem = origem;
 	}
 
+	public Posicionamento getPosicionamento() {
+		return posicionamento;
+	}
+
+	public void setPosicionamento(Posicionamento posicionamento) {
+		this.posicionamento = posicionamento;
+	}
+
+	public Set<Reuniao> getListaReunioes() {
+		return listaReunioes;
+	}
+
+	public void setListaReunioes(Set<Reuniao> listaReunioes) {
+		this.listaReunioes = listaReunioes;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
+	}
 }

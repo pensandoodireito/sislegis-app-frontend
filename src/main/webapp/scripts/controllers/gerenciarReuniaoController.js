@@ -1,6 +1,6 @@
 
 
-angular.module('sislegisapp').controller('GerenciarReuniaoController', function($scope, $http, $filter, $routeParams, $location, $modal, $log, ReuniaoResource, ProposicaoResource) {
+angular.module('sislegisapp').controller('GerenciarReuniaoController', function($scope, $http, $filter, $routeParams, $location, $modal, $log, ReuniaoResource, ProposicaoResource, PosicionamentoResource) {
     var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
@@ -90,7 +90,7 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
     
     $scope.getProposicao = function(id) {
     	$scope.selectedProposicao = ProposicaoResource.get({ProposicaoId: id});
-    	
+    	$scope.posicionamentos = PosicionamentoResource.queryAll();
     }
     
     $scope.removerProposicao = function(id){
@@ -116,6 +116,10 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
     	}
 
     });
+    
+    $scope.atualizarProposicao = function() {
+    	ProposicaoResource.update($scope.selectedProposicao);
+    }
     
     
     // CALENDARIO
