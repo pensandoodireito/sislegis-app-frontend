@@ -61,10 +61,8 @@ public class ReuniaoEndpoint {
 	@GET
 	@Path("/findByData")
 	@Produces("application/json")
-
-	public List<ProposicaoJSON> findByData(@QueryParam("data") String data) throws Exception {
-		Date formattedDate = Conversores.stringToDate(data, "yyyyMMdd");
-		List<ProposicaoJSON> lista = proposicaoService.buscarProposicoesPorDataReuniao(formattedDate);
+	public List<ProposicaoJSON> findByData(@QueryParam("data") Date data) throws Exception {
+		List<ProposicaoJSON> lista = proposicaoService.buscarProposicoesPorDataReuniao(data);
 		return lista;
 	}
 

@@ -1,4 +1,4 @@
-angular.module('sislegisapp').controller('ModalBuscarProposicaoController', function($scope, $http, $routeParams, $location, $modalInstance, ProposicaoResource, reuniao, listaProposicaoSelecao) {
+angular.module('sislegisapp').controller('ModalBuscarProposicaoController', function($scope, $http, $filter, $routeParams, $location, $modalInstance, ProposicaoResource, reuniao, listaProposicaoSelecao) {
     var self = this;
     $scope.disabled = false;
     $scope.showDetalhamentoProposicao =false;
@@ -24,10 +24,8 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController', func
     
 
     $scope.buscarProposicao = function() {
-    	var curr_date = ('0' + ($scope.campoData.getDate())).slice(-2);
-        var curr_month = ('0' + ($scope.campoData.getMonth()+1)).slice(-2); // Adicionando o 0 manualmente quando o mes tem apenas 1 digito
-        var curr_year = $scope.campoData.getFullYear();
-        var formattedDate = curr_year + "" + curr_month + "" + curr_date
+        var formattedDate = $filter('date')(new Date($scope.campoData),
+                                    'MM/dd/yyyy');
 
         $('#spinner').show();
         

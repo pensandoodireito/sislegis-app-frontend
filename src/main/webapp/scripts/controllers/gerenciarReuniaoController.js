@@ -1,6 +1,6 @@
 
 
-angular.module('sislegisapp').controller('GerenciarReuniaoController', function($scope, $http, $routeParams, $location, $modal, $log, ReuniaoResource, ProposicaoResource) {
+angular.module('sislegisapp').controller('GerenciarReuniaoController', function($scope, $http, $filter, $routeParams, $location, $modal, $log, ReuniaoResource, ProposicaoResource) {
     var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
@@ -105,10 +105,9 @@ angular.module('sislegisapp').controller('GerenciarReuniaoController', function(
     
     
     $scope.dataFormatada = function(){
-    	var curr_date = $scope.reuniao.data.getDate();
-        var curr_month = ('0' + ($scope.reuniao.data.getMonth()+1)).slice(-2); // Adicionando o 0 manualmente quando o mes tem apenas 1 digito
-        var curr_year = $scope.reuniao.data.getFullYear();
-        return curr_year + "" + curr_month + "" + curr_date;
+        var formattedDate = $filter('date')(new Date($scope.reuniao.data),
+        	'MM/dd/yyyy');
+        return formattedDate;
     };
     
     $scope.$watch("reuniao.data", function() {
