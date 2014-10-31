@@ -15,6 +15,7 @@ import javax.sql.rowset.serial.SerialClob;
 import javax.sql.rowset.serial.SerialException;
 
 import br.org.mj.sislegis.app.enumerated.Origem;
+import br.org.mj.sislegis.app.model.Posicionamento;
 import br.org.mj.sislegis.app.model.Proposicao;
 import br.org.mj.sislegis.app.model.ProposicaoJSON;
 import br.org.mj.sislegis.app.parser.camara.ParserPautaCamara;
@@ -153,11 +154,17 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 						.getEmentaClob()));
 		proposicaoJSON.setId(proposicao.getId());
 		proposicaoJSON.setIdProposicao(proposicao.getIdProposicao());
+		proposicaoJSON.setAno(proposicao.getAno());
+		proposicaoJSON.setNumero(proposicao.getNumero());
 		proposicaoJSON.setSigla(proposicao.getSigla());
 		proposicaoJSON.setAutor(proposicao.getAutor());
 		proposicaoJSON.setOrigem(proposicao.getOrigem());
 		proposicaoJSON.setComissao(proposicao.getComissao());
 		proposicaoJSON.setSeqOrdemPauta(proposicao.getSeqOrdemPauta());
+		proposicaoJSON.setPosicionamento(proposicao.getPosicionamento());
+		proposicaoJSON.setTags(proposicao.getTags());
+		//proposicaoJSON.setListaReunioes(proposicao.getListaReunioes()); //FIXME gerando lazyException
+		
 		return proposicaoJSON;
 	}
 

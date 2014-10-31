@@ -7,3 +7,8 @@
 --insert into Reuniao_Proposicao values (1, 1);
 --insert into Reuniao_Proposicao values (1, 2);
 --insert into Reuniao_Proposicao values (1, 3);
+
+insert into Posicionamento (id, nome) values (1, 'Favoravel');
+insert into Posicionamento (id, nome) values (2, 'Nao favoravel');
+insert into Posicionamento (id, nome) values (3, 'Nao interessa');
+insert into Posicionamento (id, nome) values (4, 'Outro posicionamento');
