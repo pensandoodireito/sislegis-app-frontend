@@ -15,9 +15,10 @@ import javax.sql.rowset.serial.SerialClob;
 import javax.sql.rowset.serial.SerialException;
 
 import br.org.mj.sislegis.app.enumerated.Origem;
-import br.org.mj.sislegis.app.model.Posicionamento;
+import br.org.mj.sislegis.app.json.ProposicaoJSON;
 import br.org.mj.sislegis.app.model.Proposicao;
-import br.org.mj.sislegis.app.model.ProposicaoJSON;
+import br.org.mj.sislegis.app.model.ReuniaoProposicao;
+import br.org.mj.sislegis.app.model.ReuniaoProposicaoPK;
 import br.org.mj.sislegis.app.parser.camara.ParserPautaCamara;
 import br.org.mj.sislegis.app.parser.camara.ParserProposicaoCamara;
 import br.org.mj.sislegis.app.parser.senado.ParserPautaSenado;
@@ -102,9 +103,6 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 					populaProposicao(p, proposicao);
 				}
 				save(proposicao);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (Exception e2) {
 				// TODO: handle exception
 			}
@@ -116,7 +114,15 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 			throws SerialException, SQLException {
 		proposicao.setEmentaClob(new SerialClob(proposicao.getEmenta()
 				.toCharArray()));
-		proposicao.setListaReunioes(p.getListaReunioes());
+		String siglaComissao = isNull(p.getSigla())?proposicao.getSigla():p.getSigla();
+		for(ReuniaoProposicao rp:p.getListaReuniaoProposicoes()){
+			ReuniaoProposicaoPK reuniaoProposicaoPK = new ReuniaoProposicaoPK();
+			reuniaoProposicaoPK.setSiglaComissao(siglaComissao);
+			reuniaoProposicaoPK.setDataReuniao(rp.getReuniao().getData());
+			rp.setReuniaoProposicaoPK(reuniaoProposicaoPK);
+			rp.setProposicao(proposicao);
+		}
+		proposicao.setListaReuniaoProposicoes(p.getListaReuniaoProposicoes());
 		proposicao.setOrigem(isNull(p.getOrigem())?proposicao.getOrigem():p.getOrigem());
 		proposicao.setSeqOrdemPauta(isNull(p.getSeqOrdemPauta())?proposicao.getSeqOrdemPauta():p.getSeqOrdemPauta());
 		proposicao.setAno(isNull(p.getAno())?proposicao.getAno():p.getAno());
@@ -163,7 +169,6 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 		proposicaoJSON.setSeqOrdemPauta(proposicao.getSeqOrdemPauta());
 		proposicaoJSON.setPosicionamento(proposicao.getPosicionamento());
 		proposicaoJSON.setTags(proposicao.getTags());
-		//proposicaoJSON.setListaReunioes(proposicao.getListaReunioes()); //FIXME gerando lazyException
 		
 		return proposicaoJSON;
 	}
@@ -178,13 +183,16 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 	public List<ProposicaoJSON> buscarProposicoesPorDataReuniao(Date dataReuniao) {
 
 		List<ProposicaoJSON> listaProposicaoJSON = new ArrayList<ProposicaoJSON>();
+		
+		Query query1 = em
+				.createNativeQuery("select p.* from Proposicao p ", Proposicao.class);
+		List<Proposicao> listaProposicoes1 = query1.getResultList();
 
 		Query query = em
 				.createNativeQuery("select p.* from Proposicao p "
-						+ "inner join Reuniao_Proposicao rp "
-						+ "on p.id = rp.PROPOSICAO_ID "
-						+ "inner join Reuniao r on rp.REUNIAO_ID = r.id "
-						+ "where r.data = :P_DATA", Proposicao.class);
+						+ "inner join ReuniaoProposicao rp "
+						+ "on p.id = rp.idProposicao "
+						+ "where rp.dataReuniao = :P_DATA", Proposicao.class);
 		query.setParameter("P_DATA", Conversores.dateToString(dataReuniao, "yyyy-MM-dd"));  
 
 		List<Proposicao> listaProposicoes = query.getResultList();

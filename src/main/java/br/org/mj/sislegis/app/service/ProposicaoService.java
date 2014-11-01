@@ -6,8 +6,8 @@ import java.util.Map;
 
 import javax.ejb.Local;
 
+import br.org.mj.sislegis.app.json.ProposicaoJSON;
 import br.org.mj.sislegis.app.model.Proposicao;
-import br.org.mj.sislegis.app.model.ProposicaoJSON;
 
 @Local
 public interface ProposicaoService extends Service<Proposicao> {

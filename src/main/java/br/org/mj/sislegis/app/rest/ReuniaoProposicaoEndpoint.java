@@ -1,10 +1,8 @@
 package br.org.mj.sislegis.app.rest;
 
-
-
-import java.util.Date;
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.OptimisticLockException;
 import javax.ws.rs.Consumes;
@@ -15,31 +13,26 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import br.org.mj.sislegis.app.json.ProposicaoJSON;
-import br.org.mj.sislegis.app.model.Reuniao;
-import br.org.mj.sislegis.app.service.ProposicaoService;
+import br.org.mj.sislegis.app.model.ReuniaoProposicao;
 import br.org.mj.sislegis.app.service.Service;
 
-
-@Path("/reuniaos")
-public class ReuniaoEndpoint {
-
-	@Inject
-	private Service<Reuniao> service;
+@Stateless
+@Path("/reuniaoProposicao")
+public class ReuniaoProposicaoEndpoint {
 
 	@Inject
-	private ProposicaoService proposicaoService;
-
+	private Service<ReuniaoProposicao> service;
+	
+	
 	@POST
 	@Consumes("application/json")
-	public Response create(Reuniao entity) {
+	public Response create(ReuniaoProposicao entity) {
 		service.save(entity);
 		return Response.created(
-				UriBuilder.fromResource(ReuniaoEndpoint.class)
+				UriBuilder.fromResource(ReuniaoProposicaoEndpoint.class)
 						.path(String.valueOf(entity.getId())).build()).build();
 	}
 
@@ -58,24 +51,15 @@ public class ReuniaoEndpoint {
 	}
 
 	@GET
-	@Path("/findByData")
 	@Produces("application/json")
-	public List<ProposicaoJSON> findByData(@QueryParam("data") Date data) throws Exception {
-		List<ProposicaoJSON> lista = proposicaoService.buscarProposicoesPorDataReuniao(data);
-		return lista;
-	}
-
-	@GET
-	@Produces("application/json")
-	public List<Reuniao> listAll() {
-		List<Reuniao> results = service.listAll();
-		return results;
+	public List<ReuniaoProposicao> listAll() {
+		return service.listAll();
 	}
 
 	@PUT
 	@Path("/{id:[0-9][0-9]*}")
 	@Consumes("application/json")
-	public Response update(Reuniao entity) {
+	public Response update(ReuniaoProposicao entity) {
 		try {
 			entity = service.save(entity);
 		} catch (OptimisticLockException e) {
@@ -84,5 +68,13 @@ public class ReuniaoEndpoint {
 		}
 
 		return Response.noContent().build();
+	}
+
+	public Service<ReuniaoProposicao> getService() {
+		return service;
+	}
+
+	public void setService(Service<ReuniaoProposicao> service) {
+		this.service = service;
 	}
 }

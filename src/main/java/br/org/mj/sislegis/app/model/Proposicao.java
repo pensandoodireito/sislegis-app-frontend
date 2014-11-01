@@ -16,7 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
@@ -24,306 +24,262 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import br.org.mj.sislegis.app.enumerated.Origem;
 import br.org.mj.sislegis.app.util.Conversores;
-import br.org.mj.sislegis.app.model.Posicionamento;
-import java.lang.Override;
 
 @Entity
 @XmlRootElement
-public class Proposicao implements AbstractEntity
-{
+public class Proposicao implements AbstractEntity {
 
-   private static final long serialVersionUID = 7949894944142814382L;
+	private static final long serialVersionUID = 7949894944142814382L;
 
-   @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
-   @Column(name = "id", updatable = false, nullable = false)
-   private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id", updatable = false, nullable = false)
+	private Long id;
 
-   @Column
-   private Integer idProposicao;
+	@Column
+	private Integer idProposicao;
 
-   @Column
-   private String tipo;
+	@Column
+	private String tipo;
 
-   @Column
-   private String ano;
+	@Column
+	private String ano;
 
-   @Column
-   private String numero;
+	@Column
+	private String numero;
 
-   @Column
-   @Temporal(TemporalType.DATE)
-   private Date dataApresentacao;
+	@Column
+	@Temporal(TemporalType.DATE)
+	private Date dataApresentacao;
 
-   @Column
-   private Clob ementaClob;
+	@Column
+	private Clob ementaClob;
 
-   @Column
-   private String autor;
+	@Column
+	private String autor;
 
-   @Enumerated(EnumType.STRING)
-   @Column
-   private Origem origem;
+	@Enumerated(EnumType.STRING)
+	@Column
+	private Origem origem;
 
-   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-   @JoinTable(name = "Reuniao_Proposicao", joinColumns = {
-         @JoinColumn(name = "PROPOSICAO_ID", nullable = false, updatable = false) },
-         inverseJoinColumns = { @JoinColumn(name = "REUNIAO_ID",
-               nullable = false, updatable = false) })
-   private Set<Reuniao> listaReunioes;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="proposicao")
+	private Set<ReuniaoProposicao> listaReuniaoProposicoes;
 
-   @Column
-   private String comissao;
+	@Column
+	private String comissao;
 
-   @Column
-   private Integer seqOrdemPauta;
+	@Column
+	private Integer seqOrdemPauta;
 
-   @Transient
-   private String sigla;
+	@Transient
+	private String sigla;
 
-   @Transient
-   private String ementa;
+	@Transient
+	private String ementa;
 
-   @Transient
-   private String linkProposicao;
+	@Transient
+	private String linkProposicao;
 
-   @Transient
-   private String linkPauta;
+	@Transient
+	private String linkPauta;
 
-   @Column
-   private Posicionamento posicionamento;
-   
-   @Column
-   private String tags;
+	@Column
+	private Posicionamento posicionamento;
 
-   public String getSigla()
-   {
-      if (Objects.isNull(sigla))
-         sigla = getTipo() + " " + getNumero() + "/" + getAno();
-      return sigla;
-   }
+	@Column
+	private String tags;
 
-   public void setSigla(String sigla)
-   {
-      this.sigla = sigla;
-   }
+	public String getSigla() {
+		if (Objects.isNull(sigla))
+			sigla = getTipo() + " " + getNumero() + "/" + getAno();
+		return sigla;
+	}
 
-   public Long getId()
-   {
-      return this.id;
-   }
+	public void setSigla(String sigla) {
+		this.sigla = sigla;
+	}
 
-   public void setId(final Long id)
-   {
-      this.id = id;
-   }
+	public Long getId() {
+		return this.id;
+	}
 
-   public Integer getIdProposicao()
-   {
-      return idProposicao;
-   }
+	public void setId(final Long id) {
+		this.id = id;
+	}
 
-   public void setIdProposicao(Integer idProposicao)
-   {
-      this.idProposicao = idProposicao;
-   }
+	public Integer getIdProposicao() {
+		return idProposicao;
+	}
 
-   public String getTipo()
-   {
-      return tipo;
-   }
+	public void setIdProposicao(Integer idProposicao) {
+		this.idProposicao = idProposicao;
+	}
 
-   public void setTipo(String tipo)
-   {
-      this.tipo = tipo;
-   }
+	public String getTipo() {
+		return tipo;
+	}
 
-   public String getAno()
-   {
-      return ano;
-   }
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
 
-   public void setAno(String ano)
-   {
-      this.ano = ano;
-   }
+	public String getAno() {
+		return ano;
+	}
 
-   public String getNumero()
-   {
-      return numero;
-   }
+	public void setAno(String ano) {
+		this.ano = ano;
+	}
 
-   public void setNumero(String numero)
-   {
-      this.numero = numero;
-   }
+	public String getNumero() {
+		return numero;
+	}
 
-   public Date getDataApresentacao()
-   {
-      return dataApresentacao;
-   }
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
 
-   public void setDataApresentacao(Date dataApresentacao)
-   {
-      this.dataApresentacao = dataApresentacao;
-   }
+	public Date getDataApresentacao() {
+		return dataApresentacao;
+	}
 
-   public String getEmenta()
-   {
-      return ementaClob == null ? ementa : Conversores.clobToString(ementaClob);
-   }
+	public void setDataApresentacao(Date dataApresentacao) {
+		this.dataApresentacao = dataApresentacao;
+	}
 
-   public void setEmenta(String ementa)
-   {
-      this.ementa = ementa;
-   }
+	public String getEmenta() {
+		return ementaClob == null ? ementa : Conversores
+				.clobToString(ementaClob);
+	}
 
-   public String getAutor()
-   {
-      return autor;
-   }
+	public void setEmenta(String ementa) {
+		this.ementa = ementa;
+	}
 
-   public void setAutor(String autor)
-   {
-      this.autor = autor;
-   }
+	public String getAutor() {
+		return autor;
+	}
 
-   public String getComissao()
-   {
-      return comissao;
-   }
+	public void setAutor(String autor) {
+		this.autor = autor;
+	}
 
-   public void setComissao(String comissao)
-   {
-      this.comissao = comissao;
-   }
+	public String getComissao() {
+		return comissao;
+	}
 
-   public Integer getSeqOrdemPauta()
-   {
-      return seqOrdemPauta;
-   }
+	public void setComissao(String comissao) {
+		this.comissao = comissao;
+	}
 
-   public void setSeqOrdemPauta(Integer seqOrdemPauta)
-   {
-      this.seqOrdemPauta = seqOrdemPauta;
-   }
+	public Integer getSeqOrdemPauta() {
+		return seqOrdemPauta;
+	}
 
-   public Origem getOrigem()
-   {
-      return origem;
-   }
+	public void setSeqOrdemPauta(Integer seqOrdemPauta) {
+		this.seqOrdemPauta = seqOrdemPauta;
+	}
 
-   public void setOrigem(Origem origem)
-   {
-      this.origem = origem;
-   }
+	public Origem getOrigem() {
+		return origem;
+	}
 
-   public Set<Reuniao> getListaReunioes()
-   {
-      return listaReunioes;
-   }
+	public void setOrigem(Origem origem) {
+		this.origem = origem;
+	}
 
-   public void setListaReunioes(Set<Reuniao> listaReunioes)
-   {
-      this.listaReunioes = listaReunioes;
-   }
+	public Clob getEmentaClob() {
+		return ementaClob;
+	}
 
-   public Clob getEmentaClob()
-   {
-      return ementaClob;
-   }
+	public void setEmentaClob(Clob ementaClob) {
+		this.ementaClob = ementaClob;
+	}
 
-   public void setEmentaClob(Clob ementaClob)
-   {
-      this.ementaClob = ementaClob;
-   }
+	public String getLinkProposicao() {
+		return linkProposicao;
+	}
 
-   public String getLinkProposicao()
-   {
-      return linkProposicao;
-   }
+	public void setLinkProposicao(String linkProposicao) {
+		this.linkProposicao = linkProposicao;
+	}
 
-   public void setLinkProposicao(String linkProposicao)
-   {
-      this.linkProposicao = linkProposicao;
-   }
+	public String getLinkPauta() {
+		return linkPauta;
+	}
 
-   public String getLinkPauta()
-   {
-      return linkPauta;
-   }
+	public void setLinkPauta(String linkPauta) {
+		this.linkPauta = linkPauta;
+	}
 
-   public void setLinkPauta(String linkPauta)
-   {
-      this.linkPauta = linkPauta;
-   }
-   
-   public Posicionamento getPosicionamento() {
-	   return posicionamento;
-   }
-	
-   public void setPosicionamento(Posicionamento posicionamento) {
-	   this.posicionamento = posicionamento;
-   }
+	public Posicionamento getPosicionamento() {
+		return posicionamento;
+	}
 
-   public String getTags() {
-	   return tags;
-   }
+	public void setPosicionamento(Posicionamento posicionamento) {
+		this.posicionamento = posicionamento;
+	}
 
-   public void setTags(String tags) {
-	   this.tags = tags;
-   }
+	public Set<ReuniaoProposicao> getListaReuniaoProposicoes() {
+		return listaReuniaoProposicoes;
+	}
 
-@Override
-   public boolean equals(Object obj)
-   {
-      if (this == obj)
-      {
-         return true;
-      }
-      if (!(obj instanceof Proposicao))
-      {
-         return false;
-      }
-      Proposicao other = (Proposicao) obj;
-      if (id != null)
-      {
-         if (!id.equals(other.id))
-         {
-            return false;
-         }
-      }
-      return true;
-   }
+	public void setListaReuniaoProposicoes(
+			Set<ReuniaoProposicao> listaReuniaoProposicoes) {
+		this.listaReuniaoProposicoes = listaReuniaoProposicoes;
+	}
 
-   @Override
-   public int hashCode()
-   {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((id == null) ? 0 : id.hashCode());
-      return result;
-   }
+	public String getTags() {
+		return tags;
+	}
 
-   @Override
-   public String toString()
-   {
-      String result = getClass().getSimpleName() + " ";
-      if (idProposicao != null)
-         result += "idProposicao: " + idProposicao;
-      if (tipo != null && !tipo.trim().isEmpty())
-         result += ", tipo: " + tipo;
-      if (ano != null && !ano.trim().isEmpty())
-         result += ", ano: " + ano;
-      if (numero != null && !numero.trim().isEmpty())
-         result += ", numero: " + numero;
-      if (autor != null && !autor.trim().isEmpty())
-         result += ", autor: " + autor;
-      if (comissao != null && !comissao.trim().isEmpty())
-         result += ", comissao: " + comissao;
-      if (seqOrdemPauta != null)
-         result += ", seqOrdemPauta: " + seqOrdemPauta;
-      return result;
-   }
+	public void setTags(String tags) {
+		this.tags = tags;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Proposicao)) {
+			return false;
+		}
+		Proposicao other = (Proposicao) obj;
+		if (id != null) {
+			if (!id.equals(other.id)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		String result = getClass().getSimpleName() + " ";
+		if (idProposicao != null)
+			result += "idProposicao: " + idProposicao;
+		if (tipo != null && !tipo.trim().isEmpty())
+			result += ", tipo: " + tipo;
+		if (ano != null && !ano.trim().isEmpty())
+			result += ", ano: " + ano;
+		if (numero != null && !numero.trim().isEmpty())
+			result += ", numero: " + numero;
+		if (autor != null && !autor.trim().isEmpty())
+			result += ", autor: " + autor;
+		if (comissao != null && !comissao.trim().isEmpty())
+			result += ", comissao: " + comissao;
+		if (seqOrdemPauta != null)
+			result += ", seqOrdemPauta: " + seqOrdemPauta;
+		return result;
+	}
 
 }

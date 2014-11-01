@@ -20,13 +20,13 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import br.org.mj.sislegis.app.enumerated.Origem;
+import br.org.mj.sislegis.app.exception.SislegisException;
+import br.org.mj.sislegis.app.json.ProposicaoJSON;
 import br.org.mj.sislegis.app.model.Proposicao;
-import br.org.mj.sislegis.app.model.ProposicaoJSON;
 import br.org.mj.sislegis.app.model.Reuniao;
+import br.org.mj.sislegis.app.model.ReuniaoProposicao;
 import br.org.mj.sislegis.app.service.ProposicaoService;
 import br.org.mj.sislegis.app.service.Service;
-import br.org.mj.sislegis.app.util.Conversores;
 
 /**
  * 
@@ -53,7 +53,7 @@ public class ProposicaoEndpoint {
 		
 		List<Proposicao> lista = proposicaoService.buscarProposicoesPautaCamaraWS(parametros);
 		for (Proposicao proposicao:lista) {
-			proposicao.setListaReunioes(new HashSet<Reuniao>());
+			proposicao.setListaReuniaoProposicoes(new HashSet<ReuniaoProposicao>());
 		}
 		return lista;
 	}
@@ -70,7 +70,7 @@ public class ProposicaoEndpoint {
 		
 		List<Proposicao> lista = proposicaoService.buscarProposicoesPautaSenadoWS(parametros);
 		for (Proposicao proposicao:lista) {
-			proposicao.setListaReunioes(new HashSet<Reuniao>());
+			proposicao.setListaReuniaoProposicoes(new HashSet<ReuniaoProposicao>());
 		}
 		return lista;
 	}
@@ -92,7 +92,12 @@ public class ProposicaoEndpoint {
 	@POST
 	@Consumes("application/json")
 	public void salvarProposicoes(List<Proposicao> listaProposicoesSelecionados){
-		proposicaoService.salvarListaProposicao(listaProposicoesSelecionados);
+		try{
+			proposicaoService.salvarListaProposicao(listaProposicoesSelecionados);
+		}catch(RuntimeException e){
+			e.printStackTrace();
+		}
+		
 	}
 	
 	@POST

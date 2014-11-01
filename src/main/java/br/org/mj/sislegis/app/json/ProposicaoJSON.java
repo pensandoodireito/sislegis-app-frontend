@@ -1,9 +1,11 @@
-package br.org.mj.sislegis.app.model;
+package br.org.mj.sislegis.app.json;
 
 import java.util.Date;
 import java.util.Set;
 
 import br.org.mj.sislegis.app.enumerated.Origem;
+import br.org.mj.sislegis.app.model.Posicionamento;
+import br.org.mj.sislegis.app.model.Reuniao;
 
 
 public class ProposicaoJSON {
