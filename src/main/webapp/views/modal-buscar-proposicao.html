@@ -11,10 +11,12 @@
 			<form id="BuscarProposicaoForm" name="BuscarProposicaoForm" role="form">
 				<div class="form-inline" role="form">
 					<div class="input-group">
-						<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="campoData" date-type="string" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close" readonly />
-							<span class="input-group-btn">
-				            	<button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-				            </span>
+						<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="campoData" date-type="string" is-open="opened" min-date="minDate"
+							max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close" readonly /> <span class="input-group-btn">
+							<button type="button" class="btn btn-default" ng-click="openCalendar($event)">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+						</span>
 					</div>
 					<div class="form-group">
 						<div class="input-group">
@@ -82,24 +84,26 @@
 			<div class="panel panel-default">
 				<div class="panel-heading clearfix">
 					Detalhamento
-					<button type="button" class="btn btn-success btn-xs pull-right" ng-show="showDetalhamentoProposicao" ng-click="adicionarProposicao(detalheProposicao)" title="Adicionar proposição">
+					<button type="button" class="btn btn-success btn-xs pull-right" ng-show="showDetalhamentoProposicao" ng-click="adicionarProposicao(detalheProposicao)"
+						title="Adicionar proposição">
 						<i class="fa fa-plus"></i>
 					</button>
 				</div>
 
 				<div class="panel-body rol-vert line-9">
 					<div class="fontsize-sm" ng-show="showDetalhamentoProposicao">
-						<h3><a href="{{detalheProposicao.linkProposicao}}" target="_blank">{{detalheProposicao.sigla}}</a></h3>
+						<h3>
+							<a href="{{detalheProposicao.linkProposicao}}" target="_blank">{{detalheProposicao.sigla}}</a>
+						</h3>
 						<p class="divider-top">{{detalheProposicao.ementa}}</p>
 						<p class="fontsize-sm">
-							<strong>Autor:  </strong>{{detalheProposicao.autor}}
+							<strong>Autor: </strong>{{detalheProposicao.autor}}
 						</p>
 						<p class="fontsize-sm">
-							<strong>Origem:  </strong>{{detalheProposicao.origem}}
+							<strong>Origem: </strong>{{detalheProposicao.origem}}
 						</p>
 						<p class="fontsize-sm">
-							<strong>Link da proposição:  </strong> 
-							<a href="{{detalheProposicao.linkProposicao}}" target="_blank">Abrir</a>
+							<strong>Link da proposição: </strong> <a href="{{detalheProposicao.linkProposicao}}" target="_blank">Abrir</a>
 						</p>
 					</div>
 				</div>
@@ -115,15 +119,18 @@
 							<span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
 						</button> {{proposicaoAdd.sigla}}
 					</li>
-	
+
 				</div>
 
 			</ul>
 		</div>
-		<div class="pull-right">
-			<button type="button" class="btn btn-primary btn-sm" ng-click="salvar()">Adicionar Selecionados</button>
-		</div>
 	</div>
+		<div class="modal-footer pt-sm pb-sm">
+			<p>
+				<button type="button" class="btn btn-default" title="Cancelar" data-dismiss="modal">Cancelar</button>
+				<button type="button" class="btn btn-primary" title="Adicionar proposição" ng-click="salvar()">Adicionar selecionados</button>
+			</p>
+		</div>
 </div>
 <!-- /Modal  buscar proposição -->
 
