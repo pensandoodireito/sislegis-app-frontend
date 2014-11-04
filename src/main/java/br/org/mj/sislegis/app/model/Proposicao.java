@@ -2,6 +2,7 @@ package br.org.mj.sislegis.app.model;
 
 import java.sql.Clob;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,8 +15,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -62,7 +61,7 @@ public class Proposicao implements AbstractEntity {
 	@Column
 	private Origem origem;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="proposicao")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "proposicao")
 	private Set<ReuniaoProposicao> listaReuniaoProposicoes;
 
 	@Column
@@ -88,6 +87,9 @@ public class Proposicao implements AbstractEntity {
 
 	@Column
 	private String tags;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "proposicao")
+	private Set<Comentario> listaComentario = new HashSet<Comentario>();
 
 	public String getSigla() {
 		if (Objects.isNull(sigla))
@@ -148,8 +150,7 @@ public class Proposicao implements AbstractEntity {
 	}
 
 	public String getEmenta() {
-		return ementaClob == null ? ementa : Conversores
-				.clobToString(ementaClob);
+		return ementaClob == null ? ementa : Conversores.clobToString(ementaClob);
 	}
 
 	public void setEmenta(String ementa) {
@@ -224,8 +225,7 @@ public class Proposicao implements AbstractEntity {
 		return listaReuniaoProposicoes;
 	}
 
-	public void setListaReuniaoProposicoes(
-			Set<ReuniaoProposicao> listaReuniaoProposicoes) {
+	public void setListaReuniaoProposicoes(Set<ReuniaoProposicao> listaReuniaoProposicoes) {
 		this.listaReuniaoProposicoes = listaReuniaoProposicoes;
 	}
 
@@ -280,6 +280,14 @@ public class Proposicao implements AbstractEntity {
 		if (seqOrdemPauta != null)
 			result += ", seqOrdemPauta: " + seqOrdemPauta;
 		return result;
+	}
+
+	public Set<Comentario> getListaComentario() {
+		return this.listaComentario;
+	}
+
+	public void setListaComentario(final Set<Comentario> listaComentario) {
+		this.listaComentario = listaComentario;
 	}
 
 }

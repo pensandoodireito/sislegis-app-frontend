@@ -3,7 +3,7 @@
 angular.module('sislegisapp').controller(
 		'GerenciarReuniaoController',
 		function($scope, $http, $filter, $routeParams, $location, $modal, $log,
-				ReuniaoResource, ProposicaoResource, PosicionamentoResource, ReuniaoProposicaoResource) {
+				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, ReuniaoProposicaoResource) {
     var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
@@ -11,7 +11,8 @@ angular.module('sislegisapp').controller(
     $scope.reuniao = new ReuniaoResource();
     $scope.reuniaoProposicao = new ReuniaoProposicaoResource();
     
-    $scope.open = function () {
+    
+    $scope.buscarProposicoes = function () {
     	
     	if($scope.reuniao.data == null){
     		alert('Selecione a data da reunião')
@@ -41,6 +42,30 @@ angular.module('sislegisapp').controller(
         		$scope.reuniao.listaReuniaoProposicoes = [];
         	}
         	$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
+          }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+          });
+    };
+
+    
+    $scope.abrirModalComentarios = function () {
+    	
+        var modalInstance = $modal.open({
+          templateUrl: 'views/modal-comentarios.html',
+          controller: 'ModalComentariosController',
+          size: 'lg',
+          resolve: {
+            proposicao: function () {
+            	return $scope.selectedProposicao;
+            },            
+            listaComentario: function (){
+            	return $scope.listaComentario;
+            }
+          }
+        });
+        
+        modalInstance.result.then(function (listaComentario) {
+        	$scope.listaComentario = listaComentario;
           }, function () {
             $log.info('Modal dismissed at: ' + new Date());
           });
@@ -98,6 +123,7 @@ angular.module('sislegisapp').controller(
     
     $scope.getProposicao = function(id) {
     	$scope.selectedProposicao = ProposicaoResource.get({ProposicaoId: id});
+    	$scope.listaComentario = ComentarioResource.findByProposicao({ProposicaoId: id});
     	$scope.posicionamentos = PosicionamentoResource.queryAll();
     }
     
