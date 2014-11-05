@@ -90,6 +90,9 @@ public class Proposicao implements AbstractEntity {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "proposicao")
 	private Set<Comentario> listaComentario = new HashSet<Comentario>();
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "proposicao")
+	private Set<EncaminhamentoProposicao> listaEncaminhamentoProposicao = new HashSet<EncaminhamentoProposicao>();
 
 	public String getSigla() {
 		if (Objects.isNull(sigla))

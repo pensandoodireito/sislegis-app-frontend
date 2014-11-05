@@ -19,7 +19,6 @@ import javax.ws.rs.core.UriBuilder;
 import br.org.mj.sislegis.app.model.ReuniaoProposicao;
 import br.org.mj.sislegis.app.service.Service;
 
-@Stateless
 @Path("/reuniaoProposicao")
 public class ReuniaoProposicaoEndpoint {
 

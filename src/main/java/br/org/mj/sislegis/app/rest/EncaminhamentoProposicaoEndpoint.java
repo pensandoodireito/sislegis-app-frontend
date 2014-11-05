@@ -3,9 +3,7 @@ package br.org.mj.sislegis.app.rest;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
 import javax.persistence.OptimisticLockException;
-import javax.persistence.TypedQuery;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,34 +14,32 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
-import br.org.mj.sislegis.app.model.Comentario;
-import br.org.mj.sislegis.app.service.ComentarioService;
+import br.org.mj.sislegis.app.model.Encaminhamento;
+import br.org.mj.sislegis.app.model.EncaminhamentoProposicao;
+import br.org.mj.sislegis.app.service.EncaminhamentoProposicaoService;
+import br.org.mj.sislegis.app.service.EncaminhamentoService;
 
-/**
- * 
- */
-@Path("/comentarios")
-public class ComentarioEndpoint {
+@Path("/encaminhamentoProposicao")
+public class EncaminhamentoProposicaoEndpoint {
 
 	@Inject
-	private ComentarioService comentarioService;
+	private EncaminhamentoProposicaoService service;
 
 	@POST
 	@Consumes("application/json")
-	public Response create(Comentario entity) {
-		comentarioService.save(entity);
+	public Response create(EncaminhamentoProposicao entity) {
+		service.save(entity);
 		return Response.created(
-				UriBuilder.fromResource(ComentarioEndpoint.class)
+				UriBuilder.fromResource(EncaminhamentoEndpoint.class)
 						.path(String.valueOf(entity.getId())).build()).build();
 	}
 
 	@DELETE
 	@Path("/{id:[0-9][0-9]*}")
 	public Response deleteById(@PathParam("id") Long id) {
-		comentarioService.deleteById(id);
+		service.deleteById(id);
 		return Response.noContent().build();
 	}
 
@@ -51,35 +47,23 @@ public class ComentarioEndpoint {
 	@Path("/{id:[0-9][0-9]*}")
 	@Produces("application/json")
 	public Response findById(@PathParam("id") Long id) {
-		Comentario entity = comentarioService.findById(id);
-		if (entity == null) {
-			return Response.status(Status.NOT_FOUND).build();
-		}
-		return Response.ok(entity).build();
-	}
-
-	@GET
-	@Path("/proposicao/{id:[0-9][0-9]*}")
-	@Produces("application/json")
-	public List<Comentario> findByProposicao(@PathParam("id") Long id) {
-		final List<Comentario> results = comentarioService.findByProposicao(id);
-		return results;
+		return Response.ok(service.findById(id)).build();
 	}
 
 	@GET
 	@Produces("application/json")
-	public List<Comentario> listAll(@QueryParam("start") Integer startPosition,
+	public List<EncaminhamentoProposicao> listAll(
+			@QueryParam("start") Integer startPosition,
 			@QueryParam("max") Integer maxResult) {
-		final List<Comentario> results = comentarioService.listAll();
-		return results;
+		return service.listAll();
 	}
 
 	@PUT
 	@Path("/{id:[0-9][0-9]*}")
 	@Consumes("application/json")
-	public Response update(Comentario entity) {
+	public Response update(EncaminhamentoProposicao entity) {
 		try {
-			entity = comentarioService.save(entity);
+			entity = service.save(entity);
 		} catch (OptimisticLockException e) {
 			return Response.status(Response.Status.CONFLICT)
 					.entity(e.getEntity()).build();

@@ -21,7 +21,6 @@ import br.org.mj.sislegis.app.model.Posicionamento;
 import br.org.mj.sislegis.app.service.Service;
 
 
-@Stateless
 @Path("/posicionamentos")
 public class PosicionamentoEndpoint {
 	

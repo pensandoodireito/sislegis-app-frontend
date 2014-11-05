@@ -1,14 +1,11 @@
 package br.org.mj.sislegis.app.service.ejbs;
 
-import java.net.URL;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import com.thoughtworks.xstream.XStream;
 
 import br.org.mj.sislegis.app.model.Comissao;
 import br.org.mj.sislegis.app.parser.camara.ParserComissoesCamara;
