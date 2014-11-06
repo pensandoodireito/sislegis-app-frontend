@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.inject.Inject;
 import javax.persistence.OptimisticLockException;
 import javax.ws.rs.Consumes;
@@ -91,12 +92,13 @@ public class ProposicaoEndpoint {
 	
 	@POST
 	@Consumes("application/json")
-	public void salvarProposicoes(List<Proposicao> listaProposicoesSelecionados){
+	public Response salvarProposicoes(List<Proposicao> listaProposicoesSelecionados){
 		try{
 			proposicaoService.salvarListaProposicao(listaProposicoesSelecionados);
-		}catch(RuntimeException e){
-			e.printStackTrace();
+		}catch(EJBTransactionRolledbackException e){
+			return Response.status(Response.Status.CONFLICT).build();
 		}
+		return Response.noContent().build();
 		
 	}
 	

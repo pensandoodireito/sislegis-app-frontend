@@ -1,5 +1,6 @@
 package br.org.mj.sislegis.app.json;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -9,7 +10,7 @@ import br.org.mj.sislegis.app.model.Posicionamento;
 import br.org.mj.sislegis.app.model.Reuniao;
 
 
-public class ProposicaoJSON {
+public class ProposicaoJSON implements Serializable {
 	
 	private static final long serialVersionUID = 7949894944142814382L;
 

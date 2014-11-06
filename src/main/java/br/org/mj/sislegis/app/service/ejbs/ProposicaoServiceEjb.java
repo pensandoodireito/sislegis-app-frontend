@@ -25,6 +25,7 @@ import br.org.mj.sislegis.app.parser.senado.ParserPautaSenado;
 import br.org.mj.sislegis.app.parser.senado.ParserProposicaoSenado;
 import br.org.mj.sislegis.app.service.AbstractPersistence;
 import br.org.mj.sislegis.app.service.ProposicaoService;
+import br.org.mj.sislegis.app.service.ReuniaoProposicaoService;
 import br.org.mj.sislegis.app.util.Conversores;
 import br.org.mj.sislegis.app.util.SislegisUtil;
 
@@ -43,6 +44,9 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 
 	@Inject
 	private ParserProposicaoSenado parserProposicaoSenado;
+	
+	@Inject
+	private ReuniaoProposicaoService reuniaoProposicaoService;
 
 	@PersistenceContext
 	private EntityManager em;
@@ -89,9 +93,8 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 
 	@Override
 	public void salvarListaProposicao(List<Proposicao> lista) {
-		for (Proposicao p : lista) {
+		c: for (Proposicao p : lista) {
 			try {
-
 				Proposicao proposicao = null;
 				if (p.getOrigem().equals(Origem.CAMARA)) {
 					proposicao = detalharProposicaoCamaraWS(Long.valueOf(p
@@ -102,9 +105,14 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 							.getIdProposicao()));
 					populaProposicao(p, proposicao);
 				}
+				//Evita persistir Reunião Proposição já cadastrada.
+				for(ReuniaoProposicao rp:proposicao.getListaReuniaoProposicoes()){
+					if(reuniaoProposicaoService.buscaReuniaoProposicaoPorId(rp.getReuniaoProposicaoPK())!=null)
+						continue c;
+				}
+				
 				save(proposicao);
-			} catch (Exception e2) {
-				// TODO: handle exception
+			}catch (Exception e) {
 			}
 
 		}
@@ -184,10 +192,6 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 
 		List<ProposicaoJSON> listaProposicaoJSON = new ArrayList<ProposicaoJSON>();
 		
-		Query query1 = em
-				.createNativeQuery("select p.* from Proposicao p ", Proposicao.class);
-		List<Proposicao> listaProposicoes1 = query1.getResultList();
-
 		Query query = em
 				.createNativeQuery("select p.* from Proposicao p "
 						+ "inner join ReuniaoProposicao rp "

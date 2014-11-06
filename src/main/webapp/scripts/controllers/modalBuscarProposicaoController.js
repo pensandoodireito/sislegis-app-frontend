@@ -91,13 +91,14 @@ angular
 
 					$scope.salvar = function() {
 
-						var successCallback = function(sucess) {
-							$modalInstance.close();
-
-						};
-						var errorCallback = function() {
-							alert('erro');
-						};
+				        var successCallback = function(){
+				        	alert('Registro incluido com sucesso');
+				        	$modalInstance.close($scope.listaProposicaoSelecao);
+				        };
+				        var errorCallback = function() {
+				        	alert('Proposição já adicionada para a Reunião selecionada');
+				        };
+						
 						ProposicaoResource.save($scope.listaProposicaoSelecao,
 								successCallback, errorCallback);
 					};
