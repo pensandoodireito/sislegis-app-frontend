@@ -229,4 +229,20 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 		proposicaoJSON.setListaComentario(comentarioService.findByProposicao(proposicao.getId()));
 	}
 
+	@Override
+	public void atualizaProposicaoJSON(ProposicaoJSON proposicaoJSON) {
+		Proposicao proposicao = findById(proposicaoJSON.getId());
+		proposicao.setAno(proposicaoJSON.getAno());
+		proposicao.setIdProposicao(proposicaoJSON.getIdProposicao());
+		proposicao.setNumero(proposicaoJSON.getNumero());
+		proposicao.setSigla(proposicaoJSON.getSigla());
+		proposicao.setAutor(proposicaoJSON.getAutor());
+		proposicao.setOrigem(proposicaoJSON.getOrigem());
+		proposicao.setComissao(proposicaoJSON.getComissao());
+		proposicao.setSeqOrdemPauta(proposicaoJSON.getSeqOrdemPauta());
+		proposicao.setPosicionamento(proposicaoJSON.getPosicionamento());
+		proposicao.setTags(proposicaoJSON.getTags());
+		save(proposicao);
+	}
+
 }

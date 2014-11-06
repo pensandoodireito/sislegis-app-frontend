@@ -52,6 +52,12 @@ public class ComentarioServiceEjb extends AbstractPersistence<Comentario, Long>
 
 	@Override
 	public void salvarComentario(ComentarioJSON comentarioJSON) {
+		Comentario comentario = populaEntidadeComentario(comentarioJSON);
+		save(comentario);
+		
+	}
+
+	private Comentario populaEntidadeComentario(ComentarioJSON comentarioJSON) {
 		Comentario comentario = new Comentario();
 		Proposicao proposicao = new Proposicao();
 		proposicao.setId(comentarioJSON.getIdProposicao());
@@ -60,7 +66,6 @@ public class ComentarioServiceEjb extends AbstractPersistence<Comentario, Long>
 		comentario.setId(comentarioJSON.getId());
 		comentario.setDescricao(comentarioJSON.getDescricao());
 		comentario.setProposicao(proposicao);
-		save(comentario);
-		
+		return comentario;
 	}
 }

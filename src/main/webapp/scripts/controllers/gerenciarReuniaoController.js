@@ -164,7 +164,14 @@ angular.module('sislegisapp').controller(
     });
     
     $scope.atualizarProposicao = function() {
-    	ProposicaoResource.update($scope.selectedProposicao);
+        var successCallback = function(){
+        	alert('Registro atualizado com sucesso');
+            $scope.displayError = false;
+        };
+        var errorCallback = function() {
+            $scope.displayError=true;
+        };
+    	ProposicaoResource.atualizaProposicao($scope.selectedProposicao, successCallback, errorCallback);
     }
     
     
