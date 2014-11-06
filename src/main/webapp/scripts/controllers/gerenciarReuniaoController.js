@@ -57,15 +57,12 @@ angular.module('sislegisapp').controller(
           resolve: {
             proposicao: function () {
             	return $scope.selectedProposicao;
-            },            
-            listaComentario: function (){
-            	return $scope.listaComentario;
             }
           }
         });
         
         modalInstance.result.then(function (listaComentario) {
-        	$scope.listaComentario = listaComentario;
+        	$scope.selectedProposicao.listaComentario = listaComentario;
           }, function () {
             $log.info('Modal dismissed at: ' + new Date());
           });
@@ -121,16 +118,8 @@ angular.module('sislegisapp').controller(
     
 
     $scope.remove = function() {
-        /*var successCallback = function() {
-            $location.path("/Reuniaos");
-            $scope.displayError = false;
-        };
-        var errorCallback = function() {
-            $scope.displayError=true;
-        };*/
         alert($scope.reuniao.id);
         ReuniaoResource.remove({ReuniaoId:$scope.reuniao.id})
-        //$scope.reuniao.$remove({ReuniaoId:$scope.reuniao.id}, successCallback, errorCallback); // TODO: testar
     };
     
     $scope.listaProposicaoSelection = $scope.listaProposicaoSelection || [];
@@ -147,7 +136,6 @@ angular.module('sislegisapp').controller(
     
     $scope.getProposicao = function(id) {
     	$scope.selectedProposicao = ProposicaoResource.get({ProposicaoId: id});
-    	$scope.listaComentario = ComentarioResource.findByProposicao({ProposicaoId: id});
     	$scope.posicionamentos = PosicionamentoResource.queryAll();
     }
     

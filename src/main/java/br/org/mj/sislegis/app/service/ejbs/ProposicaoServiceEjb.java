@@ -3,8 +3,10 @@ package br.org.mj.sislegis.app.service.ejbs;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -15,7 +17,9 @@ import javax.sql.rowset.serial.SerialClob;
 import javax.sql.rowset.serial.SerialException;
 
 import br.org.mj.sislegis.app.enumerated.Origem;
+import br.org.mj.sislegis.app.json.ComentarioJSON;
 import br.org.mj.sislegis.app.json.ProposicaoJSON;
+import br.org.mj.sislegis.app.model.Comentario;
 import br.org.mj.sislegis.app.model.Proposicao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicaoPK;
@@ -24,6 +28,7 @@ import br.org.mj.sislegis.app.parser.camara.ParserProposicaoCamara;
 import br.org.mj.sislegis.app.parser.senado.ParserPautaSenado;
 import br.org.mj.sislegis.app.parser.senado.ParserProposicaoSenado;
 import br.org.mj.sislegis.app.service.AbstractPersistence;
+import br.org.mj.sislegis.app.service.ComentarioService;
 import br.org.mj.sislegis.app.service.ProposicaoService;
 import br.org.mj.sislegis.app.service.ReuniaoProposicaoService;
 import br.org.mj.sislegis.app.util.Conversores;
@@ -47,6 +52,9 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 	
 	@Inject
 	private ReuniaoProposicaoService reuniaoProposicaoService;
+	
+	@Inject
+	private ComentarioService comentarioService;
 
 	@PersistenceContext
 	private EntityManager em;
@@ -177,14 +185,19 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 		proposicaoJSON.setSeqOrdemPauta(proposicao.getSeqOrdemPauta());
 		proposicaoJSON.setPosicionamento(proposicao.getPosicionamento());
 		proposicaoJSON.setTags(proposicao.getTags());
+
+		
 		
 		return proposicaoJSON;
 	}
 
+
 	@Override
 	public ProposicaoJSON buscarPorId(Long id) {
 		Proposicao proposicao = findById(id);
-		return populaProposicaoJSON(proposicao);
+		ProposicaoJSON proposicaoJSON = populaProposicaoJSON(proposicao);
+		populaComentarioProposicao(proposicao, proposicaoJSON);
+		return proposicaoJSON;
 	}
 
 	@Override
@@ -203,11 +216,17 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 		for (Object obj : listaProposicoes) {
 			Proposicao proposicao = (Proposicao)obj;
 			ProposicaoJSON proposicaoJSON = populaProposicaoJSON(proposicao);
+			populaComentarioProposicao(proposicao, proposicaoJSON);
 			listaProposicaoJSON.add(proposicaoJSON);
 		}
 
 		return listaProposicaoJSON;
 
+	}
+
+	private void populaComentarioProposicao(Proposicao proposicao,
+			ProposicaoJSON proposicaoJSON) {
+		proposicaoJSON.setListaComentario(comentarioService.findByProposicao(proposicao.getId()));
 	}
 
 }

@@ -5,14 +5,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 import java.lang.Override;
+
 import javax.xml.bind.annotation.XmlRootElement;
+
 import java.util.Date;
+
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import br.org.mj.sislegis.app.model.Proposicao;
+
 import javax.persistence.ManyToOne;
 import javax.persistence.FetchType;
+
 
 @Entity
 @XmlRootElement
@@ -36,6 +43,7 @@ public class Comentario implements AbstractEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Proposicao proposicao;
+
 
 	public Long getId() {
 		return this.id;
