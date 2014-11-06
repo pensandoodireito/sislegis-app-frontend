@@ -72,6 +72,27 @@ angular.module('sislegisapp').controller(
     };
         
 
+    $scope.abrirModalEncaminhamento = function () {
+    	
+        var modalInstance = $modal.open({
+          templateUrl: 'views/modal-encaminhamento.html',
+          controller: 'ModalEncaminhamentoController',
+          size: 'lg',
+          resolve: {
+            proposicao: function () {
+            	return $scope.selectedProposicao;
+            }            
+          }
+        });
+        
+        modalInstance.result.then(function () {
+//        	$scope.listaComentario = listaComentario;
+          }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+          });
+    };
+        
+
     $scope.isClean = function() {
         return angular.equals(self.original, $scope.reuniao);
     };
