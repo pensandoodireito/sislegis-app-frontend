@@ -76,10 +76,10 @@ public class Proposicao implements AbstractEntity {
 	@Transient
 	private String ementa;
 
-	@Transient
+	@Column
 	private String linkProposicao;
 
-	@Transient
+	@Column
 	private String linkPauta;
 
 	@Column
@@ -91,7 +91,6 @@ public class Proposicao implements AbstractEntity {
 	@Transient
 	private Set<Comentario> listaComentario = new HashSet<Comentario>();
 	
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "proposicao")
 	@Transient
 	private Set<EncaminhamentoProposicao> listaEncaminhamentoProposicao = new HashSet<EncaminhamentoProposicao>();
 

@@ -11,11 +11,14 @@
 			<div class="col-md-4">
 					<div class="form-horizontal" role="form">
 				    <div ng-show="displayError" class="alert alert-danger">
-				        <strong>Error!</strong> Something broke. Retry, or cancel and start afresh.
+				        <strong>Falha no processamento</strong>
+				    </div>
+					<div ng-hide="ComentarioForm.campoComentario.$valid" class="alert alert-danger">
+				        <strong>Por favor, preencha o campo comentário</strong>
 				    </div>
 					<div class="input-group">
 						<label for="TextoComentario">Comentário:</label>
-						<textarea class="form-control" rows="3" ng-model="comentario.descricao"></textarea>
+						<textarea class="form-control" rows="3" name="campoComentario" ng-model="comentario.descricao" ng-required="true"></textarea>
 					</div>
 					<br/>
 					<button type="submit" class="btn btn-default" ng-disabled="isClean() || ComentarioForm.$invalid" ng-show="!comentario.id" ng-click="save()">Adicionar</button>

@@ -28,6 +28,7 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 		    $scope.update = function() {
 		        var successCallback = function(){
 		        	$scope.comentario = new ComentarioResource();
+		        	alert('Comentário atualizado com sucesso');
 		            $scope.displayError = false;
 		        };
 		        var errorCallback = function() {
@@ -49,6 +50,7 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 		        	$scope.comentario = new ComentarioResource();
 		        	var id = $scope.proposicao.id;
 		        	$scope.proposicao = ProposicaoResource.get({ProposicaoId: id});
+		        	alert('Comentário adicionado com sucesso');
 		            $scope.displayError = false;
 		        };
 		        var errorCallback = function() {

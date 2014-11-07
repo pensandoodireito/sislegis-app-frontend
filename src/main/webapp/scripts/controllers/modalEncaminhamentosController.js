@@ -34,6 +34,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 		    	
 		        var successCallback = function(){
 		        	$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
+		        	alert('Encaminhamento atualizado com sucesso');
 		            $scope.displayError = false;
 		        };
 		        var errorCallback = function() {
@@ -57,6 +58,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 					$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.proposicao.id});
 		        	$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
 		        	$scope.encaminhamento = new EncaminhamentoResource();
+		        	alert('Encaminhamento adicionado com sucesso');
 		            $scope.displayError = false;
 		        };
 		        var errorCallback = function() {

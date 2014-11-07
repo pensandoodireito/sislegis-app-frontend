@@ -6,12 +6,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Transient;
+
 import br.org.mj.sislegis.app.enumerated.Origem;
 import br.org.mj.sislegis.app.model.Posicionamento;
 
-
 public class ProposicaoJSON implements Serializable {
-	
+
 	private static final long serialVersionUID = 7949894944142814382L;
 
 	private Long id;
@@ -27,24 +28,54 @@ public class ProposicaoJSON implements Serializable {
 	private Date dataApresentacao;
 
 	private String autor;
-	
+
 	private String ementa;
-	
+
 	private Origem origem;
-	
+
 	private String sigla;
-	
+
 	private String comissao;
-	
+
 	private Integer seqOrdemPauta;
-	
-	
+
+	private String linkProposicao;
+
+	private String linkPauta;
+
 	private List<ComentarioJSON> listaComentario = new ArrayList<ComentarioJSON>();
-	
+
 	private Posicionamento posicionamento;
-	
+
 	private String tags;
 	
+	public ProposicaoJSON(){}
+
+	public ProposicaoJSON(Long id, Integer idProposicao, String tipo,
+			String ano, String numero, Date dataApresentacao, String autor,
+			String ementa, Origem origem, String sigla, String comissao,
+			Integer seqOrdemPauta, String linkProposicao, String linkPauta,
+			List<ComentarioJSON> listaComentario,
+			Posicionamento posicionamento, String tags) {
+		this.id=id;
+		this.idProposicao=idProposicao;
+		this.tipo=tipo;
+		this.ano=ano;
+		this.numero=numero;
+		this.dataApresentacao=dataApresentacao;
+		this.autor=autor;
+		this.ementa=ementa;
+		this.origem=origem;
+		this.sigla=sigla;
+		this.comissao=comissao;
+		this.seqOrdemPauta=seqOrdemPauta;
+		this.linkProposicao=linkProposicao;
+		this.linkPauta=linkPauta;
+		this.listaComentario=listaComentario;
+		this.posicionamento=posicionamento;
+		this.tags=tags;
+	}
+
 	public String getComissao() {
 		return comissao;
 	}
@@ -125,7 +156,6 @@ public class ProposicaoJSON implements Serializable {
 		this.autor = autor;
 	}
 
-
 	public String getSigla() {
 		return sigla;
 	}
@@ -134,7 +164,6 @@ public class ProposicaoJSON implements Serializable {
 		this.sigla = sigla;
 	}
 
-	
 	public Origem getOrigem() {
 		return origem;
 	}
@@ -151,7 +180,6 @@ public class ProposicaoJSON implements Serializable {
 		this.posicionamento = posicionamento;
 	}
 
-
 	public String getTags() {
 		return tags;
 	}
@@ -166,5 +194,21 @@ public class ProposicaoJSON implements Serializable {
 
 	public void setListaComentario(List<ComentarioJSON> listaComentario) {
 		this.listaComentario = listaComentario;
+	}
+
+	public String getLinkProposicao() {
+		return linkProposicao;
+	}
+
+	public void setLinkProposicao(String linkProposicao) {
+		this.linkProposicao = linkProposicao;
+	}
+
+	public String getLinkPauta() {
+		return linkPauta;
+	}
+
+	public void setLinkPauta(String linkPauta) {
+		this.linkPauta = linkPauta;
 	}
 }

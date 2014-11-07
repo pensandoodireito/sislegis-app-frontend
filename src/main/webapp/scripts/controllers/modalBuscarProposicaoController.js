@@ -78,6 +78,7 @@ angular
 					};
 
 					$scope.adicionarProposicao = function(proposicao) {
+						proposicao.listaReuniaoProposicoes = proposicao.listaReuniaoProposicoes || [];
 						proposicao.listaReuniaoProposicoes
 								.push($scope.reuniaoProposicao);
 						$scope.listaProposicaoSelecao.push(proposicao);

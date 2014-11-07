@@ -155,6 +155,7 @@ angular.module('sislegisapp').controller(
     
     $scope.$watch("reuniao.data", function() {
     	if(!angular.isUndefined($scope.reuniao.data)){
+    		$scope.selectedProposicao = false;
     		$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
     	}
 

@@ -20,6 +20,7 @@ import br.org.mj.sislegis.app.enumerated.Origem;
 import br.org.mj.sislegis.app.json.ComentarioJSON;
 import br.org.mj.sislegis.app.json.ProposicaoJSON;
 import br.org.mj.sislegis.app.model.Comentario;
+import br.org.mj.sislegis.app.model.Posicionamento;
 import br.org.mj.sislegis.app.model.Proposicao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicaoPK;
@@ -49,10 +50,10 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 
 	@Inject
 	private ParserProposicaoSenado parserProposicaoSenado;
-	
+
 	@Inject
 	private ReuniaoProposicaoService reuniaoProposicaoService;
-	
+
 	@Inject
 	private ComentarioService comentarioService;
 
@@ -113,14 +114,16 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 							.getIdProposicao()));
 					populaProposicao(p, proposicao);
 				}
-				//Evita persistir Reunião Proposição já cadastrada.
-				for(ReuniaoProposicao rp:proposicao.getListaReuniaoProposicoes()){
-					if(reuniaoProposicaoService.buscaReuniaoProposicaoPorId(rp.getReuniaoProposicaoPK())!=null)
+				// Evita persistir Reunião Proposição já cadastrada.
+				for (ReuniaoProposicao rp : proposicao
+						.getListaReuniaoProposicoes()) {
+					if (reuniaoProposicaoService.buscaReuniaoProposicaoPorId(rp
+							.getReuniaoProposicaoPK()) != null)
 						continue c;
 				}
-				
+
 				save(proposicao);
-			}catch (Exception e) {
+			} catch (Exception e) {
 			}
 
 		}
@@ -130,8 +133,9 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 			throws SerialException, SQLException {
 		proposicao.setEmentaClob(new SerialClob(proposicao.getEmenta()
 				.toCharArray()));
-		String siglaComissao = isNull(p.getSigla())?proposicao.getSigla():p.getSigla();
-		for(ReuniaoProposicao rp:p.getListaReuniaoProposicoes()){
+		String siglaComissao = isNull(p.getSigla()) ? proposicao.getSigla() : p
+				.getSigla();
+		for (ReuniaoProposicao rp : p.getListaReuniaoProposicoes()) {
 			ReuniaoProposicaoPK reuniaoProposicaoPK = new ReuniaoProposicaoPK();
 			reuniaoProposicaoPK.setSiglaComissao(siglaComissao);
 			reuniaoProposicaoPK.setDataReuniao(rp.getReuniao().getData());
@@ -139,20 +143,35 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 			rp.setProposicao(proposicao);
 		}
 		proposicao.setListaReuniaoProposicoes(p.getListaReuniaoProposicoes());
-		proposicao.setOrigem(isNull(p.getOrigem())?proposicao.getOrigem():p.getOrigem());
-		proposicao.setSeqOrdemPauta(isNull(p.getSeqOrdemPauta())?proposicao.getSeqOrdemPauta():p.getSeqOrdemPauta());
-		proposicao.setAno(isNull(p.getAno())?proposicao.getAno():p.getAno());
-		proposicao.setComissao(isNull(p.getComissao())?proposicao.getComissao():p.getComissao());
-		proposicao.setAutor(isNull(p.getAutor())?proposicao.getAutor():p.getAutor());
-		proposicao.setDataApresentacao(isNull(p.getDataApresentacao())?proposicao.getDataApresentacao():p.getDataApresentacao());
-		proposicao.setLinkPauta(isNull(p.getLinkPauta())?proposicao.getLinkPauta():p.getLinkPauta());
-		proposicao.setLinkProposicao(isNull(p.getLinkProposicao())?proposicao.getLinkProposicao():p.getLinkProposicao());
-		proposicao.setNumero(isNull(p.getNumero())?proposicao.getNumero():p.getNumero());
-		proposicao.setTipo(isNull(p.getTipo())?proposicao.getTipo():p.getTipo());
+		proposicao.setOrigem(isNull(p.getOrigem()) ? proposicao.getOrigem() : p
+				.getOrigem());
+		proposicao.setSeqOrdemPauta(isNull(p.getSeqOrdemPauta()) ? proposicao
+				.getSeqOrdemPauta() : p.getSeqOrdemPauta());
+		proposicao
+				.setAno(isNull(p.getAno()) ? proposicao.getAno() : p.getAno());
+		proposicao.setComissao(isNull(p.getComissao()) ? proposicao
+				.getComissao() : p.getComissao());
+		proposicao.setAutor(isNull(p.getAutor()) ? proposicao.getAutor() : p
+				.getAutor());
+		proposicao
+				.setDataApresentacao(isNull(p.getDataApresentacao()) ? proposicao
+						.getDataApresentacao() : p.getDataApresentacao());
+		proposicao.setLinkPauta(isNull(p.getLinkPauta()) ? proposicao
+				.getLinkPauta() : p.getLinkPauta());
+		proposicao.setLinkProposicao(isNull(p.getLinkProposicao()) ? proposicao
+				.getLinkProposicao() : p.getLinkProposicao());
+		proposicao.setNumero(isNull(p.getNumero()) ? proposicao.getNumero() : p
+				.getNumero());
+		proposicao.setTipo(isNull(p.getTipo()) ? proposicao.getTipo() : p
+				.getTipo());
+		proposicao.setLinkPauta(isNull(p.getLinkPauta()) ? proposicao
+				.getLinkPauta() : p.getLinkPauta());
+		proposicao.setLinkProposicao(isNull(p.getLinkProposicao()) ? proposicao
+				.getLinkProposicao() : p.getLinkProposicao());
 	}
-	
-	public boolean isNull(Object obj){
-		return obj==null?true:false;
+
+	public boolean isNull(Object obj) {
+		return obj == null ? true : false;
 	}
 
 	@Override
@@ -169,28 +188,22 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 	}
 
 	public ProposicaoJSON populaProposicaoJSON(Proposicao proposicao) {
-		ProposicaoJSON proposicaoJSON = new ProposicaoJSON();
-		proposicaoJSON
-				.setEmenta(proposicao.getEmentaClob() == null ? proposicao
-						.getEmenta() : Conversores.clobToString(proposicao
-						.getEmentaClob()));
-		proposicaoJSON.setId(proposicao.getId());
-		proposicaoJSON.setIdProposicao(proposicao.getIdProposicao());
-		proposicaoJSON.setAno(proposicao.getAno());
-		proposicaoJSON.setNumero(proposicao.getNumero());
-		proposicaoJSON.setSigla(proposicao.getSigla());
-		proposicaoJSON.setAutor(proposicao.getAutor());
-		proposicaoJSON.setOrigem(proposicao.getOrigem());
-		proposicaoJSON.setComissao(proposicao.getComissao());
-		proposicaoJSON.setSeqOrdemPauta(proposicao.getSeqOrdemPauta());
-		proposicaoJSON.setPosicionamento(proposicao.getPosicionamento());
-		proposicaoJSON.setTags(proposicao.getTags());
+		String ementa = proposicao.getEmentaClob() == null ? proposicao
+				.getEmenta() : Conversores.clobToString(proposicao
+				.getEmentaClob());
+		ProposicaoJSON proposicaoJSON = new ProposicaoJSON(proposicao.getId(),
+				proposicao.getIdProposicao(), proposicao.getTipo(),
+				proposicao.getAno(), proposicao.getNumero(),
+				proposicao.getDataApresentacao(), proposicao.getAutor(),
+				ementa, proposicao.getOrigem(), proposicao.getSigla(),
+				proposicao.getComissao(), proposicao.getSeqOrdemPauta(),
+				proposicao.getLinkProposicao(), proposicao.getLinkPauta(),
+				comentarioService.findByProposicao(proposicao.getId()),
+				proposicao.getPosicionamento(), proposicao.getTags());
+		
 
-		
-		
 		return proposicaoJSON;
 	}
-
 
 	@Override
 	public ProposicaoJSON buscarPorId(Long id) {
@@ -204,17 +217,17 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 	public List<ProposicaoJSON> buscarProposicoesPorDataReuniao(Date dataReuniao) {
 
 		List<ProposicaoJSON> listaProposicaoJSON = new ArrayList<ProposicaoJSON>();
-		
-		Query query = em
-				.createNativeQuery("select p.* from Proposicao p "
-						+ "inner join ReuniaoProposicao rp "
-						+ "on p.id = rp.idProposicao "
-						+ "where rp.dataReuniao = :P_DATA", Proposicao.class);
-		query.setParameter("P_DATA", Conversores.dateToString(dataReuniao, "yyyy-MM-dd"));  
+
+		Query query = em.createNativeQuery("select p.* from Proposicao p "
+				+ "inner join ReuniaoProposicao rp "
+				+ "on p.id = rp.idProposicao "
+				+ "where rp.dataReuniao = :P_DATA", Proposicao.class);
+		query.setParameter("P_DATA",
+				Conversores.dateToString(dataReuniao, "yyyy-MM-dd"));
 
 		List<Proposicao> listaProposicoes = query.getResultList();
 		for (Object obj : listaProposicoes) {
-			Proposicao proposicao = (Proposicao)obj;
+			Proposicao proposicao = (Proposicao) obj;
 			ProposicaoJSON proposicaoJSON = populaProposicaoJSON(proposicao);
 			populaComentarioProposicao(proposicao, proposicaoJSON);
 			listaProposicaoJSON.add(proposicaoJSON);
@@ -226,11 +239,17 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 
 	private void populaComentarioProposicao(Proposicao proposicao,
 			ProposicaoJSON proposicaoJSON) {
-		proposicaoJSON.setListaComentario(comentarioService.findByProposicao(proposicao.getId()));
+		proposicaoJSON.setListaComentario(comentarioService
+				.findByProposicao(proposicao.getId()));
 	}
 
 	@Override
 	public void atualizaProposicaoJSON(ProposicaoJSON proposicaoJSON) {
+		Proposicao proposicao = proposicaoJsonToProposicao(proposicaoJSON);
+		save(proposicao);
+	}
+
+	private Proposicao proposicaoJsonToProposicao(ProposicaoJSON proposicaoJSON) {
 		Proposicao proposicao = findById(proposicaoJSON.getId());
 		proposicao.setAno(proposicaoJSON.getAno());
 		proposicao.setIdProposicao(proposicaoJSON.getIdProposicao());
@@ -242,7 +261,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 		proposicao.setSeqOrdemPauta(proposicaoJSON.getSeqOrdemPauta());
 		proposicao.setPosicionamento(proposicaoJSON.getPosicionamento());
 		proposicao.setTags(proposicaoJSON.getTags());
-		save(proposicao);
+		return proposicao;
 	}
 
 }
