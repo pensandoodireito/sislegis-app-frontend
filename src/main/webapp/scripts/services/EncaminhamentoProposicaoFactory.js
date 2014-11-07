@@ -14,7 +14,7 @@ angular.module('sislegisapp').factory('EncaminhamentoProposicaoResource', functi
 			method : 'PUT'
 		},
 		'findByProposicao' : {
-			url : "rest/comentarios/proposicao/:ProposicaoId",
+			url : "rest/encaminhamentoProposicao/proposicao/:ProposicaoId",
 			method : 'GET',
 			isArray : true
 		}

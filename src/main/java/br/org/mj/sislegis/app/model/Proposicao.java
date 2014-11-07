@@ -88,10 +88,11 @@ public class Proposicao implements AbstractEntity {
 	@Column
 	private String tags;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "proposicao")
+	@Transient
 	private Set<Comentario> listaComentario = new HashSet<Comentario>();
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "proposicao")
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "proposicao")
+	@Transient
 	private Set<EncaminhamentoProposicao> listaEncaminhamentoProposicao = new HashSet<EncaminhamentoProposicao>();
 
 	public String getSigla() {

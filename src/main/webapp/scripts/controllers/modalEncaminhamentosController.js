@@ -1,20 +1,22 @@
 angular.module('sislegisapp').controller('ModalEncaminhamentosController',
-		function($scope, $http, $filter, $routeParams, $location, $modalInstance, proposicao, listaEncaminhamentos, EncaminhamentoProposicaoResource, ProposicaoResource) {
+		function($scope, $http, $filter, $routeParams, $location, $modalInstance, proposicao, EncaminhamentoResource, ProposicaoResource, EncaminhamentoProposicaoResource) {
 
 			var self = this;
 			$scope.disabled = false;
-			$scope.showDetalhamentoComentario = false;
 			$scope.$location = $location;
 
 			$scope.proposicao = proposicao || new ProposicaoResource();
-			$scope.listaEncaminhamentos = listaEncaminhamentos || [];
-		    $scope.encaminhamentoProposicao = $scope.comentario || new EncaminhamentoProposicaoResource();
+		    $scope.encaminhamento = new EncaminhamentoResource();
+		    $scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
+			$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: proposicao.id});
+			$scope.listaEncaminhamento = EncaminhamentoResource.queryAll() || [];
 
 			$scope.ok = function() {
-				$modalInstance.close($scope.listaComentario);
+				$modalInstance.close();
 			};
 
 			$scope.cancel = function() {
+	        	$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
 				$modalInstance.dismiss('cancel');
 			};
 
@@ -27,35 +29,59 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 		    };
 		    
 		    $scope.update = function() {
+		    	$scope.encaminhamentoProposicao.proposicao = new ProposicaoResource();
+		    	$scope.encaminhamentoProposicao.proposicao.id = $scope.proposicao.id;
+		    	
 		        var successCallback = function(){
 		        	$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
 		            $scope.displayError = false;
 		        };
 		        var errorCallback = function() {
+		        	$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
 		            $scope.displayError=true;
 		        };
-		        $scope.comentario.$update(successCallback, errorCallback);
+		        $scope.encaminhamentoProposicao.$update({EncaminhamentoProposicaoId: $scope.encaminhamentoProposicao.id}, successCallback, errorCallback);
 		    };
 		    
 
 		    $scope.save = function() {
 		    	
-		    	$scope.comentario.dataCriacao = new Date();
-		    	$scope.comentario.proposicao = new ProposicaoResource();
-		    	$scope.comentario.proposicao.id = $scope.proposicao.id;
+		    	$scope.encaminhamentoProposicao.proposicao = new ProposicaoResource();
+		    	$scope.encaminhamentoProposicao.proposicao.id = $scope.proposicao.id;
+		    	$scope.encaminhamentoProposicao.comentario.dataCriacao = new Date();
+		    	
 		    	//TODO mock
-		    	$scope.comentario.autor = 'usuario logado';
+		    	$scope.encaminhamentoProposicao.comentario.autor = 'usuario logado';
 		    	
 		        var successCallback = function(data,responseHeaders){
-		        	$scope.listaComentario.push(data);
+		        	$scope.listaEncaminhamentoProposicao.push(data);
 		        	$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
+		        	$scope.encaminhamento = new EncaminhamentoResource();
 		            $scope.displayError = false;
 		        };
 		        var errorCallback = function() {
 		            $scope.displayError = true;
 		        };
-		        EncaminhamentoProposicaoResource.save($scope.comentario, successCallback, errorCallback);
+		        EncaminhamentoProposicaoResource.save($scope.encaminhamentoProposicao, successCallback, errorCallback);
 		    };
 
+		    // CALENDARIO
+		    $scope.setCalendar = function() {
+				$scope.openCalendar = function($event) {
+					$event.preventDefault();
+					$event.stopPropagation();
+			
+					$scope.opened = true;
+				};
+
+				$scope.dateOptions = {
+					formatYear : 'yy',
+					startingDay : 1
+				};
+
+				$scope.format = 'dd/MM/yyyy';
+		    }
+		    
+		    $scope.setCalendar();
 
 		});

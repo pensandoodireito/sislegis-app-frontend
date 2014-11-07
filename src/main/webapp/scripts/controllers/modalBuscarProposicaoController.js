@@ -92,7 +92,6 @@ angular
 					$scope.salvar = function() {
 
 				        var successCallback = function(){
-				        	alert('Registro incluido com sucesso');
 				        	$modalInstance.close($scope.listaProposicaoSelecao);
 				        };
 				        var errorCallback = function() {

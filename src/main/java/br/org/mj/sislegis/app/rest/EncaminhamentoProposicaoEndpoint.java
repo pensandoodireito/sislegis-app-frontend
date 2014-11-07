@@ -16,10 +16,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import br.org.mj.sislegis.app.model.Encaminhamento;
 import br.org.mj.sislegis.app.model.EncaminhamentoProposicao;
 import br.org.mj.sislegis.app.service.EncaminhamentoProposicaoService;
-import br.org.mj.sislegis.app.service.EncaminhamentoService;
 
 @Path("/encaminhamentoProposicao")
 public class EncaminhamentoProposicaoEndpoint {
@@ -71,4 +69,13 @@ public class EncaminhamentoProposicaoEndpoint {
 
 		return Response.noContent().build();
 	}
+
+	@GET
+	@Path("/proposicao/{id:[0-9][0-9]*}")
+	@Produces("application/json")
+	public List<EncaminhamentoProposicao> findByProposicao(@PathParam("id") Long id) {
+		final List<EncaminhamentoProposicao> results = service.findByProposicao(id);
+		return results;
+	}
+
 }

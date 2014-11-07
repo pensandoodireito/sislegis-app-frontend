@@ -1,5 +1,7 @@
 package br.org.mj.sislegis.app.model;
 
+import java.util.Objects;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,30 +13,43 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.lang.Override;
+import java.util.Date;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @XmlRootElement
 public class EncaminhamentoProposicao implements AbstractEntity {
-	
-	
+
 	private static final long serialVersionUID = 7949894944142814382L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", updatable = false, nullable = false)
 	private Long id;
-	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@PrimaryKeyJoinColumn
+
+	// @PrimaryKeyJoinColumn
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Comentario comentario;
-	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+	@OneToOne(fetch = FetchType.EAGER)
 	private Encaminhamento encaminhamento;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Proposicao proposicao;
-	
-	
+
+	@Column
+	private String responsavel;
+
+	@Column
+	@Temporal(TemporalType.DATE)
+	private Date dataLimite;
+
+	@Column
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataHoraLimite;
+
 	public Comentario getComentario() {
 		return comentario;
 	}
@@ -82,15 +97,63 @@ public class EncaminhamentoProposicao implements AbstractEntity {
 
 	@Override
 	public Long getId() {
-		// TODO Auto-generated method stub
 		return id;
 	}
 
 	public Proposicao getProposicao() {
+		if (!Objects.isNull(this.proposicao)) {
+			Proposicao p = new Proposicao();
+			p.setId(proposicao.getId());
+			this.proposicao = p;
+		}
 		return proposicao;
 	}
 
 	public void setProposicao(Proposicao proposicao) {
 		this.proposicao = proposicao;
+	}
+
+	public String getResponsavel() {
+		return responsavel;
+	}
+
+	public void setResponsavel(String responsavel) {
+		this.responsavel = responsavel;
+	}
+
+	public Date getDataLimite() {
+		return dataLimite;
+	}
+
+	public void setDataLimite(Date dataLimite) {
+		this.dataLimite = dataLimite;
+	}
+
+	public Date getDataHoraLimite() {
+		return dataHoraLimite;
+	}
+
+	public void setDataHoraLimite(Date dataHoraLimite) {
+		this.dataHoraLimite = dataHoraLimite;
+	}
+
+	@Override
+	public String toString() {
+		String result = getClass().getSimpleName() + " ";
+		if (id != null)
+			result += "id: " + id;
+		if (comentario != null)
+			result += ", comentario: " + comentario;
+		if (encaminhamento != null)
+			result += ", encaminhamento: " + encaminhamento;
+		if (proposicao != null)
+			result += ", proposicao: " + proposicao;
+		if (responsavel != null && !responsavel.trim().isEmpty())
+			result += ", responsavel: " + responsavel;
+		if (dataLimite != null)
+			result += ", dataLimite: " + dataLimite;
+		if (dataHoraLimite != null)
+			result += ", dataHoraLimite: " + dataHoraLimite;
+		return result;
 	}
 }

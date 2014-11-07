@@ -5,12 +5,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 import java.lang.Override;
+
 import javax.xml.bind.annotation.XmlRootElement;
+
 import java.util.Date;
+import java.util.Objects;
+
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import br.org.mj.sislegis.app.model.Proposicao;
+
 import javax.persistence.ManyToOne;
 import javax.persistence.FetchType;
 
@@ -105,9 +112,11 @@ public class Comentario implements AbstractEntity {
 	}
 
 	public Proposicao getProposicao() {
-		Proposicao p = new Proposicao();
-		p.setId(proposicao.getId());
-		this.proposicao = p;
+		if(!Objects.isNull(this.proposicao)){
+			Proposicao p = new Proposicao();
+			p.setId(proposicao.getId());
+			this.proposicao = p;
+		}
 		return this.proposicao;
 	}
 

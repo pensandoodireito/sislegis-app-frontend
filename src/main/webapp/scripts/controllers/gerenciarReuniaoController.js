@@ -71,36 +71,12 @@ angular.module('sislegisapp').controller(
           });
     };
     
-    
+
     $scope.abrirModalEncaminhamentos = function () {
     	
         var modalInstance = $modal.open({
           templateUrl: 'views/modal-encaminhamentos.html',
           controller: 'ModalEncaminhamentosController',
-          size: 'lg',
-          resolve: {
-            proposicao: function () {
-            	return $scope.selectedProposicao;
-            },            
-            listaComentario: function (){
-            	return $scope.listaComentario;
-            }
-          }
-        });
-        
-        modalInstance.result.then(function (listaComentario) {
-        	$scope.listaComentario = listaComentario;
-          }, function () {
-            $log.info('Modal dismissed at: ' + new Date());
-          });
-    };    
-        
-
-    $scope.abrirModalEncaminhamento = function () {
-    	
-        var modalInstance = $modal.open({
-          templateUrl: 'views/modal-encaminhamento.html',
-          controller: 'ModalEncaminhamentoController',
           size: 'lg',
           resolve: {
             proposicao: function () {

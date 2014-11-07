@@ -6,7 +6,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.ws.rs.PathParam;
 
 import br.org.mj.sislegis.app.model.Comentario;
 import br.org.mj.sislegis.app.service.AbstractPersistence;
@@ -32,7 +31,7 @@ implements ComentarioService{
 		TypedQuery<Comentario> findByIdQuery = em
 				.createQuery(
 						"SELECT DISTINCT c FROM Comentario c "
-								+ "INNER JOIN c.proposicao p WHERE p.id = :entityId ORDER BY c.id",
+								+ "INNER JOIN FETCH c.proposicao p WHERE p.id = :entityId ORDER BY c.id",
 						Comentario.class);
 		findByIdQuery.setParameter("entityId", id);
 		final List<Comentario> results = findByIdQuery.getResultList();
