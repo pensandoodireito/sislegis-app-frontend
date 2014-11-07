@@ -1,13 +1,13 @@
 package br.org.mj.sislegis.app.json;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import br.org.mj.sislegis.app.enumerated.Origem;
-import br.org.mj.sislegis.app.model.Comentario;
 import br.org.mj.sislegis.app.model.Posicionamento;
-import br.org.mj.sislegis.app.model.Reuniao;
 
 
 public class ProposicaoJSON implements Serializable {
@@ -38,9 +38,8 @@ public class ProposicaoJSON implements Serializable {
 	
 	private Integer seqOrdemPauta;
 	
-	private Set<Reuniao> listaReunioes;
 	
-	private Set<Comentario> listaComentario;
+	private List<ComentarioJSON> listaComentario = new ArrayList<ComentarioJSON>();
 	
 	private Posicionamento posicionamento;
 	
@@ -152,13 +151,6 @@ public class ProposicaoJSON implements Serializable {
 		this.posicionamento = posicionamento;
 	}
 
-	public Set<Reuniao> getListaReunioes() {
-		return listaReunioes;
-	}
-
-	public void setListaReunioes(Set<Reuniao> listaReunioes) {
-		this.listaReunioes = listaReunioes;
-	}
 
 	public String getTags() {
 		return tags;
@@ -168,11 +160,11 @@ public class ProposicaoJSON implements Serializable {
 		this.tags = tags;
 	}
 
-	public Set<Comentario> getListaComentario() {
+	public List<ComentarioJSON> getListaComentario() {
 		return listaComentario;
 	}
 
-	public void setListaComentario(Set<Comentario> listaComentario) {
+	public void setListaComentario(List<ComentarioJSON> listaComentario) {
 		this.listaComentario = listaComentario;
 	}
 }

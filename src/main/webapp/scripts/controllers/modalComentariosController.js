@@ -1,5 +1,5 @@
 angular.module('sislegisapp').controller('ModalComentariosController',
-		function($scope, $http, $filter, $routeParams, $location, $modalInstance, proposicao, listaComentario, ComentarioResource, ProposicaoResource) {
+		function($scope, $http, $filter, $routeParams, $location, $modalInstance, proposicao, ComentarioResource, ProposicaoResource) {
 
 			var self = this;
 			$scope.disabled = false;
@@ -7,11 +7,10 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 			$scope.$location = $location;
 
 			$scope.proposicao = proposicao || new ProposicaoResource();
-			$scope.listaComentario = listaComentario || [];
 		    $scope.comentario = $scope.comentario || new ComentarioResource();
 
 			$scope.ok = function() {
-				$modalInstance.close($scope.listaComentario);
+				$modalInstance.close($scope.proposicao.listaComentario);
 			};
 
 			$scope.cancel = function() {
@@ -34,21 +33,22 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 		        var errorCallback = function() {
 		            $scope.displayError=true;
 		        };
-		        $scope.comentario.$update(successCallback, errorCallback);
+		        ComentarioResource.update($scope.comentario, successCallback, errorCallback);
 		    };
 		    
 
 		    $scope.save = function() {
 		    	
 		    	$scope.comentario.dataCriacao = new Date();
-		    	$scope.comentario.proposicao = new ProposicaoResource();
-		    	$scope.comentario.proposicao.id = $scope.proposicao.id;
+		    	//$scope.comentario.proposicao = new ProposicaoResource();
+		    	$scope.comentario.idProposicao = $scope.proposicao.id;
 		    	//TODO mock
 		    	$scope.comentario.autor = 'usuario logado';
 		    	
 		        var successCallback = function(data,responseHeaders){
-		        	$scope.listaComentario.push(data);
 		        	$scope.comentario = new ComentarioResource();
+		        	var id = $scope.proposicao.id;
+		        	$scope.proposicao = ProposicaoResource.get({ProposicaoId: id});
 		            $scope.displayError = false;
 		        };
 		        var errorCallback = function() {

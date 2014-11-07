@@ -8,7 +8,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 			$scope.proposicao = proposicao || new ProposicaoResource();
 		    $scope.encaminhamento = new EncaminhamentoResource();
 		    $scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
-			$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: proposicao.id});
+			$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.proposicao.id});
 			$scope.listaEncaminhamento = EncaminhamentoResource.queryAll() || [];
 
 			$scope.ok = function() {
@@ -54,7 +54,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 		    	$scope.encaminhamentoProposicao.comentario.autor = 'usuario logado';
 		    	
 		        var successCallback = function(data,responseHeaders){
-		        	$scope.listaEncaminhamentoProposicao.push(data);
+					$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.proposicao.id});
 		        	$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
 		        	$scope.encaminhamento = new EncaminhamentoResource();
 		            $scope.displayError = false;

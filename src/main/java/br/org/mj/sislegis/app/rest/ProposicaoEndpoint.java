@@ -146,4 +146,13 @@ public class ProposicaoEndpoint {
 		return Response.noContent().build();
 	}
 	
+	
+
+	@PUT
+	@Path("/{id:[0-9][0-9]*}")
+	@Consumes("application/json")
+	public Response atualizaProposicao(ProposicaoJSON entity) {
+		proposicaoService.atualizaProposicaoJSON(entity);
+		return Response.noContent().build();
+	}
 }

@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
+import br.org.mj.sislegis.app.json.ComentarioJSON;
 import br.org.mj.sislegis.app.model.Comentario;
 import br.org.mj.sislegis.app.service.ComentarioService;
 
@@ -33,8 +34,9 @@ public class ComentarioEndpoint {
 
 	@POST
 	@Consumes("application/json")
-	public Response create(Comentario entity) {
-		comentarioService.save(entity);
+	public Response create(ComentarioJSON entity) {
+		
+		comentarioService.salvarComentario(entity);
 		return Response.created(
 				UriBuilder.fromResource(ComentarioEndpoint.class)
 						.path(String.valueOf(entity.getId())).build()).build();
@@ -61,8 +63,8 @@ public class ComentarioEndpoint {
 	@GET
 	@Path("/proposicao/{id:[0-9][0-9]*}")
 	@Produces("application/json")
-	public List<Comentario> findByProposicao(@PathParam("id") Long id) {
-		final List<Comentario> results = comentarioService.findByProposicao(id);
+	public List<ComentarioJSON> findByProposicao(@PathParam("id") Long id) {
+		final List<ComentarioJSON> results = comentarioService.findByProposicao(id);
 		return results;
 	}
 
@@ -77,9 +79,9 @@ public class ComentarioEndpoint {
 	@PUT
 	@Path("/{id:[0-9][0-9]*}")
 	@Consumes("application/json")
-	public Response update(Comentario entity) {
+	public Response update(ComentarioJSON entity) {
 		try {
-			entity = comentarioService.save(entity);
+			comentarioService.salvarComentario(entity);
 		} catch (OptimisticLockException e) {
 			return Response.status(Response.Status.CONFLICT)
 					.entity(e.getEntity()).build();
