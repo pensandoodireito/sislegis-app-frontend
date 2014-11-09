@@ -3,7 +3,8 @@
 angular.module('sislegisapp').controller(
 		'GerenciarReuniaoController',
 		function($scope, $http, $filter, $routeParams, $location, $modal, $log,
-				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, ReuniaoProposicaoResource) {
+				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, 
+				ReuniaoProposicaoResource, TagResource) {
     var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
@@ -11,6 +12,11 @@ angular.module('sislegisapp').controller(
     $scope.reuniao = new ReuniaoResource();
     $scope.reuniaoProposicao = new ReuniaoProposicaoResource();
     
+    $scope.detalhamentoProposicao = false;
+    
+    $scope.loadTags = function(query) {
+    	return TagResource.listarTodos().$promise;
+    };     
     
     $scope.buscarProposicoes = function () {
     	
@@ -134,6 +140,7 @@ angular.module('sislegisapp').controller(
     $scope.getProposicao = function(id) {
     	$scope.selectedProposicao = ProposicaoResource.get({ProposicaoId: id});
     	$scope.posicionamentos = PosicionamentoResource.queryAll();
+    	$scope.detalhamentoProposicao = true;
     }
     
     $scope.removerProposicao = function(id){
@@ -155,8 +162,9 @@ angular.module('sislegisapp').controller(
     
     $scope.$watch("reuniao.data", function() {
     	if(!angular.isUndefined($scope.reuniao.data)){
-    		$scope.selectedProposicao = false;
+    		
     		$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
+    		$scope.detalhamentoProposicao = false;
     	}
 
     });

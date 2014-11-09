@@ -18,3 +18,11 @@ insert into Encaminhamento (nome, id) values ('Tipo encaminhamento 1', 1);
 insert into Encaminhamento (nome, id) values ('Tipo encaminhamento 2', 2);
 insert into Encaminhamento (nome, id) values ('Tipo encaminhamento 3', 3);
 insert into Encaminhamento (nome, id) values ('Tipo encaminhamento 4', 4);
+
+insert into Tag (id) values('Ministério');
+insert into Tag (id) values('Câmara');
+insert into Tag (id) values('Senado');
+--insert into Tag (id) values('Justiça');
+--insert into Tag (id) values('Projeto de Lei');
+--insert into Tag (id) values('Proposição');
+--insert into Tag (id) values('Requerimento');

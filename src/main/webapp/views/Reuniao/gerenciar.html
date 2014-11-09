@@ -53,7 +53,7 @@
 	<div class="col-sm-8">
 		<div class="panel panel-default ">
 			<div class="panel-heading">Detalhamento da Proposição</div>
-				<div ng-show="selectedProposicao">
+				<div ng-show="detalhamentoProposicao">
 					
 					<div class="pt-sm pb-sm">
 						<div class="col-xs-5">
@@ -75,7 +75,9 @@
 						</p> -->
 						<p class="fontsize-sm">
 							<strong>Tags:  </strong>
-							<input type="text" ng-model="selectedProposicao.tags" class="form-control" />
+							 <tags-input ng-model="selectedProposicao.tags">
+							 	<auto-complete source="loadTags($query)"></auto-complete>
+							 </tags-input>
 						</p>
 						
 						<button type="button" class="btn btn-primary btn-sm" ng-click="atualizarProposicao()">Salvar</button>

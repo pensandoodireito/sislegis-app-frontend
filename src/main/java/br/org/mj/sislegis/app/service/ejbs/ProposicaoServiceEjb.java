@@ -17,13 +17,14 @@ import javax.sql.rowset.serial.SerialClob;
 import javax.sql.rowset.serial.SerialException;
 
 import br.org.mj.sislegis.app.enumerated.Origem;
-import br.org.mj.sislegis.app.json.ComentarioJSON;
 import br.org.mj.sislegis.app.json.ProposicaoJSON;
-import br.org.mj.sislegis.app.model.Comentario;
-import br.org.mj.sislegis.app.model.Posicionamento;
+import br.org.mj.sislegis.app.json.TagJSON;
 import br.org.mj.sislegis.app.model.Proposicao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicaoPK;
+import br.org.mj.sislegis.app.model.Tag;
+import br.org.mj.sislegis.app.model.TagProposicao;
+import br.org.mj.sislegis.app.model.TagProposicaoPK;
 import br.org.mj.sislegis.app.parser.camara.ParserPautaCamara;
 import br.org.mj.sislegis.app.parser.camara.ParserProposicaoCamara;
 import br.org.mj.sislegis.app.parser.senado.ParserPautaSenado;
@@ -32,6 +33,7 @@ import br.org.mj.sislegis.app.service.AbstractPersistence;
 import br.org.mj.sislegis.app.service.ComentarioService;
 import br.org.mj.sislegis.app.service.ProposicaoService;
 import br.org.mj.sislegis.app.service.ReuniaoProposicaoService;
+import br.org.mj.sislegis.app.service.TagService;
 import br.org.mj.sislegis.app.util.Conversores;
 import br.org.mj.sislegis.app.util.SislegisUtil;
 
@@ -56,6 +58,9 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 
 	@Inject
 	private ComentarioService comentarioService;
+	
+	@Inject
+	private TagService tagService;
 
 	@PersistenceContext
 	private EntityManager em;
@@ -191,6 +196,11 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 		String ementa = proposicao.getEmentaClob() == null ? proposicao
 				.getEmenta() : Conversores.clobToString(proposicao
 				.getEmentaClob());
+		
+/*		List<TagJSON> listaTagsJSON =new ArrayList<TagJSON>();
+		for(Tag tag:proposicao.getTags()){
+			listaTagsJSON.add(new TagJSON(tag.toString()));
+		}*/
 		ProposicaoJSON proposicaoJSON = new ProposicaoJSON(proposicao.getId(),
 				proposicao.getIdProposicao(), proposicao.getTipo(),
 				proposicao.getAno(), proposicao.getNumero(),
@@ -199,7 +209,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 				proposicao.getComissao(), proposicao.getSeqOrdemPauta(),
 				proposicao.getLinkProposicao(), proposicao.getLinkPauta(),
 				comentarioService.findByProposicao(proposicao.getId()),
-				proposicao.getPosicionamento(), proposicao.getTags());
+				proposicao.getPosicionamento(), tagService.populaListaTagsProposicaoJSON(proposicao.getTags()));
 		
 
 		return proposicaoJSON;
@@ -260,8 +270,27 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long>
 		proposicao.setComissao(proposicaoJSON.getComissao());
 		proposicao.setSeqOrdemPauta(proposicaoJSON.getSeqOrdemPauta());
 		proposicao.setPosicionamento(proposicaoJSON.getPosicionamento());
-		proposicao.setTags(proposicaoJSON.getTags());
+		Set<TagProposicao> tags = populaTagsProposicao(proposicaoJSON, proposicao);
+		proposicao.setTags(tags);
 		return proposicao;
+	}
+
+	private Set<TagProposicao> populaTagsProposicao(ProposicaoJSON proposicaoJSON,
+			Proposicao proposicao) {
+		Set<TagProposicao> tagsProposicao = new HashSet<TagProposicao>();
+		for(TagJSON tagJSON:proposicaoJSON.getTags()){
+			TagProposicaoPK tagProposicaoPK = new TagProposicaoPK();
+			TagProposicao tagProposicao = new TagProposicao();
+			Tag tag = new Tag();
+			tagProposicaoPK.setIdProposicao(proposicaoJSON.getId());
+			tagProposicaoPK.setTag(tagJSON.getText());
+			tagProposicao.setTagProposicaoPK(tagProposicaoPK);
+			tagProposicao.setProposicao(proposicao);
+			tag.setTag(tagJSON.getText());
+			tagProposicao.setTag(tag);
+			tagsProposicao.add(tagProposicao);
+		}
+		return tagsProposicao;
 	}
 
 }

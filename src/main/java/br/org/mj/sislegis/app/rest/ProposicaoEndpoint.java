@@ -21,13 +21,13 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import br.org.mj.sislegis.app.exception.SislegisException;
 import br.org.mj.sislegis.app.json.ProposicaoJSON;
 import br.org.mj.sislegis.app.model.Proposicao;
-import br.org.mj.sislegis.app.model.Reuniao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicao;
+import br.org.mj.sislegis.app.model.Tag;
 import br.org.mj.sislegis.app.service.ProposicaoService;
 import br.org.mj.sislegis.app.service.Service;
+import br.org.mj.sislegis.app.service.TagService;
 
 /**
  * 

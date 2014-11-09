@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap'])
+angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap','ngTagsInput'])
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider
 	.when('/Reuniaos/gerenciar',{templateUrl:'views/Reuniao/gerenciar.html',controller:'GerenciarReuniaoController'})

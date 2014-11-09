@@ -47,7 +47,8 @@ public class ProposicaoJSON implements Serializable {
 
 	private Posicionamento posicionamento;
 
-	private String tags;
+	
+	private List<TagJSON> tags;
 	
 	public ProposicaoJSON(){}
 
@@ -56,7 +57,7 @@ public class ProposicaoJSON implements Serializable {
 			String ementa, Origem origem, String sigla, String comissao,
 			Integer seqOrdemPauta, String linkProposicao, String linkPauta,
 			List<ComentarioJSON> listaComentario,
-			Posicionamento posicionamento, String tags) {
+			Posicionamento posicionamento, List<TagJSON> tags) {
 		this.id=id;
 		this.idProposicao=idProposicao;
 		this.tipo=tipo;
@@ -180,14 +181,6 @@ public class ProposicaoJSON implements Serializable {
 		this.posicionamento = posicionamento;
 	}
 
-	public String getTags() {
-		return tags;
-	}
-
-	public void setTags(String tags) {
-		this.tags = tags;
-	}
-
 	public List<ComentarioJSON> getListaComentario() {
 		return listaComentario;
 	}
@@ -210,5 +203,13 @@ public class ProposicaoJSON implements Serializable {
 
 	public void setLinkPauta(String linkPauta) {
 		this.linkPauta = linkPauta;
+	}
+
+	public List<TagJSON> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<TagJSON> tags) {
+		this.tags = tags;
 	}
 }

@@ -33,7 +33,7 @@ public class ReuniaoEndpoint {
 
 	@Inject
 	private ProposicaoService proposicaoService;
-
+	
 	@POST
 	@Consumes("application/json")
 	public Response create(Reuniao entity) {

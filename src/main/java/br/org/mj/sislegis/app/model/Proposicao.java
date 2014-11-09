@@ -15,6 +15,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -85,8 +87,8 @@ public class Proposicao implements AbstractEntity {
 	@Column
 	private Posicionamento posicionamento;
 
-	@Column
-	private String tags;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "proposicao")
+	private Set<TagProposicao> tags;
 
 	@Transient
 	private Set<Comentario> listaComentario = new HashSet<Comentario>();
@@ -232,13 +234,6 @@ public class Proposicao implements AbstractEntity {
 		this.listaReuniaoProposicoes = listaReuniaoProposicoes;
 	}
 
-	public String getTags() {
-		return tags;
-	}
-
-	public void setTags(String tags) {
-		this.tags = tags;
-	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -291,6 +286,14 @@ public class Proposicao implements AbstractEntity {
 
 	public void setListaComentario(final Set<Comentario> listaComentario) {
 		this.listaComentario = listaComentario;
+	}
+
+	public Set<TagProposicao> getTags() {
+		return tags;
+	}
+
+	public void setTags(Set<TagProposicao> tags) {
+		this.tags = tags;
 	}
 
 }
