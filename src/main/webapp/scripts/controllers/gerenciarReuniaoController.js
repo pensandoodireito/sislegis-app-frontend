@@ -163,7 +163,17 @@ angular.module('sislegisapp').controller(
     $scope.$watch("reuniao.data", function() {
     	if(!angular.isUndefined($scope.reuniao.data)){
     		
-    		$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
+    		var successCallback = function(){
+                if ($scope.listaReuniaoProposicoes.length == 0) {
+                	alert('Não existem proposições para esta data. Você pode adicionar novas proposições.');
+                }
+                $scope.displayError = false;
+            };
+            var errorCallback = function() {
+            	$scope.displayError=true;
+            };
+    		
+    		$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()}, successCallback, errorCallback);
     		$scope.detalhamentoProposicao = false;
     	}
 
