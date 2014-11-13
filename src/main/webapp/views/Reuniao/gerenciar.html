@@ -83,7 +83,7 @@
 						<button type="button" class="btn btn-primary btn-sm" ng-click="atualizarProposicao()">Salvar</button>
 
 					
-						<h3><a href="{{detalheProposicao.linkProposicao}}" target="_blank">{{selectedProposicao.sigla}}</a></h3>
+						<h3><a href="{{selectedProposicao.linkProposicao}}" target="_blank">{{selectedProposicao.sigla}}</a></h3>
 						<p class="divider-top">{{selectedProposicao.ementa}}</p>
 						<p class="fontsize-sm">
 							<strong>Autor:  </strong>{{selectedProposicao.autor}}
@@ -92,8 +92,7 @@
 							<strong>Origem:  </strong>{{selectedProposicao.origem}}
 						</p>
 						<p class="fontsize-sm">
-							<strong>Link da proposição:  </strong> 
-							<a href="{{selectedProposicao.linkProposicao}}" target="_blank">{{selectedProposicao.linkProposicao}}</a>
+							<a href="{{selectedProposicao.linkProposicao}}" target="_blank"><strong>Link da proposição</strong></a>
 						</p>
 					</div>
 				</div>
