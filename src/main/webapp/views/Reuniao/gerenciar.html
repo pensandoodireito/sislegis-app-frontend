@@ -67,7 +67,7 @@
 					<div class="panel-body rol-vert ">
 						<p class="fontsize-sm">
 							<strong>Posicionamento:</strong>
-							<select ng-model="selectedProposicao.posicionamento" ng-options="posicionamento.nome for posicionamento in posicionamentos track by posicionamento.id" class="form-control"></select>
+							<select ng-model="selectedProposicao.posicionamento" ng-options="posicionamento.nome for posicionamento in posicionamentos track by posicionamento.id | orderBy:'nome'" class="form-control"></select>
 						</p>
 <!-- 						<p class="fontsize-sm">
 							<strong>Responsável:  </strong>
