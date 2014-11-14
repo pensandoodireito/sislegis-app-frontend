@@ -1,4 +1,4 @@
---insert into Reuniao (id, data, version) values (1, CURRENT_DATE, 0);
+insert into Reuniao (id, data, version) values (1, CURRENT_DATE, 0);
 
 --insert into Proposicao (id, ano, autor, dataApresentacao, idProposicao, numero, tipo, origem) values (1, '2014', 'Parlamentar 1', CURRENT_DATE, 464139, '6607', 'PL', 'CAMARA');
 --insert into Proposicao (id, ano, autor, dataApresentacao, idProposicao, numero, tipo, origem) values (2, '2014', 'Parlamentar 2', CURRENT_DATE, 20918, '4491', 'PL', 'CAMARA');
@@ -44,3 +44,11 @@ insert into Encaminhamento (nome, id) values ('Retirar da Pauta do MJ', 11);
 insert into Tag (id) values('Ministério');
 insert into Tag (id) values('Câmara');
 insert into Tag (id) values('Senado');
+
+-- Usuarios
+insert into Usuario(id, nome, email) values (1, 'João', 'joao@joao.com');
+insert into Usuario(id, nome, email) values (2, 'Maria', 'maria@maria.com');
+insert into Usuario(id, nome, email) values (3, 'André', 'andre@andre.com');
+insert into Usuario(id, nome, email) values (4, 'Marcos', 'marcos@marcos.com');
+insert into Usuario(id, nome, email) values (5, 'Felipe', 'felipe@felipe.com');
+insert into Usuario(id, nome, email) values (6, 'Paula', 'paula@paula.com');
