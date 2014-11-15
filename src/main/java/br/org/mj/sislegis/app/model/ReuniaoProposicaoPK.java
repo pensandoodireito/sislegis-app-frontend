@@ -8,6 +8,10 @@ import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+/**
+ * TODO por que existe essa pk composta? Deveria ser uma pk composta entre proposicao e comissao e por que existe uma data aqui? @author guilherme.hott
+ *
+ */
 @Embeddable
 public class ReuniaoProposicaoPK implements Serializable {
 
