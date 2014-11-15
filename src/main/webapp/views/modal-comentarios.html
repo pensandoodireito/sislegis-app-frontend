@@ -13,11 +13,8 @@
 				    <div ng-show="displayError" class="alert alert-danger">
 				        <strong>Falha no processamento</strong>
 				    </div>
-					<div ng-hide="ComentarioForm.campoComentario.$valid" class="alert alert-danger">
-				        <strong>Por favor, preencha o campo comentário</strong>
-				    </div>
 					<div class="input-group">
-						<label for="TextoComentario">Comentário:</label>
+						<label for="TextoComentario">Insira um comentário:</label>
 						<textarea class="form-control" rows="3" name="campoComentario" ng-model="comentario.descricao" ng-required="true"></textarea>
 					</div>
 					<br/>
