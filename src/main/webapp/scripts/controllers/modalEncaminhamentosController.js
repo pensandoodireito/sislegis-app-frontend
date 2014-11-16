@@ -8,11 +8,11 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 			$scope.proposicao = proposicao || new ProposicaoResource();
 		    $scope.encaminhamento = new EncaminhamentoResource();
 		    $scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
-			$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.proposicao.id});
+			$scope.listaEncaminhamentoProposicao = proposicao.listaEncaminhamentoProposicao;
 			$scope.listaEncaminhamento = EncaminhamentoResource.queryAll() || [];
 
 			$scope.ok = function() {
-				$modalInstance.close();
+				$modalInstance.close($scope.listaEncaminhamentoProposicao);
 			};
 
 			$scope.cancel = function() {

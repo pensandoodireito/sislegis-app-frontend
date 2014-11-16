@@ -1,10 +1,8 @@
-
-
 angular.module('sislegisapp').controller(
 		'GerenciarReuniaoController',
 		function($scope, $http, $filter, $routeParams, $location, $modal, $log,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, 
-				ReuniaoProposicaoResource, TagResource) {
+				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource) {
     var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
@@ -88,9 +86,13 @@ angular.module('sislegisapp').controller(
           }
         });
         
-        modalInstance.result.then(function () {
-//        	$scope.listaComentario = listaComentario;
+        modalInstance.result.then(function (listaEncaminhamentoProposicao) {
+        	$scope.selectedProposicao.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
           }, function () {
+        	  //when modal is dismissed
+        	  //o certo era receber a lista como parametro, mas no dismiss nao consegui passar parametro, 
+        	  //entao carrego a lista de novo para atualizar a qtde
+          	$scope.selectedProposicao.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.selectedProposicao.id});
             $log.info('Modal dismissed at: ' + new Date());
           });
     };
@@ -125,6 +127,7 @@ angular.module('sislegisapp').controller(
         ReuniaoResource.remove({ReuniaoId:$scope.reuniao.id})
     };
     
+    //TODO o que isso faz? @author guilherme.hott
     $scope.listaProposicaoSelection = $scope.listaProposicaoSelection || [];
     $scope.$watch("listaProposicaoSelection", function(selection) {
         if (typeof selection != 'undefined' && $scope.reuniao) {
@@ -138,7 +141,17 @@ angular.module('sislegisapp').controller(
     });
     
     $scope.getProposicao = function(id) {
-    	$scope.selectedProposicao = ProposicaoResource.get({ProposicaoId: id});
+
+        var successCallback = function(data){
+        	$scope.selectedProposicao = data;
+        	$scope.selectedProposicao.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: id});
+            $scope.displayError = false;
+        };
+        var errorCallback = function(error) {
+            $scope.displayError=true;
+        };
+        
+    	ProposicaoResource.get({ProposicaoId: id}, successCallback, errorCallback);
     	$scope.posicionamentos = PosicionamentoResource.queryAll();
     	$scope.detalhamentoProposicao = true;
     }
