@@ -144,7 +144,7 @@ angular.module('sislegisapp').controller(
 
         var successCallback = function(data){
         	$scope.selectedProposicao = data;
-        	$scope.selectedProposicao.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: id});
+        	$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: id});
             $scope.displayError = false;
         };
         var errorCallback = function(error) {
