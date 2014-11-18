@@ -2,13 +2,13 @@
 angular.module('sislegisapp').factory('HttpInterceptor', function($q) {
 	return {
 		'request' : function(config) {
-			if (config && config.url && config.url.search('rest') >= 0)
+			if (config && config.url && config.url.search('rest') >= 0 && config.url.search('/tags') < 0 && config.url.search('/autocomplete') < 0)
 		        $('#spinner').show();
 			return config;
 		},
 
 		'requestError' : function(rejection) {
-			if (config && config.url && config.url.search('rest') >= 0)
+			if (config && config.url && config.url.search('rest') >= 0 && config.url.search('/tags') < 0 && config.url.search('/autocomplete') < 0)
 		        $('#spinner').show();
 			if (canRecover(rejection)) {
 				return responseOrNewPromise
