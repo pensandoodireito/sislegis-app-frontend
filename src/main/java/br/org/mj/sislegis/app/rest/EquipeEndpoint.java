@@ -68,7 +68,7 @@ public class EquipeEndpoint {
 	@Consumes("application/json")
 	public Response update(Equipe entity) {
 		try {
-			entity = service.save(entity);
+			entity = equipeService.salvarEquipe(entity);
 		} catch (OptimisticLockException e) {
 			return Response.status(Response.Status.CONFLICT)
 					.entity(e.getEntity()).build();
