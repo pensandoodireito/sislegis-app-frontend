@@ -17,14 +17,25 @@ angular.module('sislegisapp').controller('EquipeController', function ($scope, $
     
     $scope.adicionarUsuario = function() {
     	var usuarioSelecionado = $scope.usuarioSelecionado;
-    	
+
     	if (typeof usuarioSelecionado != 'undefined') {
     		var equipeUsuarioItem = {};
-        	equipeUsuarioItem.equipe = $scope.equipe.id;
+    		
+    		// o valor 1 vem do fato do json conter @1 como identificador;
+    		equipeUsuarioItem.equipe = isEditMode() ? 1 : null;
             equipeUsuarioItem.usuario = usuarioSelecionado;
             equipeUsuarioItem.isCoordenador = false;
+            
+            // pk da entidade
+            var id = {};
+            id.idEquipe = $scope.equipe.id;
+            id.idUsuario = usuarioSelecionado.id;
+            equipeUsuarioItem.id = id;
+            
             $scope.equipe.listaEquipeUsuario.push(equipeUsuarioItem);
     	}
+    	
+    	$scope.usuarioSelecionado = undefined;
     }
     
     $scope.removerUsuario = function(equipeUsuario) {
@@ -54,10 +65,9 @@ angular.module('sislegisapp').controller('EquipeController', function ($scope, $
             $scope.displayError = true;
         };
         
-        // Edição
-        if ($location.path().indexOf("edit") > -1) {
+        if (isEditMode()) {
         	$scope.equipe.$update(successCallback, errorCallback);
-        } else { // Adição
+        } else {
         	EquipeResource.save($scope.equipe, successCallback, errorCallback);
         }
     };
@@ -79,15 +89,36 @@ angular.module('sislegisapp').controller('EquipeController', function ($scope, $
     };
     
     $scope.isClean = function() {
-    	console.log(self.original);
-    	console.log("----------");
-    	console.log($scope.equipe);
-    	console.log(angular.equals(self.original, $scope.equipe));
         return angular.equals(self.original, $scope.equipe);
     };
     
-    // Chama apenas em caso de edição
-    if ($location.path().indexOf("edit") > -1) {
+   function isEditMode() {
+	    if ($location.path().indexOf("edit") > -1) {
+	    	return true;
+		}
+	    return false;
+    }
+
+    if (isEditMode()) {
     	$scope.get();
+    }
+});
+
+// Caso um usuario ja tenha sido adicionado, nao mostra na combo
+angular.module('sislegisapp').filter('removerIncluidos', function() {
+	return function(inputArray, filterCriteria) {
+		return inputArray.filter(function(item) {
+			if (!filterCriteria) {
+				return false;
+			}
+			
+			for (var i = 0; i < filterCriteria.length; i++) {
+				if (angular.equals(item.id, filterCriteria[i].usuario.id)) {
+					return false;
+				}
+				
+			}
+			return true;
+		});
 	}
 });

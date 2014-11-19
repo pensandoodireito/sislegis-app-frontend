@@ -8,7 +8,7 @@
     </div>
     
     <div class="form-group" ng-class="{'has-error': EquipeForm.nome.$invalid}">
-        <label for="nome" class="col-sm-2 control-label">Nome</label>
+        <label for="nome" class="col-sm-2 control-label">Nome da Equipe</label>
         <div id="nomeControls" class="col-sm-10">
             <input id="nome" name="nome" type="text" class="form-control" ng-model="equipe.nome" placeholder="Escreva o nome da Equipe" ng-required="true"></input>
         </div>
@@ -17,7 +17,7 @@
     <div>
 		<label for="nome" class="col-sm-2 control-label">Adicionar Usuário ao Time</label>
         <div id="usuarioControls" class="col-sm-10">
-           <select ng-model="usuarioSelecionado" ng-options="usuario.nome for usuario in usuariosList | orderBy:'nome'"></select>
+           <select ng-model="usuarioSelecionado" ng-options="usuario.nome for usuario in usuariosList | orderBy:'nome' | removerIncluidos : equipe.listaEquipeUsuario"></select>
            <input type="button" ng-click="adicionarUsuario()" value="Adicionar">
         </div>
     </div>
@@ -32,7 +32,7 @@
         		<tr ng-repeat="equipeUsuario in equipe.listaEquipeUsuario | orderBy:'usuario.nome'">
         			<td>{{equipeUsuario.usuario.nome}}</td>
         			<td><input type="checkbox" ng-model="equipeUsuario.isCoordenador"></td>
-        			<td><button type="button" class="btn btn-warning" ng-click="removerUsuario(equipeUsuario)">Remover</button></td>
+        			<td><button type="button" class="btn btn-danger" ng-click="removerUsuario(equipeUsuario)"><span class="glyphicon glyphicon-trash"></span> Excluir Usuário</button></td>
         		</tr>
         	</table>
     </div>
@@ -41,9 +41,9 @@
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button id="saveEquipe" name="saveEquipe" class="btn btn-primary" ng-disabled="isClean() || EquipeForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Save</button>
-            <button id="cancel" name="cancel" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancel</button>
-            <button id="deleteEquipe" name="deleteEquipe" class="btn btn-danger" ng-show="equipe.id" ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+            <button id="saveEquipe" name="saveEquipe" class="btn btn-primary" ng-disabled="isClean() || EquipeForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Salvar</button>
+            <button id="cancel" name="cancel" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancelar</button>
+            <button id="deleteEquipe" name="deleteEquipe" class="btn btn-danger" ng-show="equipe.id" ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Excluir</button>
         </div>
     </div>
 </form>
