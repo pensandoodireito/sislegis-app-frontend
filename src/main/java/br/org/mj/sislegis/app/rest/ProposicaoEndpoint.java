@@ -8,7 +8,6 @@ import java.util.Map;
 
 import javax.ejb.EJBTransactionRolledbackException;
 import javax.inject.Inject;
-import javax.persistence.OptimisticLockException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -24,10 +23,8 @@ import javax.ws.rs.core.UriBuilder;
 import br.org.mj.sislegis.app.json.ProposicaoJSON;
 import br.org.mj.sislegis.app.model.Proposicao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicao;
-import br.org.mj.sislegis.app.model.Tag;
 import br.org.mj.sislegis.app.service.ProposicaoService;
 import br.org.mj.sislegis.app.service.Service;
-import br.org.mj.sislegis.app.service.TagService;
 
 /**
  * 
@@ -135,24 +132,9 @@ public class ProposicaoEndpoint {
 	@PUT
 	@Path("/{id:[0-9][0-9]*}")
 	@Consumes("application/json")
-	public Response update(Proposicao entity) {
-		try {
-			entity = service.save(entity);
-		} catch (OptimisticLockException e) {
-			return Response.status(Response.Status.CONFLICT)
-					.entity(e.getEntity()).build();
-		}
-
+	public Response update(ProposicaoJSON entity) {
+		proposicaoService.atualizarProposicaoJSON(entity);
 		return Response.noContent().build();
 	}
 	
-	
-
-	@PUT
-	@Path("/{id:[0-9][0-9]*}")
-	@Consumes("application/json")
-	public Response atualizaProposicao(ProposicaoJSON entity) {
-		proposicaoService.atualizaProposicaoJSON(entity);
-		return Response.noContent().build();
-	}
 }

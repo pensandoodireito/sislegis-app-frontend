@@ -1,6 +1,6 @@
 angular.module('sislegisapp').controller(
 		'GerenciarReuniaoController',
-		function($scope, $http, $filter, $routeParams, $location, $modal, $log,
+		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, 
 				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource) {
     var self = this;
@@ -16,6 +16,26 @@ angular.module('sislegisapp').controller(
     	return TagResource.listarTodos().$promise;
     };     
     
+
+    
+    $scope.alerts = [];
+
+    $scope.closeAlert = function(index) {
+      $scope.alerts.splice(index, 1);
+    };
+    
+    var addAlert = function(alert){
+    	$scope.alerts.push(alert);
+    	$timeout(function(){
+    		$scope.alerts.splice($scope.alerts.indexOf(alert), 1);
+    	}, 3000); // maybe '}, 3000, false);' to avoid calling apply
+    }
+    
+    
+    
+    /**
+     * MODALs
+     */
     $scope.buscarProposicoes = function () {
     	
     	if($scope.reuniao.data == null){
@@ -97,30 +117,39 @@ angular.module('sislegisapp').controller(
           });
     };
         
-
+    
+    
+    
+    /**
+     * auto save when data is changed
+     */
+    var timeout = null;
+    var debounceSaveUpdates = function(newVal, oldVal) {
+      if (newVal != oldVal) {
+        if (timeout) {
+          $timeout.cancel(timeout)
+        }
+        $rootScope.inativeSpinner = true;
+        timeout = $timeout($scope.save, 1000);  // 1000 = 1 second
+      }
+    };
+    $scope.$watch('selectedProposicao.posicionamento', debounceSaveUpdates);
+    $scope.$watchCollection('selectedProposicao.tags', debounceSaveUpdates);
+    
+    
     $scope.isClean = function() {
         return angular.equals(self.original, $scope.reuniao);
     };
 
     $scope.save = function() {
         var successCallback = function(){
-            $scope.get();
-            $scope.displayError = false;
+            addAlert({type: 'success', msg: 'Registro atualizado com sucesso. (salvamento automático)'});
+        	$rootScope.inativeSpinner = false;
         };
         var errorCallback = function() {
-            $scope.displayError=true;
         };
-        $scope.reuniao.$update(successCallback, errorCallback);
+        $scope.selectedProposicao.$update(successCallback, errorCallback);
     };
-
-    $scope.cancel = function() {
-        $location.path("/Reuniaos");
-    };
-    
-    $scope.close = function(){
-    	alert('Teste');
-    };
-    
 
     $scope.remove = function() {
         alert($scope.reuniao.id);
@@ -192,16 +221,7 @@ angular.module('sislegisapp').controller(
 
     });
     
-    $scope.atualizarProposicao = function() {
-        var successCallback = function(){
-        	alert('Registro atualizado com sucesso');
-            $scope.displayError = false;
-        };
-        var errorCallback = function() {
-            $scope.displayError=true;
-        };
-    	ProposicaoResource.atualizaProposicao($scope.selectedProposicao, successCallback, errorCallback);
-    }
+    
     
     
     // CALENDARIO
@@ -222,4 +242,5 @@ angular.module('sislegisapp').controller(
     }
     
     $scope.setCalendar();
+    
 });

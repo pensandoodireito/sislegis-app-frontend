@@ -1,14 +1,21 @@
 // register the interceptor as a service
-angular.module('sislegisapp').factory('HttpInterceptor', function($q) {
+angular.module('sislegisapp').factory('HttpInterceptor', function($q, $rootScope) {
+	
+	var showSpinner = function(config){
+		return !$rootScope.inativeSpinner && 
+			config && config.url && config.url.search('rest') >= 0 && 
+			config.url.search('/tags') < 0 && config.url.search('/autocomplete') < 0;
+	}
+	
 	return {
 		'request' : function(config) {
-			if (config && config.url && config.url.search('rest') >= 0 && config.url.search('/tags') < 0 && config.url.search('/autocomplete') < 0)
+			if (showSpinner(config))
 		        $('#spinner').show();
 			return config;
 		},
 
 		'requestError' : function(rejection) {
-			if (config && config.url && config.url.search('rest') >= 0 && config.url.search('/tags') < 0 && config.url.search('/autocomplete') < 0)
+			if (showSpinner(config))
 		        $('#spinner').show();
 			if (canRecover(rejection)) {
 				return responseOrNewPromise
