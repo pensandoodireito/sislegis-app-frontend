@@ -5,7 +5,6 @@ angular.module('sislegisapp').controller('EquipeController', function ($scope, $
     $scope.$location = $location;
     $scope.equipe = $scope.equipe || {};
     $scope.equipe.listaEquipeUsuario = $scope.equipe.listaEquipeUsuario || [];
-    $scope.usuarioEditado = false;
 
     $scope.usuariosList = UsuarioResource.queryAll(function(items){
         $scope.usuariosSelectionList = $.map(items, function(item) {
@@ -37,13 +36,11 @@ angular.module('sislegisapp').controller('EquipeController', function ($scope, $
     	}
     	
     	$scope.usuarioSelecionado = undefined;
-    	$scope.usuarioEditado = true;
     }
     
     $scope.removerUsuario = function(equipeUsuario) {
     	var index = $scope.equipe.listaEquipeUsuario.indexOf(equipeUsuario);
 		$scope.equipe.listaEquipeUsuario.splice(index, 1);
-		$scope.usuarioEditado = true;
     }
     
     $scope.get = function() {
