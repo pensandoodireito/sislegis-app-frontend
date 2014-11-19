@@ -21,7 +21,6 @@ import javax.sql.rowset.serial.SerialException;
 import br.org.mj.sislegis.app.enumerated.Origem;
 import br.org.mj.sislegis.app.json.ProposicaoJSON;
 import br.org.mj.sislegis.app.json.TagJSON;
-import br.org.mj.sislegis.app.model.EncaminhamentoProposicao;
 import br.org.mj.sislegis.app.model.Proposicao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicaoPK;
