@@ -210,7 +210,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 	}
 
 	@Override
-	public void atualizaProposicaoJSON(ProposicaoJSON proposicaoJSON) {
+	public void atualizarProposicaoJSON(ProposicaoJSON proposicaoJSON) {
 		Proposicao proposicao = proposicaoJsonToProposicao(proposicaoJSON);
 		save(proposicao);
 	}

@@ -13,9 +13,6 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource) 
 		'update' : {
 			method : 'PUT'
 		},
-		'atualizaProposicao' : {
-			method : 'PUT'
-		},		
 		'salvarProposicoes' : {
 			method : 'PUT',
 			isArray : true
