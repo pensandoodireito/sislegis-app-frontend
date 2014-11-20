@@ -63,8 +63,8 @@ angular
 						$http(
 								{
 									method : 'GET',
-									url : ($scope.origem.value == 'C') ? "rest/proposicaos/detalharProposicaoCamaraWS"
-											: "rest/proposicaos/detalharProposicaoSenadoWS",
+									url : ($scope.origem.value == 'C') ? "../rest/proposicaos/detalharProposicaoCamaraWS"
+											: "../rest/proposicaos/detalharProposicaoSenadoWS",
 									params : {
 										'id' : idProposicao
 									// id proposicao
@@ -114,13 +114,13 @@ angular
 					$scope.selectOrigemComissoes = function() {
 						var origemSelecionada = $scope.origem.value;
 						if (origemSelecionada == 'S') {
-							$http.get('rest/comissaos/comissoesSenado')
+							$http.get('../rest/comissaos/comissoesSenado')
 									.success(function(data) {
 										$scope.comissoes = data;
 									}).error(function(error) {
 									});
 						} else if (origemSelecionada == 'C') {
-							$http.get('rest/comissaos/comissoesCamara')
+							$http.get('../rest/comissaos/comissoesCamara')
 									.success(function(data) {
 										$scope.comissoes = data;
 									}).error(function(error) {

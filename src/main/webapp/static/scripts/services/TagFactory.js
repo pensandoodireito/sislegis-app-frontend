@@ -1,6 +1,6 @@
 angular.module('sislegisapp').factory('TagResource',
 		function($resource) {
-			return $resource('rest/tags/:TagId', {
+			return $resource('../rest/tags/:TagId', {
 				TagId : '@id'
 			}, {
 				'queryAll' : {
@@ -15,7 +15,7 @@ angular.module('sislegisapp').factory('TagResource',
 					method : 'PUT'
 				},
 				'listarTodos' : {
-					url : "rest/tags/listarTodos",
+					url : "../rest/tags/listarTodos",
 					method : 'GET',
 					isArray : true
 				}

@@ -1,5 +1,5 @@
-angular.module('sislegisapp').factory('ComentarioResource', function($resource) {
-	var resource = $resource('rest/comentarios/:ComentarioId', {
+angular.module('sislegisapp').factory('EncaminhamentoProposicaoResource', function($resource) {
+	var resource = $resource('../rest/encaminhamentoProposicao/:EncaminhamentoProposicaoId', {
 		ComentarioId : '@id'
 	}, {
 		'queryAll' : {
@@ -14,7 +14,7 @@ angular.module('sislegisapp').factory('ComentarioResource', function($resource) 
 			method : 'PUT'
 		},
 		'findByProposicao' : {
-			url : "rest/comentarios/proposicao/:ProposicaoId",
+			url : "../rest/encaminhamentoProposicao/proposicao/:ProposicaoId",
 			method : 'GET',
 			isArray : true
 		}

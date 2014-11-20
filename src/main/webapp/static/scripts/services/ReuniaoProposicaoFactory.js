@@ -1,6 +1,6 @@
 angular.module('sislegisapp').factory('ReuniaoProposicaoResource',
 		function($resource) {
-			return $resource('rest/reuniaoProposicao/:ReuniaoProposicaoId', {
+			return $resource('../rest/reuniaoProposicao/:ReuniaoProposicaoId', {
 				ReuniaoProposicaoId : '@id'
 			}, {
 				'queryAll' : {

@@ -1,5 +1,5 @@
 angular.module('sislegisapp').factory('ProposicaoResource', function($resource) {
-	var resource = $resource('rest/proposicaos/:ProposicaoId', {
+	var resource = $resource('../rest/proposicaos/:ProposicaoId', {
 		ProposicaoId : '@id'
 	}, {
 		'queryAll' : {
@@ -18,12 +18,12 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource) 
 			isArray : true
 		},
 		'buscarCamara' : {
-			url : "rest/proposicaos/proposicoesPautaCamara",
+			url : "../rest/proposicaos/proposicoesPautaCamara",
 			method : 'GET',
 			isArray : true
 		},
 		'buscarSenado' : {
-			url : "rest/proposicaos/proposicoesPautaSenado",
+			url : "../rest/proposicaos/proposicoesPautaSenado",
 			method : 'GET',
 			isArray : true
 		}
