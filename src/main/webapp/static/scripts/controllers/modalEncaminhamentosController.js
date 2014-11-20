@@ -1,5 +1,5 @@
 angular.module('sislegisapp').controller('ModalEncaminhamentosController',
-		function($scope, $http, $filter, $routeParams, $location, $modalInstance, proposicao, EncaminhamentoResource, ProposicaoResource, EncaminhamentoProposicaoResource) {
+		function($scope, $http, $filter, $routeParams, $location, $modalInstance, proposicao, listaEncaminhamentoProposicao, EncaminhamentoResource, ProposicaoResource, EncaminhamentoProposicaoResource) {
 
 			var self = this;
 			$scope.disabled = false;
@@ -8,7 +8,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 			$scope.proposicao = proposicao || new ProposicaoResource();
 		    $scope.encaminhamento = new EncaminhamentoResource();
 		    $scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
-			$scope.listaEncaminhamentoProposicao = proposicao.listaEncaminhamentoProposicao;
+			$scope.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao || [];
 			$scope.listaEncaminhamento = EncaminhamentoResource.queryAll() || [];
 
 			$scope.ok = function() {

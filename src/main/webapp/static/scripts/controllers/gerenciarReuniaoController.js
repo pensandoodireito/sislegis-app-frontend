@@ -104,17 +104,20 @@ angular.module('sislegisapp').controller(
           resolve: {
             proposicao: function () {
             	return $scope.selectedProposicao;
-            }            
+            },            
+            listaEncaminhamentoProposicao: function (){
+            	return $scope.listaEncaminhamentoProposicao;
+            }          
           }
         });
         
         modalInstance.result.then(function (listaEncaminhamentoProposicao) {
-        	$scope.selectedProposicao.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
+        	$scope.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
           }, function () {
         	  //when modal is dismissed
         	  //o certo era receber a lista como parametro, mas no dismiss nao consegui passar parametro, 
         	  //entao carrego a lista de novo para atualizar a qtde
-          	$scope.selectedProposicao.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.selectedProposicao.id});
+          	$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.selectedProposicao.id});
             $log.info('Modal dismissed at: ' + new Date());
           });
     };
@@ -157,7 +160,7 @@ angular.module('sislegisapp').controller(
 
         var successCallback = function(data){
         	$scope.selectedProposicao = data;
-        	$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: id});
+        	$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.selectedProposicao.id});
             $scope.displayError = false;
         };
         var errorCallback = function(error) {
