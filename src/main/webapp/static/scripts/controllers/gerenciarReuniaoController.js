@@ -17,7 +17,9 @@ angular.module('sislegisapp').controller(
     };     
     
 
-    
+    /**
+     * Alerts
+     */
     $scope.alerts = [];
 
     $scope.closeAlert = function(index) {
@@ -119,31 +121,13 @@ angular.module('sislegisapp').controller(
         
     
     
-    
-    /**
-     * auto save when data is changed
-     */
-    var timeout = null;
-    var debounceSaveUpdates = function(newVal, oldVal) {
-      if (newVal != oldVal) {
-        if (timeout) {
-          $timeout.cancel(timeout)
-        }
-        $rootScope.inativeSpinner = true;
-        timeout = $timeout($scope.save, 1000);  // 1000 = 1 second
-      }
-    };
-    $scope.$watch('selectedProposicao.posicionamento', debounceSaveUpdates);
-    $scope.$watchCollection('selectedProposicao.tags', debounceSaveUpdates);
-    
-    
     $scope.isClean = function() {
         return angular.equals(self.original, $scope.reuniao);
     };
 
     $scope.save = function() {
         var successCallback = function(){
-            addAlert({type: 'success', msg: 'Registro atualizado com sucesso. (salvamento automático)'});
+            addAlert({type: 'success', msg: 'Registro atualizado com sucesso.'});
         	$rootScope.inativeSpinner = false;
         };
         var errorCallback = function() {
