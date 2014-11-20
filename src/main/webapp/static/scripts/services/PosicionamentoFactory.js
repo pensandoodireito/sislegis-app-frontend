@@ -1,7 +1,7 @@
 angular.module('sislegisapp').factory(
 		'PosicionamentoResource',
 		function($resource) {
-			var resource = $resource('rest/posicionamentos/:PosicionamentoId',
+			var resource = $resource('../rest/posicionamentos/:PosicionamentoId',
 					{
 						PosicionamentoId : '@id'
 					}, {
