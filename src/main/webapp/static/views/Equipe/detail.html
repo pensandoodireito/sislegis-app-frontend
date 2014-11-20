@@ -41,7 +41,7 @@
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button id="saveEquipe" name="saveEquipe" class="btn btn-primary" ng-disabled="isClean() || EquipeForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Salvar</button>
+            <button id="saveEquipe" name="saveEquipe" class="btn btn-primary" ng-disabled="EquipeForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Salvar</button>
             <button id="cancel" name="cancel" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancelar</button>
             <button id="deleteEquipe" name="deleteEquipe" class="btn btn-danger" ng-show="equipe.id" ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Excluir</button>
         </div>

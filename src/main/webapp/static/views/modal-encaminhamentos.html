@@ -58,7 +58,7 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Encaminhamentos</div>
 				<div class="panel-body line-9 rol-vert fontsize-sm">
-					<div class="list-group" ng-repeat="item in listaEncaminhamentoProposicao">
+					<div class="list-group" ng-repeat="item in listaEncaminhamentoProposicao | orderBy:'comentario.dataCriacao':true">
 						<div class="divider-bottom">
 							<p><strong>{{item.encaminhamento.nome}}</strong></p>
 							<p><strong>Responsável: </strong>{{item.responsavel}}</p>

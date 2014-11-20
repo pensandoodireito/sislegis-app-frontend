@@ -83,13 +83,8 @@ angular.module('sislegisapp').controller('EquipeController', function ($scope, $
         $scope.equipe.$remove(successCallback, errorCallback);
     };
     
-    
     $scope.cancel = function() {
         $location.path("/Equipes");
-    };
-    
-    $scope.isClean = function() {
-        return angular.equals(self.original, $scope.equipe);
     };
     
    function isEditMode() {
