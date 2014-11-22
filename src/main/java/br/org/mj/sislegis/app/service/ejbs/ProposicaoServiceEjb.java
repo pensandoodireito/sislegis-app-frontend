@@ -124,9 +124,8 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		String siglaComissao = isNull(p.getSigla()) ? proposicao.getSigla() : p.getSigla();
 		for (ReuniaoProposicao rp : p.getListaReuniaoProposicoes()) {
 			ReuniaoProposicaoPK reuniaoProposicaoPK = new ReuniaoProposicaoPK();
-			reuniaoProposicaoPK.setSiglaComissao(siglaComissao);
-			reuniaoProposicaoPK.setDataReuniao(rp.getReuniao().getData());
 			rp.setReuniaoProposicaoPK(reuniaoProposicaoPK);
+			rp.setSiglaComissao(siglaComissao);
 			rp.setProposicao(proposicao);
 		}
 		proposicao.setListaReuniaoProposicoes(p.getListaReuniaoProposicoes());
@@ -189,8 +188,12 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 
 		List<ProposicaoJSON> listaProposicaoJSON = new ArrayList<ProposicaoJSON>();
 
-		Query query = em.createNativeQuery("select p.* from Proposicao p " + "inner join ReuniaoProposicao rp " + "on p.id = rp.idProposicao "
-				+ "where rp.dataReuniao = :P_DATA", Proposicao.class);
+		Query query = em.createNativeQuery("select p.* from Proposicao p " 
+				+ "inner join ReuniaoProposicao rp " 
+				+ "on p.id = rp.proposicao_id "
+				+ "inner join Reuniao r "
+				+ "on r.id = rp.reuniao_id "
+				+ "where r.data = :P_DATA", Proposicao.class);
 		query.setParameter("P_DATA", Conversores.dateToString(dataReuniao, "yyyy-MM-dd"));
 
 		List<Proposicao> listaProposicoes = query.getResultList();

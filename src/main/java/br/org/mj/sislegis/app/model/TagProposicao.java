@@ -1,34 +1,31 @@
 package br.org.mj.sislegis.app.model;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @XmlRootElement
-public class TagProposicao implements AbstractEntity {
+public class TagProposicao implements Serializable {
 	
 	private static final long serialVersionUID = 7949894944142814382L;
 	
-	@Id
+	@EmbeddedId
 	private TagProposicaoPK tagProposicaoPK;
 
-	@Override
-	public Number getId() {
-		// TODO Auto-generated method stub
-		return tagProposicaoPK.hashCode();
-	}
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "idTag")
+	@MapsId("tag")
 	private Tag tag;
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "id")
+	@MapsId("idProposicao")
 	private Proposicao proposicao;
 
 	public TagProposicaoPK getTagProposicaoPK() {

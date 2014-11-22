@@ -64,6 +64,13 @@ public class TagEndpoint {
 	public List<TagJSON> listAll() {
 		return tagService.listarTodasTags();
 	}
+	
+	@GET
+	@Path("/buscarPorSufixo")
+	@Produces("application/json")
+	public List<TagJSON> buscarPorSufixo() {
+		return tagService.listarTodasTags();
+	}
 
 	@PUT
 	@Path("/{id:[0-9][0-9]*}")
