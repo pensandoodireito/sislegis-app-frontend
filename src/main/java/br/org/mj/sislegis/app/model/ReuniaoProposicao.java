@@ -1,12 +1,16 @@
 package br.org.mj.sislegis.app.model;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -15,16 +19,27 @@ public class ReuniaoProposicao implements AbstractEntity {
 
 	private static final long serialVersionUID = 7949894944142814382L;
 
-	@Id
+	@EmbeddedId
 	private ReuniaoProposicaoPK reuniaoProposicaoPK;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "idReuniao")
+	@MapsId("idReuniao")
 	private Reuniao reuniao;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "idProposicao")
+	@MapsId("idProposicao")
 	private Proposicao proposicao;
+	
+	@Column
+	private String siglaComissao;
+
+	public String getSiglaComissao() {
+		return siglaComissao;
+	}
+
+	public void setSiglaComissao(String siglaComissao) {
+		this.siglaComissao = siglaComissao;
+	}
 
 	public Number getId() {
 		return reuniaoProposicaoPK.hashCode();
