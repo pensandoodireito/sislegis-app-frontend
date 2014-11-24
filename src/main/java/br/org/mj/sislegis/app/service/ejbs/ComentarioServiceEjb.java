@@ -35,7 +35,7 @@ public class ComentarioServiceEjb extends AbstractPersistence<Comentario, Long>
 		TypedQuery<Comentario> findByIdQuery = em
 				.createQuery(
 						"SELECT DISTINCT c FROM Comentario c "
-								+ "INNER JOIN FETCH c.proposicao p WHERE p.id = :entityId ORDER BY c.id",
+								+ "INNER JOIN FETCH c.proposicao p WHERE p.id = :entityId",
 						Comentario.class);
 		findByIdQuery.setParameter("entityId", id);
 		final List<Comentario> results = findByIdQuery.getResultList();

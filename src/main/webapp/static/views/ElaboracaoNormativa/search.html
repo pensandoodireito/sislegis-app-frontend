@@ -1,0 +1,111 @@
+<div class="form-horizontal">
+	<h3>Adicionar nova Elaboracao Normativa</h3>
+	<div class="form-group">
+		<div class="col-md-offset-2 col-sm-2">
+			<a id="Create" name="Create" class="btn btn-primary"
+				href="#/ElaboracaoNormativa/new"><span
+				class="glyphicon glyphicon-plus-sign"></span> Adicionar</a>
+		</div>
+	</div>
+</div>
+<hr />
+<div>
+	<h3>Pesquisar por Elaboracao Normativas</h3>
+	<form id="ElaboracaoNormativaSearch" class="form-horizontal">
+
+		<div class="form-group">
+			<label for="tipo" class="col-sm-2 control-label">Tipo</label>
+			<div class="col-sm-10">
+				<select id="tipo" name="tipo" class="form-control"
+					ng-model="search.tipo" ng-options="t as t for t in tipoList">
+					<option value="">Escolha um Tipo</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="nup" class="col-sm-2 control-label">NUP</label>
+			<div class="col-sm-10">
+				<input id="nup" name="nup" class="form-control" type="text"
+					ng-model="search.nup"
+					placeholder="Escreva o NUP"></input>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="identificacao" class="col-sm-2 control-label">Identificacao</label>
+			<div class="col-sm-10">
+				<select id="identificacao" name="identificacao" class="form-control"
+					ng-model="search.identificacao"
+					ng-options="i as i for i in identificacaoList">
+					<option value="">Escolha uma Identificacao</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="autor" class="col-sm-2 control-label">Autor</label>
+			<div class="col-sm-10">
+				<input id="autor" name="autor" class="form-control" type="text"
+					ng-model="search.autor"
+					placeholder="Escreva o Autor"></input>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="origem" class="col-sm-2 control-label">Origem</label>
+			<div class="col-sm-10">
+				<input id="origem" name="origem" class="form-control" type="text"
+					ng-model="search.origem"
+					placeholder="Escreva a Origem"></input>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-md-offset-2 col-sm-10">
+				<a id="Search" name="Search" class="btn btn-primary"
+					ng-click="performSearch()"><span
+					class="glyphicon glyphicon-search"></span> Pesquisar</a>
+			</div>
+		</div>
+	</form>
+</div>
+<div id="search-results">
+	<div class="table-responsive">
+		<table
+			class="table table-responsive table-bordered table-striped clearfix">
+			<thead>
+				<tr>
+					<th>Data Registro</th>
+					<th>Tipo</th>
+					<th>NUP</th>
+					<th>Identificacao</th>
+					<th>Autor</th>
+					<th>Origem</th>
+				</tr>
+			</thead>
+			<tbody id="search-results-body">
+				<tr
+					ng-repeat="result in searchResults | searchFilter:searchResults | startFrom:currentPage*pageSize | limitTo:pageSize | orderBy:'dataRegistro':true">
+					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.dataRegistro| date:'dd-MM-yyyy'}}</a></td>
+					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.tipo}}</a></td>
+					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.nup}}</a></td>
+					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.identificacao}}</a></td>
+					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.autor}}</a></td>
+					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.origem}}</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<ul class="pagination pagination-centered">
+		<li ng-class="{disabled:currentPage == 0}"><a id="prev" href
+			ng-click="previous()">«</a></li>
+		<li ng-repeat="n in pageRange" ng-class="{active:currentPage == n}"
+			ng-click="setPage(n)"><a href ng-bind="n + 1">1</a></li>
+		<li ng-class="{disabled: currentPage == (numberOfPages() - 1)}">
+			<a id="next" href ng-click="next()">»</a>
+		</li>
+	</ul>
+
+</div>

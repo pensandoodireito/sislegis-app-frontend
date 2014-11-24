@@ -13,37 +13,35 @@ public class ReuniaoProposicaoPK implements Serializable {
 
 	private static final long serialVersionUID = 7949894944142814382L;
 
-	@Column
-	@Temporal(TemporalType.DATE)
-	private Date dataReuniao;
-
-	@Column
-	private String siglaComissao;
+	private Long idReuniao;
 
 
-	public Date getDataReuniao() {
-		return dataReuniao;
+	private Long idProposicao;
+
+
+	public Long getIdProposicao() {
+		return idProposicao;
 	}
 
-	public void setDataReuniao(Date dataReuniao) {
-		this.dataReuniao = dataReuniao;
+	public void setIdProposicao(Long idProposicao) {
+		this.idProposicao = idProposicao;
 	}
 
-	public String getSiglaComissao() {
-		return siglaComissao;
+	public Long getIdReuniao() {
+		return idReuniao;
 	}
 
-	public void setSiglaComissao(String siglaComissao) {
-		this.siglaComissao = siglaComissao;
+	public void setIdReuniao(Long idReuniao) {
+		this.idReuniao = idReuniao;
 	}
 
 	public int hashCode() {
 		int hashCode = 0;
 
-		if (siglaComissao != null)
-			hashCode ^= siglaComissao.hashCode();
-		if (dataReuniao != null)
-			hashCode ^= dataReuniao.hashCode();
+		if (idProposicao != null)
+			hashCode ^= idProposicao.hashCode();
+		if (idReuniao != null)
+			hashCode ^= idReuniao.hashCode();
 
 		return hashCode;
 	}
@@ -54,10 +52,10 @@ public class ReuniaoProposicaoPK implements Serializable {
 
 		ReuniaoProposicaoPK target = (ReuniaoProposicaoPK) obj;
 
-		return ((this.siglaComissao == null) ? (target.siglaComissao == null)
-				: this.siglaComissao.equals(target.siglaComissao))
-				&& ((this.dataReuniao == null) ? (target.dataReuniao == null)
-						: this.dataReuniao.equals(target.dataReuniao));
+		return ((this.idProposicao == null) ? (target.idProposicao == null)
+				: this.idProposicao.equals(target.idProposicao))
+				&& ((this.idReuniao == null) ? (target.idReuniao == null)
+						: this.idReuniao.equals(target.idReuniao));
 	}
 
 }

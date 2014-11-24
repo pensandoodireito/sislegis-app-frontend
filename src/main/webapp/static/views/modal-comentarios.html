@@ -1,0 +1,47 @@
+<!-- Modal Comentários -->
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" ng-click="ok()">
+		<span aria-hidden="true">&times;</span> <span class="sr-only">Fechar</span>
+	</button>
+	<h4 class="modal-title" id="myModalLabel">Comentários</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<form id="ComentarioForm" name="ComentarioForm" role="form">
+			<div class="col-md-4">
+					<div class="form-horizontal" role="form">
+				    <div ng-show="displayError" class="alert alert-danger">
+				        <strong>Falha no processamento</strong>
+				    </div>
+					<div class="input-group">
+						<label for="TextoComentario">Insira um comentário:</label>
+						<textarea class="form-control" rows="3" name="campoComentario" ng-model="comentario.descricao" ng-required="true"></textarea>
+					</div>
+					<br/>
+					<button type="submit" class="btn btn-default" ng-disabled="isClean() || ComentarioForm.$invalid" ng-show="!comentario.id" ng-click="save()">Adicionar</button>
+					<button type="submit" class="btn btn-default" ng-disabled="isClean() || ComentarioForm.$invalid" ng-show="comentario.id" ng-click="update()">Alterar</button>
+				</div>
+			</div>
+		</form>
+		<div class="col-md-8">
+			<div class="panel panel-default">
+				<div class="panel-heading">Comentários</div>
+				<div class="panel-body line-9 rol-vert fontsize-sm">
+					<div class="list-group" ng-repeat="item in proposicao.listaComentario | orderBy:'dataCriacao':true">
+						<div class="divider-bottom">
+							<p>{{item.descricao}}</p>
+							<div class="mt-sm">
+								<p>
+									Feito por: <strong>{{item.autor}}</strong> <span class="ml-lg">Data: {{item.dataCriacao | date: 'dd/MM/yyyy'}}<span class="ml-lg"><a href="javascript:;" ng-click="openUpdate(item)"> Alterar</a>
+									</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+<!-- /Modal Comentários -->

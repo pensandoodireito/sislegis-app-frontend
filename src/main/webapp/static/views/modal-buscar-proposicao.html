@@ -1,0 +1,132 @@
+<!-- Modal buscar proposição -->
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" ng-click="ok()">
+		<span aria-hidden="true">&times;</span> <span class="sr-only">Fechar</span>
+	</button>
+	<h4 class="modal-title" id="myModalLabel">Buscar / Adicionar proposições para reunião: {{reuniao.data | date:'dd/MM/yyyy'}}</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-sm-12">
+			<form id="BuscarProposicaoForm" name="BuscarProposicaoForm" role="form">
+				<div class="form-inline" role="form">
+					<div class="input-group">
+						<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="campoData" date-type="string" is-open="opened" min-date="minDate"
+							max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close" readonly /> <span class="input-group-btn">
+							<button type="button" class="btn btn-default" ng-click="openCalendar($event)">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+						</span>
+					</div>
+					<div class="form-group">
+						<div class="input-group">
+							<select ng-change="selectOrigemComissoes()" ng-model="origem" ng-options="origem.displayName for origem in origens" class="form-control" required></select>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="input-group">
+							<select ng-model="comissao" ng-options="comissao.sigla for comissao in comissoes | orderBy:'sigla'" class="form-control" required></select>
+						</div>
+					</div>
+					<button type="submit" class="btn btn-default" ng-click="buscarProposicao()">
+						<i class="fa fa-search"></i>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="row mt-md">
+		<div class="col-sm-5">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<div class="form-group">
+						<div class="input-group">
+							Proposições <input ng-show="proposicoes.length" ng-model="buscaPalavraChave" placeholder="Filtrar por palavra chave" style="margin-left: 15px">
+						</div>
+					</div>
+				</div>
+				<div class="line-9 rol-vert">
+					<div class="list-group" ng-model="proposicao" ng-repeat="proposicao in proposicoes | filter:buscaPalavraChave">
+						<a href="javascript:;" class="list-group-item" ng-click="detalharProposicao(proposicao.idProposicao)">
+							<h4 class="list-group-item-heading">{{proposicao.sigla}}</h4>
+							<div class="list-group-item-text clearfix">
+								<p>{{proposicao.ementa}}</p>
+								<p>
+									<strong>Origem: </strong>{{proposicao.origem}}
+								</p>
+								<p>
+									<strong>Comissao: </strong>{{proposicao.comissao}}
+								</p>
+								<p>
+									<strong>Ordem na Pauta: </strong>{{proposicao.seqOrdemPauta}}
+								</p>
+							</div>
+						</a>	
+						<div class="list-group-item-text clearfix">							
+							<p>
+								<a href="{{proposicao.linkPauta}}" target="_blank">link da pauta</a>
+															
+								<button type="button" class="pull-right btn btn-success btn-xs" ng-click="adicionarProposicao(proposicao)" title="Adicionar proposição">
+									<i class="fa fa-plus"></i>
+								</button>
+							</p>								
+						</div>
+				</div>
+			</div>
+		</div>
+			<!-- /item -->
+		</div>
+		<div class="col-sm-5">
+			<div class="panel panel-default">
+				<div class="panel-heading clearfix">
+					Detalhamento
+					<button type="button" class="btn btn-success btn-xs pull-right" ng-show="showDetalhamentoProposicao" ng-click="adicionarProposicao(detalheProposicao)"
+						title="Adicionar proposição">
+						<i class="fa fa-plus"></i>
+					</button>
+				</div>
+
+				<div class="panel-body rol-vert line-9">
+					<div class="fontsize-sm" ng-show="showDetalhamentoProposicao">
+						<h3>
+							<a href="{{detalheProposicao.linkProposicao}}" target="_blank">{{detalheProposicao.sigla}}</a>
+						</h3>
+						<p class="divider-top">{{detalheProposicao.ementa}}</p>
+						<p class="fontsize-sm">
+							<strong>Autor: </strong>{{detalheProposicao.autor}}
+						</p>
+						<p class="fontsize-sm">
+							<strong>Origem: </strong>{{detalheProposicao.origem}}
+						</p>
+						<p class="fontsize-sm">
+							<a href="{{detalheProposicao.linkProposicao}}" target="_blank"><strong>Link da proposição</strong></a>
+						</p>
+					</div>
+				</div>
+			</div>
+			<!-- /item -->
+		</div>
+		<div class="col-sm-2">
+			<ul class="list-group fontsize-sm">
+				<li class="list-group-item">Selecionados:</li>
+				<div class="llist-group-item" ng-model="proposicaoAdd" ng-repeat="proposicaoAdd in listaProposicaoSelecao">
+					<li class="list-group-item">
+						<button type="button" class="close" ng-click="removerProposicao(proposicaoAdd)">
+							<span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
+						</button> {{proposicaoAdd.sigla}}
+					</li>
+
+				</div>
+
+			</ul>
+		</div>
+	</div>
+		<div class="modal-footer pt-sm pb-sm">
+			<p>
+				<button type="button" class="btn btn-default" title="Cancelar" data-dismiss="modal" ng-click="ok()">Cancelar</button>
+				<button type="button" class="btn btn-primary" title="Adicionar proposição" ng-click="salvar()">Adicionar selecionados</button>
+			</p>
+		</div>
+</div>
+<!-- /Modal  buscar proposição -->
+

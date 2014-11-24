@@ -1,0 +1,102 @@
+<div class="row">
+	<div class="col-sm-4" id="listagem-proposicoes">
+		<div class="panel panel-default">
+			<div class="panel-heading clearfix">
+				<div class="pull-left">Proposições</div>
+				<div class="pull-right">
+					<button type="button" class="btn btn-primary btn-sm" ng-click="buscarProposicoes()" ng-disabled="!reuniao.data">Buscar proposições</button>
+				</div>
+			</div>
+
+			<div class="row pt-sm pb-sm">
+				<div class="col-xs-5 text-right">Data para a reunião:</div>
+				    <div class="row">
+				        <div class="col-md-6">
+				            <p class="input-group">
+				              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="reuniao.data" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close" readonly/>
+				              <span class="input-group-btn">
+				                <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+				              </span>
+				            </p>
+				        </div>
+				    </div>
+			</div>
+
+			<div class="list-group rol-vert height-full" ng-repeat="item in listaReuniaoProposicoes">
+
+					<a href="javascript:;" class="list-group-item" ng-click="getProposicao(item.id)">
+					<button type="button" class="close" ng-click="removerProposicao(item.id)">
+						<span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
+					</button>
+					<h4 class="list-group-item-heading">{{item.sigla}}</h4>
+					<div class="list-group-item-text">
+						<p>{{item.ementa}}</p>
+						<p>
+							<strong>Autor:</strong>{{item.autor}}
+						</p>
+						<p>
+							<strong>Origem: </strong>{{item.origem}}
+						</p>
+						<p>
+							<strong>Comissao: </strong>{{item.comissao}}
+						</p>
+						<p>
+							<strong>Ordem na Pauta: </strong>{{item.seqOrdemPauta}}
+						</p>
+					</div>
+				</a>
+			</div>
+			<!-- /item -->
+
+		</div>
+	</div>
+	<div class="col-sm-8">
+		<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+		<div class="panel panel-default ">
+			<div class="panel-heading">Detalhamento da Proposição</div>
+				<div ng-show="detalhamentoProposicao">
+					
+					<div class="pt-sm pb-sm">
+						<div class="col-xs-5">
+							<a href="javascript:;" ng-click="abrirModalComentarios()"><i class="fa fa-comment"></i> {{selectedProposicao.listaComentario.length}} comentários</a> (clique para adicionar)
+						</div>
+						<div class="col-xs-5">
+							<a href="javascript:;" ng-click="abrirModalEncaminhamentos()"> {{listaEncaminhamentoProposicao.length}} encaminhamentos</a> (clique para adicionar)
+						</div>
+					</div>
+					<hr>
+					<div class="panel-body rol-vert ">
+						<p class="fontsize-sm">
+							<strong>Posicionamento:</strong>
+							<select ng-model="selectedProposicao.posicionamento" ng-options="posicionamento.nome for posicionamento in posicionamentos track by posicionamento.id | orderBy:'nome'" class="form-control"></select>
+						</p>
+<!-- 						<p class="fontsize-sm">
+							<strong>Responsável:  </strong>
+							<font color="red">Fazer</font>
+						</p> -->
+						<p class="fontsize-sm">
+							<strong>Tags:  </strong>
+							 <tags-input ng-model="selectedProposicao.tags">
+							 	<auto-complete source="loadTags($query)"></auto-complete>
+							 </tags-input>
+						</p>
+						
+						<button type="button" class="btn btn-primary btn-sm" ng-click="save()">Salvar</button>
+
+					
+						<h3><a href="{{selectedProposicao.linkProposicao}}" target="_blank">{{selectedProposicao.sigla}}</a></h3>
+						<p class="divider-top">{{selectedProposicao.ementa}}</p>
+						<p class="fontsize-sm">
+							<strong>Autor:  </strong>{{selectedProposicao.autor}}
+						</p>
+						<p class="fontsize-sm">
+							<strong>Origem:  </strong>{{selectedProposicao.origem}}
+						</p>
+						<p class="fontsize-sm">
+							<a href="{{selectedProposicao.linkProposicao}}" target="_blank"><strong>Link da proposição</strong></a>
+						</p>
+					</div>
+				</div>
+		</div>
+	</div>
+</div>
