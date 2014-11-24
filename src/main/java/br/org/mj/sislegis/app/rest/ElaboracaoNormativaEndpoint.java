@@ -24,7 +24,7 @@ import br.org.mj.sislegis.app.service.Service;
  * 
  */
 @Stateless
-@Path("/elaboracaonormativas")
+@Path("/elaboracaonormativa")
 public class ElaboracaoNormativaEndpoint {
 
 	@Inject
