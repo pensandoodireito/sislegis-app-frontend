@@ -229,3 +229,19 @@
         .border-radius(0);
     }
 }
+
+
+
+// Customizando algumas coisas das tabs
+.nav-tabs {
+  > li {
+    // Active state, and its :hover to override normal :hover
+    &.active > a {
+      &,
+      &:hover,
+      &:focus {
+        color: #666;
+      }
+    }
+  }
+}
