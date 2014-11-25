@@ -34,4 +34,4 @@
 . Consertar erro de relacionamento entre as entidades que usam ManyToMany.
 
 
-Obs: continua configurando aqui PJ
+Obs: continua configurando aqui Paulo Jerônimo
