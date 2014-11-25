@@ -19,6 +19,7 @@ import javax.ws.rs.core.UriBuilder;
 
 import br.org.mj.sislegis.app.model.Usuario;
 import br.org.mj.sislegis.app.service.Service;
+import br.org.mj.sislegis.app.service.UsuarioService;
 
 /**
  * 
@@ -28,7 +29,7 @@ import br.org.mj.sislegis.app.service.Service;
 public class UsuarioEndpoint {
 	
 	@Inject
-	private Service<Usuario> service;
+	private UsuarioService service;
 
 	@POST
 	@Consumes("application/json")
@@ -51,6 +52,13 @@ public class UsuarioEndpoint {
 	@Produces("application/json")
 	public Response findById(@PathParam("id") Long id) {
 		return Response.ok(service.findById(id)).build();
+	}
+
+	@GET
+	@Path("/find{nome:.*}")
+	@Produces("application/json")
+	public Response findByNome(@QueryParam("nome") String nome) {
+		return Response.ok(service.findByNome(nome)).build();
 	}
 
 	@GET

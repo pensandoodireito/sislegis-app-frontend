@@ -10,6 +10,11 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 		    $scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
 			$scope.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao || [];
 			$scope.listaEncaminhamento = EncaminhamentoResource.queryAll() || [];
+			
+			$scope.teste = function(){
+				console.log($scope.selectedObject);
+				console.log($scope.encaminhamentoProposicao.responsavel);
+			}
 
 			$scope.ok = function() {
 				$modalInstance.close($scope.listaEncaminhamentoProposicao);
