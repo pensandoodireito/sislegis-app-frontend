@@ -112,14 +112,4 @@ li.tab {
 
 
 
-.cb {
-	display: inline;
-	padding: 5px 20px;
-	border: 1px solid grey;
-	border-bottom: 0;
-	border-radius: 5;
-	cursor: pointer;
-}
-.cb:hover{
-  background-color: lightblue;
-}
+

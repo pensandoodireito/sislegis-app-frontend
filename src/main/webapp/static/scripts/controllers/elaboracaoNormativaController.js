@@ -1,38 +1,27 @@
 angular.module('sislegisapp').controller('ElaboracaoNormativaController',
-		function($scope, $http, ElaboracaoNormativaResource) {
+		function($scope, $http, ElaboracaoNormativaResource, EquipeResource) {
 	
-			$scope.elaboracaoNormativaResource = new ElaboracaoNormativaResource();
+			$scope.elaboracaoNormativa = new ElaboracaoNormativaResource();
+			$scope.equipes = EquipeResource.queryAll();
 			
-		    $scope.tipos = ElaboracaoNormativaResource.tipos();
-		    
-		    
-	    	$scope.tabs = [];
-
-	    	this.addTab = function(tab){
-	    		$scope.tabs.push(tab);
-	    	};
-
-	    	$scope.selectTab = function(tab){
-	    		for(var i=0; i<$scope.tabs.length; i++){
-	    			if(tab.name != $scope.tabs[i].name){
-		    			$scope.tabs[i].selected = false;
-		    		}
-		    		else {
-		    			$scope.tabs[i].selected = true;
-		    		}
-	    		}
-	    	};
-		    
-			$scope.tabs = [
-							{ name: 'Tab1', id: 'Tab1'},
-							{ name: 'Tab2', id: 'Tab2'},
-							{ name: 'Tab3', id: 'Tab3'},
-							{ name: 'Tab4', id: 'Tab4'},
-							{ name: 'Tab5', id: 'Tab5'},
-							{ name: 'Tab6', id: 'Tab6'},
-							{ name: 'Tab7', id: 'Tab7'}
-						];
+			$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta = [];
 			
+		    $scope.tipos = ["Anteprojeto", "Preliminar"];
+		    
+		    $scope.identificacoes = ["Exposição de Motivo", "Exposição de Motivo Interministerial"];
+		    
+		    $scope.selectParecerista = function(){
+		    	console.log($scope.elaboracaoNormativa.equipe);
+		    	$scope.pareceristas = $scope.elaboracaoNormativa.equipe.listaEquipeUsuario;
+		    	
+		    };
+		    
+		    $scope.adicionarElaboracaoNormativaConsulta = function(){
+		    	
+		    	$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta.push($scope.elaboracaoNormativa.elaboracaoNormativaConsulta);
+		    	$scope.elaboracaoNormativa.elaboracaoNormativaConsulta = null;
+		    }
+		    
 			
 		    // CALENDARIO
 		    $scope.setCalendar = function() {
