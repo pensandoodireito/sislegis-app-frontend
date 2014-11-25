@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap','ngTagsInput','angucomplete'])
+angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap','ngTagsInput','angucomplete', 'angularFileUpload'])
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider
 	.when('/Reuniaos/gerenciar',{templateUrl:'views/Reuniao/gerenciar.html',controller:'GerenciarReuniaoController'})
@@ -19,6 +19,7 @@ angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap','
     .when('/Equipes/edit/:EquipeId',{templateUrl:'views/Equipe/detail.html',controller:'EquipeController'})
     .when('/ElaboracaoNormativa',{templateUrl:'views/ElaboracaoNormativa/search.html',controller:'SearchElaboracaoNormativaController'})
     .when('/ElaboracaoNormativa/new',{templateUrl:'views/ElaboracaoNormativa/elaboracaoNormativa.html',controller:'ElaboracaoNormativaController'})
+    .when('/Upload',{templateUrl:'views/Upload/upload.html',controller:'UploadController'})
     
 	
 	  .otherwise({
