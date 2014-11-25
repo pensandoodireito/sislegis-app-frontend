@@ -18,7 +18,7 @@ angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap','
     .when('/Equipes/new',{templateUrl:'views/Equipe/detail.html',controller:'EquipeController'})
     .when('/Equipes/edit/:EquipeId',{templateUrl:'views/Equipe/detail.html',controller:'EquipeController'})
     .when('/ElaboracaoNormativa',{templateUrl:'views/ElaboracaoNormativa/search.html',controller:'SearchElaboracaoNormativaController'})
-    .when('/ElaboracaoNormativa/new',{templateUrl:'views/ElaboracaoNormativa/elaboracaoNormativa.html',controller:'ElaboracaoNormativaController'})
+    .when('/ElaboracaoNormativa/new',{templateUrl:'views/ElaboracaoNormativa/detail.html',controller:'ElaboracaoNormativaController'})
     .when('/Upload',{templateUrl:'views/Upload/upload.html',controller:'UploadController'})
     
 	
