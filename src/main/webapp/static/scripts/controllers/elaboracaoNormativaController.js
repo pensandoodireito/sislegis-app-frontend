@@ -6,9 +6,16 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			
 			$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta = [];
 			
-		    $scope.tipos = ["Anteprojeto", "Preliminar"];
+			
+		    $scope.tipos = [
+		                    {name:'Anteprojeto', shade: '0'}, 
+		                    {name:'Preliminar', shade:'1'}
+		                    ];
 		    
-		    $scope.identificacoes = ["Exposição de Motivo", "Exposição de Motivo Interministerial"];
+		    $scope.identificacoes = [
+		                             {name:'Exposição de Motivo', shade:'0'},
+		                             {name:'Exposição de Motivo Interministerial', shade:'1'}
+		                             ];
 		    
 		    $scope.selectParecerista = function(){
 		    	console.log($scope.elaboracaoNormativa.equipe);
@@ -22,34 +29,25 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    	$scope.elaboracaoNormativa.elaboracaoNormativaConsulta = null;
 		    }
 		    
-		    $scope.beers = [0, 1, 2, 3, 4, 5, 6];
-		    if ($locale.id == 'en-us') {
-		    	$scope.beerForms = {
-		    			0: 'no beers',
-		    			one: '{} beer',
-		    			other: '{} beers'};
-		    }else{
-		    	$scope.beerForms = {
-				    0: 'žiadne pivo',
-				    one: '{} pivo',
-				    few: '{} pivá',
-				    other: '{} pív'};
-		    }
+		    $scope.normas = [
+		                     {name:'Decreto Lei', shade:'0'},
+		                     {name:'Medida Provisória', shade:'1'}
+		                   ];
 		    
 		    
-		    var panes = $scope.panes = [];
-		    
-		    $scope.select = function(pane) {
-		    angular.forEach(panes, function(pane) {
-		    pane.selected = false;
-		    });
-		    pane.selected = true;
-		    }
-		     
-		    this.addPane = function(pane) {
-		    if (panes.length == 0) $scope.select(pane);
-		    panes.push(pane);
-		    }		    
+			$scope.salvar = function() {
+
+		        var successCallback = function(){
+		        	$scope.elaboracaoNormativa = new ElaboracaoNormativaResource();
+		        	alert('Elaboração Normativa incluida com sucesso');
+		        };
+		        var errorCallback = function() {
+		        	alert('Falha na inclusão');
+		        };
+		        
+				ElaboracaoNormativaResource.save($scope.elaboracaoNormativa,
+						successCallback, errorCallback);
+			};		    
 		    
 			
 		    // CALENDARIO
@@ -71,27 +69,6 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    
 		    $scope.setCalendar();			
 	
-			$scope.tabs = [ {
-				title : 'Dados preliminares',
-				url : 'dadosPreliminares.html'
-			}, {
-				title : 'Dados de análise/Distribuição',
-				url : 'dadosAnaliseDistribuicao.html'
-			}, {
-				title : 'Manifestação',
-				url : 'manifestacao.html'
-			} ];
-
-			$scope.currentTab = 'dadosPreliminares.html';
-
-			$scope.onClickTab = function(tab) {
-				$scope.currentTab = tab.url;
-			}
-
-			$scope.isActiveTab = function(tabUrl) {
-				return tabUrl == $scope.currentTab;
-			}
-			
 
 
 		});

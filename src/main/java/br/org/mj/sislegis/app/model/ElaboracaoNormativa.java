@@ -42,12 +42,18 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaTipo tipo;
 	
+	@Transient
+	private int codElaboracaoNormativaTipo;
+	
 	@Column
 	private String nup;
 	
 	@Column
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaIdentificacao identificacao;
+	
+	@Transient
+	private int codElaboracaoNormativaIdentificacao;
 
 	@Column
 	private String autor;
@@ -84,14 +90,14 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaNorma elaboracaoNormativaNorma;
 	
+	@Transient
+	private int codElaboracaoNormativaNorma;
+	
 	@Column
 	private String comentarioManifestacao;
 	
 	@Column
-	private String manifestacao;
-	
-	@Column
-	private String normaGerada;
+	private String arquivoManifestacao;
 	
 	@Transient
 	private ElaboracaoNormativaConsulta elaboracaoNormativaConsulta;
@@ -218,6 +224,28 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		this.comentarioManifestacao = comentarioManifestacao;
 	}
 
+	public Set<ElaboracaoNormativaConsulta> getListaElaboracaoNormativaConsulta() {
+		return listaElaboracaoNormativaConsulta;
+	}
+
+	public void setListaElaboracaoNormativaConsulta(
+			Set<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta) {
+		this.listaElaboracaoNormativaConsulta = listaElaboracaoNormativaConsulta;
+	}
+
+	public void setElaboracaoNormativaConsulta(
+			ElaboracaoNormativaConsulta elaboracaoNormativaConsulta) {
+		this.elaboracaoNormativaConsulta = elaboracaoNormativaConsulta;
+	}
+	
+	public String getArquivoManifestacao() {
+		return arquivoManifestacao;
+	}
+
+	public void setArquivoManifestacao(String arquivoManifestacao) {
+		this.arquivoManifestacao = arquivoManifestacao;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -243,35 +271,29 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		return true;
 	}
 
-
-	public Set<ElaboracaoNormativaConsulta> getListaElaboracaoNormativaConsulta() {
-		return listaElaboracaoNormativaConsulta;
+	public int getCodElaboracaoNormativaTipo() {
+		return codElaboracaoNormativaTipo;
 	}
 
-	public void setListaElaboracaoNormativaConsulta(
-			Set<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta) {
-		this.listaElaboracaoNormativaConsulta = listaElaboracaoNormativaConsulta;
+	public void setCodElaboracaoNormativaTipo(int codElaboracaoNormativaTipo) {
+		this.codElaboracaoNormativaTipo = codElaboracaoNormativaTipo;
 	}
 
-	public void setElaboracaoNormativaConsulta(
-			ElaboracaoNormativaConsulta elaboracaoNormativaConsulta) {
-		this.elaboracaoNormativaConsulta = elaboracaoNormativaConsulta;
+	public int getCodElaboracaoNormativaIdentificacao() {
+		return codElaboracaoNormativaIdentificacao;
 	}
 
-	public String getManifestacao() {
-		return manifestacao;
+	public void setCodElaboracaoNormativaIdentificacao(
+			int codElaboracaoNormativaIdentificacao) {
+		this.codElaboracaoNormativaIdentificacao = codElaboracaoNormativaIdentificacao;
 	}
 
-	public void setManifestacao(String manifestacao) {
-		this.manifestacao = manifestacao;
+	public int getCodElaboracaoNormativaNorma() {
+		return codElaboracaoNormativaNorma;
 	}
 
-	public String getNormaGerada() {
-		return normaGerada;
-	}
-
-	public void setNormaGerada(String normaGerada) {
-		this.normaGerada = normaGerada;
+	public void setCodElaboracaoNormativaNorma(int codElaboracaoNormativaNorma) {
+		this.codElaboracaoNormativaNorma = codElaboracaoNormativaNorma;
 	}
 	
 }
