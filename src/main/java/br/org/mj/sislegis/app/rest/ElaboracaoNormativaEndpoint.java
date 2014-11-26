@@ -21,6 +21,7 @@ import javax.ws.rs.core.UriBuilder;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
 import br.org.mj.sislegis.app.json.TipoElaboracaoNormativaJSON;
 import br.org.mj.sislegis.app.model.ElaboracaoNormativa;
+import br.org.mj.sislegis.app.service.ElaboracaoNormativaService;
 import br.org.mj.sislegis.app.service.Service;
 
 /**
@@ -32,11 +33,14 @@ public class ElaboracaoNormativaEndpoint {
 
 	@Inject
 	private Service<ElaboracaoNormativa> service;
+	
+	@Inject
+	private ElaboracaoNormativaService elaboracaoNormativaService;
 
 	@POST
 	@Consumes("application/json")
 	public Response create(ElaboracaoNormativa entity) {
-		service.save(entity);
+		elaboracaoNormativaService.salvar(entity);
 		return Response.created(
 				UriBuilder.fromResource(ElaboracaoNormativaEndpoint.class)
 						.path(String.valueOf(entity.getId())).build()).build();

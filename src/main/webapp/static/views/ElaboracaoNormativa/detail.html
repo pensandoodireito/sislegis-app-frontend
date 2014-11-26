@@ -10,10 +10,10 @@
               <div class="form-group">
                   <label for="">Data do Registro:</label>
 				<p class="input-group">
-						<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataRegistro" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
+						<input id="idDataRegistro" type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataRegistro" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
 	            				<span class="input-group-btn">
 			                <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-			    		</span>
+			    		</span>		    		
 			    </p>
 		    	 <div class="form-group">
 	                 <label for="">Tags:</label>
@@ -27,13 +27,13 @@
           <div class="col-md-3">
               <div class="form-group">
                   <label for="">Tipo:</label>
-			<select ng-model="elaboracaoNormativa.tipo" ng-options="tipo for tipo in tipos" class="form-control"></select>
+			<select ng-model="elaboracaoNormativa.codElaboracaoNormativaTipo" ng-options="tipo.shade as tipo.name for tipo in tipos" class="form-control"></select>
               </div>
           </div>
           <div class="col-md-3">
               <div class="form-group">
                   <label for="">Identificação</label>
-                  <select ng-model="elaboracaoNormativa.identificacao" ng-options="identificacao for identificacao in identificacoes" class="form-control"></select>
+                  <select ng-model="elaboracaoNormativa.codElaboracaoNormativaIdentificacao" ng-options="identificacao.shade as identificacao.name for identificacao in identificacoes" class="form-control"></select>
               </div>
           </div>
     	<div class="col-md-3">
@@ -83,7 +83,7 @@
                         <div class="form-group">
                             <label for="">Data de Distribuição:</label>
 					<p class="input-group">
- 						<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataDistribuicao" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
+ 						<input id="idDataDistribuicao" type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataDistribuicao" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
               				<span class="input-group-btn">
 				                <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 				    		</span>
@@ -110,21 +110,22 @@
             <div class="col-sm-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <div class="form-inline">
-
+                        <div class="row">
                             <div class="form-group">
                                 <label for="">Área consultada:</label>
-                                <input type="text" ng-model="elaboracaoNormativa.elaboracaoNormativaConsulta.area">
-                            </div>
-                            <div class="form-group">
-                                <label for="">Anexo:</label>
-                                <button type="button" class="btn btn-default btn-sm form-control">Selecionar</button>
+                                <input type="text" ng-model="elaboracaoNormativa.elaboracaoNormativaConsulta.area" class="form-control">
                             </div>
                         </div>
-						<div class="form-inline">
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="">Anexo:</label>
+                                <button type="button" class="btn btn-default btn-sm">Selecionar</button>
+                            </div>
+                        </div>                        
+						<div class="row">
                         	<div class="form-group">
                             	<label for="">Comentários:</label>
-                            	<textarea ng-model="elaboracaoNormativa.elaboracaoNormativaConsulta.comentario" />
+                            	<textarea ng-model="elaboracaoNormativa.elaboracaoNormativaConsulta.comentario" class="form-control" />
                         	</div>
 						</div>	
                         <div class="form-group">
@@ -142,17 +143,20 @@
 
                     </ul>
                 </div>
+                
+
+                
             </div>
 
         </div>
 </pane> 
-<pane title="Manifestação">
+ <pane title="Manifestação">
      <div class="row divider-top">
          <div class="col-md-4">
              <div class="form-group">
                  <label for="">Data Nota SAL:</label>
 					<p class="input-group">
- 						<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataManifestacao" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
+ 						<input id="idDataManisfestacao" type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataManifestacao" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
               				<span class="input-group-btn">
 				                <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 				    		</span>
@@ -162,7 +166,7 @@
          <div class="col-md-4">
              <div class="form-group">
                  <label for="">Norma Gerada:</label>
-                 <input type="text" class="form-control" ng-model="elaboracaoNormativa.normaGerada">
+                 <select class="form-control" ng-model="elaboracaoNormativa.codElaboracaoNormativaNorma" ng-options="norma.shade as norma.name for norma in normas"></select>
              </div>
          </div>
          <div class="col-md-4">
@@ -172,22 +176,22 @@
              </div>
          </div>
      </div>
-     <div class="row divider-top">
-         <div class="col-md-6">
-             <div class="form-group">
-                 <label for="">Comentário:</label>
-                 <textarea class="form-control" ng-model="elaboracaoNormativa.comentarioManifestacao">
-             </div>
-         </div>
-         
-     </div>
-	<div class="text-right divider-top">
-	    <button type="button" class="btn btn-primary">Salvar</button>
-	</div>     
-</pane>
+      <div class="row divider-top">
+          <div class="col-md-4">
+              <div class="form-group">
+                  <label for="">Comentário:</label>
+                  <textarea class="form-control" ng-model="elaboracaoNormativa.comentarioManifestacao" />
+              </div>
+          </div>
+
+      </div>     
+ 
+</pane> 
 </tabs>
 
-
+	<div class="text-right divider-top">
+	    <button type="button" class="btn btn-primary" ng-click="salvar()">Salvar</button>
+	</div>  
 
 
 
