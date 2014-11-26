@@ -119,9 +119,17 @@
                         <div class="row">
                             <div class="form-group">
                                 <label for="">Anexo:</label>
-                                <button type="button" class="btn btn-default btn-sm">Selecionar</button>
-                            </div>
-                        </div>                        
+                                <input type="file" nv-file-select uploader="distribuicaoUploader" ng-click="distribuicaoUploader.clearQueue()" />
+				 				<div ng-repeat="item in distribuicaoUploader.queue">
+									 <div class="progress" style="margin-bottom: 0;">
+										<div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+										<span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span> 
+										<span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span> 
+										<span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+										</div>
+									 </div>
+								</div>
+					 	</div>                      
 						<div class="row">
                         	<div class="form-group">
                             	<label for="">Comentários:</label>
@@ -137,17 +145,13 @@
                             <button type="button" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Excluir</span>
                             </button>
                             <h5>{{elaboracaoNormativaConsulta.area}}</h5>
-                            <p>{{elaboracaoNormativaConsulta.comentario}}
-                                <p>
+                            <p>{{elaboracaoNormativaConsulta.comentario}}<p>
+                            <p>Arquivo: <a href="{{elaboracaoNormativaConsulta.arquivo}}">{{elaboracaoNormativaConsulta.arquivo}}</a><p>
                         </li>
 
                     </ul>
-                </div>
-                
-
-                
+              </div>
             </div>
-
         </div>
 </pane> 
  <pane title="Manifestação">
@@ -169,10 +173,21 @@
                  <select class="form-control" ng-model="elaboracaoNormativa.codElaboracaoNormativaNorma" ng-options="norma.shade as norma.name for norma in normas"></select>
              </div>
          </div>
-         <div class="col-md-4">
+		<div class="col-md-4">
              <div class="form-group">
                  <label for="">Manifestação:</label>
-                 <input type="text" class="form-control" id="" placeholder="Upload File Manifestação">
+                 <input type="file" nv-file-select uploader="manifestacaoUploader" ng-click="manifestacaoUploader.clearQueue()" />
+                  <p>Arquivo atual: <a href="{{elaboracaoNormativa.arquivoManifestacao}}">{{elaboracaoNormativa.arquivoManifestacao}}</a><p>
+                 
+                 <div ng-repeat="item in manifestacaoUploader.queue">
+					 <div class="progress" style="margin-bottom: 0;">
+						<div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+						<span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span> 
+						<span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span> 
+						<span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+						</div>
+					 </div>
+				 </div>
              </div>
          </div>
      </div>
@@ -189,9 +204,9 @@
 </pane> 
 </tabs>
 
-	<div class="text-right divider-top">
-	    <button type="button" class="btn btn-primary" ng-click="salvar()">Salvar</button>
-	</div>  
+<div class="text-right divider-top">
+    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="distribuicaoUploader.isUploading || manifestacaoUploader.isUploading">Salvar</button>
+</div>  
 
 
 
