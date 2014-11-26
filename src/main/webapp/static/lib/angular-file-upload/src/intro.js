@@ -8,4 +8,4 @@
     }
 }(typeof angular === 'undefined' ? null : angular, function(angular) {
 
-var module = angular.module('angularFileUpload', []);
+var module = angular.module('angularFileUpload', [])}));
