@@ -24,7 +24,8 @@
     "angular-resource": "1.2.8",
     "angular-bootstrap": "~0.11.2",
     "ng-tags-input": "2.1.1",
-    "ng-autocomplete": "*"
+    "ng-autocomplete": "*",
+    "angular-file-upload": "1.1.1"
   },
   "moduleType": [
     "node"

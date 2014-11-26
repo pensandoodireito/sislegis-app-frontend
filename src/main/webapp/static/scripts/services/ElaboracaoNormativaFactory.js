@@ -14,6 +14,11 @@ angular.module('sislegisapp').factory(
 						},
 						'update' : {
 							method : 'PUT'
+						},
+						'tipos' : {
+							url : "../rest/elaboracaonormativa/tipos",
+							method : 'GET',
+							isArray : true
 						}
 					});
 			return resource;
