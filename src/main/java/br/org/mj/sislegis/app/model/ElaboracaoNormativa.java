@@ -87,6 +87,9 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Column
 	private String comentarioManifestacao;
 	
+	@Column
+	private String arquivoManifestacao;
+	
 	@Transient
 	private ElaboracaoNormativaConsulta elaboracaoNormativaConsulta;
 
@@ -212,6 +215,28 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		this.comentarioManifestacao = comentarioManifestacao;
 	}
 
+	public Set<ElaboracaoNormativaConsulta> getListaElaboracaoNormativaConsulta() {
+		return listaElaboracaoNormativaConsulta;
+	}
+
+	public void setListaElaboracaoNormativaConsulta(
+			Set<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta) {
+		this.listaElaboracaoNormativaConsulta = listaElaboracaoNormativaConsulta;
+	}
+
+	public void setElaboracaoNormativaConsulta(
+			ElaboracaoNormativaConsulta elaboracaoNormativaConsulta) {
+		this.elaboracaoNormativaConsulta = elaboracaoNormativaConsulta;
+	}
+	
+	public String getArquivoManifestacao() {
+		return arquivoManifestacao;
+	}
+
+	public void setArquivoManifestacao(String arquivoManifestacao) {
+		this.arquivoManifestacao = arquivoManifestacao;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -235,21 +260,6 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-
-	public Set<ElaboracaoNormativaConsulta> getListaElaboracaoNormativaConsulta() {
-		return listaElaboracaoNormativaConsulta;
-	}
-
-	public void setListaElaboracaoNormativaConsulta(
-			Set<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta) {
-		this.listaElaboracaoNormativaConsulta = listaElaboracaoNormativaConsulta;
-	}
-
-	public void setElaboracaoNormativaConsulta(
-			ElaboracaoNormativaConsulta elaboracaoNormativaConsulta) {
-		this.elaboracaoNormativaConsulta = elaboracaoNormativaConsulta;
 	}
 	
 }
