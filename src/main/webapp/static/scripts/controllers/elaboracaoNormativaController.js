@@ -1,5 +1,5 @@
 angular.module('sislegisapp').controller('ElaboracaoNormativaController',
-		function($scope, $http, ElaboracaoNormativaResource, EquipeResource) {
+		function($scope, $http, $locale, ElaboracaoNormativaResource, EquipeResource) {
 	
 			$scope.elaboracaoNormativa = new ElaboracaoNormativaResource();
 			$scope.equipes = EquipeResource.queryAll();
@@ -21,6 +21,35 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    	$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta.push($scope.elaboracaoNormativa.elaboracaoNormativaConsulta);
 		    	$scope.elaboracaoNormativa.elaboracaoNormativaConsulta = null;
 		    }
+		    
+		    $scope.beers = [0, 1, 2, 3, 4, 5, 6];
+		    if ($locale.id == 'en-us') {
+		    	$scope.beerForms = {
+		    			0: 'no beers',
+		    			one: '{} beer',
+		    			other: '{} beers'};
+		    }else{
+		    	$scope.beerForms = {
+				    0: 'žiadne pivo',
+				    one: '{} pivo',
+				    few: '{} pivá',
+				    other: '{} pív'};
+		    }
+		    
+		    
+		    var panes = $scope.panes = [];
+		    
+		    $scope.select = function(pane) {
+		    angular.forEach(panes, function(pane) {
+		    pane.selected = false;
+		    });
+		    pane.selected = true;
+		    }
+		     
+		    this.addPane = function(pane) {
+		    if (panes.length == 0) $scope.select(pane);
+		    panes.push(pane);
+		    }		    
 		    
 			
 		    // CALENDARIO

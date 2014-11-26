@@ -87,6 +87,12 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Column
 	private String comentarioManifestacao;
 	
+	@Column
+	private String manifestacao;
+	
+	@Column
+	private String normaGerada;
+	
 	@Transient
 	private ElaboracaoNormativaConsulta elaboracaoNormativaConsulta;
 
@@ -250,6 +256,22 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	public void setElaboracaoNormativaConsulta(
 			ElaboracaoNormativaConsulta elaboracaoNormativaConsulta) {
 		this.elaboracaoNormativaConsulta = elaboracaoNormativaConsulta;
+	}
+
+	public String getManifestacao() {
+		return manifestacao;
+	}
+
+	public void setManifestacao(String manifestacao) {
+		this.manifestacao = manifestacao;
+	}
+
+	public String getNormaGerada() {
+		return normaGerada;
+	}
+
+	public void setNormaGerada(String normaGerada) {
+		this.normaGerada = normaGerada;
 	}
 	
 }
