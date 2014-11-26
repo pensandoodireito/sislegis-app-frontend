@@ -101,7 +101,8 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="">Parecerista:</label>
-                            <select ng-model="elaboracaoNormativa.usuario" ng-options="parecerista.usuario.nome for parecerista in pareceristas" class="form-control"></select>
+                            <select ng-model="elaboracaoNormativa.usuario.id" ng-options="parecerista.usuario.id as parecerista.usuario.nome for parecerista in pareceristas" class="form-control"></select>
+                        	{{elaboracaoNormativa.usuario.id}}
                         </div>
                     </div>
                 </div>
