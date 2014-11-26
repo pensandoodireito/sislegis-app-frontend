@@ -20,16 +20,8 @@
 					<br/>
 					<div class="input-group">
 						<label for="TextoEncaminhamento">Responsável:</label>
-						<angucomplete id="members"
-+				              placeholder="Procurar usuários...]"
-+				              pause="400"
-+				              selectedobject="encaminhamentoProposicao.responsavel"
-+				              url="../rest/user/find?s="
-+				              datafield="results"
-+				              titlefield="email"
-+				              descriptionfield="nome"
-+				              minlength="3"
-+				              inputclass="form-control" ng-required="true"/>
+	              		<input type="text" ng-model="encaminhamentoProposicao.responsavel" placeholder="Procurar usuário..." ng-required="true"
+	              			typeahead="item as item.nome for item in getUsuarios($viewValue)" class="form-control">
 					</div>
 					<br/>
 					<label for="TextoEncaminhamento">Data e Hora Limite:</label>
@@ -61,12 +53,12 @@
 					<div class="list-group" ng-repeat="item in listaEncaminhamentoProposicao | orderBy:'comentario.dataCriacao':true">
 						<div class="divider-bottom">
 							<p><strong>{{item.encaminhamento.nome}}</strong></p>
-							<p><strong>Responsável: </strong>{{item.responsavel}}</p>
+							<p><strong>Responsável: </strong>{{item.responsavel.nome}}</p>
 							<p><strong>Data e Hora Limite: </strong>{{item.dataHoraLimite | date: 'dd/MM/yyyy HH:mm'}}</p>
 							<p>{{item.comentario.descricao}}</p>
 							<div class="mt-sm">
 								<p>
-									Feito por: <strong>{{item.comentario.autor}}</strong> <span class="ml-lg">Data: {{item.comentario.dataCriacao | date: 'dd/MM/yyyy'}}<span class="ml-lg"><a href="javascript:;" ng-click="openUpdate(item)"> Alterar</a>
+									Feito por: <strong>{{item.comentario.autor.nome}}</strong> <span class="ml-lg">Data: {{item.comentario.dataCriacao | date: 'dd/MM/yyyy'}}<span class="ml-lg"><a href="javascript:;" ng-click="openUpdate(item)"> Alterar</a>
 									</span>
 								</p>
 							</div>
