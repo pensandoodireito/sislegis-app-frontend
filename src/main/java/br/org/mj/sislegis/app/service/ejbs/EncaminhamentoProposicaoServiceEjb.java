@@ -31,7 +31,7 @@ implements EncaminhamentoProposicaoService{
 	public List<EncaminhamentoProposicao> findByProposicao(Long id) {
 		TypedQuery<EncaminhamentoProposicao> findByIdQuery = em
 				.createQuery(
-						"SELECT DISTINCT c FROM EncaminhamentoProposicao c "
+						"SELECT c FROM EncaminhamentoProposicao c "
 								+ "INNER JOIN FETCH c.proposicao p WHERE p.id = :entityId",
 								EncaminhamentoProposicao.class);
 		findByIdQuery.setParameter("entityId", id);

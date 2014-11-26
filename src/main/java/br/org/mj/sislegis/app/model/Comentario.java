@@ -36,14 +36,14 @@ public class Comentario implements AbstractEntity {
 	@Column
 	private String descricao;
 
-	@Column
-	private String autor;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Usuario autor;
 
 	@Column
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataCriacao;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Proposicao proposicao;
 
 
@@ -88,11 +88,11 @@ public class Comentario implements AbstractEntity {
 		this.descricao = descricao;
 	}
 
-	public String getAutor() {
+	public Usuario getAutor() {
 		return autor;
 	}
 
-	public void setAutor(String autor) {
+	public void setAutor(Usuario autor) {
 		this.autor = autor;
 	}
 
@@ -109,7 +109,7 @@ public class Comentario implements AbstractEntity {
 		String result = getClass().getSimpleName() + " ";
 		if (descricao != null && !descricao.trim().isEmpty())
 			result += "descricao: " + descricao;
-		if (autor != null && !autor.trim().isEmpty())
+		if (autor != null)
 			result += ", autor: " + autor;
 		return result;
 	}

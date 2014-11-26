@@ -1,5 +1,6 @@
 package br.org.mj.sislegis.app.model;
 
+import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
@@ -11,12 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.lang.Override;
-import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @XmlRootElement
@@ -39,8 +37,8 @@ public class EncaminhamentoProposicao implements AbstractEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Proposicao proposicao;
 
-	@Column
-	private String responsavel;
+	@OneToOne(fetch = FetchType.EAGER)
+	private Usuario responsavel;
 
 	@Column
 	@Temporal(TemporalType.DATE)
@@ -113,11 +111,11 @@ public class EncaminhamentoProposicao implements AbstractEntity {
 		this.proposicao = proposicao;
 	}
 
-	public String getResponsavel() {
+	public Usuario getResponsavel() {
 		return responsavel;
 	}
 
-	public void setResponsavel(String responsavel) {
+	public void setResponsavel(Usuario responsavel) {
 		this.responsavel = responsavel;
 	}
 
@@ -148,7 +146,7 @@ public class EncaminhamentoProposicao implements AbstractEntity {
 			result += ", encaminhamento: " + encaminhamento;
 		if (proposicao != null)
 			result += ", proposicao: " + proposicao;
-		if (responsavel != null && !responsavel.trim().isEmpty())
+		if (responsavel != null)
 			result += ", responsavel: " + responsavel;
 		if (dataLimite != null)
 			result += ", dataLimite: " + dataLimite;
