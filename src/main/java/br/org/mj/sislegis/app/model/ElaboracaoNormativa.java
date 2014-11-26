@@ -88,10 +88,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private String comentarioManifestacao;
 	
 	@Column
-	private String manifestacao;
-	
-	@Column
-	private String normaGerada;
+	private String arquivoManifestacao;
 	
 	@Transient
 	private ElaboracaoNormativaConsulta elaboracaoNormativaConsulta;
@@ -218,6 +215,28 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		this.comentarioManifestacao = comentarioManifestacao;
 	}
 
+	public Set<ElaboracaoNormativaConsulta> getListaElaboracaoNormativaConsulta() {
+		return listaElaboracaoNormativaConsulta;
+	}
+
+	public void setListaElaboracaoNormativaConsulta(
+			Set<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta) {
+		this.listaElaboracaoNormativaConsulta = listaElaboracaoNormativaConsulta;
+	}
+
+	public void setElaboracaoNormativaConsulta(
+			ElaboracaoNormativaConsulta elaboracaoNormativaConsulta) {
+		this.elaboracaoNormativaConsulta = elaboracaoNormativaConsulta;
+	}
+	
+	public String getArquivoManifestacao() {
+		return arquivoManifestacao;
+	}
+
+	public void setArquivoManifestacao(String arquivoManifestacao) {
+		this.arquivoManifestacao = arquivoManifestacao;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -241,37 +260,6 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-
-	public Set<ElaboracaoNormativaConsulta> getListaElaboracaoNormativaConsulta() {
-		return listaElaboracaoNormativaConsulta;
-	}
-
-	public void setListaElaboracaoNormativaConsulta(
-			Set<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta) {
-		this.listaElaboracaoNormativaConsulta = listaElaboracaoNormativaConsulta;
-	}
-
-	public void setElaboracaoNormativaConsulta(
-			ElaboracaoNormativaConsulta elaboracaoNormativaConsulta) {
-		this.elaboracaoNormativaConsulta = elaboracaoNormativaConsulta;
-	}
-
-	public String getManifestacao() {
-		return manifestacao;
-	}
-
-	public void setManifestacao(String manifestacao) {
-		this.manifestacao = manifestacao;
-	}
-
-	public String getNormaGerada() {
-		return normaGerada;
-	}
-
-	public void setNormaGerada(String normaGerada) {
-		this.normaGerada = normaGerada;
 	}
 	
 }
