@@ -9,6 +9,5 @@ import br.org.mj.sislegis.app.model.ReuniaoProposicaoPK;
 @Local
 public interface ReuniaoProposicaoService extends Service<ReuniaoProposicao> {
 	
-	public ReuniaoProposicao buscaReuniaoProposicaoPorId(ReuniaoProposicaoPK reuniaoProposicaoPK);
 
 }

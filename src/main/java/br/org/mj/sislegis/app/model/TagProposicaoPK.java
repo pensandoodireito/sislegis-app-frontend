@@ -10,10 +10,8 @@ public class TagProposicaoPK implements Serializable {
 
 	private static final long serialVersionUID = 7949894944142814382L;
 
-	@Column
 	private String tag;
 
-	@Column
 	private Long idProposicao;
 
 	public String getTag() {

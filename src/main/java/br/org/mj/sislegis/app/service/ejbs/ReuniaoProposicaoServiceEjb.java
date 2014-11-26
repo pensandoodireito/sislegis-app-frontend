@@ -28,25 +28,6 @@ public class ReuniaoProposicaoServiceEjb extends AbstractPersistence<ReuniaoProp
 		return em;
 	}
 
-	@Override
-	public ReuniaoProposicao buscaReuniaoProposicaoPorId(
-			ReuniaoProposicaoPK reuniaoProposicaoPK) {
-		ReuniaoProposicao reuniaoProposicao =null;
-
-		Query query = em
-				.createNativeQuery("select rp.* from ReuniaoProposicao rp "
-						+ "where rp.dataReuniao = :P_DATA "
-						+ "and rp.siglaComissao = :P_SIGLA", ReuniaoProposicao.class);
-		query.setParameter("P_DATA", Conversores.dateToString(reuniaoProposicaoPK.getDataReuniao(), "yyyy-MM-dd"));
-		query.setParameter("P_SIGLA", reuniaoProposicaoPK.getSiglaComissao());
-		List<ReuniaoProposicao> reuniaoProposicaos = query.getResultList();
-		
-		if(reuniaoProposicaos!=null 
-				&& !reuniaoProposicaos.isEmpty())
-			reuniaoProposicao = reuniaoProposicaos.get(0);
-		
-		return reuniaoProposicao;
-	}
 	
 	
 
