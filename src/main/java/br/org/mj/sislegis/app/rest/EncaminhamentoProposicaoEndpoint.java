@@ -1,5 +1,6 @@
 package br.org.mj.sislegis.app.rest;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -17,13 +18,18 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 import br.org.mj.sislegis.app.model.EncaminhamentoProposicao;
+import br.org.mj.sislegis.app.model.Usuario;
 import br.org.mj.sislegis.app.service.EncaminhamentoProposicaoService;
+import br.org.mj.sislegis.app.service.UsuarioService;
 
 @Path("/encaminhamentoProposicao")
 public class EncaminhamentoProposicaoEndpoint {
 
 	@Inject
 	private EncaminhamentoProposicaoService service;
+
+	@Inject
+	private UsuarioService usuarioService;
 
 	@POST
 	@Consumes("application/json")
@@ -75,6 +81,12 @@ public class EncaminhamentoProposicaoEndpoint {
 	@Produces("application/json")
 	public List<EncaminhamentoProposicao> findByProposicao(@PathParam("id") Long id) {
 		final List<EncaminhamentoProposicao> results = service.findByProposicao(id);
+		for (Iterator<EncaminhamentoProposicao> iterator = results.iterator(); iterator.hasNext();) {
+			EncaminhamentoProposicao encaminhamentoProposicao = iterator.next();
+			Usuario u = usuarioService.findById(encaminhamentoProposicao.getResponsavel().getId());
+			encaminhamentoProposicao.setResponsavel(u);
+			encaminhamentoProposicao.getComentario().setAutor(u);
+		}
 		return results;
 	}
 

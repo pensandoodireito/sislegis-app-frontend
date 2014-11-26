@@ -37,7 +37,7 @@ public class EncaminhamentoProposicao implements AbstractEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Proposicao proposicao;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER)
 	private Usuario responsavel;
 
 	@Column
