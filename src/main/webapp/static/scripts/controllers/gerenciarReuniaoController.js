@@ -208,7 +208,18 @@ angular.module('sislegisapp').controller(
 
     });
     
-    
+	$scope.getUsuarios = function(val) {
+	    return $http.get('../rest/usuarios/find', {
+	      params: {
+	        nome: val
+	      }
+	    }).then(function(response){
+	      return response.data.map(function(item){
+	        return item;
+	      });
+	    });
+	  };
+
     
     
     // CALENDARIO
