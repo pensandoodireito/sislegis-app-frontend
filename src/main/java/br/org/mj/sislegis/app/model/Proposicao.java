@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -84,6 +85,9 @@ public class Proposicao implements AbstractEntity {
 
 	@Column
 	private Posicionamento posicionamento;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Usuario responsavel;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "proposicao")
 	private Set<TagProposicao> tags;
@@ -292,6 +296,14 @@ public class Proposicao implements AbstractEntity {
 
 	public void setTags(Set<TagProposicao> tags) {
 		this.tags = tags;
+	}
+
+	public Usuario getResponsavel() {
+		return responsavel;
+	}
+
+	public void setResponsavel(Usuario responsavel) {
+		this.responsavel = responsavel;
 	}
 
 }

@@ -141,6 +141,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		proposicao.setTipo(isNull(p.getTipo()) ? proposicao.getTipo() : p.getTipo());
 		proposicao.setLinkPauta(isNull(p.getLinkPauta()) ? proposicao.getLinkPauta() : p.getLinkPauta());
 		proposicao.setLinkProposicao(isNull(p.getLinkProposicao()) ? proposicao.getLinkProposicao() : p.getLinkProposicao());
+		proposicao.setResponsavel(isNull(p.getResponsavel()) ? proposicao.getResponsavel() : p.getResponsavel());
 	}
 
 	public boolean isNull(Object obj) {
@@ -166,11 +167,24 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		/*
 		 * List<TagJSON> listaTagsJSON =new ArrayList<TagJSON>(); for(Tag tag:proposicao.getTags()){ listaTagsJSON.add(new TagJSON(tag.toString())); }
 		 */
-		ProposicaoJSON proposicaoJSON = new ProposicaoJSON(proposicao.getId(), proposicao.getIdProposicao(), proposicao.getTipo(), proposicao.getAno(),
-				proposicao.getNumero(), proposicao.getDataApresentacao(), proposicao.getAutor(), ementa, proposicao.getOrigem(), proposicao.getSigla(),
-				proposicao.getComissao(), proposicao.getSeqOrdemPauta(), proposicao.getLinkProposicao(), proposicao.getLinkPauta(),
-				comentarioService.findByProposicao(proposicao.getId()), proposicao.getPosicionamento(), tagService.populaListaTagsProposicaoJSON(proposicao
-						.getTags()));
+		ProposicaoJSON proposicaoJSON = new ProposicaoJSON(proposicao.getId(), 
+				proposicao.getIdProposicao(), 
+				proposicao.getTipo(), 
+				proposicao.getAno(),
+				proposicao.getNumero(), 
+				proposicao.getDataApresentacao(), 
+				proposicao.getAutor(), 
+				ementa, 
+				proposicao.getOrigem(), 
+				proposicao.getSigla(),
+				proposicao.getComissao(), 
+				proposicao.getSeqOrdemPauta(), 
+				proposicao.getLinkProposicao(), 
+				proposicao.getLinkPauta(),
+				comentarioService.findByProposicao(proposicao.getId()), 
+				proposicao.getPosicionamento(), 
+				tagService.populaListaTagsProposicaoJSON(proposicao.getTags()),
+				proposicao.getResponsavel());
 
 		return proposicaoJSON;
 	}
@@ -229,6 +243,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		proposicao.setComissao(proposicaoJSON.getComissao());
 		proposicao.setSeqOrdemPauta(proposicaoJSON.getSeqOrdemPauta());
 		proposicao.setPosicionamento(proposicaoJSON.getPosicionamento());
+		proposicao.setResponsavel(proposicaoJSON.getResponsavel());
 		Set<TagProposicao> tags = populaTagsProposicao(proposicaoJSON, proposicao);
 		proposicao.setTags(tags);
 		return proposicao;

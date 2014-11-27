@@ -1,5 +1,6 @@
 angular.module('sislegisapp').controller('ModalEncaminhamentosController',
-		function($scope, $http, $filter, $routeParams, $location, $modalInstance, proposicao, listaEncaminhamentoProposicao, EncaminhamentoResource, ProposicaoResource, EncaminhamentoProposicaoResource) {
+		function($scope, $http, $filter, $routeParams, $location, $modalInstance, proposicao, listaEncaminhamentoProposicao, 
+				EncaminhamentoResource, ProposicaoResource, EncaminhamentoProposicaoResource, UsuarioResource) {
 
 			var self = this;
 			$scope.disabled = false;
@@ -62,6 +63,8 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 		    	$scope.encaminhamentoProposicao.proposicao = new ProposicaoResource();
 		    	$scope.encaminhamentoProposicao.proposicao.id = $scope.proposicao.id;
 		    	$scope.encaminhamentoProposicao.comentario.dataCriacao = new Date();
+		    	
+		    	//TODO pegar usuario logado
 		    	$scope.encaminhamentoProposicao.comentario.autor = $scope.encaminhamentoProposicao.responsavel;
 		    	
 		        var successCallback = function(data,responseHeaders){

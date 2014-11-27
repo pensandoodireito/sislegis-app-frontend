@@ -1,7 +1,9 @@
 angular.module('sislegisapp').controller('ElaboracaoNormativaController',
-		function($scope, $http, $locale, ElaboracaoNormativaResource, EquipeResource, FileUploader) {
-	
-			$scope.elaboracaoNormativa = new ElaboracaoNormativaResource();
+		function($scope, $http, $routeParams, $location, $locale, ElaboracaoNormativaResource, EquipeResource, FileUploader) {
+			var self = this;
+			$scope.disabled = false;
+		    $scope.$location = $location;
+			$scope.elaboracaoNormativa = $scope.elaboracaoNormativa || {};//new ElaboracaoNormativaResource();
 			$scope.equipes = EquipeResource.queryAll();
 			
 			$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta = [];
@@ -66,11 +68,42 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		        	alert('Falha na inclusão');
 		        };
 		        
-				ElaboracaoNormativaResource.save($scope.elaboracaoNormativa,
-						successCallback, errorCallback);
-			};		    
-		    
+		        if (isEditMode()) {
+		        	$scope.elaboracaoNormativa.$update(successCallback, errorCallback);
+		        } else {
+		        	ElaboracaoNormativaResource.save($scope.elaboracaoNormativa, successCallback, errorCallback);
+		        }
+		        
+				
+			};
 			
+			$scope.get = function() {
+		        var successCallback = function(data){
+		            self.original = data;
+		            $scope.elaboracaoNormativa = new ElaboracaoNormativaResource(self.original);
+		        };
+		        var errorCallback = function() {
+		            $location.path("/ElaboracaoNormativa");
+		        };
+		        
+		        ElaboracaoNormativaResource.get({ElaboracaoNormativaId:$routeParams.ElaboracaoNormativaId}, successCallback, errorCallback);
+			};
+			
+		    $scope.cancel = function() {
+		        $location.path("/Equipes");
+		    };
+			
+		    function isEditMode() {
+			    if ($location.path().indexOf("edit") > -1) {
+			    	return true;
+				}
+			    return false;
+		    }
+
+		    if (isEditMode()) {
+		    	$scope.get();
+		    }
+
 		    // CALENDARIO
 		    $scope.setCalendar = function() {
 				$scope.openCalendar = function($event) {
