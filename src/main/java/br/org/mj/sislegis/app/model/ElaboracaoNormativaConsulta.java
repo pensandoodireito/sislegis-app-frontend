@@ -29,6 +29,9 @@ public class ElaboracaoNormativaConsulta implements AbstractEntity {
 	
 	@Column
 	private String comentario;
+	
+	@Column
+	private String arquivo;
 
 	public Long getId() {
 		return id;
@@ -60,6 +63,14 @@ public class ElaboracaoNormativaConsulta implements AbstractEntity {
 
 	public void setComentario(String comentario) {
 		this.comentario = comentario;
+	}
+
+	public String getArquivo() {
+		return arquivo;
+	}
+
+	public void setArquivo(String arquivo) {
+		this.arquivo = arquivo;
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 angular.module('sislegisapp').controller('ElaboracaoNormativaController',
-		function($scope, $http, $locale, ElaboracaoNormativaResource, EquipeResource) {
+		function($scope, $http, $locale, ElaboracaoNormativaResource, EquipeResource, FileUploader) {
 	
 			$scope.elaboracaoNormativa = new ElaboracaoNormativaResource();
 			$scope.equipes = EquipeResource.queryAll();
@@ -17,6 +17,29 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		                             {name:'Exposição de Motivo Interministerial', shade:'1'}
 		                             ];
 		    
+		    // inicio config upload
+			$scope.distribuicaoUploader = new FileUploader( {
+			    url: '../rest/upload',
+			    onSuccessItem : function(item, response, status, headers) {
+			    	console.log(response);
+			    	$scope.elaboracaoNormativa.elaboracaoNormativaConsulta.arquivo = response;
+			    	$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta.push($scope.elaboracaoNormativa.elaboracaoNormativaConsulta);
+			    	$scope.elaboracaoNormativa.elaboracaoNormativaConsulta = null;
+			    }
+			});
+			
+			$scope.manifestacaoUploader = new FileUploader( {
+			    url: '../rest/upload',
+			    autoUpload : 'true',
+			    //removeAfterUpload : 'true',
+			    onSuccessItem : function(item, response, status, headers) {
+			    	console.log(response);
+			    	// o response contem o caminho relativo do arquivo
+			    	$scope.elaboracaoNormativa.arquivoManifestacao = response;
+			    },
+			});
+			// fim config upload
+		    
 		    $scope.selectParecerista = function(){
 		    	console.log($scope.elaboracaoNormativa.equipe);
 		    	$scope.pareceristas = $scope.elaboracaoNormativa.equipe.listaEquipeUsuario;
@@ -24,9 +47,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    };
 		    
 		    $scope.adicionarElaboracaoNormativaConsulta = function(){
-		    	
-		    	$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta.push($scope.elaboracaoNormativa.elaboracaoNormativaConsulta);
-		    	$scope.elaboracaoNormativa.elaboracaoNormativaConsulta = null;
+		    	$scope.distribuicaoUploader.uploadItem(0);
 		    }
 		    
 		    $scope.normas = [

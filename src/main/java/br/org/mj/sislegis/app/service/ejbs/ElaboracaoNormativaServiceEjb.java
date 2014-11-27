@@ -32,6 +32,9 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		elaboracaoNormativa.setTipo(ElaboracaoNormativaTipo.get(elaboracaoNormativa.getCodElaboracaoNormativaTipo()));
 		elaboracaoNormativa.setIdentificacao(ElaboracaoNormativaIdentificacao.get(elaboracaoNormativa.getCodElaboracaoNormativaIdentificacao()));
 		elaboracaoNormativa.setElaboracaoNormativaNorma(ElaboracaoNormativaNorma.get(elaboracaoNormativa.getCodElaboracaoNormativaNorma()));
+		if(elaboracaoNormativa.getEquipe()!=null){
+			elaboracaoNormativa.getEquipe().setListaEquipeUsuario(null);
+		}
 		save(elaboracaoNormativa);
 	}
 
