@@ -43,7 +43,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private ElaboracaoNormativaTipo tipo;
 	
 	@Transient
-	private int codElaboracaoNormativaTipo;
+	private Integer codElaboracaoNormativaTipo;
 	
 	@Column
 	private String nup;
@@ -53,7 +53,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private ElaboracaoNormativaIdentificacao identificacao;
 	
 	@Transient
-	private int codElaboracaoNormativaIdentificacao;
+	private Integer codElaboracaoNormativaIdentificacao;
 
 	@Column
 	private String autor;
@@ -91,7 +91,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private ElaboracaoNormativaNorma elaboracaoNormativaNorma;
 	
 	@Transient
-	private int codElaboracaoNormativaNorma;
+	private Integer codElaboracaoNormativaNorma;
 	
 	@Column
 	private String comentarioManifestacao;
@@ -271,28 +271,28 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		return true;
 	}
 
-	public int getCodElaboracaoNormativaTipo() {
+	public Integer getCodElaboracaoNormativaTipo() {
 		return codElaboracaoNormativaTipo;
 	}
 
-	public void setCodElaboracaoNormativaTipo(int codElaboracaoNormativaTipo) {
+	public void setCodElaboracaoNormativaTipo(Integer codElaboracaoNormativaTipo) {
 		this.codElaboracaoNormativaTipo = codElaboracaoNormativaTipo;
 	}
 
-	public int getCodElaboracaoNormativaIdentificacao() {
+	public Integer getCodElaboracaoNormativaIdentificacao() {
 		return codElaboracaoNormativaIdentificacao;
 	}
 
 	public void setCodElaboracaoNormativaIdentificacao(
-			int codElaboracaoNormativaIdentificacao) {
+			Integer codElaboracaoNormativaIdentificacao) {
 		this.codElaboracaoNormativaIdentificacao = codElaboracaoNormativaIdentificacao;
 	}
 
-	public int getCodElaboracaoNormativaNorma() {
+	public Integer getCodElaboracaoNormativaNorma() {
 		return codElaboracaoNormativaNorma;
 	}
 
-	public void setCodElaboracaoNormativaNorma(int codElaboracaoNormativaNorma) {
+	public void setCodElaboracaoNormativaNorma(Integer codElaboracaoNormativaNorma) {
 		this.codElaboracaoNormativaNorma = codElaboracaoNormativaNorma;
 	}
 	
