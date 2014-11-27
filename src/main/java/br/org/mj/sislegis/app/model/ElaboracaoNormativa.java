@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaIdentificacao;
@@ -41,12 +42,18 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaTipo tipo;
 	
+	@Transient
+	private int codElaboracaoNormativaTipo;
+	
 	@Column
 	private String nup;
 	
 	@Column
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaIdentificacao identificacao;
+	
+	@Transient
+	private int codElaboracaoNormativaIdentificacao;
 
 	@Column
 	private String autor;
@@ -73,7 +80,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private Usuario parecerista;
 
 	@OneToMany(cascade=CascadeType.ALL, mappedBy = "elaboracaoNormativa", fetch = FetchType.EAGER)
-	private Set<ElaboracaoNormativaConsulta> elaboracaoNormativaConsulta;
+	private Set<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta;
 	
 	// Manifestação (por enquanto deixei na mesma entidade para evitar normalização desnecessaria)
 	@Column
@@ -83,8 +90,17 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaNorma elaboracaoNormativaNorma;
 	
+	@Transient
+	private int codElaboracaoNormativaNorma;
+	
 	@Column
 	private String comentarioManifestacao;
+	
+	@Column
+	private String arquivoManifestacao;
+	
+	@Transient
+	private ElaboracaoNormativaConsulta elaboracaoNormativaConsulta;
 
 	public Long getId() {
 		return id;
@@ -134,9 +150,6 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		return parecerista;
 	}
 
-	public Set<ElaboracaoNormativaConsulta> getElaboracaoNormativaConsulta() {
-		return elaboracaoNormativaConsulta;
-	}
 
 	public Date getDataManifestacao() {
 		return dataManifestacao;
@@ -198,11 +211,6 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		this.parecerista = parecerista;
 	}
 
-	public void setElaboracaoNormativaConsulta(
-			Set<ElaboracaoNormativaConsulta> elaboracaoNormativaConsulta) {
-		this.elaboracaoNormativaConsulta = elaboracaoNormativaConsulta;
-	}
-
 	public void setDataManifestacao(Date dataManifestacao) {
 		this.dataManifestacao = dataManifestacao;
 	}
@@ -214,6 +222,28 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 
 	public void setComentarioManifestacao(String comentarioManifestacao) {
 		this.comentarioManifestacao = comentarioManifestacao;
+	}
+
+	public Set<ElaboracaoNormativaConsulta> getListaElaboracaoNormativaConsulta() {
+		return listaElaboracaoNormativaConsulta;
+	}
+
+	public void setListaElaboracaoNormativaConsulta(
+			Set<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta) {
+		this.listaElaboracaoNormativaConsulta = listaElaboracaoNormativaConsulta;
+	}
+
+	public void setElaboracaoNormativaConsulta(
+			ElaboracaoNormativaConsulta elaboracaoNormativaConsulta) {
+		this.elaboracaoNormativaConsulta = elaboracaoNormativaConsulta;
+	}
+	
+	public String getArquivoManifestacao() {
+		return arquivoManifestacao;
+	}
+
+	public void setArquivoManifestacao(String arquivoManifestacao) {
+		this.arquivoManifestacao = arquivoManifestacao;
 	}
 
 	@Override
@@ -239,6 +269,31 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public int getCodElaboracaoNormativaTipo() {
+		return codElaboracaoNormativaTipo;
+	}
+
+	public void setCodElaboracaoNormativaTipo(int codElaboracaoNormativaTipo) {
+		this.codElaboracaoNormativaTipo = codElaboracaoNormativaTipo;
+	}
+
+	public int getCodElaboracaoNormativaIdentificacao() {
+		return codElaboracaoNormativaIdentificacao;
+	}
+
+	public void setCodElaboracaoNormativaIdentificacao(
+			int codElaboracaoNormativaIdentificacao) {
+		this.codElaboracaoNormativaIdentificacao = codElaboracaoNormativaIdentificacao;
+	}
+
+	public int getCodElaboracaoNormativaNorma() {
+		return codElaboracaoNormativaNorma;
+	}
+
+	public void setCodElaboracaoNormativaNorma(int codElaboracaoNormativaNorma) {
+		this.codElaboracaoNormativaNorma = codElaboracaoNormativaNorma;
 	}
 	
 }

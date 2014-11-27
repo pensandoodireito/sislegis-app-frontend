@@ -6,5 +6,6 @@ import br.org.mj.sislegis.app.model.ElaboracaoNormativa;
 
 @Local
 public interface ElaboracaoNormativaService extends Service<ElaboracaoNormativa> {
+	public void salvar(ElaboracaoNormativa elaboracaoNormativa);
 
 }
