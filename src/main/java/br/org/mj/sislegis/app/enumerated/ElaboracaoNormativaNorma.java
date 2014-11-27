@@ -8,4 +8,20 @@ public enum ElaboracaoNormativaNorma {
     private ElaboracaoNormativaNorma(int value) {
         this.value = value;
     }
+    
+	public int getValue() {
+		return value;
+	}
+	
+	
+	public static ElaboracaoNormativaNorma get(int id) {
+		ElaboracaoNormativaNorma elaboracaoNormativaNorma = null; // Default
+		for (ElaboracaoNormativaNorma en : ElaboracaoNormativaNorma.values()) {
+			if (en.getValue()==id) {
+				elaboracaoNormativaNorma = en;
+				break;
+			}
+		}
+		return elaboracaoNormativaNorma;
+	}
 }

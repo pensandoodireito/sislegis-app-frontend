@@ -17,18 +17,19 @@ import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
+import br.org.mj.sislegis.app.util.PropertiesUtil;
+
 @Path("/upload")
-// http://www.mkyong.com/webservices/jax-rs/file-upload-example-in-resteasy/
+// Adaptado de: http://www.mkyong.com/webservices/jax-rs/file-upload-example-in-resteasy/
 public class UploadEndpoint {
 
-	// TODO: modificar
-	private final String UPLOADED_FILE_PATH = "c:\\etc\\sislegis";
+	private final String UPLOADED_FILE_PATH = PropertiesUtil.getProperties().getProperty("upload_path");
 	 
 	@POST
 	@Consumes("multipart/form-data")
 	public Response uploadFile(MultipartFormDataInput input) {
- 
-		String fileName = "";
+
+		String fileRelativePath = null;
  
 		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 		List<InputPart> inputParts = uploadForm.get("file");
@@ -38,7 +39,7 @@ public class UploadEndpoint {
 		 try {
  
 			MultivaluedMap<String, String> header = inputPart.getHeaders();
-			fileName = getFileName(header);
+			String fileName = getFileName(header);
  
 			//convert the uploaded file to inputstream
 			InputStream inputStream = inputPart.getBody(InputStream.class,null);
@@ -46,11 +47,9 @@ public class UploadEndpoint {
 			byte [] bytes = IOUtils.toByteArray(inputStream);
  
 			//constructs upload file path
-			fileName = UPLOADED_FILE_PATH + fileName;
- 
-			writeFile(bytes,fileName);
- 
-			System.out.println("Done");
+			Long currentTimeMillis = System.currentTimeMillis();
+			
+			fileRelativePath = writeFile(bytes, UPLOADED_FILE_PATH, currentTimeMillis.toString(), fileName);
  
 		  } catch (IOException e) {
 			e.printStackTrace();
@@ -58,8 +57,7 @@ public class UploadEndpoint {
  
 		}
  
-		return Response.status(200)
-		    .entity("uploadFile is called, Uploaded file name : " + fileName).build();
+		return Response.status(200).entity(fileRelativePath).build();
  
 	}
  
@@ -88,9 +86,14 @@ public class UploadEndpoint {
 	}
  
 	//save to somewhere
-	private void writeFile(byte[] content, String filename) throws IOException {
- 
-		File file = new File(filename);
+	private String writeFile(byte[] content, String dirName, String prefix, String filename) throws IOException {
+		File dir = new File(dirName+"/"+prefix);
+		 
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+		
+		File file = new File(dirName +"/" + prefix + "/"+ filename);
  
 		if (!file.exists()) {
 			file.createNewFile();
@@ -101,7 +104,9 @@ public class UploadEndpoint {
 		fop.write(content);
 		fop.flush();
 		fop.close();
- 
+		
+		// Retorna apenas o caminho relativo
+		return prefix + "/"+ filename;
 	}
 
 }

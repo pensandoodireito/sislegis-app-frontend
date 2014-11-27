@@ -17,4 +17,15 @@ public enum ElaboracaoNormativaTipo {
     private ElaboracaoNormativaTipo(int value) {
         this.value = value;
     }
+    
+	public static ElaboracaoNormativaTipo get(int id) {
+		ElaboracaoNormativaTipo elaboracaoNormativaTipo = null; // Default
+		for (ElaboracaoNormativaTipo en : ElaboracaoNormativaTipo.values()) {
+			if (en.getValue()==id) {
+				elaboracaoNormativaTipo = en;
+				break;
+			}
+		}
+		return elaboracaoNormativaTipo;
+	}
 }

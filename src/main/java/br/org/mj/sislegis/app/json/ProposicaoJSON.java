@@ -4,12 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
-import javax.persistence.Transient;
 
 import br.org.mj.sislegis.app.enumerated.Origem;
 import br.org.mj.sislegis.app.model.Posicionamento;
+import br.org.mj.sislegis.app.model.Usuario;
 
 public class ProposicaoJSON implements Serializable {
 
@@ -42,6 +40,8 @@ public class ProposicaoJSON implements Serializable {
 	private String linkProposicao;
 
 	private String linkPauta;
+	
+	private Usuario responsavel;
 
 	private List<ComentarioJSON> listaComentario = new ArrayList<ComentarioJSON>();
 
@@ -57,7 +57,8 @@ public class ProposicaoJSON implements Serializable {
 			String ementa, Origem origem, String sigla, String comissao,
 			Integer seqOrdemPauta, String linkProposicao, String linkPauta,
 			List<ComentarioJSON> listaComentario,
-			Posicionamento posicionamento, List<TagJSON> tags) {
+			Posicionamento posicionamento, List<TagJSON> tags,
+			Usuario responsavel) {
 		this.id=id;
 		this.idProposicao=idProposicao;
 		this.tipo=tipo;
@@ -75,6 +76,7 @@ public class ProposicaoJSON implements Serializable {
 		this.listaComentario=listaComentario;
 		this.posicionamento=posicionamento;
 		this.tags=tags;
+		this.responsavel=responsavel;
 	}
 
 	public String getComissao() {
@@ -211,5 +213,13 @@ public class ProposicaoJSON implements Serializable {
 
 	public void setTags(List<TagJSON> tags) {
 		this.tags = tags;
+	}
+
+	public Usuario getResponsavel() {
+		return responsavel;
+	}
+
+	public void setResponsavel(Usuario responsavel) {
+		this.responsavel = responsavel;
 	}
 }

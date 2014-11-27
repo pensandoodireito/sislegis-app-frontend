@@ -3,11 +3,13 @@ package br.org.mj.sislegis.app.json;
 import java.io.Serializable;
 import java.util.Date;
 
+import br.org.mj.sislegis.app.model.Usuario;
+
 public class ComentarioJSON implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public ComentarioJSON(Long id, String descricao, String autor,
+	public ComentarioJSON(Long id, String descricao, Usuario autor,
 			Date dataCriacao, Long idProposicao) {
 		this.id = id;
 		this.descricao = descricao;
@@ -22,7 +24,7 @@ public class ComentarioJSON implements Serializable {
 
 	private Long id;
 	private String descricao;
-	private String autor;
+	private Usuario autor;
 	private Date dataCriacao;
 	private Long idProposicao;
 
@@ -42,11 +44,11 @@ public class ComentarioJSON implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public String getAutor() {
+	public Usuario getAutor() {
 		return autor;
 	}
 
-	public void setAutor(String autor) {
+	public void setAutor(Usuario autor) {
 		this.autor = autor;
 	}
 
