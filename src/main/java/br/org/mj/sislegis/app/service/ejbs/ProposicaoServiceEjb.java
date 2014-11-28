@@ -25,6 +25,7 @@ import br.org.mj.sislegis.app.json.ProposicaoJSON;
 import br.org.mj.sislegis.app.json.TagJSON;
 import br.org.mj.sislegis.app.model.EncaminhamentoProposicao;
 import br.org.mj.sislegis.app.model.Proposicao;
+import br.org.mj.sislegis.app.model.Reuniao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicaoPK;
 import br.org.mj.sislegis.app.model.Tag;
@@ -38,6 +39,7 @@ import br.org.mj.sislegis.app.service.AbstractPersistence;
 import br.org.mj.sislegis.app.service.ComentarioService;
 import br.org.mj.sislegis.app.service.EncaminhamentoProposicaoService;
 import br.org.mj.sislegis.app.service.ProposicaoService;
+import br.org.mj.sislegis.app.service.ReuniaoService;
 import br.org.mj.sislegis.app.service.TagService;
 import br.org.mj.sislegis.app.util.Conversores;
 import br.org.mj.sislegis.app.util.SislegisUtil;
@@ -59,7 +61,10 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 
 	@Inject
 	private ComentarioService comentarioService;
-
+	
+	@Inject
+	private ReuniaoService reuniaoService;
+	
 	@Inject
 	private EncaminhamentoProposicaoService encaminhamentoProposicaoService;
 	
@@ -106,9 +111,22 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 
 	@Override
 	public void salvarListaProposicao(List<Proposicao> lista) {
-		for (Proposicao p : lista) {
+		List<Reuniao> listaReuniao = null;
+		c:for (Proposicao p : lista) {
 			try {
 				Proposicao proposicao = buscarPorIdProposicao(p.getIdProposicao());
+				
+				if(Objects.isNull(listaReuniao))
+					listaReuniao = reuniaoService.buscaReuniaoPorData(p.getReuniao().getData());
+				
+				for(Reuniao reuniao:listaReuniao){
+					for(ReuniaoProposicao rp:reuniao.getListaReuniaoProposicoes()){
+						if(rp.getProposicao().getIdProposicao().equals(p.getIdProposicao())){
+							continue c;
+						}
+					}
+				}
+				
 				if (Objects.isNull(proposicao)) {
 					if (p.getOrigem().equals(Origem.CAMARA)) {
 						proposicao = detalharProposicaoCamaraWS(Long.valueOf(p.getIdProposicao()));

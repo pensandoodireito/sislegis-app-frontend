@@ -1,5 +1,7 @@
 package br.org.mj.sislegis.app.service.ejbs;
 
+import java.util.Objects;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,9 +31,12 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 	@Override
 	public void salvar(ElaboracaoNormativa elaboracaoNormativa) {
 		// TODO Auto-generated method stub
-		elaboracaoNormativa.setTipo(ElaboracaoNormativaTipo.get(elaboracaoNormativa.getCodElaboracaoNormativaTipo()));
-		elaboracaoNormativa.setIdentificacao(ElaboracaoNormativaIdentificacao.get(elaboracaoNormativa.getCodElaboracaoNormativaIdentificacao()));
-		elaboracaoNormativa.setElaboracaoNormativaNorma(ElaboracaoNormativaNorma.get(elaboracaoNormativa.getCodElaboracaoNormativaNorma()));
+		elaboracaoNormativa.setTipo(Objects.isNull(elaboracaoNormativa.getCodElaboracaoNormativaTipo())?null:ElaboracaoNormativaTipo.get(elaboracaoNormativa.getCodElaboracaoNormativaTipo()));
+		elaboracaoNormativa.setIdentificacao(Objects.isNull(elaboracaoNormativa.getCodElaboracaoNormativaIdentificacao())?null:ElaboracaoNormativaIdentificacao.get(elaboracaoNormativa.getCodElaboracaoNormativaIdentificacao()));
+		elaboracaoNormativa.setElaboracaoNormativaNorma(Objects.isNull(elaboracaoNormativa.getCodElaboracaoNormativaNorma())?null:ElaboracaoNormativaNorma.get(elaboracaoNormativa.getCodElaboracaoNormativaNorma()));
+		if(!Objects.isNull(elaboracaoNormativa.getEquipe()))
+			elaboracaoNormativa.getEquipe().setListaEquipeUsuario(null);
+		
 		save(elaboracaoNormativa);
 	}
 
