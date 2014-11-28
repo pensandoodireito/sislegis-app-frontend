@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap','ngTagsInput', 'angularFileUpload', 'components'])
+angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap','ngTagsInput', 'angularFileUpload', 'components', 'ui.utils'])
 
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider
@@ -20,6 +20,7 @@ angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap','
     .when('/Equipes/edit/:EquipeId',{templateUrl:'views/Equipe/detail.html',controller:'EquipeController'})
     .when('/ElaboracaoNormativa',{templateUrl:'views/ElaboracaoNormativa/search.html',controller:'SearchElaboracaoNormativaController'})
     .when('/ElaboracaoNormativa/new',{templateUrl:'views/ElaboracaoNormativa/detail.html',controller:'ElaboracaoNormativaController'})
+    .when('/ElaboracaoNormativa/edit/:ElaboracaoNormativaId',{templateUrl:'views/ElaboracaoNormativa/detail.html',controller:'ElaboracaoNormativaController'})
     .when('/Upload',{templateUrl:'views/Upload/upload.html',controller:'UploadController'})
     
 	
