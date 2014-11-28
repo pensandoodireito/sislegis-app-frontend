@@ -3,7 +3,8 @@ angular.module('sislegisapp').controller(
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource,
 				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource) {
-    var self = this;
+    
+	var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
     
@@ -72,14 +73,12 @@ angular.module('sislegisapp').controller(
     $scope.removerProposicao = function(id){
     	if(confirm("Deseja realmente excluir esse registro?")){
     		var successCallback = function(){
-            	$scope.selectedProposicao = null;
             	
             	ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()},
             	function(sucess){
             		$scope.listaReuniaoProposicoes = sucess;
-            		if($scope.listaReuniaoProposicoes.length > 0){
-            			$scope.detalhamentoProposicao = true;
-            		}else{
+            		if($scope.selectedProposicao.id == id){
+            			$scope.selectedProposicao = null;
             			$scope.detalhamentoProposicao = false;
             		}
             	},function(){

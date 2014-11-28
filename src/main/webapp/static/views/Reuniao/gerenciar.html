@@ -31,7 +31,7 @@
 			<div class="list-group rol-vert height-full" ng-repeat="item in listaReuniaoProposicoes | filter:selectedFiltroComissao | orderBy : 'comissao'">
 
 					<a href="javascript:;" class="list-group-item" ng-click="getProposicao(item.id)">
-					<button type="button" class="close" ng-click="removerProposicao(item.id)">
+					<button type="button" class="close" ng-click="removerProposicao(item.id); $event.stopPropagation()">
 						<span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
 					</button>
 					<h4 class="list-group-item-heading">{{item.sigla}}</h4>
