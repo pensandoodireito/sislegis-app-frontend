@@ -1,7 +1,7 @@
 angular.module('sislegisapp').controller(
 		'GerenciarReuniaoController',
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout,
-				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, 
+				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource,
 				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource) {
     var self = this;
     $scope.disabled = false;
@@ -34,7 +34,120 @@ angular.module('sislegisapp').controller(
     }
     
     
+    $scope.isClean = function() {
+        return angular.equals(self.original, $scope.reuniao);
+    };
+
+    $scope.save = function() {
+        var successCallback = function(){
+            addAlert({type: 'success', msg: 'Registro atualizado com sucesso.'});
+        	$rootScope.inativeSpinner = false;
+        };
+        var errorCallback = function() {
+        };
+        $scope.selectedProposicao.$update(successCallback, errorCallback);
+    };
+
+    $scope.remove = function() {
+        alert($scope.reuniao.id);
+        ReuniaoResource.remove({ReuniaoId:$scope.reuniao.id})
+    };
     
+    //TODO o que isso faz? @author guilherme.hott
+    $scope.listaProposicaoSelection = $scope.listaProposicaoSelection || [];
+    $scope.$watch("listaProposicaoSelection", function(selection) {
+        if (typeof selection != 'undefined' && $scope.reuniao) {
+            $scope.reuniao.listaReuniaoProposicoes = [];
+            $.each(selection, function(idx,selectedItem) {
+                var collectionItem = {};
+                collectionItem.id = selectedItem.value;
+                $scope.reuniao.listaReuniaoProposicoes.push(collectionItem);
+            });
+        }
+    });
+    
+    $scope.getProposicao = function(id) {
+
+        var successCallback = function(data){
+        	$scope.selectedProposicao = data;
+        	$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.selectedProposicao.id});
+            $scope.displayError = false;
+        };
+        var errorCallback = function(error) {
+            $scope.displayError=true;
+        };
+        
+    	ProposicaoResource.get({ProposicaoId: id}, successCallback, errorCallback);
+    	$scope.posicionamentos = PosicionamentoResource.queryAll();
+    	$scope.detalhamentoProposicao = true;
+    }
+    
+    $scope.removerProposicao = function(id){
+    	if(confirm("Deseja realmente excluir esse registro?")){
+    		var successCallback = function(){
+            	$scope.selectedProposicao = null;
+            	
+            	ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()},
+            	function(sucess){
+            		$scope.listaReuniaoProposicoes = sucess;
+            		if($scope.listaReuniaoProposicoes.length > 0){
+            			$scope.detalhamentoProposicao = true;
+            		}else{
+            			$scope.detalhamentoProposicao = false;
+            		}
+            	},function(){
+                	$scope.displayError=true;
+            	});
+            };
+            var errorCallback = function() {
+            	$scope.displayError=true;
+            };
+            
+        	ProposicaoResource.remove({ProposicaoId: id}, successCallback, errorCallback);
+    	}
+
+    }; 
+    
+    
+    $scope.dataFormatada = function(){
+        var formattedDate = $filter('date')(new Date($scope.reuniao.data),
+        	'MM/dd/yyyy');
+        return formattedDate;
+    };
+    
+    $scope.$watch("reuniao.data", function() {
+    	if(!angular.isUndefined($scope.reuniao.data)){
+    		
+    		var successCallback = function(){
+                if ($scope.listaReuniaoProposicoes.length == 0) {
+                	alert('Não existem proposições para esta data. Você pode adicionar novas proposições.');
+                }
+                $scope.displayError = false;
+            };
+            var errorCallback = function() {
+            	$scope.displayError=true;
+            };
+    		
+    		$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()}, successCallback, errorCallback);
+    		$scope.detalhamentoProposicao = false;
+    	}
+
+    });
+    
+	$scope.getUsuarios = function(val) {
+	    return $http.get('../rest/usuarios/find', {
+	      params: {
+	        nome: val
+	      }
+	    }).then(function(response){
+	      return response.data.map(function(item){
+	        return item;
+	      });
+	    });
+	  };
+
+	  
+
     /**
      * MODALs
      */
@@ -121,105 +234,7 @@ angular.module('sislegisapp').controller(
             $log.info('Modal dismissed at: ' + new Date());
           });
     };
-        
-    
-    
-    $scope.isClean = function() {
-        return angular.equals(self.original, $scope.reuniao);
-    };
-
-    $scope.save = function() {
-        var successCallback = function(){
-            addAlert({type: 'success', msg: 'Registro atualizado com sucesso.'});
-        	$rootScope.inativeSpinner = false;
-        };
-        var errorCallback = function() {
-        };
-        $scope.selectedProposicao.$update(successCallback, errorCallback);
-    };
-
-    $scope.remove = function() {
-        alert($scope.reuniao.id);
-        ReuniaoResource.remove({ReuniaoId:$scope.reuniao.id})
-    };
-    
-    //TODO o que isso faz? @author guilherme.hott
-    $scope.listaProposicaoSelection = $scope.listaProposicaoSelection || [];
-    $scope.$watch("listaProposicaoSelection", function(selection) {
-        if (typeof selection != 'undefined' && $scope.reuniao) {
-            $scope.reuniao.listaReuniaoProposicoes = [];
-            $.each(selection, function(idx,selectedItem) {
-                var collectionItem = {};
-                collectionItem.id = selectedItem.value;
-                $scope.reuniao.listaReuniaoProposicoes.push(collectionItem);
-            });
-        }
-    });
-    
-    $scope.getProposicao = function(id) {
-
-        var successCallback = function(data){
-        	$scope.selectedProposicao = data;
-        	$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.selectedProposicao.id});
-            $scope.displayError = false;
-        };
-        var errorCallback = function(error) {
-            $scope.displayError=true;
-        };
-        
-    	ProposicaoResource.get({ProposicaoId: id}, successCallback, errorCallback);
-    	$scope.posicionamentos = PosicionamentoResource.queryAll();
-    	$scope.detalhamentoProposicao = true;
-    }
-    
-    $scope.removerProposicao = function(id){
-    	if(confirm("Deseja realmente excluir esse registro?")){
-        	ProposicaoResource.remove({ProposicaoId: id})
-        	$scope.listaProposicao = [];
-        	$scope.selectedProposicao = null;
-        	$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
-    	}
-
-    }; 
-    
-    
-    $scope.dataFormatada = function(){
-        var formattedDate = $filter('date')(new Date($scope.reuniao.data),
-        	'MM/dd/yyyy');
-        return formattedDate;
-    };
-    
-    $scope.$watch("reuniao.data", function() {
-    	if(!angular.isUndefined($scope.reuniao.data)){
-    		
-    		var successCallback = function(){
-                if ($scope.listaReuniaoProposicoes.length == 0) {
-                	alert('Não existem proposições para esta data. Você pode adicionar novas proposições.');
-                }
-                $scope.displayError = false;
-            };
-            var errorCallback = function() {
-            	$scope.displayError=true;
-            };
-    		
-    		$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()}, successCallback, errorCallback);
-    		$scope.detalhamentoProposicao = false;
-    	}
-
-    });
-    
-	$scope.getUsuarios = function(val) {
-	    return $http.get('../rest/usuarios/find', {
-	      params: {
-	        nome: val
-	      }
-	    }).then(function(response){
-	      return response.data.map(function(item){
-	        return item;
-	      });
-	    });
-	  };
-
+	        
     
     
     // CALENDARIO

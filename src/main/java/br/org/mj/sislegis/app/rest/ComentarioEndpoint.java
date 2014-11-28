@@ -3,9 +3,7 @@ package br.org.mj.sislegis.app.rest;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
 import javax.persistence.OptimisticLockException;
-import javax.persistence.TypedQuery;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;

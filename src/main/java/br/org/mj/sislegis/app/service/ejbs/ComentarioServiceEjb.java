@@ -20,7 +20,7 @@ public class ComentarioServiceEjb extends AbstractPersistence<Comentario, Long>
 
 	@PersistenceContext
 	private EntityManager em;
-
+	
 	public ComentarioServiceEjb() {
 		super(Comentario.class);
 	}
@@ -35,6 +35,7 @@ public class ComentarioServiceEjb extends AbstractPersistence<Comentario, Long>
 		TypedQuery<Comentario> findByIdQuery = em
 				.createQuery(
 						"SELECT DISTINCT c FROM Comentario c "
+								+ "INNER JOIN FETCH c.autor a "
 								+ "INNER JOIN FETCH c.proposicao p WHERE p.id = :entityId",
 						Comentario.class);
 		findByIdQuery.setParameter("entityId", id);
