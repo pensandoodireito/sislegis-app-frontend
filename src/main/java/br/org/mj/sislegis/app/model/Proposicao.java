@@ -85,6 +85,7 @@ public class Proposicao implements AbstractEntity {
 
 	@Column
 	private Posicionamento posicionamento;
+	
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Usuario responsavel;
