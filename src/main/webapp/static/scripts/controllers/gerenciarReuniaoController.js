@@ -53,19 +53,6 @@ angular.module('sislegisapp').controller(
         ReuniaoResource.remove({ReuniaoId:$scope.reuniao.id})
     };
     
-    //TODO o que isso faz? @author guilherme.hott
-    $scope.listaProposicaoSelection = $scope.listaProposicaoSelection || [];
-    $scope.$watch("listaProposicaoSelection", function(selection) {
-        if (typeof selection != 'undefined' && $scope.reuniao) {
-            $scope.reuniao.listaReuniaoProposicoes = [];
-            $.each(selection, function(idx,selectedItem) {
-                var collectionItem = {};
-                collectionItem.id = selectedItem.value;
-                $scope.reuniao.listaReuniaoProposicoes.push(collectionItem);
-            });
-        }
-    });
-    
     $scope.getProposicao = function(id) {
 
         var successCallback = function(data){
