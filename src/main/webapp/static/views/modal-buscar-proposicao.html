@@ -47,7 +47,7 @@
 				</div>
 				<div class="line-9 rol-vert">
 					<div class="list-group" ng-model="proposicao" ng-repeat="proposicao in proposicoes | filter:buscaPalavraChave">
-						<a href="javascript:;" class="list-group-item" ng-click="detalharProposicao(proposicao.idProposicao)">
+						<a href="javascript:;" class="list-group-item" ng-click="detalharProposicao(proposicao)">
 							<h4 class="list-group-item-heading">{{proposicao.sigla}}</h4>
 							<div class="list-group-item-text clearfix">
 								<p>{{proposicao.ementa}}</p>
