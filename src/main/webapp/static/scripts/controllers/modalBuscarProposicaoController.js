@@ -59,19 +59,21 @@ angular
 						}
 					};
 
-					$scope.detalharProposicao = function(idProposicao) {
+					$scope.detalharProposicao = function(p) {
 						$http(
 								{
 									method : 'GET',
 									url : ($scope.origem.value == 'C') ? "../rest/proposicaos/detalharProposicaoCamaraWS"
 											: "../rest/proposicaos/detalharProposicaoSenadoWS",
 									params : {
-										'id' : idProposicao
+										'id' : p.idProposicao
 									// id proposicao
 									}
 								}).success(function(data) {
 							console.log(data);
 							$scope.detalheProposicao = data;
+							$scope.detalheProposicao.comissao = p.comissao;
+							$scope.detalheProposicao.seqOrdemPauta = p.seqOrdemPauta;
 							$scope.showDetalhamentoProposicao = true;
 						}).error(function(error) {
 						});

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -19,8 +20,10 @@ import javax.sql.rowset.serial.SerialClob;
 import javax.sql.rowset.serial.SerialException;
 
 import br.org.mj.sislegis.app.enumerated.Origem;
+import br.org.mj.sislegis.app.json.ComentarioJSON;
 import br.org.mj.sislegis.app.json.ProposicaoJSON;
 import br.org.mj.sislegis.app.json.TagJSON;
+import br.org.mj.sislegis.app.model.Comentario;
 import br.org.mj.sislegis.app.model.Proposicao;
 import br.org.mj.sislegis.app.model.Reuniao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicao;
@@ -37,6 +40,7 @@ import br.org.mj.sislegis.app.service.ComentarioService;
 import br.org.mj.sislegis.app.service.ProposicaoService;
 import br.org.mj.sislegis.app.service.ReuniaoService;
 import br.org.mj.sislegis.app.service.TagService;
+import br.org.mj.sislegis.app.service.UsuarioService;
 import br.org.mj.sislegis.app.util.Conversores;
 import br.org.mj.sislegis.app.util.SislegisUtil;
 
@@ -63,6 +67,9 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 	
 	@Inject
 	private TagService tagService;
+
+	@Inject
+	private UsuarioService usuarioService;
 
 	@PersistenceContext
 	private EntityManager em;
@@ -185,6 +192,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		/*
 		 * List<TagJSON> listaTagsJSON =new ArrayList<TagJSON>(); for(Tag tag:proposicao.getTags()){ listaTagsJSON.add(new TagJSON(tag.toString())); }
 		 */
+		
 		ProposicaoJSON proposicaoJSON = new ProposicaoJSON(proposicao.getId(), 
 				proposicao.getIdProposicao(), 
 				proposicao.getTipo(), 

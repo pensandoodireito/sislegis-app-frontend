@@ -1,5 +1,5 @@
 angular.module('sislegisapp').controller('ModalComentariosController',
-		function($scope, $http, $filter, $routeParams, $location, $modalInstance, proposicao, ComentarioResource, ProposicaoResource) {
+		function($scope, $http, $filter, $routeParams, $location, $modalInstance, proposicao, ComentarioResource, ProposicaoResource, UsuarioResource) {
 
 			var self = this;
 			$scope.disabled = false;
@@ -40,12 +40,6 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 
 		    $scope.save = function() {
 		    	
-		    	$scope.comentario.dataCriacao = new Date();
-		    	//$scope.comentario.proposicao = new ProposicaoResource();
-		    	$scope.comentario.idProposicao = $scope.proposicao.id;
-		    	//TODO mock
-		    	$scope.comentario.autor = 'usuario logado';
-		    	
 		        var successCallback = function(data,responseHeaders){
 		        	$scope.comentario = new ComentarioResource();
 		        	var id = $scope.proposicao.id;
@@ -56,7 +50,18 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 		        var errorCallback = function() {
 		            $scope.displayError = true;
 		        };
-		        ComentarioResource.save($scope.comentario, successCallback, errorCallback);
+		        
+
+		    	//TODO mock
+		    	UsuarioResource.queryAll(function(data){
+		    		if(data.length > 0){
+		    			$scope.comentario.autor = data[0];
+		    		}
+		    		$scope.comentario.dataCriacao = new Date();
+		    		$scope.comentario.idProposicao = $scope.proposicao.id;
+		    		
+		    		$scope.comentario.$save(successCallback, errorCallback);
+		    	});
 		    };
 
 
