@@ -81,6 +81,7 @@ angular
 						proposicao.listaReuniaoProposicoes = proposicao.listaReuniaoProposicoes || [];
 						proposicao.listaReuniaoProposicoes
 								.push($scope.reuniaoProposicao);
+						proposicao.reuniao = $scope.reuniao;
 						$scope.listaProposicaoSelecao.push(proposicao);
 					};
 
