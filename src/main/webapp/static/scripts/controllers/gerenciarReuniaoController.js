@@ -3,6 +3,7 @@ angular.module('sislegisapp').controller(
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource,
 				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource) {
+    
 	var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
