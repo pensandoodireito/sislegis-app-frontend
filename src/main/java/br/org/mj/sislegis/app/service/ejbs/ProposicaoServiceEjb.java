@@ -23,7 +23,7 @@ import br.org.mj.sislegis.app.enumerated.Origem;
 import br.org.mj.sislegis.app.json.ComentarioJSON;
 import br.org.mj.sislegis.app.json.ProposicaoJSON;
 import br.org.mj.sislegis.app.json.TagJSON;
-import br.org.mj.sislegis.app.model.Comentario;
+import br.org.mj.sislegis.app.model.EncaminhamentoProposicao;
 import br.org.mj.sislegis.app.model.Proposicao;
 import br.org.mj.sislegis.app.model.Reuniao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicao;
@@ -37,10 +37,10 @@ import br.org.mj.sislegis.app.parser.senado.ParserPautaSenado;
 import br.org.mj.sislegis.app.parser.senado.ParserProposicaoSenado;
 import br.org.mj.sislegis.app.service.AbstractPersistence;
 import br.org.mj.sislegis.app.service.ComentarioService;
+import br.org.mj.sislegis.app.service.EncaminhamentoProposicaoService;
 import br.org.mj.sislegis.app.service.ProposicaoService;
 import br.org.mj.sislegis.app.service.ReuniaoService;
 import br.org.mj.sislegis.app.service.TagService;
-import br.org.mj.sislegis.app.service.UsuarioService;
 import br.org.mj.sislegis.app.util.Conversores;
 import br.org.mj.sislegis.app.util.SislegisUtil;
 
@@ -66,10 +66,10 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 	private ReuniaoService reuniaoService;
 	
 	@Inject
-	private TagService tagService;
-
+	private EncaminhamentoProposicaoService encaminhamentoProposicaoService;
+	
 	@Inject
-	private UsuarioService usuarioService;
+	private TagService tagService;
 
 	@PersistenceContext
 	private EntityManager em;
@@ -305,13 +305,20 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		}
 	}
 
-	public ReuniaoService getReuniaoService() {
-		return reuniaoService;
+	@Override
+	public void deleteById(Long id){
+		List<EncaminhamentoProposicao> listaEnc = encaminhamentoProposicaoService.findByProposicao(id);
+		for (Iterator<EncaminhamentoProposicao> iterator = listaEnc.iterator(); iterator.hasNext();) {
+			EncaminhamentoProposicao ep = iterator.next();
+			encaminhamentoProposicaoService.deleteById(ep.getId());
+		}
+		
+		List<ComentarioJSON> listaCom = comentarioService.findByProposicao(id);
+		for (Iterator<ComentarioJSON> iterator = listaCom.iterator(); iterator.hasNext();) {
+			ComentarioJSON c = iterator.next();
+			comentarioService.deleteById(c.getId());
+		}
+		
+		super.deleteById(id);
 	}
-
-	public void setReuniaoService(ReuniaoService reuniaoService) {
-		this.reuniaoService = reuniaoService;
-	}
-
-
 }
