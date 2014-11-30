@@ -1,10 +1,14 @@
 angular.module('sislegisapp').controller('ElaboracaoNormativaController',
-		function($scope, $http, $routeParams, $location, $locale, ElaboracaoNormativaResource, EquipeResource, FileUploader) {
+		function($scope, $http, $routeParams, $location, $locale, ElaboracaoNormativaResource, EquipeResource, FileUploader, TagResource) {
 			var self = this;
 			$scope.disabled = false;
 		    $scope.$location = $location;
 			$scope.elaboracaoNormativa = $scope.elaboracaoNormativa || {};//new ElaboracaoNormativaResource();
 			$scope.equipes = EquipeResource.queryAll();
+			
+		    $scope.loadTags = function(query) {
+		    	return TagResource.listarTodos().$promise;
+		    }; 
 			
 			$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta = [];
 			
@@ -123,6 +127,6 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    
 		    $scope.setCalendar();			
 	
-
+		    $scope.selected = 'dadosPreliminares';
 
 		});

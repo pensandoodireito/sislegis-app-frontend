@@ -2,11 +2,16 @@
     <h3>Elaboração Normativa</h3>
 </header>
 
-
-<tabs> 
-<pane title="Dados preliminares">
-      <div class="row">
-          <div class="col-md-4">
+<div class="tabs">
+  <div ng-click="selected = 'dadosPreliminares'" ng-class="{'selected': selected == 'dadosPreliminares'}" class="tab">Dados preliminares</div>
+  <div ng-click="selected = 'dadosAnalise'" ng-class="{'selected': selected == 'dadosAnalise'}" class="tab">Dados de análise/Distribuição</div>
+  <div ng-click="selected = 'manifestacao'" ng-class="{'selected': selected == 'manifestacao'}" class="tab">Manifestação</div>
+ </div>
+ 
+ 
+  <div ng-show="selected == 'dadosPreliminares'" class="tab_content">
+      <div class="row divider-top">
+          <div class="col-md-3">
               <div class="form-group">
                   <label for="">Data do Registro:</label>
 				<p class="input-group">
@@ -15,13 +20,19 @@
 			                <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 			    		</span>		    		
 			    </p>
-		    	 <div class="form-group">
-	                 <label for="">Tags:</label>
-	                 <input type="text" class="form-control" id="" placeholder="Tags">
-	             </div>
-			</div>	
+			    </div>	
        	</div>
       </div>
+ 
+      <div class="row divider-top">
+          <div class="col-md-6">
+   	                 <label for="">Tags:</label>
+					 <tags-input ng-model="elaboracaoNormativa.tags">
+					 	<auto-complete source="loadTags($query)"></auto-complete>
+					 </tags-input>	        
+          </div>
+       </div>        
+   
 
       <div class="row divider-top">
           <div class="col-md-3">
@@ -44,7 +55,7 @@
           </div>
       </div>
 	<div class="row divider-top">
-    <div class="col-md-3">
+    	<div class="col-md-3">
               <div class="form-group">
                   <label for="">Autor</label>
                   <input type="text" class="form-control" ng-model="elaboracaoNormativa.autor">
@@ -73,9 +84,9 @@
       </div>
 
 
-</pane> 
-<pane title="Dados de análise/Distribuição">
-       <div class="row">
+</div>
+  <div ng-show="selected == 'dadosAnalise'" class="tab_content">
+       <div class="row divider-top">
 
             <div class="col-sm-6">
                 <div class="row">
@@ -154,8 +165,8 @@
               </div>
             </div>
         </div>
-</pane> 
- <pane title="Manifestação">
+</div>
+  <div ng-show="selected == 'manifestacao'" class="tab_content">
      <div class="row divider-top">
          <div class="col-md-4">
              <div class="form-group">
@@ -191,7 +202,7 @@
 				 </div>
              </div>
          </div>
-     </div>
+         
       <div class="row divider-top">
           <div class="col-md-4">
               <div class="form-group">
@@ -200,12 +211,14 @@
               </div>
           </div>
 
-      </div>     
+      </div>            
+         
+     </div>
+  
  
-</pane> 
-</tabs>
+</div>
 
-<div class="text-right divider-top">
+<div class="text-right">
     <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="distribuicaoUploader.isUploading || manifestacaoUploader.isUploading">Salvar</button>
 </div>  
 

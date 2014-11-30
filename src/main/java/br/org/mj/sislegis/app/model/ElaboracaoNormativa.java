@@ -1,6 +1,7 @@
 package br.org.mj.sislegis.app.model;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -20,6 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaIdentificacao;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
+import br.org.mj.sislegis.app.json.TagJSON;
 
 @Entity
 @XmlRootElement
@@ -90,6 +92,9 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaNorma elaboracaoNormativaNorma;
 	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "elaboracaoNormativa")
+	private Set<TagElaboracaoNormativa> tagsElaboracaoNormativa;
+	
 	@Transient
 	private Integer codElaboracaoNormativaNorma;
 	
@@ -101,6 +106,10 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	
 	@Transient
 	private ElaboracaoNormativaConsulta elaboracaoNormativaConsulta;
+	
+	@Transient
+	private List<TagJSON> tags;
+
 
 	public Long getId() {
 		return id;
@@ -294,6 +303,23 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 
 	public void setCodElaboracaoNormativaNorma(Integer codElaboracaoNormativaNorma) {
 		this.codElaboracaoNormativaNorma = codElaboracaoNormativaNorma;
+	}
+
+	public List<TagJSON> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<TagJSON> tags) {
+		this.tags = tags;
+	}
+
+	public Set<TagElaboracaoNormativa> getTagsElaboracaoNormativa() {
+		return tagsElaboracaoNormativa;
+	}
+
+	public void setTagsElaboracaoNormativa(
+			Set<TagElaboracaoNormativa> tagsElaboracaoNormativa) {
+		this.tagsElaboracaoNormativa = tagsElaboracaoNormativa;
 	}
 	
 }

@@ -23,6 +23,9 @@ public class Tag implements AbstractEntity {
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "tag")
 	private Set<TagProposicao> listaTagProposicoes = new HashSet<TagProposicao>();
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "tag")
+	private Set<TagElaboracaoNormativa> listaTagElaboracaoNormativa = new HashSet<TagElaboracaoNormativa>();
 
 	@Override
 	public Number getId() {
@@ -70,6 +73,15 @@ public class Tag implements AbstractEntity {
 
 	public void setListaTagProposicoes(Set<TagProposicao> listaTagProposicoes) {
 		this.listaTagProposicoes = listaTagProposicoes;
+	}
+
+	public Set<TagElaboracaoNormativa> getListaTagElaboracaoNormativa() {
+		return listaTagElaboracaoNormativa;
+	}
+
+	public void setListaTagElaboracaoNormativa(
+			Set<TagElaboracaoNormativa> listaTagElaboracaoNormativa) {
+		this.listaTagElaboracaoNormativa = listaTagElaboracaoNormativa;
 	}
 
 }
