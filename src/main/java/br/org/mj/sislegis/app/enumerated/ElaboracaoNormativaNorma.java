@@ -1,23 +1,23 @@
 package br.org.mj.sislegis.app.enumerated;
 
 public enum ElaboracaoNormativaNorma {
-    DECRETO_LEI(0), MEDIDA_PROVISORIA(1);
+    DECRETO_LEI("Decreto Lei"), MEDIDA_PROVISORIA("Medida Provisória");
     
-    private final int value;
+    private final String value;
 
-    private ElaboracaoNormativaNorma(int value) {
+    private ElaboracaoNormativaNorma(String value) {
         this.value = value;
     }
     
-	public int getValue() {
+	public String getValue() {
 		return value;
 	}
 	
 	
-	public static ElaboracaoNormativaNorma get(int id) {
+	public static ElaboracaoNormativaNorma get(String id) {
 		ElaboracaoNormativaNorma elaboracaoNormativaNorma = null; // Default
 		for (ElaboracaoNormativaNorma en : ElaboracaoNormativaNorma.values()) {
-			if (en.getValue()==id) {
+			if (en.name().equals(id)) {
 				elaboracaoNormativaNorma = en;
 				break;
 			}

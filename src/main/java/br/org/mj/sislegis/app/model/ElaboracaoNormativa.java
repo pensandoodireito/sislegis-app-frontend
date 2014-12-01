@@ -18,6 +18,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaIdentificacao;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
@@ -26,9 +29,37 @@ import br.org.mj.sislegis.app.json.TagJSON;
 @Entity
 @XmlRootElement
 @Table(name = "elaboracao_normativa")
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id") 
 public class ElaboracaoNormativa implements AbstractEntity  {
 	
 	private static final long serialVersionUID = 7722617248451501605L;
+	
+	public ElaboracaoNormativa() {
+		// TODO Auto-generated constructor stub
+	}
+	
+
+	public ElaboracaoNormativa(Long id, Date dataRegistro, ElaboracaoNormativaTipo tipo,
+			String nup,
+			ElaboracaoNormativaIdentificacao identificacao,
+			String autor,
+			String coAutor,
+			String origem,
+			String ementa			
+			) {
+		this.id=id;
+		this.dataRegistro=dataRegistro;
+		this.tipo=tipo;
+		this.nup=nup;
+		this.identificacao=identificacao;
+		this.autor=autor;
+		this.coAutor=coAutor;
+		this.origem=origem;
+		this.ementa=ementa;
+	}
+
+	
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,7 +76,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private ElaboracaoNormativaTipo tipo;
 	
 	@Transient
-	private Integer codElaboracaoNormativaTipo;
+	private String codElaboracaoNormativaTipo;
 	
 	@Column
 	private String nup;
@@ -55,7 +86,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private ElaboracaoNormativaIdentificacao identificacao;
 	
 	@Transient
-	private Integer codElaboracaoNormativaIdentificacao;
+	private String codElaboracaoNormativaIdentificacao;
 
 	@Column
 	private String autor;
@@ -96,7 +127,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private Set<TagElaboracaoNormativa> tagsElaboracaoNormativa;
 	
 	@Transient
-	private Integer codElaboracaoNormativaNorma;
+	private String codElaboracaoNormativaNorma;
 	
 	@Column
 	private String comentarioManifestacao;
@@ -280,28 +311,28 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		return true;
 	}
 
-	public Integer getCodElaboracaoNormativaTipo() {
+	public String getCodElaboracaoNormativaTipo() {
 		return codElaboracaoNormativaTipo;
 	}
 
-	public void setCodElaboracaoNormativaTipo(Integer codElaboracaoNormativaTipo) {
+	public void setCodElaboracaoNormativaTipo(String codElaboracaoNormativaTipo) {
 		this.codElaboracaoNormativaTipo = codElaboracaoNormativaTipo;
 	}
 
-	public Integer getCodElaboracaoNormativaIdentificacao() {
+	public String getCodElaboracaoNormativaIdentificacao() {
 		return codElaboracaoNormativaIdentificacao;
 	}
 
 	public void setCodElaboracaoNormativaIdentificacao(
-			Integer codElaboracaoNormativaIdentificacao) {
+			String codElaboracaoNormativaIdentificacao) {
 		this.codElaboracaoNormativaIdentificacao = codElaboracaoNormativaIdentificacao;
 	}
 
-	public Integer getCodElaboracaoNormativaNorma() {
+	public String getCodElaboracaoNormativaNorma() {
 		return codElaboracaoNormativaNorma;
 	}
 
-	public void setCodElaboracaoNormativaNorma(Integer codElaboracaoNormativaNorma) {
+	public void setCodElaboracaoNormativaNorma(String codElaboracaoNormativaNorma) {
 		this.codElaboracaoNormativaNorma = codElaboracaoNormativaNorma;
 	}
 

@@ -13,15 +13,9 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta = [];
 			
 			
-		    $scope.tipos = [
-		                    {name:'Anteprojeto', shade: '0'}, 
-		                    {name:'Preliminar', shade:'1'}
-		                    ];
+		    $scope.tipos = ElaboracaoNormativaResource.tipos();
 		    
-		    $scope.identificacoes = [
-		                             {name:'Exposição de Motivo', shade:'0'},
-		                             {name:'Exposição de Motivo Interministerial', shade:'1'}
-		                             ];
+		    $scope.identificacoes = ElaboracaoNormativaResource.identificacoes();
 		    
 		    // inicio config upload
 			$scope.distribuicaoUploader = new FileUploader( {
@@ -56,10 +50,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    	$scope.distribuicaoUploader.uploadItem(0);
 		    }
 		    
-		    $scope.normas = [
-		                     {name:'Decreto Lei', shade:'0'},
-		                     {name:'Medida Provisória', shade:'1'}
-		                   ];
+		    $scope.normas = ElaboracaoNormativaResource.normas();
 		    
 		    
 			$scope.salvar = function() {

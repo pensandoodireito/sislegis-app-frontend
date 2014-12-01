@@ -1,12 +1,19 @@
 package br.org.mj.sislegis.app.service.ejbs;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaIdentificacao;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
@@ -16,13 +23,17 @@ import br.org.mj.sislegis.app.model.ElaboracaoNormativa;
 import br.org.mj.sislegis.app.model.Tag;
 import br.org.mj.sislegis.app.model.TagElaboracaoNormativa;
 import br.org.mj.sislegis.app.model.TagElaboracaoNormativaPK;
-import br.org.mj.sislegis.app.model.TagProposicao;
-import br.org.mj.sislegis.app.model.TagProposicaoPK;
 import br.org.mj.sislegis.app.service.AbstractPersistence;
 import br.org.mj.sislegis.app.service.ElaboracaoNormativaService;
+import br.org.mj.sislegis.app.service.TagService;
+
+import com.sun.xml.bind.v2.runtime.property.Property;
 
 @Stateless
 public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<ElaboracaoNormativa, Long> implements ElaboracaoNormativaService {
+	
+	@Inject
+	public TagService tagService;
 	
 	@PersistenceContext
     private EntityManager em;
@@ -35,6 +46,22 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 	@Override
 	protected EntityManager getEntityManager() {
 		return em;
+	}
+	
+	
+	public ElaboracaoNormativa buscaElaboracaoNormativaPorId(Long id){
+		ElaboracaoNormativa elaboracaoNormativa = getEntityManager().find(ElaboracaoNormativa.class, id);
+		elaboracaoNormativa.setListaElaboracaoNormativaConsulta(null);
+		elaboracaoNormativa.setTags(new ArrayList<TagJSON>());
+		for(TagElaboracaoNormativa tagElaboracaoNormativa:elaboracaoNormativa.getTagsElaboracaoNormativa()){
+			TagJSON tagJSON = new TagJSON(tagElaboracaoNormativa.getTag().toString());
+			elaboracaoNormativa.getTags().add(tagJSON);
+		}
+		elaboracaoNormativa.setTagsElaboracaoNormativa(null);
+		elaboracaoNormativa.setCodElaboracaoNormativaIdentificacao(Objects.isNull(elaboracaoNormativa.getIdentificacao())?null:elaboracaoNormativa.getIdentificacao().name());
+		elaboracaoNormativa.setCodElaboracaoNormativaNorma(Objects.isNull(elaboracaoNormativa.getElaboracaoNormativaNorma())?null:elaboracaoNormativa.getElaboracaoNormativaNorma().name());
+		elaboracaoNormativa.setCodElaboracaoNormativaTipo(Objects.isNull(elaboracaoNormativa.getTipo())?null:elaboracaoNormativa.getTipo().name());
+		return elaboracaoNormativa;
 	}
 
 	@Override
@@ -68,6 +95,30 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 			tagsElaboracaoNormativa.add(tagElaboracaoNormativa);
 		}
 		return tagsElaboracaoNormativa;
+	}
+	
+	
+	public List<ElaboracaoNormativa> listarTodos(){
+		
+		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+		CriteriaQuery<ElaboracaoNormativa> cq = cb.createQuery(ElaboracaoNormativa.class);
+		Root<ElaboracaoNormativa> en = cq.from(ElaboracaoNormativa.class);
+		cq.select(cb.construct(ElaboracaoNormativa.class, 
+				en.get("id"), 
+				en.get("dataRegistro"), 
+				en.get("tipo"),
+				en.get("nup"),
+				en.get("identificacao"),
+				en.get("autor"),
+				en.get("coAutor"),
+				en.get("origem"),
+				en.get("ementa")
+				));
+		Query query = getEntityManager().createQuery(cq);
+		@SuppressWarnings("unchecked")
+		List<ElaboracaoNormativa> result = query.getResultList();
+		
+		return result;
 	}
 
 }

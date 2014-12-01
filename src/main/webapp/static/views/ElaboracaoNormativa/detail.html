@@ -45,6 +45,7 @@
               <div class="form-group">
                   <label for="">Identificação</label>
                   <select ng-model="elaboracaoNormativa.codElaboracaoNormativaIdentificacao" ng-options="identificacao.shade as identificacao.name for identificacao in identificacoes" class="form-control"></select>
+              		
               </div>
           </div>
     	<div class="col-md-3">
@@ -61,7 +62,8 @@
                   <input type="text" class="form-control" ng-model="elaboracaoNormativa.autor">
               </div>
           </div>
-          <div class="col-md-3">
+          
+          <div class="col-md-3" ng-show="elaboracaoNormativa.codElaboracaoNormativaIdentificacao == 1">
               <div class="form-group">
                   <label for="">Co-Autor</label>
                   <input type="text" class="form-control" ng-model="elaboracaoNormativa.coAutor">
