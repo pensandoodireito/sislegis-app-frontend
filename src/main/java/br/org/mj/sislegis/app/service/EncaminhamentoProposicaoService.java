@@ -9,6 +9,7 @@ import br.org.mj.sislegis.app.model.EncaminhamentoProposicao;
 @Local
 public interface EncaminhamentoProposicaoService extends Service<EncaminhamentoProposicao> {
 
+	EncaminhamentoProposicao salvarEncaminhamentoProposicao(EncaminhamentoProposicao encaminhamentoProposicao);
 	List<EncaminhamentoProposicao> findByProposicao(Long id);
 
 }
