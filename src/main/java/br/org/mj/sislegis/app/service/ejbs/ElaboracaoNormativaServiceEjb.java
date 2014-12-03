@@ -51,25 +51,20 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 	
 	public ElaboracaoNormativa buscaElaboracaoNormativaPorId(Long id){
 		ElaboracaoNormativa elaboracaoNormativa = getEntityManager().find(ElaboracaoNormativa.class, id);
-		elaboracaoNormativa.setListaElaboracaoNormativaConsulta(null);
+		elaboracaoNormativa.getListaElaboracaoNormativaConsulta().size();
+		//elaboracaoNormativa.setListaElaboracaoNormativaConsulta(null);
 		elaboracaoNormativa.setTags(new ArrayList<TagJSON>());
 		for(TagElaboracaoNormativa tagElaboracaoNormativa:elaboracaoNormativa.getTagsElaboracaoNormativa()){
 			TagJSON tagJSON = new TagJSON(tagElaboracaoNormativa.getTag().toString());
 			elaboracaoNormativa.getTags().add(tagJSON);
 		}
 		elaboracaoNormativa.setTagsElaboracaoNormativa(null);
-		elaboracaoNormativa.setCodElaboracaoNormativaIdentificacao(Objects.isNull(elaboracaoNormativa.getIdentificacao())?null:elaboracaoNormativa.getIdentificacao().name());
-		elaboracaoNormativa.setCodElaboracaoNormativaNorma(Objects.isNull(elaboracaoNormativa.getElaboracaoNormativaNorma())?null:elaboracaoNormativa.getElaboracaoNormativaNorma().name());
-		elaboracaoNormativa.setCodElaboracaoNormativaTipo(Objects.isNull(elaboracaoNormativa.getTipo())?null:elaboracaoNormativa.getTipo().name());
 		return elaboracaoNormativa;
 	}
 
 	@Override
 	public void salvar(ElaboracaoNormativa elaboracaoNormativa) {
 		// TODO Auto-generated method stub
-		elaboracaoNormativa.setTipo(Objects.isNull(elaboracaoNormativa.getCodElaboracaoNormativaTipo())?null:ElaboracaoNormativaTipo.get(elaboracaoNormativa.getCodElaboracaoNormativaTipo()));
-		elaboracaoNormativa.setIdentificacao(Objects.isNull(elaboracaoNormativa.getCodElaboracaoNormativaIdentificacao())?null:ElaboracaoNormativaIdentificacao.get(elaboracaoNormativa.getCodElaboracaoNormativaIdentificacao()));
-		elaboracaoNormativa.setElaboracaoNormativaNorma(Objects.isNull(elaboracaoNormativa.getCodElaboracaoNormativaNorma())?null:ElaboracaoNormativaNorma.get(elaboracaoNormativa.getCodElaboracaoNormativaNorma()));
 		if(!Objects.isNull(elaboracaoNormativa.getEquipe()))
 			elaboracaoNormativa.getEquipe().setListaEquipeUsuario(null);
 		elaboracaoNormativa.setTagsElaboracaoNormativa(populaTagsElaboracaoNormativa(elaboracaoNormativa));

@@ -75,9 +75,6 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaTipo tipo;
 	
-	@Transient
-	private String codElaboracaoNormativaTipo;
-	
 	@Column
 	private String nup;
 	
@@ -85,9 +82,6 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaIdentificacao identificacao;
 	
-	@Transient
-	private String codElaboracaoNormativaIdentificacao;
-
 	@Column
 	private String autor;
 	
@@ -125,9 +119,6 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "elaboracaoNormativa")
 	private Set<TagElaboracaoNormativa> tagsElaboracaoNormativa;
-	
-	@Transient
-	private String codElaboracaoNormativaNorma;
 	
 	@Column
 	private String comentarioManifestacao;
@@ -311,30 +302,6 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		return true;
 	}
 
-	public String getCodElaboracaoNormativaTipo() {
-		return codElaboracaoNormativaTipo;
-	}
-
-	public void setCodElaboracaoNormativaTipo(String codElaboracaoNormativaTipo) {
-		this.codElaboracaoNormativaTipo = codElaboracaoNormativaTipo;
-	}
-
-	public String getCodElaboracaoNormativaIdentificacao() {
-		return codElaboracaoNormativaIdentificacao;
-	}
-
-	public void setCodElaboracaoNormativaIdentificacao(
-			String codElaboracaoNormativaIdentificacao) {
-		this.codElaboracaoNormativaIdentificacao = codElaboracaoNormativaIdentificacao;
-	}
-
-	public String getCodElaboracaoNormativaNorma() {
-		return codElaboracaoNormativaNorma;
-	}
-
-	public void setCodElaboracaoNormativaNorma(String codElaboracaoNormativaNorma) {
-		this.codElaboracaoNormativaNorma = codElaboracaoNormativaNorma;
-	}
 
 	public List<TagJSON> getTags() {
 		return tags;

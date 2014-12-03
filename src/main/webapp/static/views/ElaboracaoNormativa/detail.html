@@ -38,13 +38,13 @@
           <div class="col-md-3">
               <div class="form-group">
                   <label for="">Tipo:</label>
-			<select ng-model="elaboracaoNormativa.codElaboracaoNormativaTipo" ng-options="tipo.shade as tipo.name for tipo in tipos" class="form-control"></select>
+			<select ng-model="elaboracaoNormativa.tipo" ng-options="tipo.shade as tipo.name for tipo in tipos" class="form-control"></select>
               </div>
           </div>
           <div class="col-md-3">
               <div class="form-group">
                   <label for="">Identificação</label>
-                  <select ng-model="elaboracaoNormativa.codElaboracaoNormativaIdentificacao" ng-options="identificacao.shade as identificacao.name for identificacao in identificacoes" class="form-control"></select>
+                  <select ng-model="elaboracaoNormativa.identificacao" ng-options="identificacao.shade as identificacao.name for identificacao in identificacoes" class="form-control"></select>
               		
               </div>
           </div>
@@ -184,7 +184,7 @@
          <div class="col-md-4">
              <div class="form-group">
                  <label for="">Norma Gerada:</label>
-                 <select class="form-control" ng-model="elaboracaoNormativa.codElaboracaoNormativaNorma" ng-options="norma.shade as norma.name for norma in normas"></select>
+                 <select class="form-control" ng-model="elaboracaoNormativa.elaboracaoNormativaNorma" ng-options="norma.shade as norma.name for norma in normas"></select>
              </div>
          </div>
 		<div class="col-md-4">

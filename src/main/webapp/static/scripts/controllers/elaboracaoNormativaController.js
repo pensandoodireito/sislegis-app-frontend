@@ -47,7 +47,10 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    };
 		    
 		    $scope.adicionarElaboracaoNormativaConsulta = function(){
-		    	$scope.distribuicaoUploader.uploadItem(0);
+		    	//TODO: Verificar erro quando não é adicionado nenhum arquivo 
+		    	//$scope.distribuicaoUploader.uploadItem(0);
+		    	$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta.push($scope.elaboracaoNormativa.elaboracaoNormativaConsulta);
+		    	$scope.elaboracaoNormativa.elaboracaoNormativaConsulta = null;
 		    }
 		    
 		    $scope.normas = ElaboracaoNormativaResource.normas();
