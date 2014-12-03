@@ -18,7 +18,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
+import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaIdentificacao;
+import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
+import br.org.mj.sislegis.app.json.ComboJSON;
 import br.org.mj.sislegis.app.json.TipoElaboracaoNormativaJSON;
 import br.org.mj.sislegis.app.model.ElaboracaoNormativa;
 import br.org.mj.sislegis.app.service.ElaboracaoNormativaService;
@@ -57,7 +60,8 @@ public class ElaboracaoNormativaEndpoint {
 	@Path("/{id:[0-9][0-9]*}")
 	@Produces("application/json")
 	public Response findById(@PathParam("id") Long id) {
-		return Response.ok(service.findById(id)).build();
+		ElaboracaoNormativa elaboracaoNormativa = elaboracaoNormativaService.buscaElaboracaoNormativaPorId(id);
+		return Response.ok(elaboracaoNormativa).build();
 	}
 
 	@GET
@@ -65,23 +69,45 @@ public class ElaboracaoNormativaEndpoint {
 	public List<ElaboracaoNormativa> listAll(
 			@QueryParam("start") Integer startPosition,
 			@QueryParam("max") Integer maxResult) {
-		return service.listAll();
+		return elaboracaoNormativaService.listarTodos();
 	}
 	
 	@GET
 	@Path("/tipos")
 	@Produces("application/json")
-	public List<TipoElaboracaoNormativaJSON> tipos() {
-		List<TipoElaboracaoNormativaJSON> lista = new ArrayList<TipoElaboracaoNormativaJSON>();
+	public List<ComboJSON<ElaboracaoNormativaTipo>> tipos() {
+		List<ComboJSON<ElaboracaoNormativaTipo>> lista = new ArrayList<ComboJSON<ElaboracaoNormativaTipo>>();
 		for(ElaboracaoNormativaTipo elaboracaoNormativaTipo:ElaboracaoNormativaTipo.values()){
-			TipoElaboracaoNormativaJSON tipoElaboracaoNormativaJSON = new TipoElaboracaoNormativaJSON();
-			tipoElaboracaoNormativaJSON.setId(elaboracaoNormativaTipo.getValue());
-			tipoElaboracaoNormativaJSON.setDescricao(elaboracaoNormativaTipo.name());
-			lista.add(tipoElaboracaoNormativaJSON);
+			lista.add(new ComboJSON<ElaboracaoNormativaTipo>(elaboracaoNormativaTipo.name(), elaboracaoNormativaTipo.getValue()));
 		}
 		return lista;
 	}
 
+	@GET
+	@Path("/identificacoes")
+	@Produces("application/json")
+	public List<ComboJSON<ElaboracaoNormativaIdentificacao>> identificacoes() {
+		List<ComboJSON<ElaboracaoNormativaIdentificacao>> lista = new ArrayList<ComboJSON<ElaboracaoNormativaIdentificacao>>();
+		for(ElaboracaoNormativaIdentificacao elaboracaoNormativaIdentificacao:ElaboracaoNormativaIdentificacao.values()){
+			lista.add(new ComboJSON<ElaboracaoNormativaIdentificacao>(elaboracaoNormativaIdentificacao.name(), elaboracaoNormativaIdentificacao.getValue()));
+		}
+		return lista;
+	}
+	
+	
+	@GET
+	@Path("/normas")
+	@Produces("application/json")
+	public List<ComboJSON<ElaboracaoNormativaNorma>> normas() {
+		List<ComboJSON<ElaboracaoNormativaNorma>> lista = new ArrayList<ComboJSON<ElaboracaoNormativaNorma>>();
+		for(ElaboracaoNormativaNorma elaboracaoNormativaNorma:ElaboracaoNormativaNorma.values()){
+			lista.add(new ComboJSON<ElaboracaoNormativaNorma>(elaboracaoNormativaNorma.name(), elaboracaoNormativaNorma.getValue()));
+		}
+		return lista;
+	}
+	
+	
+	
 	@PUT
 	@Path("/{id:[0-9][0-9]*}")
 	@Consumes("application/json")

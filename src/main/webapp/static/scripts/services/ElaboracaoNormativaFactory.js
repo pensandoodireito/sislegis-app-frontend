@@ -19,6 +19,16 @@ angular.module('sislegisapp').factory(
 							url : "../rest/elaboracaonormativa/tipos",
 							method : 'GET',
 							isArray : true
+						},
+						'identificacoes' : {
+							url : "../rest/elaboracaonormativa/identificacoes",
+							method : 'GET',
+							isArray : true
+						},
+						'normas' : {
+							url : "../rest/elaboracaonormativa/normas",
+							method : 'GET',
+							isArray : true
 						}
 					});
 			return resource;

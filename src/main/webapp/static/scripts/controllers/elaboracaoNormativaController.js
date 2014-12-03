@@ -1,23 +1,21 @@
 angular.module('sislegisapp').controller('ElaboracaoNormativaController',
-		function($scope, $http, $routeParams, $location, $locale, ElaboracaoNormativaResource, EquipeResource, FileUploader) {
+		function($scope, $http, $routeParams, $location, $locale, ElaboracaoNormativaResource, EquipeResource, FileUploader, TagResource) {
 			var self = this;
 			$scope.disabled = false;
 		    $scope.$location = $location;
 			$scope.elaboracaoNormativa = $scope.elaboracaoNormativa || {};//new ElaboracaoNormativaResource();
 			$scope.equipes = EquipeResource.queryAll();
 			
+		    $scope.loadTags = function(query) {
+		    	return TagResource.listarTodos().$promise;
+		    }; 
+			
 			$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta = [];
 			
 			
-		    $scope.tipos = [
-		                    {name:'Anteprojeto', shade: '0'}, 
-		                    {name:'Preliminar', shade:'1'}
-		                    ];
+		    $scope.tipos = ElaboracaoNormativaResource.tipos();
 		    
-		    $scope.identificacoes = [
-		                             {name:'Exposição de Motivo', shade:'0'},
-		                             {name:'Exposição de Motivo Interministerial', shade:'1'}
-		                             ];
+		    $scope.identificacoes = ElaboracaoNormativaResource.identificacoes();
 		    
 		    // inicio config upload
 			$scope.distribuicaoUploader = new FileUploader( {
@@ -49,13 +47,13 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    };
 		    
 		    $scope.adicionarElaboracaoNormativaConsulta = function(){
-		    	$scope.distribuicaoUploader.uploadItem(0);
+		    	//TODO: Verificar erro quando não é adicionado nenhum arquivo 
+		    	//$scope.distribuicaoUploader.uploadItem(0);
+		    	$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta.push($scope.elaboracaoNormativa.elaboracaoNormativaConsulta);
+		    	$scope.elaboracaoNormativa.elaboracaoNormativaConsulta = null;
 		    }
 		    
-		    $scope.normas = [
-		                     {name:'Decreto Lei', shade:'0'},
-		                     {name:'Medida Provisória', shade:'1'}
-		                   ];
+		    $scope.normas = ElaboracaoNormativaResource.normas();
 		    
 		    
 			$scope.salvar = function() {
@@ -123,6 +121,6 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    
 		    $scope.setCalendar();			
 	
-
+		    $scope.selected = 'dadosPreliminares';
 
 		});
