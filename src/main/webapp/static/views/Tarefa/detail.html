@@ -1,0 +1,47 @@
+<div class="row">
+	<div class="col-sm-4">
+		<div class="panel panel-default">
+			<div class="panel-heading clearfix">
+				<div class="pull-left">Minhas Tarefas</div>
+			</div>
+
+			<div class="row pt-sm pb-sm">
+				<div class="col-xs-5 text-right">Filtros:</div>
+				    <div class="row">
+				        <div class="col-md-6">
+				            <p class="input-group">
+				              
+				            </p>
+				        </div>
+				    </div>
+			</div>
+		
+			<div class="list-group rol-vert height-full" ng-repeat="tarefa in listaTarefas">
+
+					<a href="javascript:;" class="list-group-item" ng-click="getTarefa(tarefa.id)">
+					<h4 class="list-group-item-heading">{{tarefa.tipoTarefa}}</h4>
+					<div class="list-group-item-text">
+						<p>{{tarefa.usuario.nome}}</p>
+						<p>
+							<strong>Data do cadastro:</strong>{{tarefa.data}}
+						</p>
+						<p>
+							<strong>Finalizada? </strong>{{tarefa.isFinalizada}}
+						</p>
+					</div>
+				</a>
+			</div>
+			<!-- /item -->
+
+		</div>
+	</div>
+	<div class="col-sm-8">
+		<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+		<div class="panel panel-default ">
+			<div class="panel-heading">Detalhamento da Tarefa {{tarefa.id}}</div>
+				<div ng-show="detalhamentoTarefa">
+
+				</div>
+		</div>
+	</div>
+</div>
