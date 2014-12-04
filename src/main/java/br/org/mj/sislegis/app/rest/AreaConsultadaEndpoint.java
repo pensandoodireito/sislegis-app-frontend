@@ -16,23 +16,20 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import br.org.mj.sislegis.app.model.Posicionamento;
+import br.org.mj.sislegis.app.model.AreaConsultada;
 import br.org.mj.sislegis.app.service.Service;
 
-
-@Path("/posicionamentos")
-public class PosicionamentoEndpoint {
-	
+@Path("/areaconsultadas")
+public class AreaConsultadaEndpoint
+{
 	@Inject
-	private Service<Posicionamento> service;
+	private Service<AreaConsultada> service;
 
 	@POST
 	@Consumes("application/json")
-	public Response create(Posicionamento entity) {
+	public Response create(AreaConsultada entity) {
 		service.save(entity);
-		return Response.created(
-				UriBuilder.fromResource(PosicionamentoEndpoint.class)
-						.path(String.valueOf(entity.getId())).build()).build();
+		return Response.created(UriBuilder.fromResource(AreaConsultadaEndpoint.class).path(String.valueOf(entity.getId())).build()).build();
 	}
 
 	@DELETE
@@ -51,21 +48,25 @@ public class PosicionamentoEndpoint {
 
 	@GET
 	@Produces("application/json")
-	public List<Posicionamento> listAll(
-			@QueryParam("start") Integer startPosition,
-			@QueryParam("max") Integer maxResult) {
+	public List<AreaConsultada> listAll(@QueryParam("start") Integer startPosition, @QueryParam("max") Integer maxResult) {
 		return service.listAll();
+	}
+
+	@GET
+	@Path("/find{descricao:.*}")
+	@Produces("application/json")
+	public Response findByDescricao(@QueryParam("descricao") String descricao) {
+		return Response.ok(service.findByProperty("descricao", descricao, "ASC")).build();
 	}
 
 	@PUT
 	@Path("/{id:[0-9][0-9]*}")
 	@Consumes("application/json")
-	public Response update(Posicionamento entity) {
+	public Response update(AreaConsultada entity) {
 		try {
 			entity = service.save(entity);
 		} catch (OptimisticLockException e) {
-			return Response.status(Response.Status.CONFLICT)
-					.entity(e.getEntity()).build();
+			return Response.status(Response.Status.CONFLICT).entity(e.getEntity()).build();
 		}
 
 		return Response.noContent().build();

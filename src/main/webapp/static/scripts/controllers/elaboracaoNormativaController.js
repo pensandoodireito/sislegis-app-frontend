@@ -101,6 +101,44 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    if (isEditMode()) {
 		    	$scope.get();
 		    }
+		    
+
+			$scope.getUsuarios = function(val) {
+			    return $http.get('../rest/usuarios/find', {
+			      params: {
+			        nome: val
+			      }
+			    }).then(function(response){
+			      return response.data.map(function(item){
+			        return item;
+			      });
+			    });
+			  };
+
+			$scope.getOrigemElaboracaoNormativas = function(val) {
+			    return $http.get('../rest/origemelaboracaonormativas/find', {
+			      params: {
+			        descricao: val
+			      }
+			    }).then(function(response){
+			      return response.data.map(function(item){
+			        return item;
+			      });
+			    });
+			  };
+
+			$scope.getAreaConsultadas = function(val) {
+			    return $http.get('../rest/areaconsultadas/find', {
+			      params: {
+			        descricao: val
+			      }
+			    }).then(function(response){
+			      return response.data.map(function(item){
+			        return item;
+			      });
+			    });
+			  };
+
 
 		    // CALENDARIO
 		    $scope.setCalendar = function() {
