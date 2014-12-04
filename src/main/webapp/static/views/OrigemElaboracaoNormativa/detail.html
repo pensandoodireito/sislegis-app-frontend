@@ -1,0 +1,25 @@
+<header ng-switch on="$location.path().indexOf('/OrigemElaboracaoNormativas/new') > -1">
+    <h3 ng-switch-when="true">Create a new OrigemElaboracaoNormativa</h3>
+    <h3 ng-switch-when="false">View or edit OrigemElaboracaoNormativa</h3>
+</header>
+<form id="OrigemElaboracaoNormativaForm" name="OrigemElaboracaoNormativaForm" class="form-horizontal" role="form">
+    <div ng-show="displayError" class="alert alert-danger">
+        <strong>Error!</strong> Something broke. Retry, or cancel and start afresh.
+    </div>
+    
+    <div class="form-group" ng-class="{'has-error': OrigemElaboracaoNormativaForm.descricao.$invalid}">
+        <label for="descricao" class="col-sm-2 control-label">Descricao</label>
+        <div id="descricaoControls" class="col-sm-10">
+            <input id="descricao" name="descricao" type="text" class="form-control" ng-model="origemElaboracaoNormativa.descricao" placeholder="Enter the OrigemElaboracaoNormativa Descricao"></input>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button id="saveOrigemElaboracaoNormativa" name="saveOrigemElaboracaoNormativa" class="btn btn-primary" ng-disabled="isClean() || OrigemElaboracaoNormativaForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Save</button>
+            <button id="cancel" name="cancel" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancel</button>
+            <button id="deleteOrigemElaboracaoNormativa" name="deleteOrigemElaboracaoNormativa" class="btn btn-danger" ng-show="origemElaboracaoNormativa.id" ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+        </div>
+    </div>
+</form>
