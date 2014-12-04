@@ -2,7 +2,6 @@ package br.org.mj.sislegis.app.rest;
 
 import java.util.List;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.OptimisticLockException;
 import javax.ws.rs.Consumes;

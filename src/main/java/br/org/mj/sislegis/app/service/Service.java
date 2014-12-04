@@ -11,6 +11,7 @@ public interface Service<T> {
 	public List<T> listAll();
 	public T save(T entity);
 	public T findById(Long id);
+	public List<T> findByProperty(String property, Object value, String orderBy);
 	public void deleteById(Long id);
 	
 }
