@@ -19,7 +19,7 @@ public class AreaConsultada implements AbstractEntity
    @Column(name = "id", updatable = false, nullable = false)
    private Long id;
 
-   @Column
+   @Column(unique=true)
    private String descricao;
 
    public Long getId()
