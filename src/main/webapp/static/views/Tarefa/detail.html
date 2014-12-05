@@ -22,7 +22,7 @@
 					<h4 class="list-group-item-heading">{{tarefa.tipoTarefa}} - {{tarefa.encaminhamentoProposicao.encaminhamento.nome}}</h4>
 					<div class="list-group-item-text" >
 						<p>
-							<strong>Data do cadastro: </strong>{{tarefa.data | date:'dd/MM/yyyy'}}
+							<strong>Data limite da tarefa: </strong>{{tarefa.encaminhamentoProposicao.dataHoraLimite | date:'dd/MM/yyyy'}}
 						</p>
 						<p>
 							<strong>Status da tarefa: </strong>{{tarefa.finalizada === true ? 'Finalizada' : 'Não-finalizada'}}
@@ -40,7 +40,11 @@
 				<div ng-show="detalhamentoTarefa">
 					<div class="panel-body rol-vert ">
 						<p class="fontsize-sm">
-							<strong>Data do cadastro: </strong>
+							<strong>Data limite da tarefa: </strong>
+							{{tarefa.encaminhamentoProposicao.dataHoraLimite | date:'dd/MM/yyyy'}}
+						</p>
+						<p class="fontsize-sm">
+							<strong>Data de registro da tarefa: </strong>
 							{{tarefa.data | date:'dd/MM/yyyy'}}
 						</p>
 						<p class="fontsize-sm">
