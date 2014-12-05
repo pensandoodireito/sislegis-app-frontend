@@ -58,15 +58,7 @@ public class TarefaEndpoint {
 			@QueryParam("start") Integer startPosition,
 			@QueryParam("max") Integer maxResult) {
 		
-		List<Tarefa> listAll = service.listAll();
-		
-		for (Tarefa tarefa : listAll) {
-			if (tarefa.getEncaminhamentoProposicao() != null) {
-				tarefa.getEncaminhamentoProposicao().getProposicao();
-			}
-		}
-		
-		return listAll;
+		return service.listAll();
 	}
 	
 	@GET

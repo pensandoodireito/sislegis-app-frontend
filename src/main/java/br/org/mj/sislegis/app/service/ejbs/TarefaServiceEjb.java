@@ -36,9 +36,7 @@ public class TarefaServiceEjb extends AbstractPersistence<Tarefa, Long> implemen
 		// Carrega para evitar lazy exception
 		for (Tarefa tarefa : resultList) {
 			if (tarefa.getEncaminhamentoProposicao() != null) {
-				// TODO: carregar a proposicao pelo ID
-				tarefa.getEncaminhamentoProposicao().getProposicao().getId();
-				//tarefa.getEncaminhamentoProposicao().setProposicao(proposicaoService.findById(proposicaoId));
+				tarefa.getEncaminhamentoProposicao().getProposicao();
 			}
 		}
 		return resultList;
