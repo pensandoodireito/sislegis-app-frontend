@@ -57,6 +57,7 @@ public class TarefaEndpoint {
 	public List<Tarefa> listAll(
 			@QueryParam("start") Integer startPosition,
 			@QueryParam("max") Integer maxResult) {
+		
 		return service.listAll();
 	}
 	

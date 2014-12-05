@@ -36,6 +36,7 @@ angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap','
 	    .when('/ElaboracaoNormativa/edit/:ElaboracaoNormativaId',{templateUrl:'views/ElaboracaoNormativa/detail.html',controller:'ElaboracaoNormativaController'})
 	    
 	    .when('/Upload',{templateUrl:'views/Upload/upload.html',controller:'UploadController'})
+	    .when('/Tarefas',{templateUrl:'views/Tarefa/detail.html', controller:'TarefaController'})
 	    .when('/Tarefas/edit/:TarefaId',{templateUrl:'views/Tarefa/detail.html', controller:'TarefaController'})
 	    .otherwise({
 	    	redirectTo: '/Reuniaos/gerenciar'
