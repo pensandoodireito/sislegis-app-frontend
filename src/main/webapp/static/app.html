@@ -41,27 +41,33 @@
                     <li class="dropdown tasks-menu" ng-controller="TarefaController">
                         <a href="#" class="dropdown-toggle">
                             <i class="fa fa-tasks"></i>
-                            <span class="label label-danger">{{listaTarefas.length}}</span>
+                            <span class="label label-danger">{{(listaTarefas | filter:{finalizada:false}).length}}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="header">Tarefas pendentes</li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">
-                                    <li ng-repeat="tarefa in listaTarefas | limitTo: 5">
+                                    <li ng-repeat="tarefa in listaTarefas | filter: {finalizada:false} | orderBy : 'encaminhamentoProposicao.dataHoraLimite' | limitTo: 5">
                                         <!-- Task item -->
                                         <a href="#/Tarefas/edit/{{tarefa.id}}">
                                             <h3>
                                             	<p>
-                                            		Tipo: {{tarefa.tipoTarefa}}
+                                            		{{tarefa.tipoTarefa}}
                                             	</p>
                                             	<p>
-                                                	Gerada em: {{tarefa.data | date: 'dd/MM/yyyy'}}
+                                            		{{tarefa.encaminhamentoProposicao.encaminhamento.nome}}
+                                            	</p>	
+                                            	<p>
+                                                	Data limite: {{tarefa.encaminhamentoProposicao.dataHoraLimite | date: 'dd/MM/yyyy'}}
                                                 </p>
-                                                <small class="pull-right">10%</small>
+                                                <small class="pull-right">{{tarefa.finalizada === true ? '100%' : '10%'}}</small>
                                             </h3>
                                             <div class="progress xs">
-                                                <div class="progress-bar progress-bar-red" style="width: 10%" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+												<div class="progress-bar progress-bar-green" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" ng-show="{{tarefa.finalizada}}">
+                                                    <span class="sr-only">100%</span>
+                                                </div>
+                                                <div class="progress-bar progress-bar-red" style="width: 10%" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" ng-show="{{!tarefa.finalizada}}">
                                                     <span class="sr-only">10%</span>
                                                 </div>
                                             </div>
@@ -70,7 +76,7 @@
                                 </ul>
                             </li>
                             <li class="footer">
-                                <a href="#">Todas as tarefas </a>
+                                <a href="#/Tarefas">Todas as tarefas </a>
                             </li>
                         </ul>
                     </li>
@@ -141,8 +147,6 @@
                         </ul>
                     </li>                    
                 </ul>
-                
-                
 
                 <form class="navbar-form navbar-right" role="search">
                     <div class="form-group">
@@ -188,7 +192,6 @@
     <script src="scripts/directives/datetimepicker.js"></script>
     <script src="scripts/filters/startFromFilter.js"></script>
     <script src="scripts/filters/genericSearchFilter.js"></script>
-    
     
     <script src="lib/ng-tags-input/ng-tags-input.min.js"></script>     
     
