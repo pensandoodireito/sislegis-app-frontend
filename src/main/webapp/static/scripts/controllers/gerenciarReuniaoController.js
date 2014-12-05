@@ -10,6 +10,7 @@ angular.module('sislegisapp').controller(
     
     $scope.reuniao = new ReuniaoResource();
     $scope.reuniaoProposicao = new ReuniaoProposicaoResource();
+    $scope.posicionamentos = PosicionamentoResource.queryAll();
     
     $scope.detalhamentoProposicao = false;
     
@@ -34,6 +35,22 @@ angular.module('sislegisapp').controller(
     	}, 3000); // maybe '}, 3000, false);' to avoid calling apply
     }
     
+    $scope.getPosicionamentos = function(current) {
+        var copy = $scope.posicionamentos.slice(0);
+        if (current) {
+        	var item = new PosicionamentoResource();
+        	item.nome = current;
+        	copy.unshift(item);
+        }
+        return copy;
+      };
+
+    $scope.onSelectPosicionamentos = function (item) {
+    	item.$save(function(success){
+    		addAlert({type: 'success', msg: 'Registro inserido com sucesso.'});
+    		$scope.posicionamentos.push(item);
+    	});
+    };
     
     $scope.isClean = function() {
         return angular.equals(self.original, $scope.reuniao);
@@ -42,7 +59,6 @@ angular.module('sislegisapp').controller(
     $scope.save = function() {
         var successCallback = function(){
             addAlert({type: 'success', msg: 'Registro atualizado com sucesso.'});
-        	$rootScope.inativeSpinner = false;
         };
         var errorCallback = function() {
         };
@@ -59,6 +75,7 @@ angular.module('sislegisapp').controller(
         var successCallback = function(data){
         	$scope.selectedProposicao = data;
         	$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.selectedProposicao.id});
+        	$scope.detalhamentoProposicao = true;
             $scope.displayError = false;
         };
         var errorCallback = function(error) {
@@ -66,8 +83,6 @@ angular.module('sislegisapp').controller(
         };
         
     	ProposicaoResource.get({ProposicaoId: id}, successCallback, errorCallback);
-    	$scope.posicionamentos = PosicionamentoResource.queryAll();
-    	$scope.detalhamentoProposicao = true;
     }
     
     $scope.removerProposicao = function(id){

@@ -62,7 +62,6 @@
 		</div>
 	</div>
 	<div class="col-sm-8">
-		<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 		<div class="panel panel-default ">
 			<div class="panel-heading">Detalhamento da Proposição</div>
 				<div ng-show="detalhamentoProposicao">
@@ -76,10 +75,14 @@
 						</div>
 					</div>
 					<hr>
+					<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 					<div class="panel-body rol-vert ">
 						<p class="fontsize-sm">
 							<strong>Posicionamento:</strong>
-							<select ng-model="selectedProposicao.posicionamento" ng-options="posicionamento.nome for posicionamento in posicionamentos track by posicionamento.id | orderBy:'nome'" class="form-control"></select>
+							<input type="text" ng-model="selectedProposicao.posicionamento" placeholder="Procurar..."
+								typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" 
+								typeahead-on-select="onSelectPosicionamentos($item)"
+								class="form-control">
 						</p>
 						<p class="fontsize-sm">
 							<strong>Responsável:  </strong>
