@@ -7,5 +7,6 @@ import br.org.mj.sislegis.app.model.Tarefa;
 public interface TarefaService extends Service<Tarefa> {
 	
 	public List<Tarefa> buscarPorUsuario(Long idUsuario);
+	public Tarefa buscarPorEncaminhamentoProposicaoId(Long idEncaminhamentoProposicao);
 	
 }

@@ -39,7 +39,13 @@ public class EncaminhamentoProposicaoServiceEjb extends AbstractPersistence<Enca
 	public EncaminhamentoProposicao salvarEncaminhamentoProposicao(EncaminhamentoProposicao encaminhamentoProposicao) {
 		EncaminhamentoProposicao savedEntity = this.save(encaminhamentoProposicao);
 		
-		// TODO: Verificar se a tarefa ja existe em caso de update
+		// Caso uma tarefa já exista, significa que foi atualizada. Excluímos a antiga antes de atualizar.
+		Tarefa tarefaPorEncaminhamentoProposicaoId = tarefaService.buscarPorEncaminhamentoProposicaoId(savedEntity.getId());
+		if (tarefaPorEncaminhamentoProposicaoId != null) {
+			tarefaService.deleteById(tarefaPorEncaminhamentoProposicaoId.getId());
+		}
+		
+		// Criamos a nova tarefa
 		Tarefa tarefa = new Tarefa();
 		tarefa.setTipoTarefa(TipoTarefa.ENCAMINHAMENTO);
 		tarefa.setData(new Date());
