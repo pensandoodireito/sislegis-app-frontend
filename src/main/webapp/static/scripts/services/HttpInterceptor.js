@@ -3,7 +3,7 @@ angular.module('sislegisapp').factory('HttpInterceptor', function($q) {
 	
 	var showSpinner = function(config){
 		return config && config.url && config.url.search('rest') >= 0 && 
-			config.url.search('/tags') < 0 && config.url.search('/autocomplete') < 0;
+			config.url.search('/tags') < 0 && config.url.search('/find') < 0;
 	}
 	
 	return {
