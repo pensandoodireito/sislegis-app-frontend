@@ -20,12 +20,14 @@ import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
 import br.org.mj.sislegis.app.json.TagJSON;
 import br.org.mj.sislegis.app.model.ElaboracaoNormativa;
+import br.org.mj.sislegis.app.model.ElaboracaoNormativaConsulta;
 import br.org.mj.sislegis.app.model.Tag;
 import br.org.mj.sislegis.app.model.TagElaboracaoNormativa;
 import br.org.mj.sislegis.app.model.TagElaboracaoNormativaPK;
 import br.org.mj.sislegis.app.service.AbstractPersistence;
 import br.org.mj.sislegis.app.service.ElaboracaoNormativaService;
 import br.org.mj.sislegis.app.service.TagService;
+import br.org.mj.sislegis.app.service.UsuarioService;
 
 import com.sun.xml.bind.v2.runtime.property.Property;
 
@@ -34,6 +36,9 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 	
 	@Inject
 	public TagService tagService;
+	
+	@Inject
+	public UsuarioService usuarioService;
 	
 	@PersistenceContext
     private EntityManager em;
@@ -51,14 +56,13 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 	
 	public ElaboracaoNormativa buscaElaboracaoNormativaPorId(Long id){
 		ElaboracaoNormativa elaboracaoNormativa = getEntityManager().find(ElaboracaoNormativa.class, id);
-		elaboracaoNormativa.getListaElaboracaoNormativaConsulta().size();
-		//elaboracaoNormativa.setListaElaboracaoNormativaConsulta(null);
 		elaboracaoNormativa.setTags(new ArrayList<TagJSON>());
 		for(TagElaboracaoNormativa tagElaboracaoNormativa:elaboracaoNormativa.getTagsElaboracaoNormativa()){
 			TagJSON tagJSON = new TagJSON(tagElaboracaoNormativa.getTag().toString());
 			elaboracaoNormativa.getTags().add(tagJSON);
 		}
 		elaboracaoNormativa.setTagsElaboracaoNormativa(null);
+		elaboracaoNormativa.setPareceristas(usuarioService.findByIdEquipe(elaboracaoNormativa.getEquipe().getId()));
 		return elaboracaoNormativa;
 	}
 
@@ -68,6 +72,10 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		if(!Objects.isNull(elaboracaoNormativa.getEquipe()))
 			elaboracaoNormativa.getEquipe().setListaEquipeUsuario(null);
 		elaboracaoNormativa.setTagsElaboracaoNormativa(populaTagsElaboracaoNormativa(elaboracaoNormativa));
+		
+		for(ElaboracaoNormativaConsulta elaboracaoNormativaConsulta:elaboracaoNormativa.getListaElaboracaoNormativaConsulta()){
+			elaboracaoNormativaConsulta.setElaboracaoNormativa(elaboracaoNormativa);
+		}
 		
 		save(elaboracaoNormativa);
 	}

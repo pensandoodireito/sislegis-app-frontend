@@ -1,5 +1,5 @@
 angular.module('sislegisapp').controller('ElaboracaoNormativaController',
-		function($scope, $http, $routeParams, $location, $locale, ElaboracaoNormativaResource, EquipeResource, FileUploader, TagResource) {
+		function($scope, $http, $routeParams, $location, $locale, ElaboracaoNormativaResource, EquipeResource, FileUploader, TagResource, UsuarioResource) {
 			var self = this;
 			$scope.disabled = false;
 		    $scope.$location = $location;
@@ -42,13 +42,14 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    
 		    $scope.selectParecerista = function(){
 		    	console.log($scope.elaboracaoNormativa.equipe);
-		    	$scope.pareceristas = $scope.elaboracaoNormativa.equipe.listaEquipeUsuario;
+		    	$scope.elaboracaoNormativa.pareceristas = UsuarioResource.findByIdEquipe({idEquipe : $scope.elaboracaoNormativa.equipe.id});
 		    	
 		    };
 		    
 		    $scope.adicionarElaboracaoNormativaConsulta = function(){
 		    	//TODO: Verificar erro quando não é adicionado nenhum arquivo 
 		    	//$scope.distribuicaoUploader.uploadItem(0);
+		    	$scope.elaboracaoNormativa.elaboracaoNormativaConsulta.elaboracaoNormativa = $scope.elaboracaoNormativa;
 		    	$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta.push($scope.elaboracaoNormativa.elaboracaoNormativaConsulta);
 		    	$scope.elaboracaoNormativa.elaboracaoNormativaConsulta = null;
 		    }

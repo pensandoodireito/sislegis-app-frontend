@@ -54,6 +54,13 @@ public class UsuarioEndpoint {
 	}
 
 	@GET
+	@Path("/findByIdEquipe")
+	@Produces("application/json")
+	public List<Usuario> findByIdEquipe(@QueryParam("idEquipe") Long id) {
+		return service.findByIdEquipe(id);
+	}
+	
+	@GET
 	@Path("/find{nome:.*}")
 	@Produces("application/json")
 	public Response findByNome(@QueryParam("nome") String nome) {
