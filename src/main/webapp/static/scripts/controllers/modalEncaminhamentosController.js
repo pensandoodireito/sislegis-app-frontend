@@ -1,5 +1,5 @@
 angular.module('sislegisapp').controller('ModalEncaminhamentosController',
-		function($scope, $http, $filter, $routeParams, $location, $modalInstance, proposicao, listaEncaminhamentoProposicao, 
+		function($scope, $http, $filter, $routeParams, $location, $modalInstance, toaster, proposicao, listaEncaminhamentoProposicao, 
 				EncaminhamentoResource, ProposicaoResource, EncaminhamentoProposicaoResource, UsuarioResource, ComentarioResource) {
 
 			var self = this;
@@ -47,7 +47,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 		    	
 		        var successCallback = function(){
 		        	$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
-		        	alert('Encaminhamento atualizado com sucesso');
+		        	toaster.pop('success', 'Encaminhamento atualizado com sucesso');
 		            $scope.displayError = false;
 		        };
 		        var errorCallback = function() {
@@ -76,7 +76,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 					$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.proposicao.id});
 		        	$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
 		        	$scope.encaminhamento = new EncaminhamentoResource();
-		        	alert('Encaminhamento adicionado com sucesso');
+		        	toaster.pop('success', 'Encaminhamento adicionado com sucesso');
 		            $scope.displayError = false;
 		        };
 		        var errorCallback = function() {
