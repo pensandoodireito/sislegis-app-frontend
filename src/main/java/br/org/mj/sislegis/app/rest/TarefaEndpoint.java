@@ -49,7 +49,7 @@ public class TarefaEndpoint {
 	@Path("/{id:[0-9][0-9]*}")
 	@Produces("application/json")
 	public Response findById(@PathParam("id") Long id) {
-		return Response.ok(service.findById(id)).build();
+		return Response.ok(tarefaService.buscarPorId(id)).build();
 	}
 
 	@GET
