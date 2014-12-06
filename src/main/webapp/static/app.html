@@ -8,6 +8,7 @@
     <link href="styles/css/theme-sislegis/sislegis.css" rel="stylesheet" type="text/css" />
     <link href="styles/css/paginas/proposicoes.css" rel="stylesheet" type="text/css" />
     <link href="styles/css/theme-sislegis/core.css" rel="stylesheet" media="screen">
+    <link href="lib/angularjs-toaster/toaster.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="lib/ng-tags-input/ng-tags-input.min.css" />
 </head>
 
@@ -143,6 +144,7 @@
     <!-- /menu principal -->
 
     <div class="container-fluid">
+    	<toaster-container toaster-options="{'time-out': 5000, 'close-button':true, 'animation-class': 'toast-top-center'}"></toaster-container>
     	<div id="main" ng-view></div>
     </div>
 
@@ -164,7 +166,9 @@
     <script src="lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="lib/es5-shim/es5-sham.min.js"></script>
     <script src="lib/angular-file-upload/angular-file-upload.min.js"></script>
-    <script src="lib/angular-ui-utils/ui-utils.min.js"></script>    
+    <script src="lib/angular-ui-utils/ui-utils.min.js"></script>
+    <script src="lib/angular-animate/angular-animate.min.js"></script>    
+    <script src="lib/angularjs-toaster/toaster.js"></script>        
 
     <script src="scripts/app.js"></script>
     <script src="scripts/offcanvas.js"></script>

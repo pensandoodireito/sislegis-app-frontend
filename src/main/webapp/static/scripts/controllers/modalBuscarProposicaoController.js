@@ -2,7 +2,7 @@ angular
 		.module('sislegisapp')
 		.controller(
 				'ModalBuscarProposicaoController',
-				function($scope, $http, $filter, $routeParams, $location,
+				function($scope, $http, $filter, $routeParams, $location, toaster,
 						$modalInstance, ProposicaoResource, reuniao,
 						reuniaoProposicao, listaProposicaoSelecao) {
 					
@@ -99,7 +99,7 @@ angular
 				        	$modalInstance.close($scope.listaProposicaoSelecao);
 				        };
 				        var errorCallback = function() {
-				        	alert('Proposição já adicionada para a Reunião selecionada');
+				        	toaster.pop('info', 'Proposição já adicionada para a Reunião selecionada');
 				        };
 						
 						ProposicaoResource.save($scope.listaProposicaoSelecao,

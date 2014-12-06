@@ -138,5 +138,14 @@ li.tab {
     height: 400px;
 }
 
+/* customizacao do toaster */
+#toast-container > div{
+	width: 500px !important;
+	opacity: none !important;
+	-ms-filter: none !important;
+	filter: none !important;
+}
 
-
+.toast-top-center {
+  top: 95px !important;
+}

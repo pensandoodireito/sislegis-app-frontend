@@ -1,6 +1,6 @@
 angular.module('sislegisapp').controller(
 		'GerenciarReuniaoController',
-		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout,
+		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource,
 				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource) {
     
@@ -19,22 +19,6 @@ angular.module('sislegisapp').controller(
     };     
     
 
-    /**
-     * Alerts
-     */
-    $scope.alerts = [];
-
-    $scope.closeAlert = function(index) {
-      $scope.alerts.splice(index, 1);
-    };
-    
-    var addAlert = function(alert){
-    	$scope.alerts.push(alert);
-    	$timeout(function(){
-    		$scope.alerts.splice($scope.alerts.indexOf(alert), 1);
-    	}, 3000); // maybe '}, 3000, false);' to avoid calling apply
-    }
-    
     $scope.getPosicionamentos = function(current) {
         var copy = $scope.posicionamentos.slice(0);
         if (current) {
@@ -47,7 +31,7 @@ angular.module('sislegisapp').controller(
 
     $scope.onSelectPosicionamentos = function (item) {
     	item.$save(function(success){
-    		addAlert({type: 'success', msg: 'Registro inserido com sucesso.'});
+    		toaster.pop('success', 'Registro inserido com sucesso.');
     		$scope.posicionamentos.push(item);
     	});
     };
@@ -58,7 +42,7 @@ angular.module('sislegisapp').controller(
 
     $scope.save = function() {
         var successCallback = function(){
-            addAlert({type: 'success', msg: 'Registro atualizado com sucesso.'});
+    		toaster.pop('success', 'Registro atualizado com sucesso.');
         };
         var errorCallback = function() {
         };
@@ -66,7 +50,7 @@ angular.module('sislegisapp').controller(
     };
 
     $scope.remove = function() {
-        alert($scope.reuniao.id);
+        toaster.pop('success', 'Registro excluído com sucesso.');
         ReuniaoResource.remove({ReuniaoId:$scope.reuniao.id})
     };
     
@@ -121,7 +105,7 @@ angular.module('sislegisapp').controller(
     		
     		var successCallback = function(){
                 if ($scope.listaReuniaoProposicoes.length == 0) {
-                	alert('Não existem proposições para esta data. Você pode adicionar novas proposições.');
+                    toaster.pop('info', 'Não existem proposições para esta data. Você pode adicionar novas proposições.');
                 }
                 $scope.displayError = false;
             };
@@ -155,7 +139,7 @@ angular.module('sislegisapp').controller(
     $scope.buscarProposicoes = function () {
     	
     	if($scope.reuniao.data == null){
-    		alert('Selecione a data da reunião')
+    		toaster.pop('info', 'Selecione a data da reunião.');
     		return;
     	}
     	
