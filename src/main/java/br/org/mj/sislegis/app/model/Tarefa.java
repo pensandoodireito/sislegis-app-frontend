@@ -42,9 +42,6 @@ public class Tarefa implements AbstractEntity {
 	
 	private boolean isFinalizada;
 	
-	// Quando usuario le a tarefa, nao precisa ser mais notificado
-	private boolean lida;
-
 	@OneToOne(fetch = FetchType.EAGER)
 	private EncaminhamentoProposicao encaminhamentoProposicao;
 
@@ -84,14 +81,6 @@ public class Tarefa implements AbstractEntity {
 
 	public void setFinalizada(boolean isFinalizada) {
 		this.isFinalizada = isFinalizada;
-	}
-
-	public boolean isLida() {
-		return lida;
-	}
-
-	public void setLida(boolean lida) {
-		this.lida = lida;
 	}
 
 	public EncaminhamentoProposicao getEncaminhamentoProposicao() {

@@ -1,5 +1,6 @@
 angular.module('sislegisapp').controller('ElaboracaoNormativaController',
-		function($scope, $http, $routeParams, $location, $locale, ElaboracaoNormativaResource, EquipeResource, FileUploader, TagResource, UsuarioResource) {
+		function($scope, $http, $routeParams, $location, $locale, ElaboracaoNormativaResource, EquipeResource, FileUploader, TagResource,
+				AreaConsultadaResource, OrigemElaboracaoNormativaResource, UsuarioResource) {
 			var self = this;
 			$scope.disabled = false;
 		    $scope.$location = $location;
@@ -102,7 +103,69 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    if (isEditMode()) {
 		    	$scope.get();
 		    }
+		    
 
+			$scope.getUsuarios = function(val) {
+			    return $http.get('../rest/usuarios/find', {
+			      params: {
+			        nome: val
+			      }
+			    }).then(function(response){
+			      return response.data.map(function(item){
+			        return item;
+			      });
+			    });
+			  };
+
+			$scope.getOrigemElaboracaoNormativas = function(val) {
+			    return $http.get('../rest/origemelaboracaonormativas/find', {
+			      params: {
+			        descricao: val
+			      }
+			    }).then(function(response){
+			        if (val) {
+			        	var item = new OrigemElaboracaoNormativaResource();
+			        	item.descricao = val;
+			        	response.data.unshift(item);
+			        }
+		    		return response.data.map(function(item){
+		    			return item;
+		    		});
+			    },function(error){
+			      console.log('Erro ao buscar dados getOrigemElaboracaoNormativas');
+			    });
+			  };
+
+		    $scope.onSelectOrigemElaboracaoNormativas = function (item) {
+		    	item.$save(function(success){
+		    		addAlert({type: 'success', msg: 'Registro inserido com sucesso.'});
+		    	});
+		    };
+				   
+			$scope.getAreaConsultadas = function(val) {
+			    return $http.get('../rest/areaconsultadas/find', {
+			      params: {
+			        descricao: val
+			      }
+			    }).then(function(response){
+			        if (val) {
+			        	var item = new AreaConsultadaResource();
+			        	item.descricao = val;
+			        	response.data.unshift(item);
+			        }
+			      return response.data.map(function(item){
+			        return item;
+			      });
+			    });
+			  };
+
+		    $scope.onSelectAreaConsultadas = function (item) {
+		    	item.$save(function(success){
+		    		addAlert({type: 'success', msg: 'Registro inserido com sucesso.'});
+		    	});
+		    };
+			    
+			  
 		    // CALENDARIO
 		    $scope.setCalendar = function() {
 				$scope.openCalendar = function($event) {

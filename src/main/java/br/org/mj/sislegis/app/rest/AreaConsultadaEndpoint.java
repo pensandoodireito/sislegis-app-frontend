@@ -16,26 +16,20 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import br.org.mj.sislegis.app.model.Tarefa;
+import br.org.mj.sislegis.app.model.AreaConsultada;
 import br.org.mj.sislegis.app.service.Service;
-import br.org.mj.sislegis.app.service.TarefaService;
 
-
-@Path("/tarefas")
-public class TarefaEndpoint {
+@Path("/areaconsultadas")
+public class AreaConsultadaEndpoint
+{
 	@Inject
-	private Service<Tarefa> service;
-	
-	@Inject
-	private TarefaService tarefaService;
+	private Service<AreaConsultada> service;
 
 	@POST
 	@Consumes("application/json")
-	public Response create(Tarefa entity) {
+	public Response create(AreaConsultada entity) {
 		service.save(entity);
-		return Response.created(
-				UriBuilder.fromResource(TarefaEndpoint.class)
-						.path(String.valueOf(entity.getId())).build()).build();
+		return Response.created(UriBuilder.fromResource(AreaConsultadaEndpoint.class).path(String.valueOf(entity.getId())).build()).build();
 	}
 
 	@DELETE
@@ -49,34 +43,30 @@ public class TarefaEndpoint {
 	@Path("/{id:[0-9][0-9]*}")
 	@Produces("application/json")
 	public Response findById(@PathParam("id") Long id) {
-		return Response.ok(tarefaService.buscarPorId(id)).build();
+		return Response.ok(service.findById(id)).build();
 	}
 
 	@GET
 	@Produces("application/json")
-	public List<Tarefa> listAll(
-			@QueryParam("start") Integer startPosition,
-			@QueryParam("max") Integer maxResult) {
-		
+	public List<AreaConsultada> listAll(@QueryParam("start") Integer startPosition, @QueryParam("max") Integer maxResult) {
 		return service.listAll();
 	}
-	
+
 	@GET
-	@Path("/usuario")
+	@Path("/find{descricao:.*}")
 	@Produces("application/json")
-	public List<Tarefa> buscarPorUsuario(@QueryParam("idUsuario") Long idUsuario) {
-		return tarefaService.buscarPorUsuario(idUsuario);
+	public Response findByDescricao(@QueryParam("descricao") String descricao) {
+		return Response.ok(service.findByProperty("descricao", descricao, "ASC")).build();
 	}
 
 	@PUT
 	@Path("/{id:[0-9][0-9]*}")
 	@Consumes("application/json")
-	public Response update(Tarefa entity) {
+	public Response update(AreaConsultada entity) {
 		try {
 			entity = service.save(entity);
 		} catch (OptimisticLockException e) {
-			return Response.status(Response.Status.CONFLICT)
-					.entity(e.getEntity()).build();
+			return Response.status(Response.Status.CONFLICT).entity(e.getEntity()).build();
 		}
 
 		return Response.noContent().build();

@@ -9,17 +9,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @XmlRootElement
-public class Posicionamento implements AbstractEntity {
-	
-	private static final long serialVersionUID = -5843916678553628190L;
+public class OrigemElaboracaoNormativa implements AbstractEntity {
 
+	private static final long serialVersionUID = 3437558309464749280L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", updatable = false, nullable = false)
 	private Long id;
 
 	@Column(unique=true)
-	private String nome;
+	private String descricao;
 
 	public Long getId() {
 		return this.id;
@@ -34,10 +34,10 @@ public class Posicionamento implements AbstractEntity {
 		if (this == obj) {
 			return true;
 		}
-		if (!(obj instanceof Posicionamento)) {
+		if (!(obj instanceof OrigemElaboracaoNormativa)) {
 			return false;
 		}
-		Posicionamento other = (Posicionamento) obj;
+		OrigemElaboracaoNormativa other = (OrigemElaboracaoNormativa) obj;
 		if (id != null) {
 			if (!id.equals(other.id)) {
 				return false;
@@ -54,19 +54,19 @@ public class Posicionamento implements AbstractEntity {
 		return result;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	@Override
 	public String toString() {
 		String result = getClass().getSimpleName() + " ";
-		if (nome != null && !nome.trim().isEmpty())
-			result += "nome: " + nome;
+		if (descricao != null && !descricao.trim().isEmpty())
+			result += "descricao: " + descricao;
 		return result;
 	}
 }

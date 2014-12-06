@@ -59,14 +59,16 @@
     	<div class="col-md-3">
               <div class="form-group">
                   <label for="">Autor</label>
-                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.autor">
+                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.autor" placeholder="Pesquisar..."
+	              			typeahead="item as item.nome for item in getUsuarios($viewValue)" typeahead-editable="false">
               </div>
           </div>
           
           <div class="col-md-3" ng-show="elaboracaoNormativa.identificacao == 'EXPOSICAO_MOTIVOS_INTERMINISTERIAL'">
               <div class="form-group">
                   <label for="">Co-Autor</label>
-                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.coAutor">
+                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.coAutor" placeholder="Pesquisar..."
+	              			typeahead="item as item.nome for item in getUsuarios($viewValue)">
               </div>
           </div>
       </div>
@@ -74,7 +76,9 @@
           <div class="col-md-3">
               <div class="form-group">
                   <label for="">Origem:</label>
-                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.origem">
+                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.origem" placeholder="Pesquisar..."
+	              			typeahead="item as item.descricao for item in getOrigemElaboracaoNormativas($viewValue)"
+	              			typeahead-on-select="onSelectOrigemElaboracaoNormativas($item)">
               </div>
           </div>
           <div class="col-md-3">
@@ -127,7 +131,9 @@
                         <div class="row">
                             <div class="form-group">
                                 <label for="">Área consultada:</label>
-                                <input type="text" ng-model="elaboracaoNormativa.elaboracaoNormativaConsulta.area" class="form-control">
+                                <input type="text" ng-model="elaboracaoNormativa.elaboracaoNormativaConsulta.areaConsultada" class="form-control" placeholder="Pesquisar..."
+	              					typeahead="item as item.descricao for item in getAreaConsultadas($viewValue)"
+	              					typeahead-on-select="onSelectAreaConsultadas($item)">
                             </div>
                         </div>
                         <div class="row">
@@ -158,7 +164,7 @@
                         <li class="list-group-item">
                             <button type="button" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Excluir</span>
                             </button>
-                            <h5>{{elaboracaoNormativaConsulta.area}}</h5>
+                            <h5>{{elaboracaoNormativaConsulta.areaConsultada.descricao}}</h5>
                             <p>{{elaboracaoNormativaConsulta.comentario}}<p>
                             <p>Arquivo: <a href="{{elaboracaoNormativaConsulta.arquivo}}">{{elaboracaoNormativaConsulta.arquivo}}</a><p>
                         </li>

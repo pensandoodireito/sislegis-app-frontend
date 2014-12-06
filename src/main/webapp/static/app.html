@@ -37,43 +37,28 @@
         <div class="navbar-top navbar-static-top clearfix" role="navigation">
             <div class="navbar-right">
                 <ul class="nav navbar-nav">
-                    <!-- Tasks: style can be found in dropdown.less -->
-                    <li class="dropdown tasks-menu" ng-controller="TarefaController">
+					<li class="dropdown notifications-menu" ng-controller="TarefaController">
                         <a href="#" class="dropdown-toggle">
-                            <i class="fa fa-tasks"></i>
-                            <span class="label label-danger">{{listaTarefas.length}}</span>
+                            <i class="fa fa-warning"></i>
+                            <span class="label label-danger">{{(listaTarefas | filter:{finalizada:false}).length}}</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">Tarefas pendentes</li>
+                            <li class="header">{{(listaTarefas | filter:{finalizada:false}).length}} tarefa(s) pendentes</li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">
-                                    <li ng-repeat="tarefa in listaTarefas | limitTo: 5">
-                                        <!-- Task item -->
+                                    <li ng-repeat="tarefa in listaTarefas | filter: {finalizada:false} | orderBy : 'encaminhamentoProposicao.dataHoraLimite' | limitTo: 5">
                                         <a href="#/Tarefas/edit/{{tarefa.id}}">
-                                            <h3>
-                                            	<p>
-                                            		Tipo: {{tarefa.tipoTarefa}}
-                                            	</p>
-                                            	<p>
-                                                	Gerada em: {{tarefa.data | date: 'dd/MM/yyyy'}}
-                                                </p>
-                                                <small class="pull-right">10%</small>
-                                            </h3>
-                                            <div class="progress xs">
-                                                <div class="progress-bar progress-bar-red" style="width: 10%" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
-                                                    <span class="sr-only">10%</span>
-                                                </div>
-                                            </div>
+                                            <i class="ion ion-ios7-people danger"></i> {{tarefa.encaminhamentoProposicao.encaminhamento.nome}} - {{tarefa.encaminhamentoProposicao.dataHoraLimite | date: 'dd/MM/yyyy'}}
                                         </a>
                                     </li>
                                 </ul>
                             </li>
-                            <li class="footer">
-                                <a href="#">Todas as tarefas </a>
+                            <li class="footer"><a href="#/Tarefas">Ver todos</a>
                             </li>
                         </ul>
                     </li>
+                    
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -131,6 +116,8 @@
                             <li><a href="#/Encaminhamentos">Gerenciar Encaminhamento</a></li>
 							<li><a href="#/Usuarios">Gerenciar Usuario</a></li>
 							<li><a href="#/Equipes">Gerenciar Equipe</a></li>
+							<li><a href="#/OrigemElaboracaoNormativas">Gerenciar Origem Elaboração Normativa</a></li>
+							<li><a href="#/AreaConsultadas">Gerenciar Área Consultada</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -141,8 +128,6 @@
                         </ul>
                     </li>                    
                 </ul>
-                
-                
 
                 <form class="navbar-form navbar-right" role="search">
                     <div class="form-group">
@@ -188,7 +173,6 @@
     <script src="scripts/directives/datetimepicker.js"></script>
     <script src="scripts/filters/startFromFilter.js"></script>
     <script src="scripts/filters/genericSearchFilter.js"></script>
-    
     
     <script src="lib/ng-tags-input/ng-tags-input.min.js"></script>     
     
@@ -244,6 +228,18 @@
     <!-- Tarefa -->
     <script src="scripts/controllers/tarefaController.js"></script>
      
+	<!-- OrigemElaboracaoNormativa -->
+    <script src="scripts/services/OrigemElaboracaoNormativaFactory.js"></script>
+    <script src="scripts/controllers/newOrigemElaboracaoNormativaController.js"></script>
+    <script src="scripts/controllers/searchOrigemElaboracaoNormativaController.js"></script>
+    <script src="scripts/controllers/editOrigemElaboracaoNormativaController.js"></script>
+    
+	<!-- AreaConsultada -->
+    <script src="scripts/services/AreaConsultadaFactory.js"></script>
+    <script src="scripts/controllers/newAreaConsultadaController.js"></script>
+    <script src="scripts/controllers/searchAreaConsultadaController.js"></script>
+    <script src="scripts/controllers/editAreaConsultadaController.js"></script>
+    
     <script src="scripts/services/locationParser.js"></script>
     
 </body>

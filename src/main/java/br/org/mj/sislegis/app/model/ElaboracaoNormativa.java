@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -35,16 +36,16 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private static final long serialVersionUID = 7722617248451501605L;
 	
 	public ElaboracaoNormativa() {
-		// TODO Auto-generated constructor stub
 	}
 	
 
 	public ElaboracaoNormativa(Long id, Date dataRegistro, ElaboracaoNormativaTipo tipo,
 			String nup,
 			ElaboracaoNormativaIdentificacao identificacao,
-			String autor,
-			String coAutor,
-			String origem,
+			Usuario autor,
+			Usuario coAutor,
+			OrigemElaboracaoNormativa origem,
+			AreaConsultada areaConsultada,
 			String ementa			
 			) {
 		this.id=id;
@@ -55,6 +56,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		this.autor=autor;
 		this.coAutor=coAutor;
 		this.origem=origem;
+		this.areaConsultada = areaConsultada;
 		this.ementa=ementa;
 	}
 
@@ -81,15 +83,18 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Column
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaIdentificacao identificacao;
-	
-	@Column
-	private String autor;
-	
-	@Column
-	private String coAutor;
 
-	@Column
-	private String origem;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Usuario autor;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Usuario coAutor;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	private OrigemElaboracaoNormativa origem;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	private AreaConsultada areaConsultada;
 	
 	@Column
 	private String ementa;
@@ -156,15 +161,15 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		return identificacao;
 	}
 
-	public String getAutor() {
+	public Usuario getAutor() {
 		return autor;
 	}
 
-	public String getCoAutor() {
+	public Usuario getCoAutor() {
 		return coAutor;
 	}
 
-	public String getOrigem() {
+	public OrigemElaboracaoNormativa getOrigem() {
 		return origem;
 	}
 
@@ -217,15 +222,15 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		this.identificacao = identificacao;
 	}
 
-	public void setAutor(String autor) {
+	public void setAutor(Usuario autor) {
 		this.autor = autor;
 	}
 
-	public void setCoAutor(String coAutor) {
+	public void setCoAutor(Usuario coAutor) {
 		this.coAutor = coAutor;
 	}
 
-	public void setOrigem(String origem) {
+	public void setOrigem(OrigemElaboracaoNormativa origem) {
 		this.origem = origem;
 	}
 
@@ -331,6 +336,16 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 
 	public void setPareceristas(List<Usuario> pareceristas) {
 		this.pareceristas = pareceristas;
+	}
+		
+		
+	public AreaConsultada getAreaConsultada() {
+		return areaConsultada;
+	}
+
+
+	public void setAreaConsultada(AreaConsultada areaConsultada) {
+		this.areaConsultada = areaConsultada;
 	}
 	
 }
