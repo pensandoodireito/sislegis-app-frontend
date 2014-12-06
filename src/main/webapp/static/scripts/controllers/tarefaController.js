@@ -23,7 +23,6 @@ angular.module('sislegisapp').controller('TarefaController', function ($scope, $
 	 * Chamado quando o usuario clica em uma tarefa especifica a partir do notification bar
 	 */
 	$scope.getTarefa = function(id) {
-		
 		var successCallback = function(data) {
 			$scope.detalhamentoTarefa = true;
 			$scope.setProposicao($scope.tarefa.encaminhamentoProposicao.proposicao.id);
@@ -32,29 +31,26 @@ angular.module('sislegisapp').controller('TarefaController', function ($scope, $
 		var errorCallback = function(data) {
 			
 		};
-		
-		// TODO: mudar a URL para edit (para manter consistencia)
-		
+
 		$scope.tarefa = TarefaResource.get({TarefaId:id}, successCallback, errorCallback);
-	}
-	
-	/**
-	 * Chamado a cada click para detalhar a tarefa
-	 */
-	$scope.detalharTarefa = function(tarefa) {
-		$scope.detalhamentoTarefa = true;
-		$scope.tarefa = tarefa;
-		$scope.setProposicao($scope.tarefa.encaminhamentoProposicao.proposicao.id);
 	}
 	
 	$scope.setProposicao = function(idProposicao) {
 		$scope.tarefa.encaminhamentoProposicao.proposicao = ProposicaoResource.get({ProposicaoId:idProposicao});
+		console.log($scope.tarefa.encaminhamentoProposicao.proposicao);
 	}
 	
-	$scope.salvar = function() {
+	$scope.finalizarTarefa = function() {
         var successCallback = function(){
             addAlert({type: 'success', msg: 'Registro atualizado com sucesso.'});
         	$rootScope.inativeSpinner = false;
+        	
+        	// Atualiza tanbém a lista da esquerda, para constar como finalizada
+        	for (var i = 0; i < $scope.listaTarefas.length; i++) {
+				if ($scope.listaTarefas[i].id == $scope.tarefa.id) {
+					$scope.listaTarefas[i] = $scope.tarefa;
+				}
+   		 	}
         };
         var errorCallback = function() {
         
