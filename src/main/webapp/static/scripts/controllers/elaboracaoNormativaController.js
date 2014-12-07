@@ -159,7 +159,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			  };
 
 		    $scope.onSelectAreaConsultadas = function (item) {
-		    	item.$save(function(success){
+		    	item.$update(function(success){
 		    		toaster.pop('success', 'Registro inserido com sucesso.');
 		    	});
 		    };

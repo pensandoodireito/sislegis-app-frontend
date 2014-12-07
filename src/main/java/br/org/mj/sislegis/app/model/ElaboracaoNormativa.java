@@ -77,12 +77,18 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaTipo tipo;
 	
+	@Transient
+	private String valueTipo;
+	
 	@Column
 	private String nup;
 	
 	@Column
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaIdentificacao identificacao;
+	
+	@Transient
+	private String valueIdentificacao;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Usuario autor;
@@ -347,5 +353,18 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	public void setAreaConsultada(AreaConsultada areaConsultada) {
 		this.areaConsultada = areaConsultada;
 	}
+
+
+	public String getValueTipo() {
+		return tipo.getValue();
+	}
+
+
+	public String getValueIdentificacao() {
+		return identificacao.getValue();
+	}
+
+
+
 	
 }
