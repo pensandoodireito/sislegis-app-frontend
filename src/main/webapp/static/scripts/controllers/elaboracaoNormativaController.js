@@ -1,5 +1,5 @@
 angular.module('sislegisapp').controller('ElaboracaoNormativaController',
-		function($scope, $http, $routeParams, $location, $locale, ElaboracaoNormativaResource, EquipeResource, FileUploader, TagResource,
+		function($scope, $http, $routeParams, $location, $locale, toaster, ElaboracaoNormativaResource, EquipeResource, FileUploader, TagResource,
 				AreaConsultadaResource, OrigemElaboracaoNormativaResource, UsuarioResource) {
 			var self = this;
 			$scope.disabled = false;
@@ -12,7 +12,6 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    }; 
 			
 			$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta = [];
-			
 			
 		    $scope.tipos = ElaboracaoNormativaResource.tipos();
 		    
@@ -62,10 +61,10 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 
 		        var successCallback = function(){
 		        	$scope.elaboracaoNormativa = new ElaboracaoNormativaResource();
-		        	alert('Elaboração Normativa incluida com sucesso');
+		        	toaster.pop('success', 'Elaboração Normativa incluida com sucesso');
 		        };
 		        var errorCallback = function() {
-		        	alert('Falha na inclusão');
+		        	toaster.pop('error', 'Falha na inclusão');
 		        };
 		        
 		        if (isEditMode()) {
@@ -138,7 +137,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 
 		    $scope.onSelectOrigemElaboracaoNormativas = function (item) {
 		    	item.$save(function(success){
-		    		addAlert({type: 'success', msg: 'Registro inserido com sucesso.'});
+		    		toaster.pop('success', 'Registro inserido com sucesso.');
 		    	});
 		    };
 				   
@@ -161,7 +160,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 
 		    $scope.onSelectAreaConsultadas = function (item) {
 		    	item.$save(function(success){
-		    		addAlert({type: 'success', msg: 'Registro inserido com sucesso.'});
+		    		toaster.pop('success', 'Registro inserido com sucesso.');
 		    	});
 		    };
 			    
