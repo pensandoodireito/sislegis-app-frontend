@@ -12,6 +12,11 @@ angular.module('sislegisapp').factory('UsuarioResource', function($resource){
 		},
 		'update' : {
 			method : 'PUT'
+		},
+		'findByIdEquipe' : {
+			url : "../rest/usuarios/findByIdEquipe",
+			method : 'GET',
+			isArray : true
 		}
 	});
 	return resource;

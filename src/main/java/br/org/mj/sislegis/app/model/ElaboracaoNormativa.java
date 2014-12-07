@@ -136,6 +136,9 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	
 	@Transient
 	private List<TagJSON> tags;
+	
+	@Transient
+	private List<Usuario> pareceristas;
 
 
 	public Long getId() {
@@ -326,6 +329,16 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	}
 
 
+	public List<Usuario> getPareceristas() {
+		return pareceristas;
+	}
+
+
+	public void setPareceristas(List<Usuario> pareceristas) {
+		this.pareceristas = pareceristas;
+	}
+		
+		
 	public AreaConsultada getAreaConsultada() {
 		return areaConsultada;
 	}
