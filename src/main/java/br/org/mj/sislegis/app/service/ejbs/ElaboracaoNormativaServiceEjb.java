@@ -106,7 +106,7 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 		CriteriaQuery<ElaboracaoNormativa> cq = cb.createQuery(ElaboracaoNormativa.class);
 		Root<ElaboracaoNormativa> en = cq.from(ElaboracaoNormativa.class);
-		cq.select(cb.construct(ElaboracaoNormativa.class, 
+/*		cq.select(cb.construct(ElaboracaoNormativa.class, 
 				en.get("id"), 
 				en.get("dataRegistro"), 
 				en.get("tipo"),
@@ -115,8 +115,9 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 				en.get("autor"),
 				en.get("coAutor"),
 				en.get("origem"),
+				en.get("areaConsultada"),
 				en.get("ementa")
-				));
+				));*/
 		Query query = getEntityManager().createQuery(cq);
 		@SuppressWarnings("unchecked")
 		List<ElaboracaoNormativa> result = query.getResultList();

@@ -61,7 +61,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 
 		        var successCallback = function(){
 		        	$scope.elaboracaoNormativa = new ElaboracaoNormativaResource();
-		        	toaster.pop('success', 'Elaboração Normativa incluida com sucesso');
+		        	toaster.pop('success', 'Elaboração Normativa salvo com sucesso');
 		        };
 		        var errorCallback = function() {
 		        	toaster.pop('error', 'Falha na inclusão');
