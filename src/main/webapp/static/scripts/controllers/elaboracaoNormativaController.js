@@ -135,9 +135,11 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			  };
 
 		    $scope.onSelectOrigemElaboracaoNormativas = function (item) {
-		    	item.$save(function(success){
-		    		toaster.pop('success', 'Registro inserido com sucesso.');
-		    	});
+		    	if(!item.id){
+		    		item.$save(function(success){
+		    			toaster.pop('success', 'Registro inserido com sucesso.');
+		    		});
+		    	}
 		    };
 				   
 			$scope.getAreaConsultadas = function(val) {
@@ -158,9 +160,11 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			  };
 
 		    $scope.onSelectAreaConsultadas = function (item) {
-		    	item.$save(function(success){
-		    		toaster.pop('success', 'Registro inserido com sucesso.');
-		    	});
+		    	if(!item.id){
+			    	item.$save(function(success){
+			    		toaster.pop('success', 'Registro inserido com sucesso.');
+			    	});
+		    	}
 		    };
 			    
 			  
