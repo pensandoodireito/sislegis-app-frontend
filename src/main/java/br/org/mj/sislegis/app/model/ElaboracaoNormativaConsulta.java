@@ -1,5 +1,6 @@
 package br.org.mj.sislegis.app.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,9 +11,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @XmlRootElement
 @Table(name = "elaboracao_normativa_consulta")
+@JsonIgnoreProperties({"elaboracaoNormativa"})
 public class ElaboracaoNormativaConsulta implements AbstractEntity {
 	
 	private static final long serialVersionUID = 4338236680426826432L;

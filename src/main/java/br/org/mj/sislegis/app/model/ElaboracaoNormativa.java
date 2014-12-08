@@ -2,6 +2,7 @@ package br.org.mj.sislegis.app.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -96,7 +97,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Usuario coAutor;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	private OrigemElaboracaoNormativa origem;
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -117,7 +118,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Column
 	private Usuario parecerista;
 
-	@OneToMany(cascade=CascadeType.ALL, mappedBy = "elaboracaoNormativa", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "elaboracaoNormativa", fetch = FetchType.EAGER)
 	private Set<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta;
 	
 	// Manifestação (por enquanto deixei na mesma entidade para evitar normalização desnecessaria)
@@ -356,12 +357,12 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 
 
 	public String getValueTipo() {
-		return tipo.getValue();
+		return Objects.isNull(tipo)?"": tipo.getValue();
 	}
 
 
 	public String getValueIdentificacao() {
-		return identificacao.getValue();
+		return Objects.isNull(identificacao)?"":identificacao.getValue();
 	}
 
 

@@ -12,6 +12,13 @@ angular.module('sislegisapp').factory('OrigemElaboracaoNormativaResource', funct
 		},
 		'update' : {
 			method : 'PUT'
+		},
+		'findByDescricao' : {
+			url : "../rest/origemelaboracaonormativas/find",
+		    params: {
+			        descricao: '@descricao'
+			      },
+			method : 'GET'
 		}
 	});
 	return resource;
