@@ -1,5 +1,6 @@
 
-angular.module('sislegisapp').controller('TarefaController', function ($scope, $routeParams, $location, $rootScope, $timeout, locationParser, TarefaResource, ProposicaoResource) {
+angular.module('sislegisapp').controller('TarefaController', function ($scope, $routeParams, $location, 
+		$rootScope, $timeout, toaster, locationParser, TarefaResource, ProposicaoResource, ComentarioResource, EncaminhamentoProposicaoResource) {
 	
 	$scope.tarefa = new TarefaResource();
 
@@ -25,7 +26,10 @@ angular.module('sislegisapp').controller('TarefaController', function ($scope, $
 	$scope.getTarefa = function(id) {
 		var successCallback = function(data) {
 			$scope.detalhamentoTarefa = true;
-			$scope.setProposicao($scope.tarefa.encaminhamentoProposicao.proposicao.id);
+			var idProposicao = $scope.tarefa.encaminhamentoProposicao.proposicao.id;
+			$scope.setProposicao(idProposicao);
+			$scope.setComentarios(idProposicao);
+			$scope.setEncaminhamentoProposicao(idProposicao);
 		};
 		
 		var errorCallback = function(data) {
@@ -37,15 +41,31 @@ angular.module('sislegisapp').controller('TarefaController', function ($scope, $
 	
 	$scope.setProposicao = function(idProposicao) {
 		$scope.tarefa.encaminhamentoProposicao.proposicao = ProposicaoResource.get({ProposicaoId:idProposicao});
-		console.log($scope.tarefa.encaminhamentoProposicao.proposicao);
+	}
+	
+	$scope.setComentarios = function(idProposicao) {
+        var successCallback = function(data) {
+        	$scope.listaComentario = data;
+        };
+        var errorCallback = function() {
+        };
+		ComentarioResource.findByProposicao({ProposicaoId:idProposicao}, successCallback, errorCallback);
+	}
+	
+	$scope.setEncaminhamentoProposicao = function(idProposicao) {
+        var successCallback = function(data){
+        	$scope.listaEncaminhamentoProposicao = data;
+        };
+        var errorCallback = function() {
+        };
+		EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId:idProposicao}, successCallback, errorCallback);
 	}
 	
 	$scope.finalizarTarefa = function() {
-        var successCallback = function(){
-            addAlert({type: 'success', msg: 'Registro atualizado com sucesso.'});
-        	$rootScope.inativeSpinner = false;
+        var successCallback = function() {
+        	toaster.pop('success', 'Tarefa finalizada com sucesso');
         	
-        	// Atualiza tanbém a lista da esquerda, para constar como finalizada
+        	// Atualiza também a lista da esquerda, para constar como finalizada
         	for (var i = 0; i < $scope.listaTarefas.length; i++) {
 				if ($scope.listaTarefas[i].id == $scope.tarefa.id) {
 					$scope.listaTarefas[i] = $scope.tarefa;
@@ -61,22 +81,6 @@ angular.module('sislegisapp').controller('TarefaController', function ($scope, $
         
         $scope.tarefa.$update(successCallback, errorCallback);
     };
-    
-    /**
-     * Alerts
-     */
-    $scope.alerts = [];
-
-    $scope.closeAlert = function(index) {
-      $scope.alerts.splice(index, 1);
-    };
-    
-    var addAlert = function(alert){
-    	$scope.alerts.push(alert);
-    	$timeout(function() {
-    		$scope.alerts.splice($scope.alerts.indexOf(alert), 1);
-    	}, 3000);
-    }
     
     if ($location.path().indexOf("edit") > -1) {
     	if ($routeParams.TarefaId != undefined) {

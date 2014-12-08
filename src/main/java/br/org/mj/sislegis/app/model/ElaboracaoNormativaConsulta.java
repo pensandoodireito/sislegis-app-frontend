@@ -25,7 +25,7 @@ public class ElaboracaoNormativaConsulta implements AbstractEntity {
 	private ElaboracaoNormativa elaboracaoNormativa;
 	
 	@Column
-	private String area;
+	private AreaConsultada area;
 	
 	@Column
 	private String comentario;
@@ -41,7 +41,7 @@ public class ElaboracaoNormativaConsulta implements AbstractEntity {
 		return elaboracaoNormativa;
 	}
 
-	public String getArea() {
+	public AreaConsultada getArea() {
 		return area;
 	}
 
@@ -57,7 +57,7 @@ public class ElaboracaoNormativaConsulta implements AbstractEntity {
 		this.elaboracaoNormativa = elaboracaoNormativa;
 	}
 
-	public void setArea(String area) {
+	public void setArea(AreaConsultada area) {
 		this.area = area;
 	}
 
