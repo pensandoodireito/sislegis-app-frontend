@@ -64,7 +64,7 @@
               </div>
           </div>
           
-          <div class="col-md-3" ng-show="elaboracaoNormativa.codElaboracaoNormativaIdentificacao == 1">
+          <div class="col-md-3" ng-show="elaboracaoNormativa.identificacao == 'EXPOSICAO_MOTIVOS_INTERMINISTERIAL'">
               <div class="form-group">
                   <label for="">Co-Autor</label>
                   <input type="text" class="form-control" ng-model="elaboracaoNormativa.coAutor" placeholder="Pesquisar..."
@@ -110,7 +110,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="">Distribuição:</label>
-                            <select ng-change="selectParecerista()" ng-model="elaboracaoNormativa.equipe" ng-options="equipe as equipe.nome for equipe in equipes" class="form-control"></select>
+                            <select ng-change="selectParecerista()" ng-model="elaboracaoNormativa.equipe.id" ng-options="equipe.id as equipe.nome for equipe in equipes" class="form-control"></select>
                         </div>
                     </div>
                 </div>
@@ -118,7 +118,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="">Parecerista:</label>
-                            <select ng-model="elaboracaoNormativa.parecerista" ng-options="parecerista.usuario as parecerista.usuario.nome for parecerista in pareceristas" class="form-control"></select>
+                            <select ng-model="elaboracaoNormativa.parecerista.id" ng-options="usuario.id as usuario.nome for usuario in elaboracaoNormativa.pareceristas" class="form-control"></select>
                         	{{elaboracaoNormativa.usuario}}
                         </div>
                     </div>

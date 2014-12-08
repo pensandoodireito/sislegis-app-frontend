@@ -68,6 +68,36 @@
 							<p class="fontsize-sm">
 								<a href="{{tarefa.encaminhamentoProposicao.proposicao.linkProposicao}}" target="_blank"><strong>Link da proposição</strong></a>
 							</p>
+							<div class="divider-bottom">
+							
+							
+							<p><h3>Comentários</h3></p>
+							<div class="list-group" ng-repeat="item in listaComentario | orderBy:'dataCriacao':true">
+								<div class="divider-bottom">
+									<p>{{item.descricao}}</p>
+									<div class="mt-sm">
+										<p>
+											Feito por: <strong>{{item.autor.nome}}</strong> <span class="ml-lg">Data: {{item.dataCriacao | date: 'dd/MM/yyyy'}}<span class="ml-lg"></span>
+										</p>
+									</div>
+								</div>
+							</div>
+
+							<p><h3>Encaminhamentos</h3></p>
+							<div class="list-group" ng-repeat="item in listaEncaminhamentoProposicao | orderBy:'comentario.dataCriacao':true">
+								<div class="divider-bottom">
+									<p><strong>{{item.encaminhamento.nome}}</strong></p>
+									<p><strong>Responsável: </strong>{{item.responsavel.nome}}</p>
+									<p><strong>Data e Hora Limite: </strong>{{item.dataHoraLimite | date: 'dd/MM/yyyy HH:mm'}}</p>
+									<p>{{item.comentario.descricao}}</p>
+									<div class="mt-sm">
+										<p>
+											Feito por: <strong>{{item.comentario.autor.nome}}</strong> <span class="ml-lg">Data: {{item.comentario.dataCriacao | date: 'dd/MM/yyyy'}}<span class="ml-lg"></span>
+										</p>
+									</div>
+								</div>
+							</div>
+							
 						</p>
 					</div>
 				</div>
