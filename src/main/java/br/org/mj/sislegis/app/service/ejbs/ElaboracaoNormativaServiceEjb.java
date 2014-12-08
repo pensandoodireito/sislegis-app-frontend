@@ -19,12 +19,14 @@ import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaIdentificacao;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
 import br.org.mj.sislegis.app.json.TagJSON;
+import br.org.mj.sislegis.app.model.AreaConsultada;
 import br.org.mj.sislegis.app.model.ElaboracaoNormativa;
 import br.org.mj.sislegis.app.model.ElaboracaoNormativaConsulta;
 import br.org.mj.sislegis.app.model.Tag;
 import br.org.mj.sislegis.app.model.TagElaboracaoNormativa;
 import br.org.mj.sislegis.app.model.TagElaboracaoNormativaPK;
 import br.org.mj.sislegis.app.service.AbstractPersistence;
+import br.org.mj.sislegis.app.service.AreaConsultadaService;
 import br.org.mj.sislegis.app.service.ElaboracaoNormativaService;
 import br.org.mj.sislegis.app.service.TagService;
 import br.org.mj.sislegis.app.service.UsuarioService;
@@ -39,6 +41,9 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 	
 	@Inject
 	public UsuarioService usuarioService;
+	
+	@Inject
+	public AreaConsultadaService areaConsultadaService;
 	
 	@PersistenceContext
     private EntityManager em;
@@ -62,7 +67,10 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 			elaboracaoNormativa.getTags().add(tagJSON);
 		}
 		elaboracaoNormativa.setTagsElaboracaoNormativa(null);
-		elaboracaoNormativa.setPareceristas(usuarioService.findByIdEquipe(elaboracaoNormativa.getEquipe().getId()));
+		
+		if(!Objects.isNull(elaboracaoNormativa.getEquipe()))
+			elaboracaoNormativa.setPareceristas(usuarioService.findByIdEquipe(elaboracaoNormativa.getEquipe().getId()));
+		
 		return elaboracaoNormativa;
 	}
 
@@ -75,6 +83,14 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		
 		for(ElaboracaoNormativaConsulta elaboracaoNormativaConsulta:elaboracaoNormativa.getListaElaboracaoNormativaConsulta()){
 			elaboracaoNormativaConsulta.setElaboracaoNormativa(elaboracaoNormativa);
+			if(!Objects.isNull(elaboracaoNormativaConsulta.getAreaConsultada())
+					&&Objects.isNull(elaboracaoNormativaConsulta.getAreaConsultada().getId())){
+				List<AreaConsultada> areaConsultadas = areaConsultadaService
+						.findByProperty("descricao", elaboracaoNormativaConsulta.getAreaConsultada().getDescricao(), "ASC");
+				if(!areaConsultadas.isEmpty()){
+					elaboracaoNormativaConsulta.setAreaConsultada(areaConsultadas.get(0));
+				}
+			}
 		}
 		
 		save(elaboracaoNormativa);

@@ -6,8 +6,8 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    $scope.$location = $location;
 			$scope.elaboracaoNormativa = $scope.elaboracaoNormativa || {};//new ElaboracaoNormativaResource();
 			$scope.equipes = EquipeResource.queryAll();
-			$scope.elaboracaoNormativa.elaboracaoNormativaConsulta = {};
-			$scope.elaboracaoNormativa.elaboracaoNormativaConsulta.areaConsultada = {};
+			$scope.elaboracaoNormativa.elaboracaoNormativaConsulta = $scope.elaboracaoNormativa.elaboracaoNormativaConsulta || {};
+			$scope.elaboracaoNormativaConsulta = new ElaboracaoNormativaConsultaResource();
 			
 		    $scope.loadTags = function(query) {
 		    	return TagResource.listarTodos().$promise;
@@ -51,9 +51,9 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    $scope.adicionarElaboracaoNormativaConsulta = function(){
 		    	//TODO: Verificar erro quando não é adicionado nenhum arquivo 
 		    	//$scope.distribuicaoUploader.uploadItem(0);
-		    	$scope.elaboracaoNormativa.elaboracaoNormativaConsulta.elaboracaoNormativa = $scope.elaboracaoNormativa;
-		    	$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta.push($scope.elaboracaoNormativa.elaboracaoNormativaConsulta);
-		    	$scope.elaboracaoNormativa.elaboracaoNormativaConsulta = new ElaboracaoNormativaConsultaResource();
+		    	//$scope.elaboracaoNormativa.elaboracaoNormativaConsulta.elaboracaoNormativa = $scope.elaboracaoNormativa;
+		    	$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta.push($scope.elaboracaoNormativaConsulta);
+		    	$scope.elaboracaoNormativaConsulta = new ElaboracaoNormativaConsultaResource();
 		    }
 		    
 		    $scope.normas = ElaboracaoNormativaResource.normas();
@@ -86,7 +86,6 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		        var errorCallback = function() {
 		            $location.path("/ElaboracaoNormativa");
 		        };
-		        onSelectAreaConsultadas
 		        ElaboracaoNormativaResource.get({ElaboracaoNormativaId:$routeParams.ElaboracaoNormativaId}, successCallback, errorCallback);
 			};
 			
@@ -138,9 +137,11 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			  };
 
 		    $scope.onSelectOrigemElaboracaoNormativas = function (item) {
-		    	item.$save(function(success){
-		    		toaster.pop('success', 'Registro inserido com sucesso.');
-		    	});
+		    	if(!item.id){
+		    		item.$save(function(success){
+		    			toaster.pop('success', 'Registro inserido com sucesso.');
+		    		});
+		    	}
 		    };
 				   
 			$scope.getAreaConsultadas = function(val) {
@@ -161,9 +162,11 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			  };
 
 		    $scope.onSelectAreaConsultadas = function (item) {
-		    	item.$save(function(success){
-		    		toaster.pop('success', 'Registro inserido com sucesso.');
-		    	});
+		    	if(!item.id){
+			    	item.$save(function(success){
+			    		toaster.pop('success', 'Registro inserido com sucesso.');
+			    	});
+		    	}
 		    };
 			    
 			  

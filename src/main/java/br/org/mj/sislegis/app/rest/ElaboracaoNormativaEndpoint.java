@@ -113,7 +113,7 @@ public class ElaboracaoNormativaEndpoint {
 	@Consumes("application/json")
 	public Response update(ElaboracaoNormativa entity) {
 		try {
-			entity = service.save(entity);
+			elaboracaoNormativaService.salvar(entity);
 		} catch (OptimisticLockException e) {
 			return Response.status(Response.Status.CONFLICT)
 					.entity(e.getEntity()).build();
