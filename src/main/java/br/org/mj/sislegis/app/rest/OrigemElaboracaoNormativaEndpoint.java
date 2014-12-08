@@ -29,7 +29,8 @@ public class OrigemElaboracaoNormativaEndpoint {
 	@Consumes("application/json")
 	public Response create(OrigemElaboracaoNormativa entity) {
 		service.save(entity);
-		return Response.created(UriBuilder.fromResource(OrigemElaboracaoNormativaEndpoint.class).path(String.valueOf(entity.getId())).build()).build();
+		return Response.created(UriBuilder.fromResource(OrigemElaboracaoNormativaEndpoint.class)
+				.path(String.valueOf(entity.getId())).build()).build();
 	}
 
 	@DELETE
