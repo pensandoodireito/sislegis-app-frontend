@@ -1,22 +1,22 @@
 package br.org.mj.sislegis.app.enumerated;
 
 public enum ElaboracaoNormativaIdentificacao {
-    EXPOSICAO_MOTIVOS(0), EXPOSICAO_MOTIVOS_INTERMINISTERIAL(1);
+    EXPOSICAO_MOTIVOS("Exposição de Motivos"), EXPOSICAO_MOTIVOS_INTERMINISTERIAL("Exposição de Motivos Interministerial");
     
-    private int value;
+    private String value;
 
-    private ElaboracaoNormativaIdentificacao(int value) {
+    private ElaboracaoNormativaIdentificacao(String value) {
         this.value = value;
     }
     
-	public int getValue() {
+	public String getValue() {
 		return value;
 	}
     
-	public static ElaboracaoNormativaIdentificacao get(int id) {
+	public static ElaboracaoNormativaIdentificacao get(String id) {
 		ElaboracaoNormativaIdentificacao elaboracaoNormativaIdentificacao = null; // Default
 		for (ElaboracaoNormativaIdentificacao en : ElaboracaoNormativaIdentificacao.values()) {
-			if (en.getValue()==id) {
+			if (en.name().equals(id)) {
 				elaboracaoNormativaIdentificacao = en;
 				break;
 			}

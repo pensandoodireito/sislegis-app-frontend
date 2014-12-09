@@ -5,7 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @XmlRootElement
@@ -23,6 +27,7 @@ public class Usuario implements AbstractEntity {
 
 	@Column
 	private String email;
+	
 	
 	public Long getId() {
 		return this.id;
@@ -82,4 +87,5 @@ public class Usuario implements AbstractEntity {
 			result += ", email: " + email;
 		return result;
 	}
+
 }

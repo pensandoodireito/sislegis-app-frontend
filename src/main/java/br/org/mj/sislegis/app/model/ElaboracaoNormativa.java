@@ -1,6 +1,8 @@
 package br.org.mj.sislegis.app.model;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,21 +14,55 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaIdentificacao;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
+import br.org.mj.sislegis.app.json.TagJSON;
 
 @Entity
 @XmlRootElement
 @Table(name = "elaboracao_normativa")
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id") 
 public class ElaboracaoNormativa implements AbstractEntity  {
 	
 	private static final long serialVersionUID = 7722617248451501605L;
+	
+	public ElaboracaoNormativa() {
+	}
+	
+
+	public ElaboracaoNormativa(Long id, Date dataRegistro, ElaboracaoNormativaTipo tipo,
+			String nup,
+			ElaboracaoNormativaIdentificacao identificacao,
+			Usuario autor,
+			Usuario coAutor,
+			OrigemElaboracaoNormativa origem,
+			AreaConsultada areaConsultada,
+			String ementa			
+			) {
+		this.id=id;
+		this.dataRegistro=dataRegistro;
+		this.tipo=tipo;
+		this.nup=nup;
+		this.identificacao=identificacao;
+		this.autor=autor;
+		this.coAutor=coAutor;
+		this.origem=origem;
+		this.areaConsultada = areaConsultada;
+		this.ementa=ementa;
+	}
+
+	
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -43,7 +79,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private ElaboracaoNormativaTipo tipo;
 	
 	@Transient
-	private int codElaboracaoNormativaTipo;
+	private String valueTipo;
 	
 	@Column
 	private String nup;
@@ -53,16 +89,19 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private ElaboracaoNormativaIdentificacao identificacao;
 	
 	@Transient
-	private int codElaboracaoNormativaIdentificacao;
+	private String valueIdentificacao;
 
-	@Column
-	private String autor;
-	
-	@Column
-	private String coAutor;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Usuario autor;
 
-	@Column
-	private String origem;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Usuario coAutor;
+
+	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	private OrigemElaboracaoNormativa origem;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	private AreaConsultada areaConsultada;
 	
 	@Column
 	private String ementa;
@@ -79,7 +118,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Column
 	private Usuario parecerista;
 
-	@OneToMany(cascade=CascadeType.ALL, mappedBy = "elaboracaoNormativa", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "elaboracaoNormativa", fetch = FetchType.EAGER)
 	private Set<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta;
 	
 	// Manifestação (por enquanto deixei na mesma entidade para evitar normalização desnecessaria)
@@ -90,8 +129,8 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaNorma elaboracaoNormativaNorma;
 	
-	@Transient
-	private int codElaboracaoNormativaNorma;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "elaboracaoNormativa")
+	private Set<TagElaboracaoNormativa> tagsElaboracaoNormativa;
 	
 	@Column
 	private String comentarioManifestacao;
@@ -101,6 +140,13 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	
 	@Transient
 	private ElaboracaoNormativaConsulta elaboracaoNormativaConsulta;
+	
+	@Transient
+	private List<TagJSON> tags;
+	
+	@Transient
+	private List<Usuario> pareceristas;
+
 
 	public Long getId() {
 		return id;
@@ -122,15 +168,15 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		return identificacao;
 	}
 
-	public String getAutor() {
+	public Usuario getAutor() {
 		return autor;
 	}
 
-	public String getCoAutor() {
+	public Usuario getCoAutor() {
 		return coAutor;
 	}
 
-	public String getOrigem() {
+	public OrigemElaboracaoNormativa getOrigem() {
 		return origem;
 	}
 
@@ -183,15 +229,15 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		this.identificacao = identificacao;
 	}
 
-	public void setAutor(String autor) {
+	public void setAutor(Usuario autor) {
 		this.autor = autor;
 	}
 
-	public void setCoAutor(String coAutor) {
+	public void setCoAutor(Usuario coAutor) {
 		this.coAutor = coAutor;
 	}
 
-	public void setOrigem(String origem) {
+	public void setOrigem(OrigemElaboracaoNormativa origem) {
 		this.origem = origem;
 	}
 
@@ -271,29 +317,55 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		return true;
 	}
 
-	public int getCodElaboracaoNormativaTipo() {
-		return codElaboracaoNormativaTipo;
+
+	public List<TagJSON> getTags() {
+		return tags;
 	}
 
-	public void setCodElaboracaoNormativaTipo(int codElaboracaoNormativaTipo) {
-		this.codElaboracaoNormativaTipo = codElaboracaoNormativaTipo;
+	public void setTags(List<TagJSON> tags) {
+		this.tags = tags;
 	}
 
-	public int getCodElaboracaoNormativaIdentificacao() {
-		return codElaboracaoNormativaIdentificacao;
+	public Set<TagElaboracaoNormativa> getTagsElaboracaoNormativa() {
+		return tagsElaboracaoNormativa;
 	}
 
-	public void setCodElaboracaoNormativaIdentificacao(
-			int codElaboracaoNormativaIdentificacao) {
-		this.codElaboracaoNormativaIdentificacao = codElaboracaoNormativaIdentificacao;
+	public void setTagsElaboracaoNormativa(
+			Set<TagElaboracaoNormativa> tagsElaboracaoNormativa) {
+		this.tagsElaboracaoNormativa = tagsElaboracaoNormativa;
 	}
 
-	public int getCodElaboracaoNormativaNorma() {
-		return codElaboracaoNormativaNorma;
+
+	public List<Usuario> getPareceristas() {
+		return pareceristas;
 	}
 
-	public void setCodElaboracaoNormativaNorma(int codElaboracaoNormativaNorma) {
-		this.codElaboracaoNormativaNorma = codElaboracaoNormativaNorma;
+
+	public void setPareceristas(List<Usuario> pareceristas) {
+		this.pareceristas = pareceristas;
 	}
+		
+		
+	public AreaConsultada getAreaConsultada() {
+		return areaConsultada;
+	}
+
+
+	public void setAreaConsultada(AreaConsultada areaConsultada) {
+		this.areaConsultada = areaConsultada;
+	}
+
+
+	public String getValueTipo() {
+		return Objects.isNull(tipo)?"": tipo.getValue();
+	}
+
+
+	public String getValueIdentificacao() {
+		return Objects.isNull(identificacao)?"":identificacao.getValue();
+	}
+
+
+
 	
 }

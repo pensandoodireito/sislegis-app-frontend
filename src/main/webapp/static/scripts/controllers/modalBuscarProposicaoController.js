@@ -2,7 +2,7 @@ angular
 		.module('sislegisapp')
 		.controller(
 				'ModalBuscarProposicaoController',
-				function($scope, $http, $filter, $routeParams, $location,
+				function($scope, $http, $filter, $routeParams, $location, toaster,
 						$modalInstance, ProposicaoResource, reuniao,
 						reuniaoProposicao, listaProposicaoSelecao) {
 					
@@ -59,19 +59,21 @@ angular
 						}
 					};
 
-					$scope.detalharProposicao = function(idProposicao) {
+					$scope.detalharProposicao = function(p) {
 						$http(
 								{
 									method : 'GET',
 									url : ($scope.origem.value == 'C') ? "../rest/proposicaos/detalharProposicaoCamaraWS"
 											: "../rest/proposicaos/detalharProposicaoSenadoWS",
 									params : {
-										'id' : idProposicao
+										'id' : p.idProposicao
 									// id proposicao
 									}
 								}).success(function(data) {
 							console.log(data);
 							$scope.detalheProposicao = data;
+							$scope.detalheProposicao.comissao = p.comissao;
+							$scope.detalheProposicao.seqOrdemPauta = p.seqOrdemPauta;
 							$scope.showDetalhamentoProposicao = true;
 						}).error(function(error) {
 						});
@@ -81,6 +83,7 @@ angular
 						proposicao.listaReuniaoProposicoes = proposicao.listaReuniaoProposicoes || [];
 						proposicao.listaReuniaoProposicoes
 								.push($scope.reuniaoProposicao);
+						proposicao.reuniao = $scope.reuniao;
 						$scope.listaProposicaoSelecao.push(proposicao);
 					};
 
@@ -96,7 +99,7 @@ angular
 				        	$modalInstance.close($scope.listaProposicaoSelecao);
 				        };
 				        var errorCallback = function() {
-				        	alert('Proposição já adicionada para a Reunião selecionada');
+				        	toaster.pop('info', 'Proposição já adicionada para a Reunião selecionada');
 				        };
 						
 						ProposicaoResource.save($scope.listaProposicaoSelecao,

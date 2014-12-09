@@ -3,7 +3,9 @@ package br.org.mj.sislegis.app.service;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
+
 import br.org.mj.sislegis.app.model.AbstractEntity;
 
 /**
@@ -50,6 +52,14 @@ public abstract class AbstractPersistence<T extends AbstractEntity, PK extends N
 		return getEntityManager().createQuery(cq).getResultList();
 	}
 
+	public List<T> findByProperty(String property, Object value, String orderBy) {
+		TypedQuery<T> findByIdQuery = getEntityManager().createQuery(
+				"SELECT c FROM "+entityClass.getSimpleName()+" c WHERE upper(c."+property+") like upper(:"+property+") ORDER BY c."+property+" "+orderBy+"",
+				entityClass);
+		findByIdQuery.setParameter(property, "%"+value+"%");
+		return findByIdQuery.getResultList();
+	}
+	
 	// Exige a definição do <code>EntityManager</code> responsável pelas
 	// operações de persistencia.
 	protected abstract EntityManager getEntityManager();

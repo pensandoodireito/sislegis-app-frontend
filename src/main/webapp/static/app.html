@@ -9,6 +9,7 @@
     <link href="styles/css/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="styles/css/theme-sislegis/sislegis.css" rel="stylesheet" type="text/css" />
     <link href="styles/css/theme-sislegis/core.css" rel="stylesheet" media="screen">
+    <link href="lib/angularjs-toaster/toaster.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="lib/ng-tags-input/ng-tags-input.min.css" />
 </head>
 
@@ -38,47 +39,24 @@
         <div class="navbar-top navbar-static-top clearfix" role="navigation">
             <div class="navbar-right">
                 <ul class="nav navbar-nav">
-
-                    <!-- Notificações de tarefas -->
-                    <li class="dropdown notifications-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<li class="dropdown notifications-menu" ng-controller="TarefaController">
+                        <a href="#" class="dropdown-toggle">
                             <i class="fa fa-warning"></i>
-                            <span class="label label-warning">10</span>
+                            <span class="label label-danger">{{(listaTarefas | filter:{finalizada:false}).length}}</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">5 avisos</li>
+                            <li class="header">{{(listaTarefas | filter:{finalizada:false}).length}} tarefa(s) pendentes</li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">
-                                    <li>
-                                        <a href="#">
-                                            <i class="ion ion-ios7-people info"></i> Lorem ipsum dolor sit amet
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-warning danger"></i>Consectetur adipiscing elit.
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-users warning"></i> Lipsum dolor sit
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#">
-                                            <i class="ion ion-ios7-cart success"></i> Vectelius dolor vectus
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="ion ion-ios7-person danger"></i> Ipsum sit dolor seter
+                                    <li ng-repeat="tarefa in listaTarefas | filter: {finalizada:false} | orderBy : 'encaminhamentoProposicao.dataHoraLimite' | limitTo: 5">
+                                        <a href="#/Tarefas/edit/{{tarefa.id}}">
+                                            <i class="ion ion-ios7-people danger"></i> {{tarefa.encaminhamentoProposicao.encaminhamento.nome}} - {{tarefa.encaminhamentoProposicao.dataHoraLimite | date: 'dd/MM/yyyy'}}
                                         </a>
                                     </li>
                                 </ul>
                             </li>
-                            <li class="footer"><a href="#">Ver todos</a>
+                            <li class="footer"><a href="#/Tarefas">Ver todos</a>
                             </li>
                         </ul>
                     </li>
@@ -136,17 +114,14 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle">Gerenciar<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="#/Reuniaos/gerenciar">Gerenciar Reuniao</a>
-                            </li>
+                            <li><a href="#/Reuniaos/gerenciar">Gerenciar Reuniao</a></li>
                             <li class="divider"></li>
-                            <li><a href="#/Posicionamentos">Gerenciar Posicionamento</a>
-                            </li>
-                            <li><a href="#/Encaminhamentos">Gerenciar Encaminhamento</a>
-                            </li>
-                            <li><a href="#/Usuarios">Gerenciar Usuario</a>
-                            </li>
-                            <li><a href="#/Equipes">Gerenciar Equipe</a>
-                            </li>
+                            <li><a href="#/Posicionamentos">Gerenciar Posicionamento</a></li>
+                            <li><a href="#/Encaminhamentos">Gerenciar Encaminhamento</a></li>
+							<li><a href="#/Usuarios">Gerenciar Usuario</a></li>
+							<li><a href="#/Equipes">Gerenciar Equipe</a></li>
+							<li><a href="#/OrigemElaboracaoNormativas">Gerenciar Origem Elaboração Normativa</a></li>
+							<li><a href="#/AreaConsultadas">Gerenciar Área Consultada</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -168,6 +143,7 @@
     <!-- /menu principal -->
 
     <div class="container-fluid">
+    	<toaster-container toaster-options="{'time-out': 5000, 'close-button':true, 'animation-class': 'toast-top-center'}"></toaster-container>
         <div id="main" ng-view></div>
     </div>
 
@@ -189,6 +165,9 @@
     <script src="lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="lib/es5-shim/es5-sham.min.js"></script>
     <script src="lib/angular-file-upload/angular-file-upload.min.js"></script>
+    <script src="lib/angular-ui-utils/ui-utils.min.js"></script>
+    <script src="lib/angular-animate/angular-animate.min.js"></script>    
+    <script src="lib/angularjs-toaster/toaster.js"></script>        
 
     <script src="scripts/app.js"></script>
     <script src="scripts/offcanvas.js"></script>
@@ -197,7 +176,6 @@
     <script src="scripts/directives/datetimepicker.js"></script>
     <script src="scripts/filters/startFromFilter.js"></script>
     <script src="scripts/filters/genericSearchFilter.js"></script>
-
 
     <script src="lib/ng-tags-input/ng-tags-input.min.js"></script>
 
@@ -211,11 +189,12 @@
     <script src="scripts/services/ProposicaoFactory.js"></script>
     <script src="scripts/services/ReuniaoFactory.js"></script>
     <script src="scripts/services/ElaboracaoNormativaFactory.js"></script>
+    <script src="scripts/services/TarefaFactory.js"></script>
     <script src="scripts/services/HttpInterceptor.js"></script>
 
     <!-- Posicionamento -->
     <script src="scripts/controllers/newPosicionamentoController.js"></script>
-    <script src="scripts/controllers/searchPosicionamentoController.js"></script>
+    <script src="scripts/controllers/searchPosicionamentoController.js"></script/static/app.html#/ElaboracaoNormativa/new>
     <script src="scripts/controllers/editPosicionamentoController.js"></script>
     <script src="scripts/services/PosicionamentoFactory.js"></script>
 
@@ -248,10 +227,26 @@
 
     <!-- Upload -->
     <script src="scripts/controllers/uploadController.js"></script>
-
+    
+    <!-- Tarefa -->
+    <script src="scripts/controllers/tarefaController.js"></script>
+     
+	<!-- OrigemElaboracaoNormativa -->
+    <script src="scripts/services/OrigemElaboracaoNormativaFactory.js"></script>
+    <script src="scripts/controllers/newOrigemElaboracaoNormativaController.js"></script>
+    <script src="scripts/controllers/searchOrigemElaboracaoNormativaController.js"></script>
+    <script src="scripts/controllers/editOrigemElaboracaoNormativaController.js"></script>
+    
+	<!-- AreaConsultada -->
+    <script src="scripts/services/AreaConsultadaFactory.js"></script>
+    <script src="scripts/controllers/newAreaConsultadaController.js"></script>
+    <script src="scripts/controllers/searchAreaConsultadaController.js"></script>
+    <script src="scripts/controllers/editAreaConsultadaController.js"></script>
+    
+    <script src="scripts/services/ElaboracaoNormativaConsultaFactory.js"></script>
+    
     <script src="scripts/services/locationParser.js"></script>
 
-    <script src="scripts/js/components.js"></script>
 </body>
 
 </html>

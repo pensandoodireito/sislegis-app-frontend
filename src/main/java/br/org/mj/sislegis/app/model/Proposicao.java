@@ -85,6 +85,7 @@ public class Proposicao implements AbstractEntity {
 
 	@Column
 	private Posicionamento posicionamento;
+	
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Usuario responsavel;
@@ -97,6 +98,9 @@ public class Proposicao implements AbstractEntity {
 	
 	@Transient
 	private Set<EncaminhamentoProposicao> listaEncaminhamentoProposicao = new HashSet<EncaminhamentoProposicao>();
+	
+	@Transient
+	private Reuniao reuniao;
 
 	public String getSigla() {
 		if (Objects.isNull(sigla))
@@ -304,6 +308,14 @@ public class Proposicao implements AbstractEntity {
 
 	public void setResponsavel(Usuario responsavel) {
 		this.responsavel = responsavel;
+	}
+
+	public Reuniao getReuniao() {
+		return reuniao;
+	}
+
+	public void setReuniao(Reuniao reuniao) {
+		this.reuniao = reuniao;
 	}
 
 }

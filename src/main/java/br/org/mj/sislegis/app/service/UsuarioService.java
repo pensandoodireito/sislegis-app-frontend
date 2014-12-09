@@ -10,6 +10,7 @@ import br.org.mj.sislegis.app.model.Usuario;
 public interface UsuarioService extends Service<Usuario> {
 
 	List<Usuario> findByNome(String nome);
+	List<Usuario> findByIdEquipe(Long idEquipe);
 	
 
 }

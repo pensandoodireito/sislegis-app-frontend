@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -19,9 +20,12 @@ import javax.sql.rowset.serial.SerialClob;
 import javax.sql.rowset.serial.SerialException;
 
 import br.org.mj.sislegis.app.enumerated.Origem;
+import br.org.mj.sislegis.app.json.ComentarioJSON;
 import br.org.mj.sislegis.app.json.ProposicaoJSON;
 import br.org.mj.sislegis.app.json.TagJSON;
+import br.org.mj.sislegis.app.model.EncaminhamentoProposicao;
 import br.org.mj.sislegis.app.model.Proposicao;
+import br.org.mj.sislegis.app.model.Reuniao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicaoPK;
 import br.org.mj.sislegis.app.model.Tag;
@@ -33,7 +37,9 @@ import br.org.mj.sislegis.app.parser.senado.ParserPautaSenado;
 import br.org.mj.sislegis.app.parser.senado.ParserProposicaoSenado;
 import br.org.mj.sislegis.app.service.AbstractPersistence;
 import br.org.mj.sislegis.app.service.ComentarioService;
+import br.org.mj.sislegis.app.service.EncaminhamentoProposicaoService;
 import br.org.mj.sislegis.app.service.ProposicaoService;
+import br.org.mj.sislegis.app.service.ReuniaoService;
 import br.org.mj.sislegis.app.service.TagService;
 import br.org.mj.sislegis.app.util.Conversores;
 import br.org.mj.sislegis.app.util.SislegisUtil;
@@ -55,7 +61,13 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 
 	@Inject
 	private ComentarioService comentarioService;
-
+	
+	@Inject
+	private ReuniaoService reuniaoService;
+	
+	@Inject
+	private EncaminhamentoProposicaoService encaminhamentoProposicaoService;
+	
 	@Inject
 	private TagService tagService;
 
@@ -99,9 +111,22 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 
 	@Override
 	public void salvarListaProposicao(List<Proposicao> lista) {
-		for (Proposicao p : lista) {
+		List<Reuniao> listaReuniao = null;
+		c:for (Proposicao p : lista) {
 			try {
 				Proposicao proposicao = buscarPorIdProposicao(p.getIdProposicao());
+				
+				if(Objects.isNull(listaReuniao))
+					listaReuniao = reuniaoService.buscaReuniaoPorData(p.getReuniao().getData());
+				
+				for(Reuniao reuniao:listaReuniao){
+					for(ReuniaoProposicao rp:reuniao.getListaReuniaoProposicoes()){
+						if(rp.getProposicao().getIdProposicao().equals(p.getIdProposicao())){
+							continue c;
+						}
+					}
+				}
+				
 				if (Objects.isNull(proposicao)) {
 					if (p.getOrigem().equals(Origem.CAMARA)) {
 						proposicao = detalharProposicaoCamaraWS(Long.valueOf(p.getIdProposicao()));
@@ -167,6 +192,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		/*
 		 * List<TagJSON> listaTagsJSON =new ArrayList<TagJSON>(); for(Tag tag:proposicao.getTags()){ listaTagsJSON.add(new TagJSON(tag.toString())); }
 		 */
+		
 		ProposicaoJSON proposicaoJSON = new ProposicaoJSON(proposicao.getId(), 
 				proposicao.getIdProposicao(), 
 				proposicao.getTipo(), 
@@ -279,4 +305,20 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		}
 	}
 
+	@Override
+	public void deleteById(Long id){
+		List<EncaminhamentoProposicao> listaEnc = encaminhamentoProposicaoService.findByProposicao(id);
+		for (Iterator<EncaminhamentoProposicao> iterator = listaEnc.iterator(); iterator.hasNext();) {
+			EncaminhamentoProposicao ep = iterator.next();
+			encaminhamentoProposicaoService.deleteById(ep.getId());
+		}
+		
+		List<ComentarioJSON> listaCom = comentarioService.findByProposicao(id);
+		for (Iterator<ComentarioJSON> iterator = listaCom.iterator(); iterator.hasNext();) {
+			ComentarioJSON c = iterator.next();
+			comentarioService.deleteById(c.getId());
+		}
+		
+		super.deleteById(id);
+	}
 }

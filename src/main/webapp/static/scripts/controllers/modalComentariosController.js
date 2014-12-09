@@ -1,5 +1,5 @@
 angular.module('sislegisapp').controller('ModalComentariosController',
-		function($scope, $http, $filter, $routeParams, $location, $modalInstance, proposicao, ComentarioResource, ProposicaoResource) {
+		function($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource, ProposicaoResource, UsuarioResource) {
 
 			var self = this;
 			$scope.disabled = false;
@@ -28,7 +28,7 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 		    $scope.update = function() {
 		        var successCallback = function(){
 		        	$scope.comentario = new ComentarioResource();
-		        	alert('Comentário atualizado com sucesso');
+		        	toaster.pop('success', 'Comentário atualizado com sucesso');
 		            $scope.displayError = false;
 		        };
 		        var errorCallback = function() {
@@ -40,23 +40,28 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 
 		    $scope.save = function() {
 		    	
-		    	$scope.comentario.dataCriacao = new Date();
-		    	//$scope.comentario.proposicao = new ProposicaoResource();
-		    	$scope.comentario.idProposicao = $scope.proposicao.id;
-		    	//TODO mock
-		    	$scope.comentario.autor = 'usuario logado';
-		    	
 		        var successCallback = function(data,responseHeaders){
 		        	$scope.comentario = new ComentarioResource();
 		        	var id = $scope.proposicao.id;
 		        	$scope.proposicao = ProposicaoResource.get({ProposicaoId: id});
-		        	alert('Comentário adicionado com sucesso');
+		        	toaster.pop('success', 'Comentário adicionado com sucesso');
 		            $scope.displayError = false;
 		        };
 		        var errorCallback = function() {
 		            $scope.displayError = true;
 		        };
-		        ComentarioResource.save($scope.comentario, successCallback, errorCallback);
+		        
+
+		    	//TODO mock
+		    	UsuarioResource.queryAll(function(data){
+		    		if(data.length > 0){
+		    			$scope.comentario.autor = data[0];
+		    		}
+		    		$scope.comentario.dataCriacao = new Date();
+		    		$scope.comentario.idProposicao = $scope.proposicao.id;
+		    		
+		    		$scope.comentario.$save(successCallback, errorCallback);
+		    	});
 		    };
 
 

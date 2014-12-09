@@ -1,23 +1,23 @@
 angular.module('sislegisapp').controller('ElaboracaoNormativaController',
-		function($scope, $http, $routeParams, $location, $locale, ElaboracaoNormativaResource, EquipeResource, FileUploader) {
+		function($scope, $http, $routeParams, $location, $locale, toaster, ElaboracaoNormativaResource, EquipeResource, FileUploader, TagResource,
+				AreaConsultadaResource, OrigemElaboracaoNormativaResource, UsuarioResource, ElaboracaoNormativaConsultaResource) {
 			var self = this;
 			$scope.disabled = false;
 		    $scope.$location = $location;
 			$scope.elaboracaoNormativa = $scope.elaboracaoNormativa || {};//new ElaboracaoNormativaResource();
 			$scope.equipes = EquipeResource.queryAll();
+			$scope.elaboracaoNormativa.elaboracaoNormativaConsulta = $scope.elaboracaoNormativa.elaboracaoNormativaConsulta || {};
+			$scope.elaboracaoNormativaConsulta = new ElaboracaoNormativaConsultaResource();
+			
+		    $scope.loadTags = function(query) {
+		    	return TagResource.listarTodos().$promise;
+		    }; 
 			
 			$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta = [];
 			
-			
-		    $scope.tipos = [
-		                    {name:'Anteprojeto', shade: '0'}, 
-		                    {name:'Preliminar', shade:'1'}
-		                    ];
+		    $scope.tipos = ElaboracaoNormativaResource.tipos();
 		    
-		    $scope.identificacoes = [
-		                             {name:'Exposição de Motivo', shade:'0'},
-		                             {name:'Exposição de Motivo Interministerial', shade:'1'}
-		                             ];
+		    $scope.identificacoes = ElaboracaoNormativaResource.identificacoes();
 		    
 		    // inicio config upload
 			$scope.distribuicaoUploader = new FileUploader( {
@@ -44,28 +44,29 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    
 		    $scope.selectParecerista = function(){
 		    	console.log($scope.elaboracaoNormativa.equipe);
-		    	$scope.pareceristas = $scope.elaboracaoNormativa.equipe.listaEquipeUsuario;
+		    	$scope.elaboracaoNormativa.pareceristas = UsuarioResource.findByIdEquipe({idEquipe : $scope.elaboracaoNormativa.equipe.id});
 		    	
 		    };
 		    
 		    $scope.adicionarElaboracaoNormativaConsulta = function(){
-		    	$scope.distribuicaoUploader.uploadItem(0);
+		    	//TODO: Verificar erro quando não é adicionado nenhum arquivo 
+		    	//$scope.distribuicaoUploader.uploadItem(0);
+		    	//$scope.elaboracaoNormativa.elaboracaoNormativaConsulta.elaboracaoNormativa = $scope.elaboracaoNormativa;
+		    	$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta.push($scope.elaboracaoNormativaConsulta);
+		    	$scope.elaboracaoNormativaConsulta = new ElaboracaoNormativaConsultaResource();
 		    }
 		    
-		    $scope.normas = [
-		                     {name:'Decreto Lei', shade:'0'},
-		                     {name:'Medida Provisória', shade:'1'}
-		                   ];
+		    $scope.normas = ElaboracaoNormativaResource.normas();
 		    
 		    
 			$scope.salvar = function() {
 
 		        var successCallback = function(){
 		        	$scope.elaboracaoNormativa = new ElaboracaoNormativaResource();
-		        	alert('Elaboração Normativa incluida com sucesso');
+		        	toaster.pop('success', 'Elaboração Normativa salvo com sucesso');
 		        };
 		        var errorCallback = function() {
-		        	alert('Falha na inclusão');
+		        	toaster.pop('error', 'Falha na inclusão');
 		        };
 		        
 		        if (isEditMode()) {
@@ -85,7 +86,6 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		        var errorCallback = function() {
 		            $location.path("/ElaboracaoNormativa");
 		        };
-		        
 		        ElaboracaoNormativaResource.get({ElaboracaoNormativaId:$routeParams.ElaboracaoNormativaId}, successCallback, errorCallback);
 			};
 			
@@ -103,7 +103,71 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    if (isEditMode()) {
 		    	$scope.get();
 		    }
+		    
 
+			$scope.getUsuarios = function(val) {
+			    return $http.get('../rest/usuarios/find', {
+			      params: {
+			        nome: val
+			      }
+			    }).then(function(response){
+			      return response.data.map(function(item){
+			        return item;
+			      });
+			    });
+			  };
+
+			$scope.getOrigemElaboracaoNormativas = function(val) {
+			    return $http.get('../rest/origemelaboracaonormativas/find', {
+			      params: {
+			        descricao: val
+			      }
+			    }).then(function(response){
+			        if (val) {
+			        	var item = new OrigemElaboracaoNormativaResource();
+			        	item.descricao = val;
+			        	response.data.unshift(item);
+			        }
+		    		return response.data.map(function(item){
+		    			return item;
+		    		});
+			    },function(error){
+			      console.log('Erro ao buscar dados getOrigemElaboracaoNormativas');
+			    });
+			  };
+
+		    $scope.onSelectAreaConsultadas = function (item) {
+		    	item.$save(function(success){
+		    		toaster.pop('success', 'Registro inserido com sucesso.');
+		    	});
+		    };
+				   
+			$scope.getAreaConsultadas = function(val) {
+			    return $http.get('../rest/areaconsultadas/find', {
+			      params: {
+			        descricao: val
+			      }
+			    }).then(function(response){
+			        if (val) {
+			        	var item = new AreaConsultadaResource();
+			        	item.descricao = val;
+			        	response.data.unshift(item);
+			        }
+			      return response.data.map(function(item){
+			        return item;
+			      });
+			    });
+			  };
+
+		    $scope.onSelectAreaConsultadas = function (item) {
+		    	if(!item.id){
+			    	item.$save(function(success){
+			    		toaster.pop('success', 'Registro inserido com sucesso.');
+			    	});
+		    	}
+		    };
+			    
+			  
 		    // CALENDARIO
 		    $scope.setCalendar = function() {
 				$scope.openCalendar = function($event) {
@@ -123,6 +187,6 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    
 		    $scope.setCalendar();			
 	
-
+		    $scope.selected = 'dadosPreliminares';
 
 		});

@@ -20,6 +20,7 @@ import javax.ws.rs.core.UriBuilder;
 import br.org.mj.sislegis.app.model.EncaminhamentoProposicao;
 import br.org.mj.sislegis.app.model.Usuario;
 import br.org.mj.sislegis.app.service.EncaminhamentoProposicaoService;
+import br.org.mj.sislegis.app.service.TarefaService;
 import br.org.mj.sislegis.app.service.UsuarioService;
 
 @Path("/encaminhamentoProposicao")
@@ -30,14 +31,18 @@ public class EncaminhamentoProposicaoEndpoint {
 
 	@Inject
 	private UsuarioService usuarioService;
+	
+//	@Inject
+	private TarefaService tarefaService;
 
 	@POST
 	@Consumes("application/json")
 	public Response create(EncaminhamentoProposicao entity) {
-		service.save(entity);
+		EncaminhamentoProposicao savedEntity = service.salvarEncaminhamentoProposicao(entity);
+		
 		return Response.created(
 				UriBuilder.fromResource(EncaminhamentoEndpoint.class)
-						.path(String.valueOf(entity.getId())).build()).build();
+						.path(String.valueOf(savedEntity.getId())).build()).build();
 	}
 
 	@DELETE
@@ -67,7 +72,7 @@ public class EncaminhamentoProposicaoEndpoint {
 	@Consumes("application/json")
 	public Response update(EncaminhamentoProposicao entity) {
 		try {
-			entity = service.save(entity);
+			entity = service.salvarEncaminhamentoProposicao(entity);
 		} catch (OptimisticLockException e) {
 			return Response.status(Response.Status.CONFLICT)
 					.entity(e.getEntity()).build();

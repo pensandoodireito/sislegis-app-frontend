@@ -52,7 +52,7 @@
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group">onSelectAreaConsultadas
 			<label for="origem" class="col-sm-2 control-label">Origem</label>
 			<div class="col-sm-10">
 				<input id="origem" name="origem" class="form-control" type="text"
@@ -87,12 +87,12 @@
 			<tbody id="search-results-body">
 				<tr
 					ng-repeat="result in searchResults | searchFilter:searchResults | startFrom:currentPage*pageSize | limitTo:pageSize | orderBy:'dataRegistro':true">
-					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.dataRegistro| date:'dd-MM-yyyy'}}</a></td>
-					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.tipo}}</a></td>
+					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.dataRegistro| date:'dd/MM/yyyy'}}</a></td>
+					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.valueTipo}}</a></td>
 					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.nup}}</a></td>
-					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.identificacao}}</a></td>
-					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.autor}}</a></td>
-					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.origem}}</a></td>
+					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.valueIdentificacao}}</a></td>
+					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.autor.nome}}</a></td>
+					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.origem.descricao}}</a></td>
 				</tr>
 			</tbody>
 		</table>

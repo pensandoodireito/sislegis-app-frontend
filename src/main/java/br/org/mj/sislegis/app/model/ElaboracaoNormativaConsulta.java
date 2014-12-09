@@ -1,7 +1,9 @@
 package br.org.mj.sislegis.app.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -9,9 +11,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @XmlRootElement
 @Table(name = "elaboracao_normativa_consulta")
+@JsonIgnoreProperties({"elaboracaoNormativa"})
 public class ElaboracaoNormativaConsulta implements AbstractEntity {
 	
 	private static final long serialVersionUID = 4338236680426826432L;
@@ -24,8 +29,8 @@ public class ElaboracaoNormativaConsulta implements AbstractEntity {
 	@ManyToOne
 	private ElaboracaoNormativa elaboracaoNormativa;
 	
-	@Column
-	private String area;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private AreaConsultada areaConsultada;
 	
 	@Column
 	private String comentario;
@@ -41,10 +46,6 @@ public class ElaboracaoNormativaConsulta implements AbstractEntity {
 		return elaboracaoNormativa;
 	}
 
-	public String getArea() {
-		return area;
-	}
-
 	public String getComentario() {
 		return comentario;
 	}
@@ -55,10 +56,6 @@ public class ElaboracaoNormativaConsulta implements AbstractEntity {
 
 	public void setElaboracaoNormativa(ElaboracaoNormativa elaboracaoNormativa) {
 		this.elaboracaoNormativa = elaboracaoNormativa;
-	}
-
-	public void setArea(String area) {
-		this.area = area;
 	}
 
 	public void setComentario(String comentario) {
@@ -96,6 +93,14 @@ public class ElaboracaoNormativaConsulta implements AbstractEntity {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public AreaConsultada getAreaConsultada() {
+		return areaConsultada;
+	}
+
+	public void setAreaConsultada(AreaConsultada areaConsultada) {
+		this.areaConsultada = areaConsultada;
 	}
 	
 	// TODO: anexo

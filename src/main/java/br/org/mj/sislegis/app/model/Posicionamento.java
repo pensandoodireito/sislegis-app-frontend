@@ -18,7 +18,7 @@ public class Posicionamento implements AbstractEntity {
 	@Column(name = "id", updatable = false, nullable = false)
 	private Long id;
 
-	@Column
+	@Column(unique=true)
 	private String nome;
 
 	public Long getId() {
