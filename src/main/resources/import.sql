@@ -98,6 +98,10 @@ INSERT INTO Usuario (id, nome, email) VALUES(nextval ('hibernate_sequence'), 'Br
 INSERT INTO Usuario (id, nome, email) VALUES(nextval ('hibernate_sequence'), 'Edriene dos Santos Oliveira', 'edriene.oliveira@mj.gov.br');
 INSERT INTO Usuario (id, nome, email) VALUES(nextval ('hibernate_sequence'), 'Yara Campos Souto', 'yara.souto@mj.gov.br');
 
+INSERT INTO Usuario (id, nome, email) VALUES(nextval ('hibernate_sequence'), 'Guilherme Hott', 'guilhermehott@gmail.com');
+-- Para demonstrar funcionalidade de tarefas, foi colocado um id manual
+INSERT INTO Usuario (id, nome, email) VALUES(999, 'Aman Rathie', 'amanrathie@gmail.com'); 
+
 -- equipe
 insert into equipe(id, nome) values (nextval ('hibernate_sequence'), 'Equipe 1');
 insert into equipe(id, nome) values (nextval ('hibernate_sequence'), 'Equipe 2');
