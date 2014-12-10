@@ -32,7 +32,7 @@ public class TarefaEndpoint {
 	@POST
 	@Consumes("application/json")
 	public Response create(Tarefa entity) {
-		service.save(entity);
+		tarefaService.save(entity);
 		return Response.created(
 				UriBuilder.fromResource(TarefaEndpoint.class)
 						.path(String.valueOf(entity.getId())).build()).build();
@@ -73,7 +73,7 @@ public class TarefaEndpoint {
 	@Consumes("application/json")
 	public Response update(Tarefa entity) {
 		try {
-			entity = service.save(entity);
+			entity = tarefaService.save(entity);
 		} catch (OptimisticLockException e) {
 			return Response.status(Response.Status.CONFLICT)
 					.entity(e.getEntity()).build();
