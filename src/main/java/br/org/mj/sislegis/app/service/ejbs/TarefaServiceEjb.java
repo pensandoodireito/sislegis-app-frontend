@@ -53,8 +53,8 @@ public class TarefaServiceEjb extends AbstractPersistence<Tarefa, Long> implemen
 					emailFrom, 
 					PropertiesUtil.getProperties().getProperty("password")));
 			
-			String linkTarefa = "http://"+uriInfo.getAbsolutePath().getHost()+":"
-					+uriInfo.getAbsolutePath().getPort()+"/sislegis/app.html#/Tarefas";
+			String linkTarefa = "http://"+uriInfo.getAbsolutePath().getAuthority()+"/"
+					+uriInfo.getAbsolutePath().getPath().split("/")[1]+"/static/app.html#/Tarefas";
 			String linkTodasTarefas = linkTarefa+"/edit/"+entity.getId();
 			
 			String body = "<h2> A tarefa <i>"+entity.getEncaminhamentoProposicao().getEncaminhamento().getNome()
