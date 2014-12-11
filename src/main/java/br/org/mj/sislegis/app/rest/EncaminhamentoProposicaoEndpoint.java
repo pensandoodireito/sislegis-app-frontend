@@ -14,13 +14,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import br.org.mj.sislegis.app.model.EncaminhamentoProposicao;
 import br.org.mj.sislegis.app.model.Usuario;
 import br.org.mj.sislegis.app.service.EncaminhamentoProposicaoService;
-import br.org.mj.sislegis.app.service.TarefaService;
 import br.org.mj.sislegis.app.service.UsuarioService;
 
 @Path("/encaminhamentoProposicao")
@@ -32,13 +33,10 @@ public class EncaminhamentoProposicaoEndpoint {
 	@Inject
 	private UsuarioService usuarioService;
 	
-//	@Inject
-	private TarefaService tarefaService;
-
 	@POST
 	@Consumes("application/json")
-	public Response create(EncaminhamentoProposicao entity) {
-		EncaminhamentoProposicao savedEntity = service.salvarEncaminhamentoProposicao(entity);
+	public Response create(EncaminhamentoProposicao entity, @Context UriInfo uriInfo) {
+		EncaminhamentoProposicao savedEntity = service.salvarEncaminhamentoProposicao(entity, uriInfo);
 		
 		return Response.created(
 				UriBuilder.fromResource(EncaminhamentoEndpoint.class)
@@ -70,9 +68,9 @@ public class EncaminhamentoProposicaoEndpoint {
 	@PUT
 	@Path("/{id:[0-9][0-9]*}")
 	@Consumes("application/json")
-	public Response update(EncaminhamentoProposicao entity) {
+	public Response update(EncaminhamentoProposicao entity, @Context UriInfo uriInfo) {
 		try {
-			entity = service.salvarEncaminhamentoProposicao(entity);
+			entity = service.salvarEncaminhamentoProposicao(entity, uriInfo);
 		} catch (OptimisticLockException e) {
 			return Response.status(Response.Status.CONFLICT)
 					.entity(e.getEntity()).build();

@@ -62,8 +62,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 		    	
 		    	$scope.encaminhamentoProposicao.proposicao = new ProposicaoResource();
 		    	$scope.encaminhamentoProposicao.proposicao.id = $scope.proposicao.id;
-		    	console.log($scope.encaminhamentoProposicao.comentario);
-		    	if($scope.encaminhamentoProposicao.comentario == undefined){
+		    	if($scope.encaminhamentoProposicao.comentario){
 		    		$scope.encaminhamentoProposicao.comentario = new ComentarioResource();
 		    	}
 		    	

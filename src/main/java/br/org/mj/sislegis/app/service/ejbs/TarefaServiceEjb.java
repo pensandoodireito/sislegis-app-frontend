@@ -3,15 +3,19 @@ package br.org.mj.sislegis.app.service.ejbs;
 import java.util.List;
 
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.ws.rs.core.UriInfo;
+
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
 
 import br.org.mj.sislegis.app.model.Tarefa;
 import br.org.mj.sislegis.app.service.AbstractPersistence;
-import br.org.mj.sislegis.app.service.ProposicaoService;
 import br.org.mj.sislegis.app.service.TarefaService;
+import br.org.mj.sislegis.app.util.PropertiesUtil;
 
 @Stateless
 public class TarefaServiceEjb extends AbstractPersistence<Tarefa, Long> implements TarefaService {
@@ -28,6 +32,62 @@ public class TarefaServiceEjb extends AbstractPersistence<Tarefa, Long> implemen
 		return em;
 	}
 	
+	@Override
+	public Tarefa save(Tarefa entity, UriInfo uriInfo){
+		entity = super.save(entity);
+		sendEmailNotification(entity, uriInfo);
+		return entity;
+	}
+	
+	private void sendEmailNotification(Tarefa entity, UriInfo uriInfo) {
+		final HtmlEmail htmlEmail = new HtmlEmail();
+
+		try {
+			String emailFrom = PropertiesUtil.getProperties().getProperty("email");
+			
+			htmlEmail.setHostName(PropertiesUtil.getProperties().getProperty("host"));
+			htmlEmail.setSmtpPort(Integer.parseInt(PropertiesUtil.getProperties().getProperty("port")));
+			htmlEmail.setTLS(true);
+			
+			htmlEmail.setAuthenticator(new DefaultAuthenticator(
+					emailFrom, 
+					PropertiesUtil.getProperties().getProperty("password")));
+			
+			String linkTarefa = "http://"+uriInfo.getAbsolutePath().getAuthority()+"/"
+					+uriInfo.getAbsolutePath().getPath().split("/")[1]+"/static/app.html#/Tarefas";
+			String linkTodasTarefas = linkTarefa+"/edit/"+entity.getId();
+			
+			String body = "<h2> A tarefa <i>"+entity.getEncaminhamentoProposicao().getEncaminhamento().getNome()
+					+ "</i> foi atribuída a você</h2>"
+					+ "</br></br>"
+					+ "Prezado(a) "+entity.getUsuario().getNome()+","
+					+ "</br></br>"
+					+ "<p>Você foi definido como o(a) responsável pela tarefa <b>"+entity.getEncaminhamentoProposicao().getEncaminhamento().getNome() + "</b>.</p>"
+					+ "<p>Acompanhe <a href='"+linkTarefa +"'>essa tarefa</a>, ou veja o quadro de <a href='"+ linkTodasTarefas +"'>todas as suas tarefas</a> no SISLEGIS.</p>"
+					+ "</br></br>"
+					+ "Atenciosamente,"
+					+ "</br></br>"
+					+ "</br></br>"
+					+ "<p><b>SISLEGIS - acompanhamento legislativo</b></p>";
+
+
+			htmlEmail.setFrom(emailFrom, PropertiesUtil.getProperties().getProperty("username"));
+
+			htmlEmail.setSubject("[SISLEGIS] Nova tarefa atribuída a você");
+
+			htmlEmail.addTo(entity.getUsuario().getEmail(), entity.getUsuario().getNome());
+
+			htmlEmail.setHtmlMsg(body);
+
+			htmlEmail.setCharset("UTF-8");
+			htmlEmail.setSocketTimeout(Integer.parseInt(PropertiesUtil.getProperties().getProperty("emailTimeout")));
+			htmlEmail.send();
+
+		} catch (EmailException e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public Tarefa buscarPorId(Long idTarefa) {
 		TypedQuery<Tarefa> findByIdQuery = em.createQuery("SELECT t FROM Tarefa t WHERE t.id = :idTarefa", Tarefa.class);

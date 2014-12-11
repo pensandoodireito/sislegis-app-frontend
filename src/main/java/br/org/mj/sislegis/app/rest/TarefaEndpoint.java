@@ -13,8 +13,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import br.org.mj.sislegis.app.model.Tarefa;
 import br.org.mj.sislegis.app.service.Service;
@@ -31,8 +33,8 @@ public class TarefaEndpoint {
 
 	@POST
 	@Consumes("application/json")
-	public Response create(Tarefa entity) {
-		service.save(entity);
+	public Response create(Tarefa entity, @Context UriInfo uriInfo) {
+		tarefaService.save(entity, uriInfo);
 		return Response.created(
 				UriBuilder.fromResource(TarefaEndpoint.class)
 						.path(String.valueOf(entity.getId())).build()).build();
@@ -73,7 +75,7 @@ public class TarefaEndpoint {
 	@Consumes("application/json")
 	public Response update(Tarefa entity) {
 		try {
-			entity = service.save(entity);
+			entity = tarefaService.save(entity);
 		} catch (OptimisticLockException e) {
 			return Response.status(Response.Status.CONFLICT)
 					.entity(e.getEntity()).build();
