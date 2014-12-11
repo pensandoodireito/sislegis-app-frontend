@@ -8,7 +8,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.ws.rs.core.UriInfo;
 
 import br.org.mj.sislegis.app.enumerated.TipoTarefa;
 import br.org.mj.sislegis.app.model.EncaminhamentoProposicao;
@@ -37,7 +36,7 @@ public class EncaminhamentoProposicaoServiceEjb extends AbstractPersistence<Enca
 	}
 	
 	@Override
-	public EncaminhamentoProposicao salvarEncaminhamentoProposicao(EncaminhamentoProposicao encaminhamentoProposicao, UriInfo uriInfo) {
+	public EncaminhamentoProposicao salvarEncaminhamentoProposicao(EncaminhamentoProposicao encaminhamentoProposicao, String referer) {
 		EncaminhamentoProposicao savedEntity = this.save(encaminhamentoProposicao);
 		
 		// Caso uma tarefa já exista, significa que foi atualizada. Excluímos a antiga antes de atualizar.
@@ -53,7 +52,7 @@ public class EncaminhamentoProposicaoServiceEjb extends AbstractPersistence<Enca
 		tarefa.setUsuario(savedEntity.getResponsavel());
 		tarefa.setEncaminhamentoProposicao(savedEntity);
 		
-		tarefaService.save(tarefa, uriInfo);
+		tarefaService.save(tarefa, referer);
 		
 		return savedEntity;
 	}
