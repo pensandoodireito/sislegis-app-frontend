@@ -7,7 +7,10 @@ body > .header {
     position: relative;
     // max-height: 100px;   
     z-index: 1030;
-    
+    .navbar-right {
+        float: right;
+        margin-right: 0 !important;
+    }
     .box-shadow(0 5px 5px rgba(0, 0, 0, .2));
     .navbar-top {
         // height: 50px;
@@ -148,6 +151,7 @@ body > .header {
         }
         .navbar-right {
             float: right;
+            margin-right: 0 !important;
         }
     }
 }
@@ -170,6 +174,120 @@ body > .header {
         }
         > .wrapper, .sidebar-offcanvas {
             margin-top: 100px!important;
+        }
+    }
+}
+/* skin-green navbar */
+
+.skin-green {
+    #cabecalho {
+        background-color: #019c80 !important;
+    }
+}
+.skin-green .navbar-top {
+    .navbar-variant(#019c80;
+    #fff;
+    #41b5b5;
+    #fff);
+    // border-bottom: 1px solid #eee;
+}
+/* skin-green logo */
+
+.skin-green .logo {
+    .logo-variant(#019c80);
+}
+/* skin-green content header */
+
+.skin-green .right-side > .content-header {
+    background: transparent;
+    box-shadow: none;
+}
+/* Skin-red user panel */
+
+.skin-green .user-panel {
+    > .image > img {
+        border: 1px solid #444;
+    }
+    > .info, > .info > a {
+        color: #eee;
+    }
+}
+/* skin-green sidebar */
+
+.skin-green {
+    .sidebar {
+        border-bottom: 1px solid #333;
+    }
+    // the menu 
+    .sidebar > .sidebar-menu > li {
+        border-top: 1px solid #333;
+        border-bottom: 0px solid #444;
+        &:first-of-type {
+            border-top: 1px solid #444;
+            > a {
+                border-top: 0px solid #333;
+            }
+        }
+        > a {
+            margin-right: 1px;
+        }
+        //Hover and active states
+        > a:hover, &.active > a {
+            color: #f6f6f6;
+            background: #444;
+        }
+        > .treeview-menu {
+            margin: 0 1px;
+            background: #444;
+        }
+    }
+    // Sidebar color
+    .left-side {
+        background: #333;
+    }
+    .sidebar a {
+        color: #eee;
+        &:hover {
+            text-decoration: none;
+        }
+    }
+    // skin blue treeview-menu
+    .treeview-menu {
+        > li {
+            > a {
+                color: #ccc;
+            }
+            &.active > a, > a:hover {
+                color: #fff;
+            }
+        }
+    }
+    .sidebar-form {
+        .border-radius(2px);
+        border: 0px solid #555;
+        margin: 10px 10px;
+        input[type="text"], .btn {
+            box-shadow: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 0 solid rgba(255, 255, 255, 0.1);
+            height: 35px;
+            outline: none;
+        }
+        input[type="text"] {
+            color: #666;
+            .border-radius(2px, 0, 2px, 0)!important;
+            &:focus, &:focus + .input-group-btn .btn {
+                background-color: #444;
+                border: 0;
+            }
+            &:focus + .input-group-btn .btn {
+                border-left: 0;
+            }
+        }
+        .btn {
+            color: #999;
+            .border-radius(0, 2px, 0, 2px)!important;
+            border-left: 0;
         }
     }
 }

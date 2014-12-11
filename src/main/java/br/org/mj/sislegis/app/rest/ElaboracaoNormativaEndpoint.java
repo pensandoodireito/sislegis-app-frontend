@@ -1,7 +1,9 @@
 package br.org.mj.sislegis.app.rest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -22,7 +24,6 @@ import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaIdentificacao;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
 import br.org.mj.sislegis.app.json.ComboJSON;
-import br.org.mj.sislegis.app.json.TipoElaboracaoNormativaJSON;
 import br.org.mj.sislegis.app.model.ElaboracaoNormativa;
 import br.org.mj.sislegis.app.service.ElaboracaoNormativaService;
 import br.org.mj.sislegis.app.service.Service;
@@ -71,6 +72,25 @@ public class ElaboracaoNormativaEndpoint {
 			@QueryParam("max") Integer maxResult) {
 		return elaboracaoNormativaService.listarTodos();
 	}
+	
+	@GET
+	@Path("/searchElaboracaoNormativa")
+	@Produces("application/json")
+	public List<ElaboracaoNormativa> searchElaboracaoNormativa(
+			@QueryParam("tipo") String tipo,
+			@QueryParam("nup") String nup,
+			@QueryParam("identificacao") String identificacao,
+			@QueryParam("autor") Long idAutor,
+			@QueryParam("origem") Long idOrigem) {
+		Map<String, Object> mapaCampos = new HashMap<String, Object>();
+		mapaCampos.put("tipo", tipo);
+		mapaCampos.put("nup", nup);
+		mapaCampos.put("identificacao", identificacao);
+		mapaCampos.put("autor", idAutor);
+		mapaCampos.put("origem", idOrigem);
+		return elaboracaoNormativaService.buscaPorParametros(mapaCampos);
+	}
+	
 	
 	@GET
 	@Path("/tipos")

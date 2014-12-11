@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import br.org.mj.sislegis.app.model.AbstractEntity;
 
@@ -58,6 +59,23 @@ public abstract class AbstractPersistence<T extends AbstractEntity, PK extends N
 				entityClass);
 		findByIdQuery.setParameter(property, "%"+value+"%");
 		return findByIdQuery.getResultList();
+	}
+	
+	/***
+	 * Retorna um único resultado
+	 * @param property
+	 * @param value
+	 * @return
+	 */
+	public T findByProperty(String property, Object value){
+		CriteriaQuery cq = getEntityManager().getCriteriaBuilder()
+				.createQuery();
+		Root<T> c = cq.from(entityClass);
+		cq.select(c);
+		cq.where(
+			      getEntityManager().getCriteriaBuilder().equal(c.get(property), value)
+			  );
+		return (T)getEntityManager().createQuery(cq).getSingleResult();
 	}
 	
 	// Exige a definição do <code>EntityManager</code> responsável pelas

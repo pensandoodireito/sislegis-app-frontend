@@ -43,22 +43,16 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	public ElaboracaoNormativa(Long id, Date dataRegistro, ElaboracaoNormativaTipo tipo,
 			String nup,
 			ElaboracaoNormativaIdentificacao identificacao,
-			Usuario autor,
-			Usuario coAutor,
-			OrigemElaboracaoNormativa origem,
-			AreaConsultada areaConsultada,
-			String ementa			
+			String nomeAutor,
+			String origemDescricao
 			) {
 		this.id=id;
 		this.dataRegistro=dataRegistro;
 		this.tipo=tipo;
 		this.nup=nup;
 		this.identificacao=identificacao;
-		this.autor=autor;
-		this.coAutor=coAutor;
-		this.origem=origem;
-		this.areaConsultada = areaConsultada;
-		this.ementa=ementa;
+		this.nomeAutor=nomeAutor;
+		this.origemDescricao=origemDescricao;
 	}
 
 	
@@ -142,10 +136,16 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private ElaboracaoNormativaConsulta elaboracaoNormativaConsulta;
 	
 	@Transient
+	private String nomeAutor;
+	
+	@Transient
 	private List<TagJSON> tags;
 	
 	@Transient
 	private List<Usuario> pareceristas;
+	
+	@Transient
+	private String origemDescricao;
 
 
 	public Long getId() {
@@ -363,6 +363,26 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 
 	public String getValueIdentificacao() {
 		return Objects.isNull(identificacao)?"":identificacao.getValue();
+	}
+
+
+	public String getNomeAutor() {
+		return nomeAutor;
+	}
+
+
+	public void setNomeAutor(String nomeAutor) {
+		this.nomeAutor = nomeAutor;
+	}
+
+
+	public String getOrigemDescricao() {
+		return origemDescricao;
+	}
+
+
+	public void setOrigemDescricao(String origemDescricao) {
+		this.origemDescricao = origemDescricao;
 	}
 
 
