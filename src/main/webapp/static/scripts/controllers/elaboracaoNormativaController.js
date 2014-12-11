@@ -6,8 +6,6 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    $scope.$location = $location;
 			$scope.elaboracaoNormativa = $scope.elaboracaoNormativa || {};//new ElaboracaoNormativaResource();
 			$scope.equipes = EquipeResource.queryAll();
-			$scope.elaboracaoNormativa.elaboracaoNormativaConsulta = $scope.elaboracaoNormativa.elaboracaoNormativaConsulta || {};
-			$scope.elaboracaoNormativaConsulta = new ElaboracaoNormativaConsultaResource();
 			
 		    $scope.loadTags = function(query) {
 		    	return TagResource.listarTodos().$promise;
@@ -136,10 +134,12 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			    });
 			  };
 
-		    $scope.onSelectAreaConsultadas = function (item) {
-		    	item.$save(function(success){
-		    		toaster.pop('success', 'Registro inserido com sucesso.');
-		    	});
+		    $scope.onSelectOrigemElaboracaoNormativas = function (item) {
+		    	if(!item.id){
+		    		item.$save(function(success){
+		    			toaster.pop('success', 'Registro inserido com sucesso.');
+		    		});
+		    	}
 		    };
 				   
 			$scope.getAreaConsultadas = function(val) {
