@@ -32,13 +32,13 @@ public class TarefaServiceEjb extends AbstractPersistence<Tarefa, Long> implemen
 	}
 	
 	@Override
-	public Tarefa save(Tarefa entity){
-		super.save(entity);
-		sendEmailNotification(entity);
+	public Tarefa save(Tarefa entity, String path){
+		entity = super.save(entity);
+		sendEmailNotification(entity, path);
 		return entity;
 	}
 	
-	private void sendEmailNotification(Tarefa entity) {
+	private void sendEmailNotification(Tarefa entity, String path) {
 		final HtmlEmail htmlEmail = new HtmlEmail();
 
 		try {
@@ -52,8 +52,8 @@ public class TarefaServiceEjb extends AbstractPersistence<Tarefa, Long> implemen
 					emailFrom, 
 					PropertiesUtil.getProperties().getProperty("password")));
 			
-			String linkTarefa = "www.google.com";
-			String linkTodasTarefas = "www.facebook.com";
+			String linkTarefa = path+"#/Tarefas";
+			String linkTodasTarefas = path+"#/Tarefas/edit/"+entity.getId();
 			
 			String body = "<h2> A tarefa <i>"+entity.getEncaminhamentoProposicao().getEncaminhamento().getNome()
 					+ "</i> foi atribuída a você</h2>"
