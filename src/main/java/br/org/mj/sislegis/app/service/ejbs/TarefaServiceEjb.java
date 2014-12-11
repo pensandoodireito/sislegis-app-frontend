@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
@@ -32,13 +33,13 @@ public class TarefaServiceEjb extends AbstractPersistence<Tarefa, Long> implemen
 	}
 	
 	@Override
-	public Tarefa save(Tarefa entity, String path){
+	public Tarefa save(Tarefa entity, UriInfo uriInfo){
 		entity = super.save(entity);
-		sendEmailNotification(entity, path);
+		sendEmailNotification(entity, uriInfo);
 		return entity;
 	}
 	
-	private void sendEmailNotification(Tarefa entity, String path) {
+	private void sendEmailNotification(Tarefa entity, UriInfo uriInfo) {
 		final HtmlEmail htmlEmail = new HtmlEmail();
 
 		try {
@@ -52,8 +53,9 @@ public class TarefaServiceEjb extends AbstractPersistence<Tarefa, Long> implemen
 					emailFrom, 
 					PropertiesUtil.getProperties().getProperty("password")));
 			
-			String linkTarefa = path+"#/Tarefas";
-			String linkTodasTarefas = path+"#/Tarefas/edit/"+entity.getId();
+			String linkTarefa = "http://"+uriInfo.getAbsolutePath().getHost()+":"
+					+uriInfo.getAbsolutePath().getPort()+"/sislegis/app.html#/Tarefas";
+			String linkTodasTarefas = linkTarefa+"/edit/"+entity.getId();
 			
 			String body = "<h2> A tarefa <i>"+entity.getEncaminhamentoProposicao().getEncaminhamento().getNome()
 					+ "</i> foi atribuída a você</h2>"

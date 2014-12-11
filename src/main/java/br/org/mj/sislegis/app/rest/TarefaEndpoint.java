@@ -34,7 +34,7 @@ public class TarefaEndpoint {
 	@POST
 	@Consumes("application/json")
 	public Response create(Tarefa entity, @Context UriInfo uriInfo) {
-		tarefaService.save(entity, uriInfo.getPath());
+		tarefaService.save(entity, uriInfo);
 		return Response.created(
 				UriBuilder.fromResource(TarefaEndpoint.class)
 						.path(String.valueOf(entity.getId())).build()).build();
