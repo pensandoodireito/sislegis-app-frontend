@@ -1,7 +1,4 @@
-angular
-		.module('sislegisapp')
-		.controller(
-				'ModalBuscarProposicaoController',
+angular.module('sislegisapp').controller('ModalBuscarProposicaoController',
 				function($scope, $http, $filter, $routeParams, $location, toaster,
 						$modalInstance, ProposicaoResource, reuniao,
 						reuniaoProposicao, listaProposicaoSelecao) {
@@ -32,8 +29,7 @@ angular
 					};
 
 					$scope.buscarProposicao = function() {
-						var formattedDate = $filter('date')(
-								new Date($scope.campoData), 'MM/dd/yyyy');
+						var formattedDate = $filter('date')(new Date($scope.campoData), 'MM/dd/yyyy');
 
 						var successCallback = function(sucess) {
 							$scope.detalheProposicao = null;
@@ -60,17 +56,12 @@ angular
 					};
 
 					$scope.detalharProposicao = function(p) {
-						$http(
-								{
-									method : 'GET',
-									url : ($scope.origem.value == 'C') ? "../rest/proposicaos/detalharProposicaoCamaraWS"
-											: "../rest/proposicaos/detalharProposicaoSenadoWS",
-									params : {
-										'id' : p.idProposicao
-									// id proposicao
-									}
-								}).success(function(data) {
-							console.log(data);
+						$http({
+							method: 'GET',
+							url: ($scope.origem.value == 'C') ? "../rest/proposicaos/detalharProposicaoCamaraWS"
+									: "../rest/proposicaos/detalharProposicaoSenadoWS",
+							params : {'id' : p.idProposicao}
+						}).success(function(data) {
 							$scope.detalheProposicao = data;
 							$scope.detalheProposicao.comissao = p.comissao;
 							$scope.detalheProposicao.seqOrdemPauta = p.seqOrdemPauta;
@@ -81,8 +72,7 @@ angular
 
 					$scope.adicionarProposicao = function(proposicao) {
 						proposicao.listaReuniaoProposicoes = proposicao.listaReuniaoProposicoes || [];
-						proposicao.listaReuniaoProposicoes
-								.push($scope.reuniaoProposicao);
+						proposicao.listaReuniaoProposicoes.push($scope.reuniaoProposicao);
 						proposicao.reuniao = $scope.reuniao;
 						$scope.listaProposicaoSelecao.push(proposicao);
 					};

@@ -8,16 +8,15 @@ import javax.persistence.OptimisticLockException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
 
 import br.org.mj.sislegis.app.model.EncaminhamentoProposicao;
 import br.org.mj.sislegis.app.model.Usuario;
@@ -35,8 +34,8 @@ public class EncaminhamentoProposicaoEndpoint {
 	
 	@POST
 	@Consumes("application/json")
-	public Response create(EncaminhamentoProposicao entity, @Context UriInfo uriInfo) {
-		EncaminhamentoProposicao savedEntity = service.salvarEncaminhamentoProposicao(entity, uriInfo);
+	public Response create(EncaminhamentoProposicao entity, @HeaderParam("Referer") String referer) {
+		EncaminhamentoProposicao savedEntity = service.salvarEncaminhamentoProposicao(entity, referer);
 		
 		return Response.created(
 				UriBuilder.fromResource(EncaminhamentoEndpoint.class)
@@ -68,9 +67,9 @@ public class EncaminhamentoProposicaoEndpoint {
 	@PUT
 	@Path("/{id:[0-9][0-9]*}")
 	@Consumes("application/json")
-	public Response update(EncaminhamentoProposicao entity, @Context UriInfo uriInfo) {
+	public Response update(EncaminhamentoProposicao entity, @HeaderParam("Referer") String referer) {
 		try {
-			entity = service.salvarEncaminhamentoProposicao(entity, uriInfo);
+			entity = service.salvarEncaminhamentoProposicao(entity, referer);
 		} catch (OptimisticLockException e) {
 			return Response.status(Response.Status.CONFLICT)
 					.entity(e.getEntity()).build();
