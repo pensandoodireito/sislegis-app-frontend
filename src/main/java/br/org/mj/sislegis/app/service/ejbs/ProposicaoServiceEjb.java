@@ -88,7 +88,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 	public List<Proposicao> buscarProposicoesPautaCamaraWS(Map parametros) throws Exception {
 		Long idComissao = (Long) parametros.get("idComissao");
 		String dataIni = Conversores.dateToString((Date) parametros.get("data"), "yyyyMMdd");
-		String dataFim = Conversores.dateToString(SislegisUtil.getDate(), "yyyyMMdd");
+		String dataFim = Conversores.dateToString(SislegisUtil.getFutureDate(), "yyyyMMdd");
 		return parserPautaCamara.getProposicoes(idComissao, dataIni, dataFim);
 	}
 
