@@ -10,6 +10,7 @@ angular
 					$scope.disabled = false;
 					$scope.showDetalhamentoProposicao = false;
 					$scope.$location = $location;
+					$scope.campoData = new Date();
 
 					$scope.comissao = new Object();
 					$scope.reuniao = reuniao;
