@@ -29,7 +29,16 @@ angular.module('sislegisapp').factory(
 							url : "../rest/elaboracaonormativa/normas",
 							method : 'GET',
 							isArray : true
-						}
+						},
+						'searchElaboracaoNormativa' : {
+							url : "../rest/elaboracaonormativa/searchElaboracaoNormativa",
+						    params: {
+							        tipo: '@tipo',
+							        nup: '@nup'
+							      },
+							method : 'GET',
+							isArray : true
+						}						
 					});
 			return resource;
 		});

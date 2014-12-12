@@ -1,6 +1,5 @@
 package br.org.mj.sislegis.app.model;
 
-import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
@@ -12,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @XmlRootElement
-public class TagElaboracaoNormativa implements Serializable {
+public class TagElaboracaoNormativa implements AbstractEntity {
 	
 	private static final long serialVersionUID = 7949894944142814382L;
 	
@@ -76,5 +75,11 @@ public class TagElaboracaoNormativa implements Serializable {
 		int result = 1;
 		result = prime * result + ((tagElaboracaoNormativaPK == null) ? 0 : tagElaboracaoNormativaPK.hashCode());
 		return result;
+	}
+
+	@Override
+	public Number getId() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

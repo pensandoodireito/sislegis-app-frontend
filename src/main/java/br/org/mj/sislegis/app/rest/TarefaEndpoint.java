@@ -7,6 +7,7 @@ import javax.persistence.OptimisticLockException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -31,8 +32,8 @@ public class TarefaEndpoint {
 
 	@POST
 	@Consumes("application/json")
-	public Response create(Tarefa entity) {
-		service.save(entity);
+	public Response create(Tarefa entity, @HeaderParam("Referer") String referer) {
+		tarefaService.save(entity, referer);
 		return Response.created(
 				UriBuilder.fromResource(TarefaEndpoint.class)
 						.path(String.valueOf(entity.getId())).build()).build();
@@ -71,9 +72,9 @@ public class TarefaEndpoint {
 	@PUT
 	@Path("/{id:[0-9][0-9]*}")
 	@Consumes("application/json")
-	public Response update(Tarefa entity) {
+	public Response update(Tarefa entity, @HeaderParam("Referer") String referer) {
 		try {
-			entity = service.save(entity);
+			entity = tarefaService.save(entity, referer);
 		} catch (OptimisticLockException e) {
 			return Response.status(Response.Status.CONFLICT)
 					.entity(e.getEntity()).build();

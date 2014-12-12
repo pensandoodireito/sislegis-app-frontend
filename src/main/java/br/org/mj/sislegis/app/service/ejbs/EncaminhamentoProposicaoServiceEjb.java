@@ -36,7 +36,7 @@ public class EncaminhamentoProposicaoServiceEjb extends AbstractPersistence<Enca
 	}
 	
 	@Override
-	public EncaminhamentoProposicao salvarEncaminhamentoProposicao(EncaminhamentoProposicao encaminhamentoProposicao) {
+	public EncaminhamentoProposicao salvarEncaminhamentoProposicao(EncaminhamentoProposicao encaminhamentoProposicao, String referer) {
 		EncaminhamentoProposicao savedEntity = this.save(encaminhamentoProposicao);
 		
 		// Caso uma tarefa já exista, significa que foi atualizada. Excluímos a antiga antes de atualizar.
@@ -52,7 +52,7 @@ public class EncaminhamentoProposicaoServiceEjb extends AbstractPersistence<Enca
 		tarefa.setUsuario(savedEntity.getResponsavel());
 		tarefa.setEncaminhamentoProposicao(savedEntity);
 		
-		tarefaService.save(tarefa);
+		tarefaService.save(tarefa, referer);
 		
 		return savedEntity;
 	}
