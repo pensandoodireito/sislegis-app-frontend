@@ -1,4 +1,4 @@
-package br.org.mj.sislegis.app.util;
+package br.gov.mj.sislegis.app.util;
 
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
