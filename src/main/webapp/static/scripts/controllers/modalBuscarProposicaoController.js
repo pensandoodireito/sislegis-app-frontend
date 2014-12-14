@@ -92,7 +92,7 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController',
 				        var errorCallback = function() {
 				        	toaster.pop('info', 'Proposição já adicionada para a Reunião selecionada');
 				        };
-				        console.log('ProposicaoResourceeee');
+
 				        ProposicaoResource.salvarProposicoes($scope.listaProposicaoSelecao,
 								successCallback, errorCallback);
 					};
