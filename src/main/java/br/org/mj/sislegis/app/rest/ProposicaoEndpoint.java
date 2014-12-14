@@ -22,7 +22,6 @@ import javax.ws.rs.core.UriBuilder;
 
 import br.org.mj.sislegis.app.json.ProposicaoJSON;
 import br.org.mj.sislegis.app.model.Proposicao;
-import br.org.mj.sislegis.app.model.Reuniao;
 import br.org.mj.sislegis.app.model.ReuniaoProposicao;
 import br.org.mj.sislegis.app.service.ProposicaoService;
 import br.org.mj.sislegis.app.service.Service;
@@ -89,6 +88,7 @@ public class ProposicaoEndpoint {
 	}
 	
 	@POST
+	@Path("/salvarProposicoes")
 	@Consumes("application/json")
 	public Response salvarProposicoes(List<Proposicao> listaProposicoesSelecionados){
 		try{
