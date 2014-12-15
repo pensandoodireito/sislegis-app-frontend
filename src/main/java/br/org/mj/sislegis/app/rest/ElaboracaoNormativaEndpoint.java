@@ -20,7 +20,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaIdentificacao;
+import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaObjeto;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.org.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
 import br.org.mj.sislegis.app.json.ComboJSON;
@@ -106,10 +106,10 @@ public class ElaboracaoNormativaEndpoint {
 	@GET
 	@Path("/identificacoes")
 	@Produces("application/json")
-	public List<ComboJSON<ElaboracaoNormativaIdentificacao>> identificacoes() {
-		List<ComboJSON<ElaboracaoNormativaIdentificacao>> lista = new ArrayList<ComboJSON<ElaboracaoNormativaIdentificacao>>();
-		for(ElaboracaoNormativaIdentificacao elaboracaoNormativaIdentificacao:ElaboracaoNormativaIdentificacao.values()){
-			lista.add(new ComboJSON<ElaboracaoNormativaIdentificacao>(elaboracaoNormativaIdentificacao.name(), elaboracaoNormativaIdentificacao.getValue()));
+	public List<ComboJSON<ElaboracaoNormativaObjeto>> identificacoes() {
+		List<ComboJSON<ElaboracaoNormativaObjeto>> lista = new ArrayList<ComboJSON<ElaboracaoNormativaObjeto>>();
+		for(ElaboracaoNormativaObjeto elaboracaoNormativaIdentificacao:ElaboracaoNormativaObjeto.values()){
+			lista.add(new ComboJSON<ElaboracaoNormativaObjeto>(elaboracaoNormativaIdentificacao.name(), elaboracaoNormativaIdentificacao.getValue()));
 		}
 		return lista;
 	}

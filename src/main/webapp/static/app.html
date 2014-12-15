@@ -62,33 +62,6 @@
                     </li>
                     
                     
-                    <!-- User Account: Ativar só quando for usar  
-                    <li class="dropdown user user-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="glyphicon glyphicon-user"></i>
-                            <span>Pedro Silva <i class="caret"></i>
-                            </span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            
-                            <li class="user-header bg-light-blue">
-                                <p>
-                                    Pedro Silva
-                                    <small>Analista</small>
-                                </p>
-                            </li>
-                            
-                            <li class="user-footer">
-                                <div class="pull-left">
-                                    <a href="#" class="btn btn-default btn-flat">Configurações</a>
-                                </div>
-                                <div class="pull-right">
-                                    <a href="#" class="btn btn-default btn-flat">Sair</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    -->
                 </ul>
             </div>
         </div>
@@ -108,7 +81,6 @@
                 </button>
             </div>
 
-
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
@@ -122,6 +94,7 @@
 							<li><a href="#/Equipes">Gerenciar Equipe</a></li>
 							<li><a href="#/OrigemElaboracaoNormativas">Gerenciar Origem Elaboração Normativa</a></li>
 							<li><a href="#/AreaConsultadas">Gerenciar Área Consultada</a></li>
+							<li><a href="#/StatusSidof">Status SIDOF</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -194,7 +167,7 @@
 
     <!-- Posicionamento -->
     <script src="scripts/controllers/newPosicionamentoController.js"></script>
-    <script src="scripts/controllers/searchPosicionamentoController.js"></script/static/app.html#/ElaboracaoNormativa/new>
+    <script src="scripts/controllers/searchPosicionamentoController.js" />
     <script src="scripts/controllers/editPosicionamentoController.js"></script>
     <script src="scripts/services/PosicionamentoFactory.js"></script>
 
@@ -225,6 +198,11 @@
     <script src="scripts/controllers/searchElaboracaoNormativaController.js"></script>
     <script src="scripts/controllers/elaboracaoNormativaController.js"></script>
 
+    <!-- Status Sidof -->
+    <script src="scripts/controllers/searchStatusSidofController.js"></script>
+    <script src="scripts/controllers/newStatusSidofController.js"></script>
+    <script src="scripts/controllers/editStatusSidofController.js"></script>
+
     <!-- Upload -->
     <script src="scripts/controllers/uploadController.js"></script>
     
@@ -244,6 +222,8 @@
     <script src="scripts/controllers/editAreaConsultadaController.js"></script>
     
     <script src="scripts/services/ElaboracaoNormativaConsultaFactory.js"></script>
+    
+    <script src="scripts/services/StatusSidofFactory.js"></script>
     
     <script src="scripts/services/locationParser.js"></script>
 

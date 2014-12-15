@@ -13,6 +13,29 @@
       <div class="row divider-top">
           <div class="col-md-3">
               <div class="form-group">
+                  <label for="">Tipo:</label>
+			<select ng-model="elaboracaoNormativa.tipo" ng-options="tipo.shade as tipo.name for tipo in tipos" class="form-control"></select>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <div class="form-group">
+                  <label for="">Objeto: </label>
+                  <select ng-model="elaboracaoNormativa.identificacao" ng-options="identificacao.shade as identificacao.name for identificacao in identificacoes" class="form-control"></select>
+              		
+              </div>
+          </div>
+    	<div class="col-md-3">
+              <div class="form-group">
+                  <label for=""> Número Único de Protocolo (NUP): </label>
+                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.nup">
+              </div>
+          </div>
+      </div>
+
+  
+      <div class="row divider-top">
+          <div class="col-md-3">
+              <div class="form-group">
                   <label for="">Data do Registro:</label>
 				<p class="input-group">
 						<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataRegistro" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
@@ -34,27 +57,7 @@
        </div>        
    
 
-      <div class="row divider-top">
-          <div class="col-md-3">
-              <div class="form-group">
-                  <label for="">Tipo:</label>
-			<select ng-model="elaboracaoNormativa.tipo" ng-options="tipo.shade as tipo.name for tipo in tipos" class="form-control"></select>
-              </div>
-          </div>
-          <div class="col-md-3">
-              <div class="form-group">
-                  <label for="">Identificação</label>
-                  <select ng-model="elaboracaoNormativa.identificacao" ng-options="identificacao.shade as identificacao.name for identificacao in identificacoes" class="form-control"></select>
-              		
-              </div>
-          </div>
-    	<div class="col-md-3">
-              <div class="form-group">
-                  <label for=""> Número Único de Protocolo (NUP): </label>
-                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.nup">
-              </div>
-          </div>
-      </div>
+
 	<div class="row divider-top">
     	<div class="col-md-3">
               <div class="form-group">
@@ -163,7 +166,7 @@
                     </div>
                     <ul class="list-group" ng-repeat="elaboracaoNormativaConsulta in elaboracaoNormativa.listaElaboracaoNormativaConsulta">
                         <li class="list-group-item">
-                            <button type="button" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Excluir</span>
+                            <button type="button" class="close" ng-click="excluirElaboracaoNormativa()"><span aria-hidden="true">&times;</span><span class="sr-only">Excluir</span>
                             </button>
                             <h5>{{elaboracaoNormativaConsulta.areaConsultada.descricao}}</h5>
                             <p>{{elaboracaoNormativaConsulta.comentario}}<p>
