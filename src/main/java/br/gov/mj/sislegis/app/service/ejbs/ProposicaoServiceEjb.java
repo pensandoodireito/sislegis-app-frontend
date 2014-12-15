@@ -34,6 +34,7 @@ import br.gov.mj.sislegis.app.model.TagProposicaoPK;
 import br.gov.mj.sislegis.app.parser.camara.ParserPautaCamara;
 import br.gov.mj.sislegis.app.parser.camara.ParserProposicaoCamara;
 import br.gov.mj.sislegis.app.parser.senado.ParserPautaSenado;
+import br.gov.mj.sislegis.app.parser.senado.ParserPlenarioSenado;
 import br.gov.mj.sislegis.app.parser.senado.ParserProposicaoSenado;
 import br.gov.mj.sislegis.app.service.AbstractPersistence;
 import br.gov.mj.sislegis.app.service.ComentarioService;
@@ -58,6 +59,9 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 
 	@Inject
 	private ParserProposicaoSenado parserProposicaoSenado;
+	
+	@Inject
+	private ParserPlenarioSenado parserPlenarioSenado;
 
 	@Inject
 	private ComentarioService comentarioService;
@@ -96,6 +100,11 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 	public List<Proposicao> buscarProposicoesPautaSenadoWS(Map parametros) throws Exception {
 		String siglaComissao = (String) parametros.get("siglaComissao");
 		String dataIni = Conversores.dateToString((Date) parametros.get("data"), "yyyyMMdd");
+		
+		if (siglaComissao.equals("PLEN")) {
+			return parserPlenarioSenado.getProposicoes(dataIni);
+		}
+		
 		return parserPautaSenado.getProposicoes(siglaComissao, dataIni);
 	}
 

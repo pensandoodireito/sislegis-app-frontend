@@ -24,6 +24,12 @@ public class ParserComissoesSenado {
 		config(xstream);
 		
 		xstream.fromXML(url, comissoes);
+		
+		// Adiciona manualmente uma comissao para o plenario
+		Comissao comissaoPlenario = new Comissao();
+		comissaoPlenario.setId(999l);
+		comissaoPlenario.setSigla("PLEN");
+		comissoes.getComissoes().add(comissaoPlenario);
 
 		return comissoes.getComissoes();
 	}
