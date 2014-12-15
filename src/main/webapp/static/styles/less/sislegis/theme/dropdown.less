@@ -14,14 +14,7 @@
     }
     > li > a:hover {
         background-color: @light-blue;
-        color: #f9f9f9;
-    }
-}
-/*Drodown in navbars*/
-
-.skin-blue .navbar {
-    .dropdown-menu > li > a {
-        color: #444444;
+        color: #fff;
     }
 }
 /*
@@ -30,6 +23,9 @@
 */
 
 .navbar-top {
+    .navbar-nav > .notifications-menu, .navbar-nav > .messages-menu, .navbar-nav > .tasks-menu{
+        a{ color:#fff;}
+    }
     .navbar-nav > .notifications-menu, .navbar-nav > .messages-menu, .navbar-nav > .tasks-menu {
         //fix width and padding
         > .dropdown-menu {
@@ -212,7 +208,6 @@
 //User menu
 .navbar-top {
     .navbar-nav > .user-menu {
-        
         > .dropdown-menu {
             .border-radius(0);
             padding: 1px 0 0 0;
@@ -260,7 +255,6 @@
                     > small {
                         display: block;
                         font-size: 12px;
-
                     }
                 }
             }

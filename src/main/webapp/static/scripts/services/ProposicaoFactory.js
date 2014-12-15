@@ -14,8 +14,8 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource) 
 			method : 'PUT'
 		},
 		'salvarProposicoes' : {
-			method : 'PUT',
-			isArray : true
+			url : "../rest/proposicaos/salvarProposicoes",
+			method : 'POST'
 		},
 		'buscarCamara' : {
 			url : "../rest/proposicaos/proposicoesPautaCamara",

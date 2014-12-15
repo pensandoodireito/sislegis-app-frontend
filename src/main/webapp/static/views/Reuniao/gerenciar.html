@@ -80,7 +80,6 @@
 							<strong>Posicionamento:</strong>
 							<input type="text" ng-model="selectedProposicao.posicionamento" placeholder="Procurar..."
 								typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" 
-								typeahead-on-select="onSelectPosicionamentos($item)"
 								class="form-control">
 						</p>
 						<p class="fontsize-sm">

@@ -7,6 +7,7 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController',
 					$scope.disabled = false;
 					$scope.showDetalhamentoProposicao = false;
 					$scope.$location = $location;
+					$scope.campoData = new Date();
 
 					$scope.comissao = new Object();
 					$scope.reuniao = reuniao;
@@ -91,8 +92,8 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController',
 				        var errorCallback = function() {
 				        	toaster.pop('info', 'Proposição já adicionada para a Reunião selecionada');
 				        };
-						
-						ProposicaoResource.save($scope.listaProposicaoSelecao,
+
+				        ProposicaoResource.salvarProposicoes($scope.listaProposicaoSelecao,
 								successCallback, errorCallback);
 					};
 
