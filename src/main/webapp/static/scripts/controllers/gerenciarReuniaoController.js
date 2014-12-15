@@ -28,13 +28,6 @@ angular.module('sislegisapp').controller(
         }
         return copy;
       };
-
-    $scope.onSelectPosicionamentos = function (item) {
-    	item.$save(function(success){
-    		toaster.pop('success', 'Registro inserido com sucesso.');
-    		$scope.posicionamentos.push(item);
-    	});
-    };
     
     $scope.isClean = function() {
         return angular.equals(self.original, $scope.reuniao);
