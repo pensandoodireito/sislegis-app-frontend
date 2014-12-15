@@ -22,10 +22,10 @@ import javax.ws.rs.core.UriBuilder;
 
 import br.gov.mj.sislegis.app.json.ProposicaoJSON;
 import br.gov.mj.sislegis.app.model.Proposicao;
-import br.gov.mj.sislegis.app.model.Reuniao;
 import br.gov.mj.sislegis.app.model.ReuniaoProposicao;
 import br.gov.mj.sislegis.app.service.ProposicaoService;
 import br.gov.mj.sislegis.app.service.Service;
+
 
 /**
  * 
@@ -89,6 +89,7 @@ public class ProposicaoEndpoint {
 	}
 	
 	@POST
+	@Path("/salvarProposicoes")
 	@Consumes("application/json")
 	public Response salvarProposicoes(List<Proposicao> listaProposicoesSelecionados){
 		try{
