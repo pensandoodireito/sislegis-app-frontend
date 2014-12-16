@@ -19,7 +19,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaIdentificacao;
+import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaObjeto;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
 import br.gov.mj.sislegis.app.json.TagJSON;
 import br.gov.mj.sislegis.app.model.AreaConsultada;
@@ -189,7 +189,7 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		}
 		if(!Objects.isNull(mapaCampos.get("identificacao"))){
 			Predicate identificacao =cb.equal(en.get("identificacao"), 
-					ElaboracaoNormativaIdentificacao.get((String)mapaCampos.get("identificacao")));
+					ElaboracaoNormativaObjeto.get((String)mapaCampos.get("identificacao")));
 			predicates.add(identificacao);			
 		}
 		if(!Objects.isNull(mapaCampos.get("autor"))){
