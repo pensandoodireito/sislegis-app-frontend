@@ -72,10 +72,15 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController',
 					};
 
 					$scope.adicionarProposicao = function(proposicao) {
-						proposicao.listaReuniaoProposicoes = proposicao.listaReuniaoProposicoes || [];
-						proposicao.listaReuniaoProposicoes.push($scope.reuniaoProposicao);
-						proposicao.reuniao = $scope.reuniao;
-						$scope.listaProposicaoSelecao.push(proposicao);
+						// condicional para evitar itens duplicados
+						if ($scope.listaProposicaoSelecao.indexOf(proposicao) == -1) {
+							proposicao.listaReuniaoProposicoes = proposicao.listaReuniaoProposicoes || [];
+							proposicao.listaReuniaoProposicoes.push($scope.reuniaoProposicao);
+							proposicao.reuniao = $scope.reuniao;
+							$scope.listaProposicaoSelecao.push(proposicao);
+						} else {
+							toaster.pop('info', 'Proposição já selecionada');
+						}
 					};
 
 					$scope.removerProposicao = function(proposicao) {
