@@ -185,7 +185,19 @@ angular.module('sislegisapp').controller(
           });
     };
     
-
+    $scope.abrirModalRelatorio = function() {
+        var modalInstance = $modal.open({
+          templateUrl: 'views/Reuniao/modal-relatorio.html',
+          controller: 'ModalRelatorioReuniaoController',
+          size: 'lg',
+          resolve: {
+        	  listaReuniaoProposicoes: function () {
+            	return $scope.listaReuniaoProposicoes;
+            }
+          }
+        });
+    };
+    
     $scope.abrirModalEncaminhamentos = function () {
     	
         var modalInstance = $modal.open({

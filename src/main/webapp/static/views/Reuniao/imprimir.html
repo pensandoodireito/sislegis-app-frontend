@@ -1,0 +1,19 @@
+ <!-- Tudo que for para o usuario imprimir deve ficar nesse HTML -->
+ <div class="list-group-item clearfix" ng-repeat="item in listaReuniaoProposicoes | filter:selectedFiltroOrigem | filter:selectedFiltroComissao | orderBy : 'comissao'">
+     <div class="row">
+         <div class="col-sm-12">
+             <h3 class="list-group-item-heading">{{item.sigla}}</h3>
+             <p>{{item.ementa}}
+                 <br/>
+                 <strong>Autor: </strong>{{item.autor}}
+                 <br/>
+                 <strong>Origem: </strong>{{item.origem}}
+                 <br/>
+                 <strong>Comissao: </strong>{{item.comissao}}
+                 <br/>
+                 <strong>Ordem na Pauta: </strong>{{item.seqOrdemPauta}}
+                 <br/>
+             </p>
+         </div>
+     </div>
+ </div>
