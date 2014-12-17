@@ -8,6 +8,8 @@ angular.module('sislegisapp').controller(
     $scope.disabled = false;
     $scope.$location = $location;
     
+    $scope.selectedFiltro = new Object();
+    
     $scope.reuniao = new ReuniaoResource();
     $scope.reuniaoProposicao = new ReuniaoProposicaoResource();
     $scope.posicionamentos = PosicionamentoResource.queryAll();

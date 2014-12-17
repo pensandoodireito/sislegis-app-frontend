@@ -35,13 +35,14 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <label>Filtrar por casa legislativa:</label>
-                                    <select ng-model="selectedFiltroOrigem" ng-options="item.origem as item.origem for item in listaReuniaoProposicoes | unique:'origem'" class="form-control">
+                                    <select ng-model="selectedFiltro.origem" ng-options="item.origem as item.origem for item in listaReuniaoProposicoes | unique:'origem'" class="form-control"
+                                    	ng-change="selectOrigemComissoes()">
                                         <option value=""></option>
                                     </select>
                                 </div>
                                 <div class="col-sm-4">
                                     <label>Filtrar por comissão:</label>
-                                    <select ng-model="selectedFiltroComissao" ng-options="item.comissao as item.comissao for item in listaReuniaoProposicoes | unique:'comissao'" class="form-control">
+                                    <select ng-model="selectedFiltro.comissao" ng-options="item.comissao as item.comissao for item in listaReuniaoProposicoes | filter:selectedFiltro | unique:'comissao'" class="form-control">
                                         <option value=""></option>
                                     </select>
                                 </div>
@@ -60,7 +61,7 @@
                         <h4 class="list-group-item-heading">Comissão A</h4>
                     </div>
 
-                    <div class="list-group-item clearfix" ng-repeat="item in listaReuniaoProposicoes | filter:selectedFiltroOrigem | filter:selectedFiltroComissao | orderBy : 'comissao'">
+                    <div class="list-group-item clearfix" ng-repeat="item in listaReuniaoProposicoes | filter:selectedFiltro | orderBy : 'comissao'">
                         <button type="button" class="close" ng-click="removerProposicao(item.id); $event.stopPropagation()">
                             <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
                         </button>
