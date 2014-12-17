@@ -167,7 +167,6 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    	}
 		    };
 			    
-			  
 		    // CALENDARIO
 		    $scope.setCalendar = function() {
 				$scope.openCalendar = function($event) {
