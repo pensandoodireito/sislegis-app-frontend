@@ -128,7 +128,7 @@
 
 
     <div class="container-fluid mt-md">
-        <toaster-container toaster-options="{'time-out': 5000, 'close-button':true, 'animation-class': 'toast-top-center'}"></toaster-container>
+        <toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-center'}"></toaster-container>
         <div id="main" ng-view></div>
     </div>
 
@@ -169,6 +169,7 @@
     <script src="scripts/controllers/modalComentariosController.js"></script>
     <script src="scripts/controllers/modalEncaminhamentosController.js"></script>
     <script src="scripts/services/ComentarioFactory.js"></script>
+    <script src="scripts/services/ComentarioService.js"></script>
     <script src="scripts/services/EncaminhamentoProposicaoFactory.js"></script>
     <script src="scripts/services/ComissaoFactory.js"></script>
     <script src="scripts/services/ProposicaoFactory.js"></script>
@@ -179,10 +180,8 @@
 
     <!-- Posicionamento -->
     <script src="scripts/controllers/newPosicionamentoController.js"></script>
-    <script src="scripts/controllers/searchPosicionamentoController.js" />
+    <script src="scripts/controllers/searchPosicionamentoController.js"></script>
     <script src="scripts/controllers/editPosicionamentoController.js"></script>
-    <script src="scripts/controllers/searchPosicionamentoController.js">
-    </script>
     <script src="scripts/services/PosicionamentoFactory.js"></script>
 
     <!-- Encaminhamento -->

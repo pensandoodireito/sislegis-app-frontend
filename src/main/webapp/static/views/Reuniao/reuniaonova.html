@@ -31,17 +31,18 @@
                             <div ng-show="listaReuniaoProposicoes.length > 0">
                                 <div class="col-sm-4">
                                     <label>Filtrar proposições:</label>
-                                    <input type="text" class="form-control" id="" placeholder="Filtrar as proposições">
+                                    <input type="text" class="form-control" ng-model="selectedFiltro.$" placeholder="Filtrar as proposições">
                                 </div>
                                 <div class="col-sm-4">
                                     <label>Filtrar por casa legislativa:</label>
-                                    <select ng-model="selectedFiltroOrigem" ng-options="item.origem as item.origem for item in listaReuniaoProposicoes | unique:'origem'" class="form-control">
+                                    <select ng-model="selectedFiltro.origem" ng-options="item.origem as item.origem for item in listaReuniaoProposicoes | unique:'origem'" class="form-control"
+                                    	ng-change="selectOrigemComissoes()">
                                         <option value=""></option>
                                     </select>
                                 </div>
                                 <div class="col-sm-4">
                                     <label>Filtrar por comissão:</label>
-                                    <select ng-model="selectedFiltroComissao" ng-options="item.comissao as item.comissao for item in listaReuniaoProposicoes | unique:'comissao'" class="form-control">
+                                    <select ng-model="selectedFiltro.comissao" ng-options="item.comissao as item.comissao for item in listaReuniaoProposicoes | filter:selectedFiltro | unique:'comissao'" class="form-control">
                                         <option value=""></option>
                                     </select>
                                 </div>
@@ -60,7 +61,7 @@
                         <h4 class="list-group-item-heading">Comissão A</h4>
                     </div>
 
-                    <div class="list-group-item clearfix" ng-repeat="item in listaReuniaoProposicoes | filter:selectedFiltroOrigem | filter:selectedFiltroComissao | orderBy : 'comissao'">
+                    <div class="list-group-item clearfix" ng-repeat="item in listaReuniaoProposicoes | filter:selectedFiltro | orderBy : 'comissao'">
                         <button type="button" class="close" ng-click="removerProposicao(item.id); $event.stopPropagation()">
                             <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
                         </button>
@@ -84,20 +85,19 @@
                                 <div class="divider-left fontsize-sm">
                                     <div class="clearfix">
                                         <div class="col-md-10">
-                                            <textarea class="form-control" rows="3" placeholder="Adicione um comentário"></textarea>
-
+                                            <textarea class="form-control" rows="3" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
                                         </div>
                                         <div class="col-md-2">
-                                            <button type="button" class="btn btn-success btn-sm"><i class="fa fa-check"></i>
+                                            <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i>
                                             </button>
                                         </div>
                                     </div>
                                     <div class="divider-top clearfix">
                                         <div class="col-md-6">
-                                            <strong> <a href="javascript:;" ng-click="abrirModalComentarios()"><i class="fa fa-comment"></i> {{selectedProposicao.listaComentario.length}} comentários</a></strong>
+                                            <strong> <a href="javascript:;" ng-click="abrirModalComentarios(item)"><i class="fa fa-comment"></i> {{item.listaComentario.length}} comentários</a></strong>
                                         </div>
                                         <div class="col-md-6 text-right">
-                                            <strong><a href="javascript:;" ng-click="abrirModalEncaminhamentos()"> {{listaEncaminhamentoProposicao.length}} encaminhamentos</a></strong>
+                                            <strong><a href="javascript:;" ng-click="abrirModalEncaminhamentos()"> {{item.listaEncaminhamentoProposicao.length}} encaminhamentos</a></strong>
                                         </div>
                                     </div>
 
