@@ -50,6 +50,7 @@ angular.module('toaster', ['ngAnimate'])
     'tap-to-dismiss': true,
     'close-button': false,
     'newest-on-top': true,
+    'clear-before-pop': true,
     //'fade-in': 1000,            // done in css
     //'on-fade-in': undefined,    // not implemented
     //'fade-out': 1000,           // done in css
@@ -99,6 +100,10 @@ function ($compile, $rootScope, $interval, $sce, toasterConfig, toaster) {
             };
 
             function addToast(toast) {
+            	if(mergedConfig['clear-before-pop'] === true){
+            		scope.toasters.splice(0, scope.toasters.length);
+            	}
+            	
                 toast.type = mergedConfig['icon-classes'][toast.type];
                 if (!toast.type)
                     toast.type = mergedConfig['icon-class'];

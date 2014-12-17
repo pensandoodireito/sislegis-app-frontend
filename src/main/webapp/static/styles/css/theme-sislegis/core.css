@@ -141,11 +141,20 @@ li.tab {
 /* customizacao do toaster */
 #toast-container > div{
 	width: 500px !important;
-	opacity: none !important;
+	opacity: 1 !important;
 	-ms-filter: none !important;
 	filter: none !important;
 }
 
 .toast-top-center {
   top: 95px !important;
+}
+
+:not(.no-leave)#toast-container > div.ng-leave
+{ 
+    -webkit-transition: 0ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all !important;
+    -moz-transition: 0ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all !important;
+    -ms-transition: 0ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all !important;
+    -o-transition: 0ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all !important;
+    transition: 0ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all !important;
 }
