@@ -104,7 +104,9 @@ angular.module('sislegisapp').controller(
                     	body: 'Você pode adicionar novas proposições clicando aqui ou no link na página.',
                     	timeout: 3000,
                     	clickHandler: function() {
-                    	$scope.buscarProposicoes();
+	                    	$scope.buscarProposicoes();
+	                	}
+                	});
                 }
                 $scope.displayError = false;
             };
