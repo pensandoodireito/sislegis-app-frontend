@@ -170,6 +170,7 @@ angular.module('sislegisapp').controller(
     $scope.incluirComentario = function(item){
     	var comentario = new ComentarioResource();
     	comentario.descricao = item.comentarioTmp;
+    	item.comentarioTmp = null;
     	
     	var successCallback = function(data,responseHeaders){
 			item.listaComentario.push(comentario);
