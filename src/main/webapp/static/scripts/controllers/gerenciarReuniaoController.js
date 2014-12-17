@@ -100,7 +100,11 @@ angular.module('sislegisapp').controller(
     		
     		var successCallback = function(){
                 if ($scope.listaReuniaoProposicoes.length == 0) {
-                    toaster.pop('info', 'Não existem proposições para esta data. Você pode adicionar novas proposições.');
+                	toaster.pop({type:'info', title:'Não existem proposições para esta data.', 
+                    	body: 'Você pode adicionar novas proposições clicando aqui ou no link na página.',
+                    	timeout: 3000,
+                    	clickHandler: function() {
+                    	$scope.buscarProposicoes();
                 }
                 $scope.displayError = false;
             };
