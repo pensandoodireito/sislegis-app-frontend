@@ -98,7 +98,7 @@ INSERT INTO Usuario (id, nome, email) VALUES(nextval ('hibernate_sequence'), 'Br
 INSERT INTO Usuario (id, nome, email) VALUES(nextval ('hibernate_sequence'), 'Edriene dos Santos Oliveira', 'edriene.oliveira@mj.gov.br');
 INSERT INTO Usuario (id, nome, email) VALUES(nextval ('hibernate_sequence'), 'Yara Campos Souto', 'yara.souto@mj.gov.br');
 
-INSERT INTO Usuario (id, nome, email) VALUES(999, 'Guilherme Hott', 'guilhermehott@gmail.com');
+INSERT INTO Usuario (id, nome, email) VALUES(nextval ('hibernate_sequence'), 'Guilherme Hott', 'guilhermehott@gmail.com');
 
 -- equipe
 insert into equipe(id, nome) values (nextval ('hibernate_sequence'), 'Equipe 1');
@@ -114,3 +114,9 @@ insert into OrigemElaboracaoNormativa(id, descricao) values (nextval ('hibernate
 insert into AreaConsultada(id, descricao) values (nextval ('hibernate_sequence'), 'AreaConsultada 1');
 insert into AreaConsultada(id, descricao) values (nextval ('hibernate_sequence'), 'AreaConsultada 2');
 insert into AreaConsultada(id, descricao) values (nextval ('hibernate_sequence'), 'AreaConsultada 3');
+
+--Status Sidof
+insert into StatusSidof(id, descricao) values (nextval ('hibernate_sequence'), 'Em Trâmite na PR');
+insert into StatusSidof(id, descricao) values (nextval ('hibernate_sequence'), 'Em análise no co-autor');
+insert into StatusSidof(id, descricao) values (nextval ('hibernate_sequence'), 'Em trâmite no co-autor');
+
