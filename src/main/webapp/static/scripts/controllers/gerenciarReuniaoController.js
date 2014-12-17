@@ -100,13 +100,7 @@ angular.module('sislegisapp').controller(
     		
     		var successCallback = function(){
                 if ($scope.listaReuniaoProposicoes.length == 0) {
-                	toaster.pop({type:'info', title:'Não existem proposições para esta data.', 
-                    	body: 'Você pode adicionar novas proposições clicando aqui ou no link na página.',
-                    	timeout: 3000,
-                    	clickHandler: function() {
-	                    	$scope.buscarProposicoes();
-	                	}
-                	});
+                	toaster.pop('info', 'Não existem proposições para esta data. Você pode adicionar novas proposições.');
                 }
                 $scope.displayError = false;
             };
@@ -212,7 +206,8 @@ angular.module('sislegisapp').controller(
     };
     
 
-    $scope.abrirModalEncaminhamentos = function () {
+    $scope.abrirModalEncaminhamentos = function (item) {
+    	$scope.selectedProposicao = item;
     	
         var modalInstance = $modal.open({
           templateUrl: 'views/modal-encaminhamentos.html',
@@ -223,18 +218,18 @@ angular.module('sislegisapp').controller(
             	return $scope.selectedProposicao;
             },            
             listaEncaminhamentoProposicao: function (){
-            	return $scope.listaEncaminhamentoProposicao;
+            	return $scope.proposicao.listaEncaminhamentoProposicao;
             }          
           }
         });
         
         modalInstance.result.then(function (listaEncaminhamentoProposicao) {
-        	$scope.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
+        	$scope.proposicao.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
           }, function () {
         	  //when modal is dismissed
         	  //o certo era receber a lista como parametro, mas no dismiss nao consegui passar parametro, 
         	  //entao carrego a lista de novo para atualizar a qtde
-          	$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.selectedProposicao.id});
+          	$scope.proposicao.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.selectedProposicao.id});
             $log.info('Modal dismissed at: ' + new Date());
           });
     };
