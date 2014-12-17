@@ -132,6 +132,7 @@ angular.module('sislegisapp').controller(
      * MODALs
      */
     $scope.buscarProposicoes = function () {
+    	toaster.clear();
     	
     	if($scope.reuniao.data == null){
     		toaster.pop('info', 'Selecione a data da reunião.');
@@ -218,18 +219,18 @@ angular.module('sislegisapp').controller(
             	return $scope.selectedProposicao;
             },            
             listaEncaminhamentoProposicao: function (){
-            	return $scope.proposicao.listaEncaminhamentoProposicao;
+            	return $scope.selectedProposicao.listaEncaminhamentoProposicao;
             }          
           }
         });
         
         modalInstance.result.then(function (listaEncaminhamentoProposicao) {
-        	$scope.proposicao.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
+        	$scope.selectedProposicao.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
           }, function () {
         	  //when modal is dismissed
         	  //o certo era receber a lista como parametro, mas no dismiss nao consegui passar parametro, 
         	  //entao carrego a lista de novo para atualizar a qtde
-          	$scope.proposicao.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.selectedProposicao.id});
+          	$scope.selectedProposicao.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.selectedProposicao.id});
             $log.info('Modal dismissed at: ' + new Date());
           });
     };
