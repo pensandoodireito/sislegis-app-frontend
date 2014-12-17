@@ -11,6 +11,10 @@ angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap','
 		.when('/Posicionamentos',{templateUrl:'views/Posicionamento/search.html',controller:'SearchPosicionamentoController'})
 		.when('/Posicionamentos/new',{templateUrl:'views/Posicionamento/detail.html',controller:'NewPosicionamentoController'})
 		.when('/Posicionamentos/edit/:PosicionamentoId',{templateUrl:'views/Posicionamento/detail.html',controller:'EditPosicionamentoController'})
+
+		.when('/StatusSidof',{templateUrl:'views/StatusSidof/search.html',controller:'SearchStatusSidofController'})
+		.when('/StatusSidof/new',{templateUrl:'views/StatusSidof/detail.html',controller:'NewStatusSidofController'})
+		.when('/StatusSidof/edit/:StatusSidofId',{templateUrl:'views/StatusSidof/detail.html',controller:'EditStatusSidofController'})
 		
 		.when('/OrigemElaboracaoNormativas',{templateUrl:'views/OrigemElaboracaoNormativa/search.html',controller:'SearchOrigemElaboracaoNormativaController'})
 		.when('/OrigemElaboracaoNormativas/new',{templateUrl:'views/OrigemElaboracaoNormativa/detail.html',controller:'NewOrigemElaboracaoNormativaController'})

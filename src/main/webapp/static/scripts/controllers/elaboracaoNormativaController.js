@@ -102,6 +102,10 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    	$scope.get();
 		    }
 		    
+		    $scope.excluirElaboracaoNormativa = function(){
+		    	
+		    }
+		    
 
 			$scope.getUsuarios = function(val) {
 			    return $http.get('../rest/usuarios/find', {

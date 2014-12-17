@@ -20,13 +20,14 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaIdentificacao;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
+import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaObjeto;
+import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaSituacao;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
 import br.gov.mj.sislegis.app.json.TagJSON;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @XmlRootElement
@@ -42,7 +43,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 
 	public ElaboracaoNormativa(Long id, Date dataRegistro, ElaboracaoNormativaTipo tipo,
 			String nup,
-			ElaboracaoNormativaIdentificacao identificacao,
+			ElaboracaoNormativaObjeto identificacao,
 			String nomeAutor,
 			String origemDescricao
 			) {
@@ -54,9 +55,6 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		this.nomeAutor=nomeAutor;
 		this.origemDescricao=origemDescricao;
 	}
-
-	
-	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -80,7 +78,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	
 	@Column
 	@Enumerated(EnumType.ORDINAL)
-	private ElaboracaoNormativaIdentificacao identificacao;
+	private ElaboracaoNormativaObjeto identificacao;
 	
 	@Transient
 	private String valueIdentificacao;
@@ -132,6 +130,25 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Column
 	private String arquivoManifestacao;
 	
+	@Column
+	private Integer ano;
+	
+	@Column
+	private String numero;
+	
+	@Column
+	private String ementaPreliminar;
+	
+	@Column
+	private Date dataInclusaoSIDOF;
+	
+	@Column
+	private Date dataAssinaturaSIDOF;
+	
+	@Column
+	@Enumerated(EnumType.ORDINAL)
+	private ElaboracaoNormativaSituacao elaboracaoNormativaSituacao;
+	
 	@Transient
 	private ElaboracaoNormativaConsulta elaboracaoNormativaConsulta;
 	
@@ -164,7 +181,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		return nup;
 	}
 
-	public ElaboracaoNormativaIdentificacao getIdentificacao() {
+	public ElaboracaoNormativaObjeto getIdentificacao() {
 		return identificacao;
 	}
 
@@ -225,7 +242,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		this.nup = nup;
 	}
 
-	public void setIdentificacao(ElaboracaoNormativaIdentificacao identificacao) {
+	public void setIdentificacao(ElaboracaoNormativaObjeto identificacao) {
 		this.identificacao = identificacao;
 	}
 

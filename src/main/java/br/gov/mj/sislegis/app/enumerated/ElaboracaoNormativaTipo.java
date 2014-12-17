@@ -1,7 +1,10 @@
 package br.gov.mj.sislegis.app.enumerated;
 
 public enum ElaboracaoNormativaTipo {
-    ANTEPROJETO("Ante Projeto"), PRELIMINAR("Preliminar");
+    MINUTA("Minuta"), 
+    EXPOSICAOMOTIVOS("Exposição de Motivos"), 
+    EXPOSICAOMOTIVOSINTERMINISTERIAL("Exposição de Motivos Interministerial"), 
+    OUTROS("Outros");
     
     private String value;
     private String nome;
