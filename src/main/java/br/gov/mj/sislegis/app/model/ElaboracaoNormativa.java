@@ -91,7 +91,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Usuario coAutor;
 
-	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private OrigemElaboracaoNormativa origem;
 
 	@ManyToOne(fetch = FetchType.EAGER)
