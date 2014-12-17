@@ -24,61 +24,24 @@
               		
               </div>
           </div>
-    	<div class="col-md-3">
+    	<div class="col-md-2">
               <div class="form-group">
-                  <label for=""> Número Único de Protocolo (NUP): </label>
-                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.nup">
+                  <label for="">Número: </label>
+                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.numero">
               </div>
           </div>
+    	<div class="col-md-1">
+              <div class="form-group">
+                  <label for="">Ano: </label>
+                  <input type="text" size="4" class="form-control" ng-model="elaboracaoNormativa.ano">
+              </div>
+          </div>          
       </div>
 
-  
       <div class="row divider-top">
           <div class="col-md-3">
               <div class="form-group">
-                  <label for="">Data do Registro:</label>
-				<p class="input-group">
-						<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataRegistro" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
-	            				<span class="input-group-btn">
-			                <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-			    		</span>		    		
-			    </p>
-			    </div>	
-       	</div>
-      </div>
- 
-      <div class="row divider-top">
-          <div class="col-md-6">
-   	                 <label for="">Tags:</label>
-					 <tags-input ng-model="elaboracaoNormativa.tags">
-					 	<auto-complete source="loadTags($query)"></auto-complete>
-					 </tags-input>	        
-          </div>
-       </div>        
-   
-
-
-	<div class="row divider-top">
-    	<div class="col-md-3">
-              <div class="form-group">
-                  <label for="">Autor</label>
-                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.autor" placeholder="Pesquisar..."
-	              			typeahead="item as item.nome for item in getUsuarios($viewValue)" typeahead-editable="false">
-              </div>
-          </div>
-          
-          <div class="col-md-3" ng-show="elaboracaoNormativa.identificacao == 'EXPOSICAO_MOTIVOS_INTERMINISTERIAL'">
-              <div class="form-group">
-                  <label for="">Co-Autor</label>
-                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.coAutor" placeholder="Pesquisar..."
-	              			typeahead="item as item.nome for item in getUsuarios($viewValue)">
-              </div>
-          </div>
-      </div>
-      <div class="row divider-top">
-          <div class="col-md-3">
-              <div class="form-group">
-                  <label for="">Origem:</label>
+                  <label for="">Órgão de Origem:</label>
                   <input type="text" class="form-control" ng-model="elaboracaoNormativa.origem" placeholder="Pesquisar..."
 	              			typeahead="item as item.descricao for item in getOrigemElaboracaoNormativas($viewValue)"
 	              			typeahead-on-select="onSelectOrigemElaboracaoNormativas($item)">
@@ -86,11 +49,78 @@
           </div>
           <div class="col-md-3">
               <div class="form-group">
+                  <label for="">Co-Autor</label>
+                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.coAutor" placeholder="Pesquisar..."
+	              			typeahead="item as item.nome for item in getUsuarios($viewValue)">
+              </div>
+          </div>
+      </div>
+  
+      <div class="row divider-top">
+          <div class="col-md-6">
+              <div class="form-group">
                   <label for="">Ementa:</label>
                   <textarea class="form-control" ng-model="elaboracaoNormativa.ementa" />
               </div>
           </div>
       </div>
+      
+      
+      <div class="row divider-top">
+          <div class="col-md-3">
+              <div class="form-group">
+                  <label for="">Data de inclusão no SIDOF:</label>
+				<p class="input-group">
+						<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataInclusaoSIDOF" is-open="opened_dataInclusaoSIDOF" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
+	            				<span class="input-group-btn">
+			                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'dataInclusaoSIDOF')"><i class="glyphicon glyphicon-calendar"></i></button>
+			    		</span>		    		
+			    </p>
+			    </div>	
+       	</div>
+          <div class="col-md-3">
+              <div class="form-group">
+                  <label for="">Data de Assinatura no SIDOF:</label>
+				<p class="input-group">
+						<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataAssinaturaSIDOF" is-open="opened_dataAssinaturaSIDOF" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
+	            				<span class="input-group-btn">
+			                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'dataAssinaturaSIDOF')"><i class="glyphicon glyphicon-calendar"></i></button>
+			    		</span>		    		
+			    </p>
+			    </div>	
+       	</div>
+      </div>      
+ 
+      <div class="row divider-top">
+    	<div class="col-md-3">
+              <div class="form-group">
+                  <label for="">Nº de Protocolo (NUP): </label>
+                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.nup">
+              </div>
+          </div>      
+      
+          <div class="col-md-3">
+   	                 <label for="">Tags:</label>
+					 <tags-input ng-model="elaboracaoNormativa.tags">
+					 	<auto-complete source="loadTags($query)"></auto-complete>
+					 </tags-input>	        
+          </div>
+       </div>        
+   
+      <div class="row divider-top">
+          <div class="col-md-3">
+              <div class="form-group">
+                  <label for="">Situação:</label>
+              	<select ng-model="elaboracaoNormativa.elaboracaoNormativaSituacao" ng-options="elaboracaoNormativaSituacao.shade as elaboracaoNormativaSituacao.name for elaboracaoNormativaSituacao in situacoes" class="form-control"></select>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <div class="form-group">
+              	<label for="">Status no SIDOF: </label>
+              	<select ng-model="elaboracaoNormativa.statusSidof.id" ng-options="statusSidof.id as statusSidof.descricao for statusSidof in listaStatusSidof" class="form-control"></select>
+              </div>
+          </div>
+      </div>   
 
 
 </div>
@@ -182,7 +212,9 @@
      <div class="row divider-top">
          <div class="col-md-4">
              <div class="form-group">
-                 <label for="">Data Nota SAL:</label>
+  <div class="text-right">
+    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="distribuicaoUploader.isUploading || manifestacaoUploader.isUploading">Salvar</button>
+</div>                <label for="">Data Nota SAL:</label>
 					<p class="input-group">
  						<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataManifestacao" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
               				<span class="input-group-btn">
@@ -227,12 +259,11 @@
          
      </div>
   
- 
+ <div class="text-right">
+    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="distribuicaoUploader.isUploading || manifestacaoUploader.isUploading">Salvar</button>
 </div>
 
-<div class="text-right">
-    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="distribuicaoUploader.isUploading || manifestacaoUploader.isUploading">Salvar</button>
-</div>  
+  
 
 
 

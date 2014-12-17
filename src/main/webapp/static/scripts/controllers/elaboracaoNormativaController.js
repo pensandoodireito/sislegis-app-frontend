@@ -1,6 +1,6 @@
 angular.module('sislegisapp').controller('ElaboracaoNormativaController',
-		function($scope, $http, $routeParams, $location, $locale, toaster, ElaboracaoNormativaResource, EquipeResource, FileUploader, TagResource,
-				AreaConsultadaResource, OrigemElaboracaoNormativaResource, UsuarioResource, ElaboracaoNormativaConsultaResource) {
+		function($scope, $http, $routeParams, $location, $locale, $parse, toaster, ElaboracaoNormativaResource, EquipeResource, FileUploader, TagResource,
+				AreaConsultadaResource, OrigemElaboracaoNormativaResource, UsuarioResource, ElaboracaoNormativaConsultaResource, StatusSidofResource) {
 			var self = this;
 			$scope.disabled = false;
 		    $scope.$location = $location;
@@ -16,6 +16,10 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    $scope.tipos = ElaboracaoNormativaResource.tipos();
 		    
 		    $scope.identificacoes = ElaboracaoNormativaResource.identificacoes();
+		    
+		    $scope.listaStatusSidof = StatusSidofResource.queryAll();
+		    
+		    $scope.situacoes = ElaboracaoNormativaResource.situacoes();
 		    
 		    // inicio config upload
 			$scope.distribuicaoUploader = new FileUploader( {
@@ -174,11 +178,15 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			  
 		    // CALENDARIO
 		    $scope.setCalendar = function() {
-				$scope.openCalendar = function($event) {
+				$scope.openCalendar = function($event, id) {
 					$event.preventDefault();
 					$event.stopPropagation();
+					
+					var opened = 'opened_'+id;
+					var model = $parse(opened);
+					model.assign($scope, true);
+					$scope.apply;
 			
-					$scope.opened = true;
 				};
 
 				$scope.dateOptions = {
@@ -186,11 +194,14 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 					startingDay : 1
 				};
 
-				$scope.format = 'dd/MM/yyyy';
 		    }
 		    
-		    $scope.setCalendar();			
+		    $scope.setCalendar();	
+		    
+		    $scope.format = 'dd/MM/yyyy';
+		    
+		    //Aba default
+		    $scope.selected = "dadosPreliminares";
 	
-		    $scope.selected = 'dadosPreliminares';
 
 		});
