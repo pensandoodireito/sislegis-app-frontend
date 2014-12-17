@@ -32,7 +32,7 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 		        	toaster.pop('success', 'Comentário atualizado com sucesso');
 		        };
 		        var errorCallback = function() {
-		        	toaster.pop('error', 'Falha ao processar informações.');
+		        	toaster.pop('error', 'Falha ao realizar operação.');
 		        };
 		        ComentarioResource.update($scope.comentario, successCallback, errorCallback);
 		    };
@@ -47,7 +47,7 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 		        	toaster.pop('success', 'Comentário inserido com sucesso');
 		        };
 		        var errorCallback = function() {
-		        	toaster.pop('error', 'Falha ao processar informações.');
+		        	toaster.pop('error', 'Falha ao realizar operação.');
 		        };
 		        
 
