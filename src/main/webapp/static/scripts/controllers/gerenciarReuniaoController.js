@@ -2,7 +2,7 @@ angular.module('sislegisapp').controller(
 		'GerenciarReuniaoController',
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource,
-				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource) {
+				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService) {
     
 	var self = this;
     $scope.disabled = false;
@@ -165,9 +165,26 @@ angular.module('sislegisapp').controller(
             $log.info('Modal dismissed at: ' + new Date());
           });
     };
+    
+    
+    $scope.incluirComentario = function(item){
+    	var comentario = new ComentarioResource();
+    	comentario.descricao = item.comentarioTmp;
+    	
+    	var successCallback = function(data,responseHeaders){
+			item.listaComentario.push(comentario);
+        	toaster.pop('success', 'Comentário inserido com sucesso');
+        };
+        var errorCallback = function() {
+        	toaster.pop('error', 'Falha ao processar informações.');
+        };
+        
+		ComentarioService.save(comentario, item.id).then(successCallback, errorCallback);
+    }
 
     
-    $scope.abrirModalComentarios = function () {
+    $scope.abrirModalComentarios = function (item) {
+    	$scope.selectedProposicao = item;
     	
         var modalInstance = $modal.open({
           templateUrl: 'views/modal-comentarios.html',

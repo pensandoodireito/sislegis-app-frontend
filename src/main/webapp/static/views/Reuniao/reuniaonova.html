@@ -85,20 +85,19 @@
                                 <div class="divider-left fontsize-sm">
                                     <div class="clearfix">
                                         <div class="col-md-10">
-                                            <textarea class="form-control" rows="3" placeholder="Adicione um comentário"></textarea>
-
+                                            <textarea class="form-control" rows="3" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
                                         </div>
                                         <div class="col-md-2">
-                                            <button type="button" class="btn btn-success btn-sm"><i class="fa fa-check"></i>
+                                            <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i>
                                             </button>
                                         </div>
                                     </div>
                                     <div class="divider-top clearfix">
                                         <div class="col-md-6">
-                                            <strong> <a href="javascript:;" ng-click="abrirModalComentarios()"><i class="fa fa-comment"></i> {{selectedProposicao.listaComentario.length}} comentários</a></strong>
+                                            <strong> <a href="javascript:;" ng-click="abrirModalComentarios()"><i class="fa fa-comment"></i> {{item.listaComentario.length}} comentários</a></strong>
                                         </div>
                                         <div class="col-md-6 text-right">
-                                            <strong><a href="javascript:;" ng-click="abrirModalEncaminhamentos()"> {{listaEncaminhamentoProposicao.length}} encaminhamentos</a></strong>
+                                            <strong><a href="javascript:;" ng-click="abrirModalEncaminhamentos()"> {{item.listaEncaminhamentoProposicao.length}} encaminhamentos</a></strong>
                                         </div>
                                     </div>
 
