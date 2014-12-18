@@ -113,6 +113,12 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "elaboracaoNormativa", fetch = FetchType.EAGER)
 	private Set<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta;
 	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Comentario> listaComentario;
+	
+	@Column
+	private Comentario comentario;
+	
 	// Manifestação (por enquanto deixei na mesma entidade para evitar normalização desnecessaria)
 	@Column
 	private Date dataManifestacao;
@@ -144,6 +150,9 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	
 	@Column
 	private Date dataAssinaturaSIDOF;
+	
+	@Column
+	private StatusSidof statusSidof;
 	
 	@Column
 	@Enumerated(EnumType.ORDINAL)
@@ -400,6 +409,112 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 
 	public void setOrigemDescricao(String origemDescricao) {
 		this.origemDescricao = origemDescricao;
+	}
+
+
+	public StatusSidof getStatusSidof() {
+		return statusSidof;
+	}
+
+
+	public void setStatusSidof(StatusSidof statusSidof) {
+		this.statusSidof = statusSidof;
+	}
+
+
+	public Set<Comentario> getListaComentario() {
+		return listaComentario;
+	}
+
+
+	public void setListaComentario(Set<Comentario> listaComentario) {
+		this.listaComentario = listaComentario;
+	}
+
+
+	public Comentario getComentario() {
+		return comentario;
+	}
+
+
+	public void setComentario(Comentario comentario) {
+		this.comentario = comentario;
+	}
+
+
+	public Integer getAno() {
+		return ano;
+	}
+
+
+	public void setAno(Integer ano) {
+		this.ano = ano;
+	}
+
+
+	public String getNumero() {
+		return numero;
+	}
+
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+
+	public String getEmentaPreliminar() {
+		return ementaPreliminar;
+	}
+
+
+	public void setEmentaPreliminar(String ementaPreliminar) {
+		this.ementaPreliminar = ementaPreliminar;
+	}
+
+
+	public Date getDataInclusaoSIDOF() {
+		return dataInclusaoSIDOF;
+	}
+
+
+	public void setDataInclusaoSIDOF(Date dataInclusaoSIDOF) {
+		this.dataInclusaoSIDOF = dataInclusaoSIDOF;
+	}
+
+
+	public Date getDataAssinaturaSIDOF() {
+		return dataAssinaturaSIDOF;
+	}
+
+
+	public void setDataAssinaturaSIDOF(Date dataAssinaturaSIDOF) {
+		this.dataAssinaturaSIDOF = dataAssinaturaSIDOF;
+	}
+
+
+	public ElaboracaoNormativaSituacao getElaboracaoNormativaSituacao() {
+		return elaboracaoNormativaSituacao;
+	}
+
+
+	public void setElaboracaoNormativaSituacao(
+			ElaboracaoNormativaSituacao elaboracaoNormativaSituacao) {
+		this.elaboracaoNormativaSituacao = elaboracaoNormativaSituacao;
+	}
+
+
+	public ElaboracaoNormativaConsulta getElaboracaoNormativaConsulta() {
+		return elaboracaoNormativaConsulta;
+	}
+
+
+	public void setValueTipo(String valueTipo) {
+		this.valueTipo = valueTipo;
+	}
+
+
+	public void setValueIdentificacao(String valueIdentificacao) {
+		this.valueIdentificacao = valueIdentificacao;
 	}
 
 
