@@ -102,6 +102,8 @@ angular.module('sislegisapp').controller(
                 if ($scope.listaReuniaoProposicoes.length == 0) {
                 	toaster.pop('info', 'Não existem proposições para esta data. Você pode adicionar novas proposições.');
                 }
+                $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
+                $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
                 $scope.displayError = false;
             };
             var errorCallback = function() {
@@ -113,6 +115,18 @@ angular.module('sislegisapp').controller(
     	}
 
     });
+    
+    $scope.changeFiltroComissao = function() {
+		if(!$scope.filtroComissao.comissao){
+			$scope.filtroComissao = null;
+		}
+	}
+
+    $scope.changeFiltroOrigem = function() {
+		if(!$scope.filtroOrigem.origem){
+			$scope.filtroOrigem = null;
+		}
+	}
     
 	$scope.getUsuarios = function(val) {
 	    return $http.get('../rest/usuarios/find', {
