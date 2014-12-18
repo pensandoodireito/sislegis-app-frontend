@@ -30,6 +30,11 @@ angular.module('sislegisapp').factory(
 							method : 'GET',
 							isArray : true
 						},
+						'situacoes' : {
+							url : "../rest/elaboracaonormativa/situacoes",
+							method : 'GET',
+							isArray : true
+						},						
 						'searchElaboracaoNormativa' : {
 							url : "../rest/elaboracaonormativa/searchElaboracaoNormativa",
 						    params: {
