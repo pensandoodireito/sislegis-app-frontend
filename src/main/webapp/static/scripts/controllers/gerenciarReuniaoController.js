@@ -2,11 +2,13 @@ angular.module('sislegisapp').controller(
 		'GerenciarReuniaoController',
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource,
-				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource) {
+				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService) {
     
 	var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
+    
+    $scope.selectedFiltro = new Object();
     
     $scope.reuniao = new ReuniaoResource();
     $scope.reuniaoProposicao = new ReuniaoProposicaoResource();
@@ -98,7 +100,7 @@ angular.module('sislegisapp').controller(
     		
     		var successCallback = function(){
                 if ($scope.listaReuniaoProposicoes.length == 0) {
-                    toaster.pop('info', 'Não existem proposições para esta data. Você pode adicionar novas proposições.');
+                	toaster.pop('info', 'Não existem proposições para esta data. Você pode adicionar novas proposições.');
                 }
                 $scope.displayError = false;
             };
@@ -130,6 +132,7 @@ angular.module('sislegisapp').controller(
      * MODALs
      */
     $scope.buscarProposicoes = function () {
+    	toaster.clear();
     	
     	if($scope.reuniao.data == null){
     		toaster.pop('info', 'Selecione a data da reunião.');
@@ -163,9 +166,27 @@ angular.module('sislegisapp').controller(
             $log.info('Modal dismissed at: ' + new Date());
           });
     };
+    
+    
+    $scope.incluirComentario = function(item){
+    	var comentario = new ComentarioResource();
+    	comentario.descricao = item.comentarioTmp;
+    	item.comentarioTmp = null;
+    	
+    	var successCallback = function(data,responseHeaders){
+			item.listaComentario.push(comentario);
+        	toaster.pop('success', 'Comentário inserido com sucesso');
+        };
+        var errorCallback = function() {
+        	toaster.pop('error', 'Falha ao processar informações.');
+        };
+        
+		ComentarioService.save(comentario, item.id).then(successCallback, errorCallback);
+    }
 
     
-    $scope.abrirModalComentarios = function () {
+    $scope.abrirModalComentarios = function (item) {
+    	$scope.selectedProposicao = item;
     	
         var modalInstance = $modal.open({
           templateUrl: 'views/modal-comentarios.html',
@@ -185,8 +206,21 @@ angular.module('sislegisapp').controller(
           });
     };
     
-
-    $scope.abrirModalEncaminhamentos = function () {
+    $scope.abrirModalRelatorio = function() {
+        var modalInstance = $modal.open({
+          templateUrl: 'views/Reuniao/modal-relatorio.html',
+          controller: 'ModalRelatorioReuniaoController',
+          size: 'lg',
+          resolve: {
+        	  listaReuniaoProposicoes: function () {
+            	return $scope.listaReuniaoProposicoes;
+            }
+          }
+        });
+    };
+    
+    $scope.abrirModalEncaminhamentos = function (item) {
+    	$scope.selectedProposicao = item;
     	
         var modalInstance = $modal.open({
           templateUrl: 'views/modal-encaminhamentos.html',
@@ -197,18 +231,18 @@ angular.module('sislegisapp').controller(
             	return $scope.selectedProposicao;
             },            
             listaEncaminhamentoProposicao: function (){
-            	return $scope.listaEncaminhamentoProposicao;
+            	return $scope.selectedProposicao.listaEncaminhamentoProposicao;
             }          
           }
         });
         
         modalInstance.result.then(function (listaEncaminhamentoProposicao) {
-        	$scope.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
+        	$scope.selectedProposicao.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
           }, function () {
         	  //when modal is dismissed
         	  //o certo era receber a lista como parametro, mas no dismiss nao consegui passar parametro, 
         	  //entao carrego a lista de novo para atualizar a qtde
-          	$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.selectedProposicao.id});
+          	$scope.selectedProposicao.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.selectedProposicao.id});
             $log.info('Modal dismissed at: ' + new Date());
           });
     };

@@ -1,0 +1,9 @@
+<div class="modal-header hidden-print">
+	<button type="button" class="close" data-dismiss="modal" ng-click="ok()">
+		<span aria-hidden="true">&times;</span> <span class="sr-only">Fechar</span>
+	</button>
+	<h4 class="modal-title" id="myModalLabel">Relatório</h4>
+	<span class="pull-left"><a href="javascript:window.print()"><strong>Imprimir</strong></a></span>
+</div>
+
+<div ng-include="'views/Reuniao/imprimir.html'" class="modal-body hidden-print"></div>

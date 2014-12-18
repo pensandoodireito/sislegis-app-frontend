@@ -1,5 +1,6 @@
 angular.module('sislegisapp').controller('ModalComentariosController',
-		function($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource, ProposicaoResource, UsuarioResource) {
+		function($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource, 
+				ProposicaoResource, UsuarioResource, ComentarioService) {
 
 			var self = this;
 			$scope.disabled = false;
@@ -29,10 +30,9 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 		        var successCallback = function(){
 		        	$scope.comentario = new ComentarioResource();
 		        	toaster.pop('success', 'Comentário atualizado com sucesso');
-		            $scope.displayError = false;
 		        };
 		        var errorCallback = function() {
-		            $scope.displayError=true;
+		        	toaster.pop('error', 'Falha ao realizar operação.');
 		        };
 		        ComentarioResource.update($scope.comentario, successCallback, errorCallback);
 		    };
@@ -44,24 +44,14 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 		        	$scope.comentario = new ComentarioResource();
 		        	var id = $scope.proposicao.id;
 		        	$scope.proposicao = ProposicaoResource.get({ProposicaoId: id});
-		        	toaster.pop('success', 'Comentário adicionado com sucesso');
-		            $scope.displayError = false;
+		        	toaster.pop('success', 'Comentário inserido com sucesso');
 		        };
 		        var errorCallback = function() {
-		            $scope.displayError = true;
+		        	toaster.pop('error', 'Falha ao realizar operação.');
 		        };
 		        
 
-		    	//TODO mock
-		    	UsuarioResource.queryAll(function(data){
-		    		if(data.length > 0){
-		    			$scope.comentario.autor = data[0];
-		    		}
-		    		$scope.comentario.dataCriacao = new Date();
-		    		$scope.comentario.idProposicao = $scope.proposicao.id;
-		    		
-		    		$scope.comentario.$save(successCallback, errorCallback);
-		    	});
+	    		ComentarioService.save($scope.comentario, $scope.proposicao.id).then(successCallback, errorCallback);
 		    };
 
 
