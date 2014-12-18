@@ -105,12 +105,9 @@ angular.module('sislegisapp').controller(
                 if ($scope.listaReuniaoProposicoes.length == 0) {
                 	toaster.pop('info', 'Não existem proposições para esta data. Você pode adicionar novas proposições.');
                 }
-                $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
-                $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
-                $scope.displayError = false;
             };
             var errorCallback = function() {
-            	$scope.displayError=true;
+            	toaster.pop('error', 'Erro ao buscar Reunião.');
             };
     		
     		$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()}, successCallback, errorCallback);
@@ -118,6 +115,11 @@ angular.module('sislegisapp').controller(
     	}
 
     });
+    
+    $scope.$watch('listaReuniaoProposicoes', function() {
+        $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
+        $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
+	});
     
     $scope.changeFiltroComissao = function() {
 		if(!$scope.filtroComissao.comissao){
@@ -176,10 +178,6 @@ angular.module('sislegisapp').controller(
         
         modalInstance.result.then(function (listaProposicaoSelecao) {
         	$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
-
-            $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
-            $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
-            
           }, function () {
             $log.info('Modal dismissed at: ' + new Date());
           });
