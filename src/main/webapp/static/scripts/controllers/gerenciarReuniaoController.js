@@ -14,6 +14,9 @@ angular.module('sislegisapp').controller(
     $scope.reuniaoProposicao = new ReuniaoProposicaoResource();
     $scope.posicionamentos = PosicionamentoResource.queryAll();
     
+    $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
+    $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
+    
     $scope.detalhamentoProposicao = false;
     
     $scope.loadTags = function(query) {
@@ -172,10 +175,11 @@ angular.module('sislegisapp').controller(
         });
         
         modalInstance.result.then(function (listaProposicaoSelecao) {
-        	if(!$scope.reuniao.listaReuniaoProposicoes){
-        		$scope.reuniao.listaReuniaoProposicoes = [];
-        	}
         	$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
+
+            $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
+            $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
+            
           }, function () {
             $log.info('Modal dismissed at: ' + new Date());
           });
