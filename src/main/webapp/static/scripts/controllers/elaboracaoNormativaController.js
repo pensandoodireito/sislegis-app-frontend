@@ -13,6 +13,8 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			
 			$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta = [];
 			
+			$scope.elaboracaoNormativa.listaComentario = [];
+			
 		    $scope.tipos = ElaboracaoNormativaResource.tipos();
 		    
 		    $scope.identificacoes = ElaboracaoNormativaResource.identificacoes();
@@ -181,7 +183,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 				$scope.openCalendar = function($event, id) {
 					$event.preventDefault();
 					$event.stopPropagation();
-					
+					http://localhost:8080/sislegis-app/rest/elaboracaonormativa
 					var opened = 'opened_'+id;
 					var model = $parse(opened);
 					model.assign($scope, true);
