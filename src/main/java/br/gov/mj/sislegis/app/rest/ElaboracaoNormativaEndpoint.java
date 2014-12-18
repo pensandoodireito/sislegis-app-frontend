@@ -22,9 +22,11 @@ import javax.ws.rs.core.UriBuilder;
 
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaObjeto;
+import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaSituacao;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
 import br.gov.mj.sislegis.app.json.ComboJSON;
 import br.gov.mj.sislegis.app.model.ElaboracaoNormativa;
+import br.gov.mj.sislegis.app.model.StatusSidof;
 import br.gov.mj.sislegis.app.service.ElaboracaoNormativaService;
 import br.gov.mj.sislegis.app.service.Service;
 
@@ -40,6 +42,7 @@ public class ElaboracaoNormativaEndpoint {
 	
 	@Inject
 	private ElaboracaoNormativaService elaboracaoNormativaService;
+	
 
 	@POST
 	@Consumes("application/json")
@@ -126,6 +129,17 @@ public class ElaboracaoNormativaEndpoint {
 		return lista;
 	}
 	
+	
+	@GET
+	@Path("/situacoes")
+	@Produces("application/json")
+	public List<ComboJSON<ElaboracaoNormativaSituacao>> situacoes() {
+		List<ComboJSON<ElaboracaoNormativaSituacao>> lista = new ArrayList<ComboJSON<ElaboracaoNormativaSituacao>>();
+		for(ElaboracaoNormativaSituacao elaboracaoNormativaSituacao:ElaboracaoNormativaSituacao.values()){
+			lista.add(new ComboJSON<ElaboracaoNormativaSituacao>(elaboracaoNormativaSituacao.name(), elaboracaoNormativaSituacao.getValue()));
+		}
+		return lista;
+	}
 	
 	
 	@PUT
