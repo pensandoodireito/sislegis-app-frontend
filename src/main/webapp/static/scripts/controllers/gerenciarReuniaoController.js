@@ -14,6 +14,9 @@ angular.module('sislegisapp').controller(
     $scope.reuniaoProposicao = new ReuniaoProposicaoResource();
     $scope.posicionamentos = PosicionamentoResource.queryAll();
     
+    $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
+    $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
+    
     $scope.detalhamentoProposicao = false;
     
     $scope.loadTags = function(query) {
@@ -102,12 +105,9 @@ angular.module('sislegisapp').controller(
                 if ($scope.listaReuniaoProposicoes.length == 0) {
                 	toaster.pop('info', 'Não existem proposições para esta data. Você pode adicionar novas proposições.');
                 }
-                $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
-                $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
-                $scope.displayError = false;
             };
             var errorCallback = function() {
-            	$scope.displayError=true;
+            	toaster.pop('error', 'Erro ao buscar Reunião.');
             };
     		
     		$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()}, successCallback, errorCallback);
@@ -115,6 +115,11 @@ angular.module('sislegisapp').controller(
     	}
 
     });
+    
+    $scope.$watch('listaReuniaoProposicoes', function() {
+        $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
+        $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
+	});
     
     $scope.changeFiltroComissao = function() {
 		if(!$scope.filtroComissao.comissao){
@@ -172,9 +177,6 @@ angular.module('sislegisapp').controller(
         });
         
         modalInstance.result.then(function (listaProposicaoSelecao) {
-        	if(!$scope.reuniao.listaReuniaoProposicoes){
-        		$scope.reuniao.listaReuniaoProposicoes = [];
-        	}
         	$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
           }, function () {
             $log.info('Modal dismissed at: ' + new Date());
