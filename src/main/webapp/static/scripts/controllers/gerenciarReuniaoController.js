@@ -53,10 +53,8 @@ angular.module('sislegisapp').controller(
     };
     
     $scope.getProposicao = function(id) {
-
         var successCallback = function(data){
         	$scope.selectedProposicao = data;
-        	$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.selectedProposicao.id});
         	$scope.detalhamentoProposicao = true;
             $scope.displayError = false;
         };
@@ -107,7 +105,7 @@ angular.module('sislegisapp').controller(
                 }
             };
             var errorCallback = function() {
-            	toaster.pop('error', 'Erro ao buscar Reunião.');
+            	toaster.pop('error', 'Falha ao buscar Reunião.');
             };
     		
     		$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()}, successCallback, errorCallback);
@@ -194,7 +192,7 @@ angular.module('sislegisapp').controller(
         	toaster.pop('success', 'Comentário inserido com sucesso');
         };
         var errorCallback = function() {
-        	toaster.pop('error', 'Falha ao processar informações.');
+        	toaster.pop('error', 'Falha ao realizar operação.');
         };
         
 		ComentarioService.save(comentario, item.id).then(successCallback, errorCallback);
@@ -245,15 +243,12 @@ angular.module('sislegisapp').controller(
           resolve: {
             proposicao: function () {
             	return $scope.selectedProposicao;
-            },            
-            listaEncaminhamentoProposicao: function (){
-            	return $scope.selectedProposicao.listaEncaminhamentoProposicao;
-            }          
+            }         
           }
         });
         
-        modalInstance.result.then(function (listaEncaminhamentoProposicao) {
-        	$scope.selectedProposicao.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
+        modalInstance.result.then(function (selectedProposicao) {
+        	$scope.selectedProposicao = selectedProposicao;
           }, function () {
         	  //when modal is dismissed
         	  //o certo era receber a lista como parametro, mas no dismiss nao consegui passar parametro, 

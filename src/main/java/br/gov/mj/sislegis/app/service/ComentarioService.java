@@ -11,5 +11,6 @@ import br.gov.mj.sislegis.app.model.Comentario;
 public interface ComentarioService extends Service<Comentario> {
 	public List<ComentarioJSON> findByProposicao(Long id);
 	public void salvarComentario(ComentarioJSON comentarioJSON);
+	public ComentarioJSON findByIdJSON(Long id);
 
 }

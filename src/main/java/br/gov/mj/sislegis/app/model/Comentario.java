@@ -13,7 +13,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 import java.util.Objects;
 
-
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -22,9 +21,12 @@ import br.gov.mj.sislegis.app.model.Proposicao;
 import javax.persistence.ManyToOne;
 import javax.persistence.FetchType;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 @XmlRootElement
+@JsonIgnoreProperties({"idProposicao"})
 public class Comentario implements AbstractEntity {
 
 	private static final long serialVersionUID = 739840933885769688L;
@@ -36,7 +38,7 @@ public class Comentario implements AbstractEntity {
 	@Column
 	private String descricao;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Usuario autor;
 
 	@Column

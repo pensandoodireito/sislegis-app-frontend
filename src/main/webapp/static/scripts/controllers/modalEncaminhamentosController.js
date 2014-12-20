@@ -24,7 +24,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 			  };
 
 			$scope.ok = function() {
-				$modalInstance.close($scope.proposicao.listaEncaminhamentoProposicao);
+				$modalInstance.close($scope.proposicao);
 			};
 
 			$scope.cancel = function() {
@@ -36,7 +36,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 		    };
 
 		    $scope.openUpdate = function(item) {
-		        $scope.encaminhamentoProposicao = item;
+		        $scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource(item);
 		    };
 		    
 		    $scope.update = function() {
@@ -44,13 +44,16 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 		    	$scope.encaminhamentoProposicao.proposicao.id = $scope.proposicao.id;
 		    	
 		        var successCallback = function(){
-		        	$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
-		        	toaster.pop('success', 'Encaminhamento atualizado com sucesso');
-		            $scope.displayError = false;
+		        	EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.proposicao.id},function(data) {
+						$scope.proposicao.listaEncaminhamentoProposicao = data;
+						$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
+						$scope.encaminhamento = new EncaminhamentoResource();
+						toaster.pop('success', 'Encaminhamento atualizado com sucesso');
+					});
 		        };
 		        var errorCallback = function() {
 		        	$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
-		            $scope.displayError=true;
+		        	toaster.pop('error', 'Falha ao realizar operação.');
 		        };
 		        $scope.encaminhamentoProposicao.$update({EncaminhamentoProposicaoId: $scope.encaminhamentoProposicao.id}, successCallback, errorCallback);
 		    };

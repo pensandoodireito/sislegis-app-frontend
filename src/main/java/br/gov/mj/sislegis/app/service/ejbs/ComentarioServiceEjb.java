@@ -2,6 +2,7 @@ package br.gov.mj.sislegis.app.service.ejbs;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -48,6 +49,26 @@ public class ComentarioServiceEjb extends AbstractPersistence<Comentario, Long>
 
 		}
 		return lista;
+	}
+	
+	public ComentarioJSON findByIdJSON(Long id) {
+		TypedQuery<Comentario> findByIdQuery = em
+				.createQuery(
+						"SELECT c FROM Comentario c "
+								+ "LEFT JOIN FETCH c.autor a "
+								+ "LEFT JOIN FETCH c.proposicao p WHERE c.id = :entityId",
+						Comentario.class);
+		findByIdQuery.setParameter("entityId", id);
+		List<Comentario> lista = findByIdQuery.getResultList();
+		Comentario comentario = null;
+		if(!Objects.isNull(lista) && !lista.isEmpty()){
+			comentario = lista.get(0);
+		}
+		Long idProposicao = Objects.isNull(comentario.getProposicao()) ? null : comentario.getProposicao().getId();
+		return new ComentarioJSON(
+				comentario.getId(), comentario.getDescricao(),
+				comentario.getAutor(), comentario.getDataCriacao(),
+				idProposicao);
 	}
 
 	@Override
