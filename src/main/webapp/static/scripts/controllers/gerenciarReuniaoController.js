@@ -145,6 +145,7 @@ angular.module('sislegisapp').controller(
 		if(!$scope.filtroOrigem.origem){
 			$scope.filtroOrigem = null;
 		}
+		$scope.filtroComissao = null;
 	}
     
 	$scope.getUsuarios = function(val) {
