@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaBotao;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaObjeto;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaSituacao;
@@ -131,7 +132,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private Set<TagElaboracaoNormativa> tagsElaboracaoNormativa;
 	
 	@Column
-	private String comentarioManifestacao;
+	private String ementaManifestacao;
 	
 	@Column
 	private String arquivoManifestacao;
@@ -155,6 +156,18 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private StatusSidof statusSidof;
 	
 	@Column
+	private String normaGeradaNumero;
+	
+	@Column
+	private Integer normaGeradaAno;
+	
+	@Column
+	private String normaGeradaLink;
+	
+	@Column
+	private ElaboracaoNormativaBotao elaboracaoNormativaBotao;
+	
+	@Column
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaSituacao elaboracaoNormativaSituacao;
 	
@@ -172,6 +185,8 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	
 	@Transient
 	private String origemDescricao;
+	
+
 
 
 	public Long getId() {
@@ -231,10 +246,6 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		return elaboracaoNormativaNorma;
 	}
 
-	public String getComentarioManifestacao() {
-		return comentarioManifestacao;
-	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -290,10 +301,6 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	public void setElaboracaoNormativaNorma(
 			ElaboracaoNormativaNorma elaboracaoNormativaNorma) {
 		this.elaboracaoNormativaNorma = elaboracaoNormativaNorma;
-	}
-
-	public void setComentarioManifestacao(String comentarioManifestacao) {
-		this.comentarioManifestacao = comentarioManifestacao;
 	}
 
 	public Set<ElaboracaoNormativaConsulta> getListaElaboracaoNormativaConsulta() {
@@ -516,6 +523,59 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	public void setValueIdentificacao(String valueIdentificacao) {
 		this.valueIdentificacao = valueIdentificacao;
 	}
+
+
+	public String getNormaGeradaNumero() {
+		return normaGeradaNumero;
+	}
+
+
+	public void setNormaGeradaNumero(String normaGeradaNumero) {
+		this.normaGeradaNumero = normaGeradaNumero;
+	}
+
+
+	public Integer getNormaGeradaAno() {
+		return normaGeradaAno;
+	}
+
+
+	public void setNormaGeradaAno(Integer normaGeradaAno) {
+		this.normaGeradaAno = normaGeradaAno;
+	}
+
+
+	public String getNormaGeradaLink() {
+		return normaGeradaLink;
+	}
+
+
+	public void setNormaGeradaLink(String normaGeradaLink) {
+		this.normaGeradaLink = normaGeradaLink;
+	}
+
+
+	public String getEmentaManifestacao() {
+		return ementaManifestacao;
+	}
+
+
+	public void setEmentaManifestacao(String ementaManifestacao) {
+		this.ementaManifestacao = ementaManifestacao;
+	}
+
+
+	public ElaboracaoNormativaBotao getElaboracaoNormativaBotao() {
+		return elaboracaoNormativaBotao;
+	}
+
+
+	public void setElaboracaoNormativaBotao(
+			ElaboracaoNormativaBotao elaboracaoNormativaBotao) {
+		this.elaboracaoNormativaBotao = elaboracaoNormativaBotao;
+	}
+
+
 
 
 

@@ -1,5 +1,7 @@
 package br.gov.mj.sislegis.app.model;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -31,6 +34,9 @@ public class ElaboracaoNormativaConsulta implements AbstractEntity {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	private AreaConsultada areaConsultada;
+	
+	@Column
+	private Date prazoResposta;
 	
 	@Column
 	private String comentario;
@@ -101,6 +107,14 @@ public class ElaboracaoNormativaConsulta implements AbstractEntity {
 
 	public void setAreaConsultada(AreaConsultada areaConsultada) {
 		this.areaConsultada = areaConsultada;
+	}
+
+	public Date getPrazoResposta() {
+		return prazoResposta;
+	}
+
+	public void setPrazoResposta(Date prazoResposta) {
+		this.prazoResposta = prazoResposta;
 	}
 	
 	// TODO: anexo
