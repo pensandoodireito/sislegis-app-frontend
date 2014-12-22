@@ -136,9 +136,9 @@
                  <div class="form-group">
                      <label for="">Data de Distribuição:</label>
 				<p class="input-group">
-						<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataDistribuicao" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
+						<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataDistribuicao" is-open="opened_dataDistribuicao" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
 			          				<span class="input-group-btn">
-			                <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+			                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'dataDistribuicao')"><i class="glyphicon glyphicon-calendar"></i></button>
 			    		</span>
 			    </p>
                  </div>
@@ -166,26 +166,21 @@
 						<div class="row">
                         	<div class="form-group">
                             	<label for="">Comentários:</label>
-                            	<textarea ng-model="elaboracaoNormativaConsulta.comentario" class="form-control" />
+                            	<textarea ng-model="comentario.descricao" class="form-control" />
                         	</div>
 						</div>	
                         <div class="form-group">
-                        	<button type="button" class="btn btn-primary" ng-click="adicionarElaboracaoNormativaConsulta()"><i class="fa fa-plus"></i> Adicionar</button>
+                        	<button type="button" class="btn btn-primary" ng-click="adicionarComentario(comentario)"><i class="fa fa-plus"></i> Adicionar</button>
                         </div>
                     </div>
-                    <ul class="list-group" ng-repeat="comentario in elaboracaoNormativa.listaComentario">
+                    <ul class="list-group" ng-repeat="itemComentario in elaboracaoNormativa.listaComentario">
                         <li class="list-group-item">
-                            <button type="button" class="close" ng-click="excluirElaboracaoNormativa()"><span aria-hidden="true">&times;</span><span class="sr-only">Excluir</span>
-                            </button>		                               
-		                            </div>
-                            <h5>{{elaboracaoNormativaConsulta.areaConsultada.descricao}}</h5>
-                            <p>{{elaboracaoNormativaConsulta.comentario}}<p>
-                            <!-- <p>Arquivo: <a href="{{elaboracaoNormativaConsulta.arquivo}}">{{elaboracaoNormativaConsulta.arquivo}}</a><p> -->
+                            {{itemComentario.descricao}}
                         </li>
 
                     </ul>
               </div>
-         
+         	</div>
             <div class="col-sm-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -202,9 +197,9 @@
 				                 <div class="form-group">
 				                     <label for="">Prazo de resposta:</label>
 								<p class="input-group">
-										<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataDistribuicao" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
+										<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativaConsulta.prazoResposta" is-open="opened_prazoResposta" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
 							          				<span class="input-group-btn">
-							                <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+							                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'prazoResposta')"><i class="glyphicon glyphicon-calendar"></i></button>
 							    		</span>
 							    </p>
 				                 </div>
@@ -234,67 +229,104 @@
                         <li class="list-group-item">
                             <button type="button" class="close" ng-click="excluirElaboracaoNormativa()"><span aria-hidden="true">&times;</span><span class="sr-only">Excluir</span>
                             </button>
-                            <h5>{{elaboracaoNormativaConsulta.areaConsultada.descricao}}</h5>
-                            <p>{{elaboracaoNormativaConsulta.comentario}}<p>
-                            <!-- <p>Arquivo: <a href="{{elaboracaoNormativaConsulta.arquivo}}">{{elaboracaoNormativaConsulta.arquivo}}</a><p> -->
+	                      		<div class="form-group">
+					            	<label for="">Área consultada:</label>
+					            	{{elaboracaoNormativaConsulta.areaConsultada.descricao}}
+					            </div>	
+	                      		<div class="form-group">
+					            	<label for="">Prazo:</label>
+					            	{{elaboracaoNormativaConsulta.prazoResposta | date:'dd/MM/yyyy'}}
+					            </div>
+		                        <div class="form-group">
+	                            	<label for="">Resumo da resposta:</label>
+	                            	<textarea ng-model="elaboracaoNormativaConsulta.comentario" class="form-control" />
+	                        	</div>				            	                            
                         </li>
 
                     </ul>
               </div>
             </div>
-           </div>   
-        </div>
+     </div>   
+	 <div>
+	    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="distribuicaoUploader.isUploading || manifestacaoUploader.isUploading">Salvar como Minuta</button>
+	    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="distribuicaoUploader.isUploading || manifestacaoUploader.isUploading">Salvar como Proposta Oficial</button>
+	</div>     
 </div>
-  <div ng-show="selected == 'manifestacao'" class="tab_content">
-     <div class="row divider-top">
+ <div ng-show="selected == 'manifestacao'" class="tab_content">
+    <div class="row divider-top">
          <div class="col-md-4">
              <div class="form-group">
-  <div class="text-right">
-    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="distribuicaoUploader.isUploading || manifestacaoUploader.isUploading">Salvar</button>
-</div>                <label for="">Data Nota SAL:</label>
-					<p class="input-group">
- 						<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataManifestacao" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
-              				<span class="input-group-btn">
-				                <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-				    		</span>
-				    </p>
+                 <label for="">Ementa:</label>
+                 <textarea class="form-control" ng-model="elaboracaoNormativa.ementaManifestacao" />
              </div>
-         </div>
-         <div class="col-md-4">
-             <div class="form-group">
-                 <label for="">Norma Gerada:</label>
-                 <select class="form-control" ng-model="elaboracaoNormativa.elaboracaoNormativaNorma" ng-options="norma.shade as norma.name for norma in normas"></select>
-             </div>
-         </div>
-		<div class="col-md-4">
-             <div class="form-group">
-                 <label for="">Manifestação:</label>
-                 <input type="file" nvcover bass the miracle u2-file-select uploader="manifestacaoUploader" ng-click="manifestacaoUploader.clearQueue()" />
-                  <p>Arquivo atual: <a href="{{elaboracaoNormativa.arquivoManifestacao}}">{{elaboracaoNormativa.arquivoManifestacao}}</a><p>
-                 
-                 <div ng-repeat="item in manifestacaoUploader.queue">
-					 <div class="progress" style="margin-bottom: 0;">
-						<div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
-						<span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span> 
-						<span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span> 
-						<span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
-						</div>
-					 </div>
+         </div>    
+        <div class="col-md-4">
+            <div class="form-group">
+            <label for="">Data Nota SAL:</label>
+				<p class="input-group">
+						<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataManifestacao" is-open="opened_dataManifestacao" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
+             				<span class="input-group-btn">
+			                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'dataManifestacao')"><i class="glyphicon glyphicon-calendar"></i></button>
+			    		</span>
+			    </p>
+            </div>
+        </div>
+
+	<div class="col-md-4">
+            <div class="form-group">
+                <label for="">Arquivo da nota:</label>
+                <input type="file" nvcover bass the miracle u2-file-select uploader="manifestacaoUploader" ng-click="manifestacaoUploader.clearQueue()" />
+                 <p>Arquivo atual: <a href="{{elaboracaoNormativa.arquivoManifestacao}}">{{elaboracaoNormativa.arquivoManifestacao}}</a><p>
+                
+                <div ng-repeat="item in manifestacaoUploader.queue">
+				 <div class="progress" style="margin-bottom: 0;">
+					<div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+					<span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span> 
+					<span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span> 
+					<span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+					</div>
 				 </div>
-             </div>
-         </div>
-         
+			 </div>
+            </div>
+        </div>
+        
+     <div class="row divider-top">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="">Norma Gerada:</label>
+                <select class="form-control" ng-model="elaboracaoNormativa.elaboracaoNormativaNorma" ng-options="norma.shade as norma.name for norma in normas"></select>
+            </div>
+        </div>
+
+     </div>   
+
       <div class="row divider-top">
           <div class="col-md-4">
               <div class="form-group">
-                  <label for="">Comentário:</label>
-                  <textarea class="form-control" ng-model="elaboracaoNormativa.comentarioManifestacao" />
+                  <label for="">Link: </label>
+                  <input type="text" size="4" class="form-control" ng-model="elaboracaoNormativa.normaGeradaLink">
+              </div>
+          </div>        
+    	  <div class="col-md-2">
+              <div class="form-group">
+                  <label for="">Número: </label>
+                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.normaGeradaNumero">
               </div>
           </div>
-
-      </div>            
-         
-     </div>
+    	<div class="col-md-1">
+              <div class="form-group">
+                  <label for="">Ano: </label>
+                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.normaGeradaAno">
+              </div>
+          </div>  
+      </div>              
+     
+	 <div>
+	    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="distribuicaoUploader.isUploading || manifestacaoUploader.isUploading">Salvar como Minuta</button>
+	    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="distribuicaoUploader.isUploading || manifestacaoUploader.isUploading">Salvar como Proposta Oficial</button>
+	</div>      
+        
+ </div>
   
 
   

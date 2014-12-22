@@ -1,11 +1,14 @@
 angular.module('sislegisapp').controller('ElaboracaoNormativaController',
-		function($scope, $http, $routeParams, $location, $locale, $parse, toaster, ElaboracaoNormativaResource, EquipeResource, FileUploader, TagResource,
-				AreaConsultadaResource, OrigemElaboracaoNormativaResource, UsuarioResource, ElaboracaoNormativaConsultaResource, StatusSidofResource) {
+		function($scope, $http, $routeParams, $location, $locale, $parse, toaster, ElaboracaoNormativaResource, 
+				EquipeResource, FileUploader, TagResource, ComentarioResource, AreaConsultadaResource, 
+				OrigemElaboracaoNormativaResource, UsuarioResource, ElaboracaoNormativaConsultaResource, StatusSidofResource) {
 			var self = this;
 			$scope.disabled = false;
 		    $scope.$location = $location;
 			$scope.elaboracaoNormativa = $scope.elaboracaoNormativa || {};//new ElaboracaoNormativaResource();
 			$scope.equipes = EquipeResource.queryAll();
+			
+			$scope.elaboracaoNormativaConsulta = new ElaboracaoNormativaConsultaResource();
 			
 		    $scope.loadTags = function(query) {
 		    	return TagResource.listarTodos().$promise;
@@ -58,6 +61,11 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    	//$scope.elaboracaoNormativa.elaboracaoNormativaConsulta.elaboracaoNormativa = $scope.elaboracaoNormativa;
 		    	$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta.push($scope.elaboracaoNormativaConsulta);
 		    	$scope.elaboracaoNormativaConsulta = new ElaboracaoNormativaConsultaResource();
+		    }
+		    
+		    $scope.adicionarComentario = function(comentario){
+		    	$scope.elaboracaoNormativa.listaComentario.push(comentario);
+		    	$scope.comentario =null;
 		    }
 		    
 		    $scope.normas = ElaboracaoNormativaResource.normas();
