@@ -36,7 +36,7 @@ public class Proposicao implements AbstractEntity {
 	@Column(name = "id", updatable = false, nullable = false)
 	private Long id;
 
-	@Column
+	@Column(nullable = false, unique = true)
 	private Integer idProposicao;
 
 	@Column
@@ -49,13 +49,6 @@ public class Proposicao implements AbstractEntity {
 	private String numero;
 
 	@Column
-	@Temporal(TemporalType.DATE)
-	private Date dataApresentacao;
-
-	@Column
-	private Clob ementaClob;
-
-	@Column
 	private String autor;
 
 	@Enumerated(EnumType.STRING)
@@ -65,22 +58,22 @@ public class Proposicao implements AbstractEntity {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "proposicao")
 	private Set<ReuniaoProposicao> listaReuniaoProposicoes;
 
-	@Column
+	@Transient
 	private String comissao;
 
-	@Column
+	@Transient
 	private Integer seqOrdemPauta;
 
 	@Transient
 	private String sigla;
 
-	@Transient
+	@Column(length=2000)
 	private String ementa;
 
 	@Column
 	private String linkProposicao;
 
-	@Column
+	@Transient
 	private String linkPauta;
 
 	@Column
@@ -151,17 +144,9 @@ public class Proposicao implements AbstractEntity {
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
-
-	public Date getDataApresentacao() {
-		return dataApresentacao;
-	}
-
-	public void setDataApresentacao(Date dataApresentacao) {
-		this.dataApresentacao = dataApresentacao;
-	}
-
+	
 	public String getEmenta() {
-		return ementaClob == null ? ementa : Conversores.clobToString(ementaClob);
+		return ementa;
 	}
 
 	public void setEmenta(String ementa) {
@@ -198,14 +183,6 @@ public class Proposicao implements AbstractEntity {
 
 	public void setOrigem(Origem origem) {
 		this.origem = origem;
-	}
-
-	public Clob getEmentaClob() {
-		return ementaClob;
-	}
-
-	public void setEmentaClob(Clob ementaClob) {
-		this.ementaClob = ementaClob;
 	}
 
 	public String getLinkProposicao() {

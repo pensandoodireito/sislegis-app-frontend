@@ -28,7 +28,7 @@ public class Reuniao implements AbstractEntity {
 	@Column(name = "id", updatable = false, nullable = false)
 	private Long id;
 
-	@Column
+	@Column(nullable = false, unique = true)
 	@Temporal(TemporalType.DATE)
 	private Date data;
 
