@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -32,6 +33,12 @@ public class ReuniaoProposicao implements AbstractEntity {
 	
 	@Column
 	private String siglaComissao;
+	
+	@Column
+	private Integer seqOrdemPauta;
+
+	@Column
+	private String linkPauta;
 
 	public String getSiglaComissao() {
 		return siglaComissao;
@@ -61,8 +68,21 @@ public class ReuniaoProposicao implements AbstractEntity {
 		this.proposicao = proposicao;
 	}
 
+	public Integer getSeqOrdemPauta() {
+		return seqOrdemPauta;
+	}
 
-	
+	public String getLinkPauta() {
+		return linkPauta;
+	}
+
+	public void setSeqOrdemPauta(Integer seqOrdemPauta) {
+		this.seqOrdemPauta = seqOrdemPauta;
+	}
+
+	public void setLinkPauta(String linkPauta) {
+		this.linkPauta = linkPauta;
+	}
 
 	public ReuniaoProposicaoPK getReuniaoProposicaoPK() {
 		return reuniaoProposicaoPK;

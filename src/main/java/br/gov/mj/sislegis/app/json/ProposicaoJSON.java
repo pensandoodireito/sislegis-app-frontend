@@ -55,7 +55,7 @@ public class ProposicaoJSON implements Serializable {
 	public ProposicaoJSON(){}
 
 	public ProposicaoJSON(Long id, Integer idProposicao, String tipo,
-			String ano, String numero, Date dataApresentacao, String autor,
+			String ano, String numero, String autor,
 			String ementa, Origem origem, String sigla, String comissao,
 			Integer seqOrdemPauta, String linkProposicao, String linkPauta,
 			List<ComentarioJSON> listaComentario,
@@ -67,7 +67,6 @@ public class ProposicaoJSON implements Serializable {
 		this.tipo=tipo;
 		this.ano=ano;
 		this.numero=numero;
-		this.dataApresentacao=dataApresentacao;
 		this.autor=autor;
 		this.ementa=ementa;
 		this.origem=origem;

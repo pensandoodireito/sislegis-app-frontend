@@ -119,20 +119,30 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 	}
 
 	@Override
-	public void salvarListaProposicao(List<Proposicao> lista) {
-		List<Reuniao> listaReuniao = null;
-		c:for (Proposicao p : lista) {
+	public void salvarListaProposicao(List<Proposicao> listaProposicao) {
+		Reuniao reuniao = null;
+		// Cria/obtém a reuniao
+		if (! listaProposicao.isEmpty()) {
+			Proposicao proposicao = listaProposicao.get(0); // uma forma de obter a data da reuniao é através do objeto proposicao
+			reuniao = reuniaoService.buscaReuniaoPorData(proposicao.getReuniao().getData());
+			
+			// a primeira vez, salva o objeto
+			if (Objects.isNull(reuniao)) {
+				reuniao = new Reuniao();
+				reuniao.setData(proposicao.getReuniao().getData());
+				reuniao = reuniaoService.save(reuniao);
+			}
+		}
+		
+		// Agora vamos salvar cada proposição
+		for (Proposicao p : listaProposicao) {
 			try {
 				Proposicao proposicao = buscarPorIdProposicao(p.getIdProposicao());
 				
-				if(Objects.isNull(listaReuniao))
-					listaReuniao = reuniaoService.buscaReuniaoPorData(p.getReuniao().getData());
-				
-				for(Reuniao reuniao:listaReuniao){
-					for(ReuniaoProposicao rp:reuniao.getListaReuniaoProposicoes()){
-						if(rp.getProposicao().getIdProposicao().equals(p.getIdProposicao())){
-							continue c;
-						}
+				// Evita incluir proposicoes duplicadas na mesma reunião
+				for (ReuniaoProposicao rp : reuniao.getListaReuniaoProposicoes()) {
+					if (rp.getProposicao().getIdProposicao().equals(p.getIdProposicao())) {
+						continue;
 					}
 				}
 				
@@ -143,7 +153,8 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 						proposicao = detalharProposicaoSenadoWS(Long.valueOf(p.getIdProposicao()));
 					}
 				}
-				popularProposicao(p, proposicao);
+				
+				popularProposicao(reuniao, p, proposicao);
 
 				save(proposicao);
 			} catch (Exception e) {
@@ -153,22 +164,27 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		}
 	}
 
-	private void popularProposicao(Proposicao p, Proposicao proposicao) throws SerialException, SQLException {
-		proposicao.setEmentaClob(new SerialClob(proposicao.getEmenta().toCharArray()));
-		String siglaComissao = isNull(p.getSigla()) ? proposicao.getSigla() : p.getSigla();
+	private void popularProposicao(Reuniao reuniao, Proposicao p, Proposicao proposicao) throws SerialException, SQLException {
+		String siglaComissao = isNull(p.getComissao()) ? proposicao.getComissao() : p.getComissao();
+		Integer seqOrdemPauta = isNull(p.getSeqOrdemPauta()) ? proposicao.getSeqOrdemPauta() : p.getSeqOrdemPauta();
+		String linkPauta = isNull(p.getLinkPauta()) ? proposicao.getLinkPauta() : p.getLinkPauta();
 		for (ReuniaoProposicao rp : p.getListaReuniaoProposicoes()) {
 			ReuniaoProposicaoPK reuniaoProposicaoPK = new ReuniaoProposicaoPK();
 			rp.setReuniaoProposicaoPK(reuniaoProposicaoPK);
 			rp.setSiglaComissao(siglaComissao);
+			rp.setSeqOrdemPauta(seqOrdemPauta);
+			rp.setLinkPauta(linkPauta);
+			
+			rp.setReuniao(reuniao);
 			rp.setProposicao(proposicao);
 		}
+		proposicao.setEmenta(p.getEmenta());
 		proposicao.setListaReuniaoProposicoes(p.getListaReuniaoProposicoes());
 		proposicao.setOrigem(isNull(p.getOrigem()) ? proposicao.getOrigem() : p.getOrigem());
 		proposicao.setSeqOrdemPauta(isNull(p.getSeqOrdemPauta()) ? proposicao.getSeqOrdemPauta() : p.getSeqOrdemPauta());
 		proposicao.setAno(isNull(p.getAno()) ? proposicao.getAno() : p.getAno());
 		proposicao.setComissao(isNull(p.getComissao()) ? proposicao.getComissao() : p.getComissao());
 		proposicao.setAutor(isNull(p.getAutor()) ? proposicao.getAutor() : p.getAutor());
-		proposicao.setDataApresentacao(isNull(p.getDataApresentacao()) ? proposicao.getDataApresentacao() : p.getDataApresentacao());
 		proposicao.setLinkPauta(isNull(p.getLinkPauta()) ? proposicao.getLinkPauta() : p.getLinkPauta());
 		proposicao.setLinkProposicao(isNull(p.getLinkProposicao()) ? proposicao.getLinkProposicao() : p.getLinkProposicao());
 		proposicao.setNumero(isNull(p.getNumero()) ? proposicao.getNumero() : p.getNumero());
@@ -195,21 +211,14 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		return listaProposicaoJSON;
 	}
 
-	public ProposicaoJSON populaProposicaoJSON(Proposicao proposicao) {
-		String ementa = proposicao.getEmentaClob() == null ? proposicao.getEmenta() : Conversores.clobToString(proposicao.getEmentaClob());
-
-		/*
-		 * List<TagJSON> listaTagsJSON =new ArrayList<TagJSON>(); for(Tag tag:proposicao.getTags()){ listaTagsJSON.add(new TagJSON(tag.toString())); }
-		 */
-		
+	public ProposicaoJSON populaProposicaoJSON(Proposicao proposicao) {	
 		ProposicaoJSON proposicaoJSON = new ProposicaoJSON(proposicao.getId(), 
 				proposicao.getIdProposicao(), 
 				proposicao.getTipo(), 
 				proposicao.getAno(),
 				proposicao.getNumero(), 
-				proposicao.getDataApresentacao(), 
 				proposicao.getAutor(), 
-				ementa, 
+				proposicao.getEmenta(), 
 				proposicao.getOrigem(), 
 				proposicao.getSigla(),
 				proposicao.getComissao(), 
@@ -235,10 +244,24 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 
 	@Override
 	public List<ProposicaoJSON> buscarProposicoesPorDataReuniao(Date dataReuniao) {
-
 		List<ProposicaoJSON> listaProposicaoJSON = new ArrayList<ProposicaoJSON>();
+		Reuniao reuniao = reuniaoService.buscaReuniaoPorData(dataReuniao);
+		
+		if (!Objects.isNull(reuniao)) {
+			Set<ReuniaoProposicao> listaReuniaoProposicoes = reuniao.getListaReuniaoProposicoes();
+			for (ReuniaoProposicao reuniaoProposicao : listaReuniaoProposicoes) {
+				Proposicao proposicao = reuniaoProposicao.getProposicao();
+				proposicao.setComissao(reuniaoProposicao.getSiglaComissao());
+				proposicao.setSeqOrdemPauta(reuniaoProposicao.getSeqOrdemPauta());
+				proposicao.setLinkPauta(reuniaoProposicao.getLinkPauta());
+				
+				ProposicaoJSON proposicaoJSON = populaProposicaoJSON(proposicao);
+				populaComentarioProposicao(proposicao, proposicaoJSON);
+				listaProposicaoJSON.add(proposicaoJSON);
+			}
+		}
 
-		Query query = em.createNativeQuery("select p.* from Proposicao p " 
+		/*Query query = em.createNativeQuery("select p.* from Proposicao p " 
 				+ "inner join ReuniaoProposicao rp " 
 				+ "on p.id = rp.proposicao_id "
 				+ "inner join Reuniao r "
@@ -246,13 +269,8 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 				+ "where r.data = :P_DATA", Proposicao.class);
 		query.setParameter("P_DATA", Conversores.dateToString(dataReuniao, "yyyy-MM-dd"));
 
-		List<Proposicao> listaProposicoes = query.getResultList();
-		for (Object obj : listaProposicoes) {
-			Proposicao proposicao = (Proposicao) obj;
-			ProposicaoJSON proposicaoJSON = populaProposicaoJSON(proposicao);
-			populaComentarioProposicao(proposicao, proposicaoJSON);
-			listaProposicaoJSON.add(proposicaoJSON);
-		}
+		List<Proposicao> listaProposicoes = query.getResultList();*/
+		
 
 		return listaProposicaoJSON;
 
