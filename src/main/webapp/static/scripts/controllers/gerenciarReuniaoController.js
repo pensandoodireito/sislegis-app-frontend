@@ -72,7 +72,7 @@ angular.module('sislegisapp').controller(
     	ProposicaoResource.get({ProposicaoId: id}, successCallback, errorCallback);
     }
     
-    $scope.getComissao = function(item) {
+    $scope.showHeaderComissao = function(item) {
     	var obj = new Object();
     	obj.id = item.id;
     	obj.comissao = item.comissao;
