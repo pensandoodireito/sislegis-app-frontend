@@ -69,6 +69,12 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    	$scope.comentario =null;
 		    }
 		    
+		    $scope.excluirComentario = function(comentario){
+				var index = $scope.elaboracaoNormativa.listaComentario.indexOf(comentario);
+				$scope.elaboracaoNormativa.listaComentario.splice(index, 1);
+		    }
+		    
+		    
 		    $scope.normas = ElaboracaoNormativaResource.normas();
 		    
 		    
@@ -118,8 +124,9 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    	$scope.get();
 		    }
 		    
-		    $scope.excluirElaboracaoNormativa = function(){
-		    	
+		    $scope.excluirElaboracaoNormativa = function(elaboracaoNormativaConsulta){
+				var index = $scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta.indexOf(elaboracaoNormativaConsulta);
+				$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta.splice(index, 1);
 		    }
 		    
 
