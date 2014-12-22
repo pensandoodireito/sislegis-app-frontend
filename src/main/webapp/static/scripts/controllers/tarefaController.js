@@ -87,6 +87,10 @@ angular.module('sislegisapp').controller('TarefaController', function ($scope, $
     		$scope.getTarefa($routeParams.TarefaId);
     	}
 	}
+    
+    $rootScope.$on('updateTarefas', function(event) {
+    	$scope.getListaTarefas();
+    });
 	
 	$scope.getListaTarefas();
 });

@@ -122,7 +122,7 @@
 		                                    </div>
 		                                    <div class="divider-top">
 		                                        <label>Tags: </label>
-		                                        <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save()">
+		                                        <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save()" min-length="1">
 		                                            <auto-complete source="loadTags($query)"></auto-complete>
 		                                        </tags-input>
 		                                    </div>
