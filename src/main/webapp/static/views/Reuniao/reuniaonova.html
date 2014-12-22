@@ -65,7 +65,7 @@
 		                        <h4 class="list-group-item-heading">{{item.comissao}}</h4>
 		                    </div>
 		
-		                    <div class="list-group-item clearfix">
+		                    <div class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
 			                    
 		                        <button type="button" class="close" ng-click="removerProposicao(item.id); $event.stopPropagation()">
 		                            <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
@@ -109,18 +109,20 @@
 		                                    <div class="divider-top form-inline">
 		                                        <div class="form-group">
 		                                            <label>Posicionamento:</label>
-		                                            <input class="form-control" type="text" ng-model="selectedProposicao.posicionamento" placeholder="Procurar" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" class="form-control">
+		                                            <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" 
+		                                            	typeahead-on-select="save()" class="form-control">
 		                                        </div>
 		                                    </div>
 		                                    <div class="divider-top form-inline">
 		                                        <div class="form-group">
 		                                            <label>Responsável: </label>
-		                                            <input type="text" ng-model="selectedProposicao.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue)" class="form-control">
+		                                            <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue)" 
+		                                            	typeahead-on-select="save()" class="form-control">
 		                                        </div>
 		                                    </div>
 		                                    <div class="divider-top">
 		                                        <label>Tags: </label>
-		                                        <tags-input ng-model="selectedProposicao.tags" ng-class="form-group">
+		                                        <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save()">
 		                                            <auto-complete source="loadTags($query)"></auto-complete>
 		                                        </tags-input>
 		                                    </div>

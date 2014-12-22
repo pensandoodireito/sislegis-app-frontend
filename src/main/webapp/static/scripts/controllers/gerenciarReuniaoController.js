@@ -21,8 +21,11 @@ angular.module('sislegisapp').controller(
     
     $scope.loadTags = function(query) {
     	return TagResource.listarTodos().$promise;
-    };     
+    }; 
     
+    $scope.setSelectedProposicao = function(item) {
+    	$scope.selectedProposicao = item;
+	}
 
     $scope.getPosicionamentos = function(current) {
         var copy = $scope.posicionamentos.slice(0);
@@ -37,14 +40,18 @@ angular.module('sislegisapp').controller(
     $scope.isClean = function() {
         return angular.equals(self.original, $scope.reuniao);
     };
-
+    
     $scope.save = function() {
+    	$rootScope.inactivateSpinner = true;
         var successCallback = function(){
-    		toaster.pop('success', 'Registro atualizado com sucesso.');
+        	$rootScope.inactivateSpinner = false;
+    		toaster.pop('success', 'Proposição atualizada com sucesso.');
         };
         var errorCallback = function() {
+        	$rootScope.inactivateSpinner = false;
+        	toaster.pop('error', 'Falha salvar proposição.');
         };
-        $scope.selectedProposicao.$update(successCallback, errorCallback);
+        ProposicaoResource.update($scope.selectedProposicao, successCallback, errorCallback);
     };
 
     $scope.remove = function() {
