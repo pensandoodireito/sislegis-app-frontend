@@ -7,7 +7,7 @@ angular.module('sislegisapp').controller(
 	var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
-    
+    $scope.arrayComissao = new Array();
     $scope.selectedFiltro = new Object();
     
     $scope.reuniao = new ReuniaoResource();
@@ -21,8 +21,11 @@ angular.module('sislegisapp').controller(
     
     $scope.loadTags = function(query) {
     	return TagResource.listarTodos().$promise;
-    };     
+    }; 
     
+    $scope.setSelectedProposicao = function(item) {
+    	$scope.selectedProposicao = item;
+	}
 
     $scope.getPosicionamentos = function(current) {
         var copy = $scope.posicionamentos.slice(0);
@@ -37,14 +40,18 @@ angular.module('sislegisapp').controller(
     $scope.isClean = function() {
         return angular.equals(self.original, $scope.reuniao);
     };
-
+    
     $scope.save = function() {
+    	$rootScope.inactivateSpinner = true;
         var successCallback = function(){
-    		toaster.pop('success', 'Registro atualizado com sucesso.');
+        	$rootScope.inactivateSpinner = false;
+    		toaster.pop('success', 'Proposição atualizada com sucesso.');
         };
         var errorCallback = function() {
+        	$rootScope.inactivateSpinner = false;
+        	toaster.pop('error', 'Falha salvar proposição.');
         };
-        $scope.selectedProposicao.$update(successCallback, errorCallback);
+        ProposicaoResource.update($scope.selectedProposicao, successCallback, errorCallback);
     };
 
     $scope.remove = function() {
@@ -53,10 +60,8 @@ angular.module('sislegisapp').controller(
     };
     
     $scope.getProposicao = function(id) {
-
         var successCallback = function(data){
         	$scope.selectedProposicao = data;
-        	$scope.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.selectedProposicao.id});
         	$scope.detalhamentoProposicao = true;
             $scope.displayError = false;
         };
@@ -66,6 +71,22 @@ angular.module('sislegisapp').controller(
         
     	ProposicaoResource.get({ProposicaoId: id}, successCallback, errorCallback);
     }
+    
+    $scope.showHeaderComissao = function(item) {
+    	var obj = new Object();
+    	obj.id = item.id;
+    	obj.comissao = item.comissao;
+    	for (var int = 0; int < $scope.arrayComissao.length; int++) {
+			var array_element = $scope.arrayComissao[int];
+			
+			if(array_element.comissao == item.comissao && array_element.id != item.id){
+				return false;
+			}
+		}
+		obj.show = true;
+		$scope.arrayComissao.push(obj);
+    	return true;
+	}	
     
     $scope.removerProposicao = function(id){
     	if(confirm("Deseja realmente excluir esse registro?")){
@@ -107,7 +128,7 @@ angular.module('sislegisapp').controller(
                 }
             };
             var errorCallback = function() {
-            	toaster.pop('error', 'Erro ao buscar Reunião.');
+            	toaster.pop('error', 'Falha ao buscar Reunião.');
             };
     		
     		$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()}, successCallback, errorCallback);
@@ -131,6 +152,7 @@ angular.module('sislegisapp').controller(
 		if(!$scope.filtroOrigem.origem){
 			$scope.filtroOrigem = null;
 		}
+		$scope.filtroComissao = null;
 	}
     
 	$scope.getUsuarios = function(val) {
@@ -194,7 +216,7 @@ angular.module('sislegisapp').controller(
         	toaster.pop('success', 'Comentário inserido com sucesso');
         };
         var errorCallback = function() {
-        	toaster.pop('error', 'Falha ao processar informações.');
+        	toaster.pop('error', 'Falha ao realizar operação.');
         };
         
 		ComentarioService.save(comentario, item.id).then(successCallback, errorCallback);
@@ -245,15 +267,12 @@ angular.module('sislegisapp').controller(
           resolve: {
             proposicao: function () {
             	return $scope.selectedProposicao;
-            },            
-            listaEncaminhamentoProposicao: function (){
-            	return $scope.selectedProposicao.listaEncaminhamentoProposicao;
-            }          
+            }         
           }
         });
         
-        modalInstance.result.then(function (listaEncaminhamentoProposicao) {
-        	$scope.selectedProposicao.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
+        modalInstance.result.then(function (selectedProposicao) {
+        	$scope.selectedProposicao = selectedProposicao;
           }, function () {
         	  //when modal is dismissed
         	  //o certo era receber a lista como parametro, mas no dismiss nao consegui passar parametro, 

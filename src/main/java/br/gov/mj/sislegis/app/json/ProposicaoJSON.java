@@ -45,6 +45,8 @@ public class ProposicaoJSON implements Serializable {
 
 	private List<ComentarioJSON> listaComentario = new ArrayList<ComentarioJSON>();
 
+	private List<EncaminhamentoProposicaoJSON> listaEncaminhamentoProposicao = new ArrayList<EncaminhamentoProposicaoJSON>();
+
 	private Posicionamento posicionamento;
 
 	
@@ -57,6 +59,7 @@ public class ProposicaoJSON implements Serializable {
 			String ementa, Origem origem, String sigla, String comissao,
 			Integer seqOrdemPauta, String linkProposicao, String linkPauta,
 			List<ComentarioJSON> listaComentario,
+			List<EncaminhamentoProposicaoJSON> listaEncaminhamentoProposicao,
 			Posicionamento posicionamento, List<TagJSON> tags,
 			Usuario responsavel) {
 		this.id=id;
@@ -74,6 +77,7 @@ public class ProposicaoJSON implements Serializable {
 		this.linkProposicao=linkProposicao;
 		this.linkPauta=linkPauta;
 		this.listaComentario=listaComentario;
+		this.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
 		this.posicionamento=posicionamento;
 		this.tags=tags;
 		this.responsavel=responsavel;
@@ -221,5 +225,13 @@ public class ProposicaoJSON implements Serializable {
 
 	public void setResponsavel(Usuario responsavel) {
 		this.responsavel = responsavel;
+	}
+
+	public List<EncaminhamentoProposicaoJSON> getListaEncaminhamentoProposicao() {
+		return listaEncaminhamentoProposicao;
+	}
+
+	public void setListaEncaminhamentoProposicao(List<EncaminhamentoProposicaoJSON> listaEncaminhamentoProposicao) {
+		this.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
 	}
 }

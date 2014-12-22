@@ -21,9 +21,9 @@ import javax.sql.rowset.serial.SerialException;
 
 import br.gov.mj.sislegis.app.enumerated.Origem;
 import br.gov.mj.sislegis.app.json.ComentarioJSON;
+import br.gov.mj.sislegis.app.json.EncaminhamentoProposicaoJSON;
 import br.gov.mj.sislegis.app.json.ProposicaoJSON;
 import br.gov.mj.sislegis.app.json.TagJSON;
-import br.gov.mj.sislegis.app.model.EncaminhamentoProposicao;
 import br.gov.mj.sislegis.app.model.Proposicao;
 import br.gov.mj.sislegis.app.model.Reuniao;
 import br.gov.mj.sislegis.app.model.ReuniaoProposicao;
@@ -216,7 +216,8 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 				proposicao.getSeqOrdemPauta(), 
 				proposicao.getLinkProposicao(), 
 				proposicao.getLinkPauta(),
-				comentarioService.findByProposicao(proposicao.getId()), 
+				comentarioService.findByProposicao(proposicao.getId()),
+				encaminhamentoProposicaoService.findByProposicao(proposicao.getId()), 
 				proposicao.getPosicionamento(), 
 				tagService.populaListaTagsProposicaoJSON(proposicao.getTags()),
 				proposicao.getResponsavel());
@@ -316,9 +317,9 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 
 	@Override
 	public void deleteById(Long id){
-		List<EncaminhamentoProposicao> listaEnc = encaminhamentoProposicaoService.findByProposicao(id);
-		for (Iterator<EncaminhamentoProposicao> iterator = listaEnc.iterator(); iterator.hasNext();) {
-			EncaminhamentoProposicao ep = iterator.next();
+		List<EncaminhamentoProposicaoJSON> listaEnc = encaminhamentoProposicaoService.findByProposicao(id);
+		for (Iterator<EncaminhamentoProposicaoJSON> iterator = listaEnc.iterator(); iterator.hasNext();) {
+			EncaminhamentoProposicaoJSON ep = iterator.next();
 			encaminhamentoProposicaoService.deleteById(ep.getId());
 		}
 		

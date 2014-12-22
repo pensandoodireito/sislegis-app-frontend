@@ -16,8 +16,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @XmlRootElement
+@JsonIgnoreProperties({"idProposicao"})
 public class EncaminhamentoProposicao implements AbstractEntity {
 
 	private static final long serialVersionUID = 7949894944142814382L;
@@ -27,7 +30,6 @@ public class EncaminhamentoProposicao implements AbstractEntity {
 	@Column(name = "id", updatable = false, nullable = false)
 	private Long id;
 
-	// @PrimaryKeyJoinColumn
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Comentario comentario;
 
@@ -39,10 +41,6 @@ public class EncaminhamentoProposicao implements AbstractEntity {
 
 	@OneToOne(fetch = FetchType.EAGER)
 	private Usuario responsavel;
-
-	@Column
-	@Temporal(TemporalType.DATE)
-	private Date dataLimite;
 
 	@Column
 	@Temporal(TemporalType.TIMESTAMP)
@@ -119,14 +117,6 @@ public class EncaminhamentoProposicao implements AbstractEntity {
 		this.responsavel = responsavel;
 	}
 
-	public Date getDataLimite() {
-		return dataLimite;
-	}
-
-	public void setDataLimite(Date dataLimite) {
-		this.dataLimite = dataLimite;
-	}
-
 	public Date getDataHoraLimite() {
 		return dataHoraLimite;
 	}
@@ -148,8 +138,6 @@ public class EncaminhamentoProposicao implements AbstractEntity {
 			result += ", proposicao: " + proposicao;
 		if (responsavel != null)
 			result += ", responsavel: " + responsavel;
-		if (dataLimite != null)
-			result += ", dataLimite: " + dataLimite;
 		if (dataHoraLimite != null)
 			result += ", dataHoraLimite: " + dataHoraLimite;
 		return result;
