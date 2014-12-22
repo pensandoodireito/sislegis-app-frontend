@@ -42,6 +42,8 @@ angular.module('sislegisapp').controller(
     };
     
     $scope.save = function() {
+    	clear();
+    	
     	$rootScope.inactivateSpinner = true;
         var successCallback = function(){
         	$rootScope.inactivateSpinner = false;
@@ -53,6 +55,10 @@ angular.module('sislegisapp').controller(
         };
         ProposicaoResource.update($scope.selectedProposicao, successCallback, errorCallback);
     };
+    
+    var clear = function() {
+    	delete $scope.selectedProposicao.comentarioTmp;
+	}
 
     $scope.remove = function() {
         toaster.pop('success', 'Registro excluído com sucesso.');
