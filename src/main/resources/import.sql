@@ -120,3 +120,11 @@ insert into StatusSidof(id, descricao) values (nextval ('hibernate_sequence'), '
 insert into StatusSidof(id, descricao) values (nextval ('hibernate_sequence'), 'Em análise no co-autor');
 insert into StatusSidof(id, descricao) values (nextval ('hibernate_sequence'), 'Em trâmite no co-autor');
 
+
+-- Órgão
+insert into Orgao(id, nome) values (nextval ('hibernate_sequence'), 'Ministério da Justiça');
+insert into Orgao(id, nome) values (nextval ('hibernate_sequence'), 'MPOG');
+insert into Orgao(id, nome) values (nextval ('hibernate_sequence'), 'Senado');
+insert into Orgao(id, nome) values (nextval ('hibernate_sequence'), 'Câmara');
+insert into Orgao(id, nome) values (nextval ('hibernate_sequence'), 'Policia Federal');
+insert into Orgao(id, nome) values (nextval ('hibernate_sequence'), 'MEC');

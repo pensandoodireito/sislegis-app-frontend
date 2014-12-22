@@ -1,7 +1,8 @@
 angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		function($scope, $http, $routeParams, $location, $locale, $parse, toaster, ElaboracaoNormativaResource, 
 				EquipeResource, FileUploader, TagResource, ComentarioResource, AreaConsultadaResource, 
-				OrigemElaboracaoNormativaResource, UsuarioResource, ElaboracaoNormativaConsultaResource, StatusSidofResource) {
+				OrigemElaboracaoNormativaResource, UsuarioResource, ElaboracaoNormativaConsultaResource, 
+				StatusSidofResource, OrgaoResource) {
 			var self = this;
 			$scope.disabled = false;
 		    $scope.$location = $location;
@@ -75,6 +76,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 
 		        var successCallback = function(){
 		        	$scope.elaboracaoNormativa = new ElaboracaoNormativaResource();
+		        	$scope.selected = "dadosPreliminares";
 		        	toaster.pop('success', 'Elaboração Normativa salvo com sucesso');
 		        };
 		        var errorCallback = function() {
@@ -121,8 +123,8 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    }
 		    
 
-			$scope.getUsuarios = function(val) {
-			    return $http.get('../rest/usuarios/find', {
+			$scope.getCoAutor = function(val) {
+			    return $http.get('../rest/orgaos/find', {
 			      params: {
 			        nome: val
 			      }
@@ -134,14 +136,14 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			  };
 
 			$scope.getOrigemElaboracaoNormativas = function(val) {
-			    return $http.get('../rest/origemelaboracaonormativas/find', {
+			    return $http.get('../rest/orgaos/find', {
 			      params: {
-			        descricao: val
+			        nome: val
 			      }
 			    }).then(function(response){
 			        if (val) {
-			        	var item = new OrigemElaboracaoNormativaResource();
-			        	item.descricao = val;
+			        	var item = new OrgaoResource();
+			        	item.nome = val;
 			        	response.data.unshift(item);
 			        }
 		    		return response.data.map(function(item){
@@ -151,14 +153,6 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			      console.log('Erro ao buscar dados getOrigemElaboracaoNormativas');
 			    });
 			  };
-
-		    $scope.onSelectOrigemElaboracaoNormativas = function (item) {
-		    	if(!item.id){
-		    		item.$save(function(success){
-		    			toaster.pop('success', 'Registro inserido com sucesso.');
-		    		});
-		    	}
-		    };
 				   
 			$scope.getAreaConsultadas = function(val) {
 			    return $http.get('../rest/areaconsultadas/find', {
@@ -190,7 +184,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 				$scope.openCalendar = function($event, id) {
 					$event.preventDefault();
 					$event.stopPropagation();
-					http://localhost:8080/sislegis-app/rest/elaboracaonormativa
+					http://localhost:8080/sisl$scope.selected = "dadosPreliminares";egis-app/rest/elaboracaonormativa
 					var opened = 'opened_'+id;
 					var model = $parse(opened);
 					model.assign($scope, true);

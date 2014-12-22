@@ -23,6 +23,10 @@ angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap','
 		.when('/AreaConsultadas',{templateUrl:'views/AreaConsultada/search.html',controller:'SearchAreaConsultadaController'})
 		.when('/AreaConsultadas/new',{templateUrl:'views/AreaConsultada/detail.html',controller:'NewAreaConsultadaController'})
 		.when('/AreaConsultadas/edit/:AreaConsultadaId',{templateUrl:'views/AreaConsultada/detail.html',controller:'EditAreaConsultadaController'})
+
+		.when('/Orgaos',{templateUrl:'views/Orgao/search.html',controller:'SearchOrgaoController'})
+		.when('/Orgaos/new',{templateUrl:'views/Orgao/detail.html',controller:'NewOrgaoController'})
+		.when('/Orgaos/edit/:OrgaoId',{templateUrl:'views/Orgao/detail.html',controller:'EditOrgaoController'})
 		
 		.when('/Encaminhamentos',{templateUrl:'views/Encaminhamento/search.html',controller:'SearchEncaminhamentoController'})
 		.when('/Encaminhamentos/new',{templateUrl:'views/Encaminhamento/detail.html',controller:'NewEncaminhamentoController'})
