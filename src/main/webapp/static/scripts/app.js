@@ -44,7 +44,7 @@ angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap','
 	    .when('/Tarefas',{templateUrl:'views/Tarefa/detail.html', controller:'TarefaController'})
 	    .when('/Tarefas/edit/:TarefaId',{templateUrl:'views/Tarefa/detail.html', controller:'TarefaController'})
 	    .otherwise({
-	    	redirectTo: '/Reuniaos/gerenciar'
+	    	redirectTo: '/Reuniaos/reuniaonova'
 	    });
   }])
   
