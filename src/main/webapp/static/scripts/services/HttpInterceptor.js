@@ -1,8 +1,9 @@
 // register the interceptor as a service
-angular.module('sislegisapp').factory('HttpInterceptor', function($q) {
+angular.module('sislegisapp').factory('HttpInterceptor', function($q, $rootScope) {
 	
 	var showSpinner = function(config){
-		return config && config.url && config.url.search('rest') >= 0 && 
+		return !$rootScope.inactivateSpinner &&
+			config && config.url && config.url.search('rest') >= 0 && 
 			config.url.search('/tags') < 0 && config.url.search('/find') < 0;
 	}
 	
