@@ -45,7 +45,6 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	public ElaboracaoNormativa(Long id, Date dataRegistro, ElaboracaoNormativaTipo tipo,
 			String nup,
 			ElaboracaoNormativaObjeto identificacao,
-			String nomeAutor,
 			String origemDescricao
 			) {
 		this.id=id;
@@ -53,7 +52,6 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		this.tipo=tipo;
 		this.nup=nup;
 		this.identificacao=identificacao;
-		this.nomeAutor=nomeAutor;
 		this.origemDescricao=origemDescricao;
 	}
 
@@ -85,13 +83,10 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private String valueIdentificacao;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	private Usuario autor;
+	private Orgao coAutor;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	private Usuario coAutor;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	private OrigemElaboracaoNormativa origem;
+	private Orgao origem;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private AreaConsultada areaConsultada;
@@ -175,9 +170,6 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private ElaboracaoNormativaConsulta elaboracaoNormativaConsulta;
 	
 	@Transient
-	private String nomeAutor;
-	
-	@Transient
 	private List<TagJSON> tags;
 	
 	@Transient
@@ -209,15 +201,11 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		return identificacao;
 	}
 
-	public Usuario getAutor() {
-		return autor;
-	}
-
-	public Usuario getCoAutor() {
+	public Orgao getCoAutor() {
 		return coAutor;
 	}
 
-	public OrigemElaboracaoNormativa getOrigem() {
+	public Orgao getOrigem() {
 		return origem;
 	}
 
@@ -266,15 +254,11 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		this.identificacao = identificacao;
 	}
 
-	public void setAutor(Usuario autor) {
-		this.autor = autor;
-	}
-
-	public void setCoAutor(Usuario coAutor) {
+	public void setCoAutor(Orgao coAutor) {
 		this.coAutor = coAutor;
 	}
 
-	public void setOrigem(OrigemElaboracaoNormativa origem) {
+	public void setOrigem(Orgao origem) {
 		this.origem = origem;
 	}
 
@@ -396,16 +380,6 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 
 	public String getValueIdentificacao() {
 		return Objects.isNull(identificacao)?"":identificacao.getValue();
-	}
-
-
-	public String getNomeAutor() {
-		return nomeAutor;
-	}
-
-
-	public void setNomeAutor(String nomeAutor) {
-		this.nomeAutor = nomeAutor;
 	}
 
 

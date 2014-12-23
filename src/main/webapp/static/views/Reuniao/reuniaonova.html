@@ -53,19 +53,19 @@
 	                    </div>
 	                    <div class="col-sm-4">
 	                        <span class="pull-left"><a href="javascript:;" ng-click="buscarProposicoes()" ng-disabled="!reuniao.data"><strong>Buscar/Adicionar proposições</strong></a></span>
-	                        <span class="pull-right" ng-show="reuniao.data"><a href="javascript:;" ng-click="abrirModalRelatorio()"><strong>Gerar relatório</strong></a></span>
+	                        <span class="pull-right" ng-show="listaReuniaoProposicoes.length > 0"><a href="javascript:;" ng-click="abrirModalRelatorio()"><strong>Gerar relatório</strong></a></span>
 	                    </div>
 	                </div>
 	            </div>
 	            <div class="panel-body">
 	
 	                <div class="list-group">
-	                	<div ng-repeat="item in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | orderBy : 'comissao'">
-		                    <div class="list-group-item active" ng-show="showHeaderComissao(item)">
-		                        <h4 class="list-group-item-heading">{{item.comissao}}</h4>
+	                	<div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | groupBy :'comissao' |  orderBy : 'comissao' ">
+		                    <div class="list-group-item active">
+		                        <h4 class="list-group-item-heading">{{comissao}}</h4>
 		                    </div>
-		
-		                    <div class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
+
+		                    <div ng-repeat="item in value | orderBy : 'seqOrdemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
 			                    
 		                        <button type="button" class="close" ng-click="removerProposicao(item.id); $event.stopPropagation()">
 		                            <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
@@ -73,7 +73,7 @@
 		
 		                        <div class="row">
 		                            <div class="col-sm-7">
-		                                <a href="javascript:;" ng-click="getProposicao(item.id)"><h3 class="list-group-item-heading">{{item.sigla}}</h3></a>
+		                                <a href="{{selectedProposicao.linkProposicao}}" target="_blank"><h3 class="list-group-item-heading">{{item.sigla}}</h3></a>
 		                                <p>{{item.ementa}}
 		                                    <br/>
 		                                    <strong>Autor: </strong>{{item.autor}}
@@ -110,19 +110,19 @@
 		                                        <div class="form-group">
 		                                            <label>Posicionamento:</label>
 		                                            <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" 
-		                                            	typeahead-on-select="save()" class="form-control">
+		                                            	typeahead-on-select="save(item)" class="form-control">
 		                                        </div>
 		                                    </div>
 		                                    <div class="divider-top form-inline">
 		                                        <div class="form-group">
 		                                            <label>Responsável: </label>
 		                                            <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue)" 
-		                                            	typeahead-on-select="save()" class="form-control">
+		                                            	typeahead-on-select="save(item)" class="form-control">
 		                                        </div>
 		                                    </div>
 		                                    <div class="divider-top">
 		                                        <label>Tags: </label>
-		                                        <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save()" min-length="1">
+		                                        <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1">
 		                                            <auto-complete source="loadTags($query)"></auto-complete>
 		                                        </tags-input>
 		                                    </div>
