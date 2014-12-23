@@ -44,18 +44,10 @@
 		</div>
 
 		<div class="form-group">
-			<label for="autor" class="col-sm-2 control-label">Autor</label>
-			<div class="col-sm-10">
-                  <input type="text" class="form-control" ng-model="search.autor" placeholder="Pesquisar..."
-	              			typeahead="item as item.nome for item in getUsuarios($viewValue)" typeahead-editable="false">
-			</div>
-		</div>
-
-		<div class="form-group">
 			<label for="origem" class="col-sm-2 control-label">Origem</label>
 			<div class="col-sm-10">
                   <input type="text" class="form-control" ng-model="search.origem" placeholder="Pesquisar..."
-	              			typeahead="item as item.descricao for item in getOrigemElaboracaoNormativas($viewValue)">
+	              			typeahead="item as item.nome for item in getOrigemElaboracaoNormativas($viewValue)">
 			</div>
 		</div>
 

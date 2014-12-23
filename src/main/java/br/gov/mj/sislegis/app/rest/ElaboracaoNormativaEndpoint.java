@@ -33,7 +33,6 @@ import br.gov.mj.sislegis.app.service.Service;
 /**
  * 
  */
-@Stateless
 @Path("/elaboracaonormativa")
 public class ElaboracaoNormativaEndpoint {
 

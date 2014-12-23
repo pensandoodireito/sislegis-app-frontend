@@ -69,7 +69,7 @@
 						</a>	
 						<div class="list-group-item-text clearfix">							
 							<p>
-								<a href="{{proposicao.linkPauta}}" target="_blank">link da pauta</a>
+								<a href="{{proposicao.linkPauta}}" target="_blank" ng-show="proposicao.linkPauta != null">Link da pauta</a>
 															
 								<button type="button" class="pull-right btn btn-success btn-xs" ng-click="adicionarProposicao(proposicao)" title="Adicionar proposição">
 									<i class="fa fa-plus"></i>
