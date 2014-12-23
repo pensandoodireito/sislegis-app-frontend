@@ -1,5 +1,8 @@
  <!-- Tudo que for para o usuario imprimir deve ficar nesse HTML -->
  <div class="list-group-item clearfix" ng-repeat="item in listaReuniaoProposicoes | filter:selectedFiltroOrigem | filter:selectedFiltroComissao | orderBy : 'comissao'">
+     <div class="list-group-item active" ng-show="showHeaderComissao(item)">
+         <h4 class="list-group-item-heading">{{item.comissao}}</h4>
+     </div>
      <div class="row">
          <div class="col-sm-12">
              <h3 class="list-group-item-heading">{{item.sigla}}</h3>
