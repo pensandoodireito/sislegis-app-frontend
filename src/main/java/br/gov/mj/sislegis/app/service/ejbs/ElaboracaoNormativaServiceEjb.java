@@ -25,6 +25,7 @@ import br.gov.mj.sislegis.app.json.TagJSON;
 import br.gov.mj.sislegis.app.model.AreaConsultada;
 import br.gov.mj.sislegis.app.model.ElaboracaoNormativa;
 import br.gov.mj.sislegis.app.model.ElaboracaoNormativaConsulta;
+import br.gov.mj.sislegis.app.model.Orgao;
 import br.gov.mj.sislegis.app.model.OrigemElaboracaoNormativa;
 import br.gov.mj.sislegis.app.model.Tag;
 import br.gov.mj.sislegis.app.model.TagElaboracaoNormativa;
@@ -33,6 +34,7 @@ import br.gov.mj.sislegis.app.model.Usuario;
 import br.gov.mj.sislegis.app.service.AbstractPersistence;
 import br.gov.mj.sislegis.app.service.AreaConsultadaService;
 import br.gov.mj.sislegis.app.service.ElaboracaoNormativaService;
+import br.gov.mj.sislegis.app.service.OrgaoService;
 import br.gov.mj.sislegis.app.service.OrigemElaboracaoNormativaService;
 import br.gov.mj.sislegis.app.service.TagService;
 import br.gov.mj.sislegis.app.service.UsuarioService;
@@ -51,6 +53,9 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 	
 	@Inject
 	public OrigemElaboracaoNormativaService origemElaboracaoNormativaService;
+	
+	@Inject
+	public OrgaoService orgaoService;
 	
 	@PersistenceContext
     private EntityManager em;
@@ -91,9 +96,9 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		
 		if(!Objects.isNull(elaboracaoNormativa.getOrigem())
 				&&Objects.isNull(elaboracaoNormativa.getOrigem().getId())){
-			OrigemElaboracaoNormativa origemElaboracaoNormativa = origemElaboracaoNormativaService
-					.findByProperty("descricao", elaboracaoNormativa.getOrigem().getDescricao());
-			elaboracaoNormativa.setOrigem(origemElaboracaoNormativa);
+			Orgao orgao = orgaoService
+					.findByProperty("nome", elaboracaoNormativa.getOrigem().getNome());
+			elaboracaoNormativa.setOrigem(orgao);
 		}
 		
 		for(ElaboracaoNormativaConsulta elaboracaoNormativaConsulta:elaboracaoNormativa.getListaElaboracaoNormativaConsulta()){
@@ -165,16 +170,14 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 		CriteriaQuery<ElaboracaoNormativa> cq = cb.createQuery(ElaboracaoNormativa.class);
 		Root<ElaboracaoNormativa> en = cq.from(ElaboracaoNormativa.class);
-		Join<ElaboracaoNormativa, Usuario> a = en.join("autor", JoinType.LEFT);
-		Join<ElaboracaoNormativa, OrigemElaboracaoNormativa> oen = en.join("origem", JoinType.LEFT);
+		Join<ElaboracaoNormativa, Orgao> oen = en.join("origem", JoinType.LEFT);
 		cq.select(cb.construct(ElaboracaoNormativa.class, 
 				en.get("id"), 
 				en.get("dataRegistro"), 
 				en.get("tipo"),
 				en.get("nup"),
 				en.get("identificacao"),
-				a.get("nome"),
-				oen.get("descricao")
+				oen.get("nome")
 				));
 
 		List<Predicate> predicates=new ArrayList<Predicate>();
@@ -191,10 +194,6 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 			Predicate identificacao =cb.equal(en.get("identificacao"), 
 					ElaboracaoNormativaObjeto.get((String)mapaCampos.get("identificacao")));
 			predicates.add(identificacao);			
-		}
-		if(!Objects.isNull(mapaCampos.get("autor"))){
-			Predicate nup =cb.equal(a.get("id"), mapaCampos.get("autor"));
-			predicates.add(nup);			
 		}
 		if(!Objects.isNull(mapaCampos.get("origem"))){
 			Predicate nup =cb.equal(oen.get("id"), mapaCampos.get("origem"));
