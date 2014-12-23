@@ -13,7 +13,6 @@ import javax.persistence.TypedQuery;
 import br.gov.mj.sislegis.app.enumerated.TipoTarefa;
 import br.gov.mj.sislegis.app.json.ComentarioJSON;
 import br.gov.mj.sislegis.app.json.EncaminhamentoProposicaoJSON;
-import br.gov.mj.sislegis.app.model.Comentario;
 import br.gov.mj.sislegis.app.model.EncaminhamentoProposicao;
 import br.gov.mj.sislegis.app.model.Tarefa;
 import br.gov.mj.sislegis.app.service.AbstractPersistence;

@@ -7,6 +7,7 @@ angular.module('sislegisapp').controller(
 	var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
+
     $scope.arrayComissao = new Array();
     $scope.selectedFiltro = new Object();
     
@@ -16,8 +17,6 @@ angular.module('sislegisapp').controller(
     
     $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
     $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
-    
-    $scope.detalhamentoProposicao = false;
     
     $scope.loadTags = function(query) {
     	return TagResource.listarTodos().$promise;
@@ -41,7 +40,13 @@ angular.module('sislegisapp').controller(
         return angular.equals(self.original, $scope.reuniao);
     };
     
-    $scope.save = function() {
+    $scope.save = function(item) {
+    	if(item){
+    		$scope.setSelectedProposicao(item);
+    	}
+    		
+    	clear();
+    	
     	$rootScope.inactivateSpinner = true;
         var successCallback = function(){
         	$rootScope.inactivateSpinner = false;
@@ -53,6 +58,10 @@ angular.module('sislegisapp').controller(
         };
         ProposicaoResource.update($scope.selectedProposicao, successCallback, errorCallback);
     };
+    
+    var clear = function() {
+    	delete $scope.selectedProposicao.comentarioTmp;
+	}
 
     $scope.remove = function() {
         toaster.pop('success', 'Registro excluído com sucesso.');

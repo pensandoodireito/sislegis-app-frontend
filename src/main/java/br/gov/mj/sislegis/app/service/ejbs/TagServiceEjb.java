@@ -3,7 +3,6 @@ package br.gov.mj.sislegis.app.service.ejbs;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -16,7 +15,7 @@ import br.gov.mj.sislegis.app.service.AbstractPersistence;
 import br.gov.mj.sislegis.app.service.TagService;
 
 @Stateless
-public class TagServiceEjb extends AbstractPersistence<Tag, Number>
+public class TagServiceEjb extends AbstractPersistence<Tag, Long>
 implements TagService{
 	
 	@PersistenceContext
@@ -24,12 +23,6 @@ implements TagService{
 	
 	public TagServiceEjb() {
 		super(Tag.class);
-	}
-
-	@Override
-	public Tag findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

@@ -110,19 +110,19 @@
 		                                        <div class="form-group">
 		                                            <label>Posicionamento:</label>
 		                                            <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" 
-		                                            	typeahead-on-select="save()" class="form-control">
+		                                            	typeahead-on-select="save(item)" class="form-control">
 		                                        </div>
 		                                    </div>
 		                                    <div class="divider-top form-inline">
 		                                        <div class="form-group">
 		                                            <label>Responsável: </label>
 		                                            <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue)" 
-		                                            	typeahead-on-select="save()" class="form-control">
+		                                            	typeahead-on-select="save(item)" class="form-control">
 		                                        </div>
 		                                    </div>
 		                                    <div class="divider-top">
 		                                        <label>Tags: </label>
-		                                        <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save()" min-length="1">
+		                                        <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1">
 		                                            <auto-complete source="loadTags($query)"></auto-complete>
 		                                        </tags-input>
 		                                    </div>

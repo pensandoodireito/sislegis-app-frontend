@@ -1,6 +1,5 @@
 package br.gov.mj.sislegis.app.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,8 +26,6 @@ public class TagEndpoint {
 	@Inject
 	private TagService tagService;
 	
-	
-
 	@POST
 	@Consumes("application/json")
 	public Response create(Tag entity) {
