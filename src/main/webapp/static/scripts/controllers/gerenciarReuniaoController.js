@@ -8,6 +8,9 @@ angular.module('sislegisapp').controller(
     $scope.disabled = false;
     $scope.$location = $location;
 
+    // faz as ações de cada proposição abrir e fechar (collapse)
+    $scope.showAcoes = true;
+
     $scope.arrayComissao = new Array();
     $scope.selectedFiltro = new Object();
     

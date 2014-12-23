@@ -1,3 +1,4 @@
+<link href="styles/css/theme-sislegis/reuniao-sislegis.css" rel="stylesheet" type="text/css" />
 <div class="hidden-print">
     <div class="container">
         <div class="row">
@@ -10,8 +11,8 @@
                                 <div class="input-group width-grid-2">
                                     <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="reuniao.data" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Fechar" readonly/>
                                     <span class="input-group-btn">
-					                <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-					              </span>
+                                    <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
                                 </div>
 
                             </div>
@@ -21,7 +22,7 @@
                     </div>
                     <p class="fontsize-sm text-red mt-xs mb-0">Para montar a pauta da reunião, é preciso escolher a data em que ela ocorrerá</p>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -59,38 +60,43 @@
                 </div>
                 <div class="panel-body">
 
-                    <div class="list-group">
-	                	<div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | groupBy :'comissao' |  orderBy : 'comissao' ">
-		                    <div class="list-group-item active">
-		                        <h4 class="list-group-item-heading">{{comissao}}</h4>
-                            </div>
+                    <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
 
-		                    <div ng-repeat="item in value | orderBy : 'seqOrdemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
+                        <div class="list-group-item active">
+                            <h4 class="list-group-item-heading">{{comissao}}</h4>
+                        </div>
 
+                        <div ng-repeat="item in value | orderBy : 'seqOrdemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
+                            <div class="clearfix">
                                 <button type="button" class="close" ng-click="removerProposicao(item.id); $event.stopPropagation()">
                                     <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
                                 </button>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-7">
+                                    <a href="{{selectedProposicao.linkProposicao}}" target="_blank"><h3 class="list-group-item-heading">{{item.sigla}}</h3></a>
+                                    <p>{{item.ementa}}
+                                        <br/>
+                                        <strong>Autor: </strong>{{item.autor}}
+                                        <br/>
+                                        <strong>Origem: </strong>{{item.origem}}
+                                        <br/>
+                                        <strong>Comissao: </strong>{{item.comissao}}
+                                        <br/>
+                                        <strong>Ordem na Pauta: </strong>{{item.seqOrdemPauta}}
+                                        <br/>
+                                    </p>
 
-                                <div class="row">
-                                    <div class="col-sm-7">
-		                                <a href="{{selectedProposicao.linkProposicao}}" target="_blank"><h3 class="list-group-item-heading">{{item.sigla}}</h3></a>
-                                        <p>{{item.ementa}}
-                                            <br/>
-                                            <strong>Autor: </strong>{{item.autor}}
-                                            <br/>
-                                            <strong>Origem: </strong>{{item.origem}}
-                                            <br/>
-                                            <strong>Comissao: </strong>{{item.comissao}}
-                                            <br/>
-                                            <strong>Ordem na Pauta: </strong>{{item.seqOrdemPauta}}
-                                            <br/>
-                                        </p>
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <div class="divider-left fontsize-sm">
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading cursor-pointer" ng-click="showAcoes = !showAcoes">
+                                            Ações <i class="fa fa-sort"></i>
+                                        </div>
+                                        <div class="panel-body" collapse="showAcoes">
                                             <div class="clearfix">
                                                 <div class="col-md-10">
-                                                    <textarea class="form-control" rows="3" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
+                                                    <textarea class="form-control fontsize-sm" rows="3" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i>
@@ -109,28 +115,28 @@
                                             <div class="divider-top form-inline">
                                                 <div class="form-group">
                                                     <label>Posicionamento:</label>
-		                                            <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" 
-		                                            	typeahead-on-select="save(item)" class="form-control">
+                                                    <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-on-select="save(item)" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="divider-top form-inline">
                                                 <div class="form-group">
                                                     <label>Responsável: </label>
-		                                            <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue)" 
-		                                            	typeahead-on-select="save(item)" class="form-control">
+                                                    <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue)" typeahead-on-select="save(item)" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="divider-top">
                                                 <label>Tags: </label>
-		                                        <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1">
+                                                <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1">
                                                     <auto-complete source="loadTags($query)"></auto-complete>
                                                 </tags-input>
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
+
                         <!-- /item -->
                     </div>
                 </div>
