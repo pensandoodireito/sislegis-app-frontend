@@ -3,14 +3,15 @@
 	<button type="button" class="close" data-dismiss="modal" ng-click="ok()">
 		<span aria-hidden="true">&times;</span> <span class="sr-only">Fechar</span>
 	</button>
-	<h4 class="modal-title" id="myModalLabel">Buscar / Adicionar proposições para reunião: {{reuniao.data | date:'dd/MM/yyyy'}}</h4>
+	<h4 class="modal-title">Buscar / Adicionar proposições para reunião de <span class="text-red">{{reuniao.data | date:'dd/MM/yyyy'}}</span></h4>
 </div>
 <div class="modal-body">
 	<div class="row">
 		<div class="col-sm-12">
 			<form id="BuscarProposicaoForm" name="BuscarProposicaoForm" role="form">
 				<div class="form-inline" role="form">
-					<div class="input-group">
+				<p class="form-control-static mr-sm">Procurar proposições a partir do dia:</p>
+					<div class="input-group width-grid-2">
 						<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="campoData" date-type="string" is-open="opened" min-date="minDate"
 							max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close" readonly /> <span class="input-group-btn">
 							<button type="button" class="btn btn-default" ng-click="openCalendar($event)">
@@ -20,12 +21,16 @@
 					</div>
 					<div class="form-group">
 						<div class="input-group">
-							<select ng-change="selectOrigemComissoes()" ng-model="origem" ng-options="origem.displayName for origem in origens" class="form-control" required></select>
+							<select ng-change="selectOrigemComissoes()" ng-model="origem" ng-options="origem.displayName for origem in origens" class="form-control" required>
+								<option value="" selected>Origem da proposição</option>
+							</select>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="input-group">
-							<select ng-model="comissao" ng-options="comissao.sigla for comissao in comissoes | orderBy:'sigla'" class="form-control" required></select>
+							<select ng-model="comissao" ng-options="comissao.sigla for comissao in comissoes | orderBy:'sigla'" class="form-control" required>
+								<option value="" selected>Comissão</option>
+							</select>
 						</div>
 					</div>
 					<button type="submit" class="btn btn-default" ng-click="buscarProposicao()">

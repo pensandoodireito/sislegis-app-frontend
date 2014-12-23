@@ -1,142 +1,140 @@
 <div class="hidden-print">
-	<div class="row">
-	    <div class="col-md-12">
-	        <div class="panel panel-warning container">
-	            <div class="panel-body">
-	                <div class="form-inline" role="form">
-	                    <label class="form-group text-danger">Informe a Data para a reunião:</label>
-	                    <div class="form-group">
-	                        <div class="input-group">
-	                            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="reuniao.data" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close" readonly/>
-	                            <span class="input-group-btn">
+    <div class="container">
+        <div class="row">
+            <div class="panel panel-warning">
+                <div class="panel-body">
+                    <div class="clearfix">
+                        <div class="form-inline pull-left mr-lg" role="form">
+                            <label class="form-group text-danger">Informe a Data para a reunião:</label>
+                            <div class="form-group">
+                                <div class="input-group width-grid-2">
+                                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="reuniao.data" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Fechar" readonly/>
+                                    <span class="input-group-btn">
 					                <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 					              </span>
-	                        </div>
-	                    </div>
-	                    <div class="form-group">
-	                        <p class="fontsize-sm ml-md">Para montar a pauta da reunião, é preciso escolher a data em que ela ocorrerá</p>
-	                    </div>
-	
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-	</div>
-	<div class="container">
-	    <div class="row">
-	        <div class="panel panel-default">
-	            <div class="panel-heading">
-	                <div class="clearfix">
-	                    <div class="col-sm-8 fontsize-sm">
-	                        <div class="row" role="form">
-	                            <div ng-show="listaReuniaoProposicoes.length > 0">
-	                                <div class="col-sm-4">
-	                                    <label>Filtrar proposições:</label>
-	                                    <input type="text" class="form-control" ng-model="filtroGlobal.$" placeholder="Filtrar as proposições">
-	                                </div>
-	                                <div class="col-sm-4">
-	                                    <label>Filtrar por casa legislativa:</label>
-	                                    <select ng-model="filtroOrigem.origem" ng-options="item.origem as item.origem for item in listaRPOrigem | unique:'origem'" class="form-control" 
-	                                    	ng-change="changeFiltroOrigem()">
-	                                        <option value=""></option>
-	                                    </select>
-	                                </div>
-	                                <div class="col-sm-4">
-	                                    <label>Filtrar por comissão:</label>
-	                                    <select ng-model="filtroComissao.comissao" ng-options="item.comissao as item.comissao for item in listaRPComissao | filter:filtroOrigem | unique:'comissao'" 
-	                                    	ng-change="changeFiltroComissao()" class="form-control">
-	                                        <option value=""></option>
-	                                    </select>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>
-	                    <div class="col-sm-4">
-	                        <span class="pull-left"><a href="javascript:;" ng-click="buscarProposicoes()" ng-disabled="!reuniao.data"><strong>Buscar/Adicionar proposições</strong></a></span>
-	                        <span class="pull-right" ng-show="reuniao.data"><a href="javascript:;" ng-click="abrirModalRelatorio()"><strong>Gerar relatório</strong></a></span>
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="panel-body">
-	
-	                <div class="list-group">
-	                	<div ng-repeat="item in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | orderBy : 'comissao'">
-		                    <div class="list-group-item active" ng-show="showHeaderComissao(item)">
-		                        <h4 class="list-group-item-heading">{{item.comissao}}</h4>
-		                    </div>
-		
-		                    <div class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
-			                    
-		                        <button type="button" class="close" ng-click="removerProposicao(item.id); $event.stopPropagation()">
-		                            <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
-		                        </button>
-		
-		                        <div class="row">
-		                            <div class="col-sm-7">
-		                                <a href="javascript:;" ng-click="getProposicao(item.id)"><h3 class="list-group-item-heading">{{item.sigla}}</h3></a>
-		                                <p>{{item.ementa}}
-		                                    <br/>
-		                                    <strong>Autor: </strong>{{item.autor}}
-		                                    <br/>
-		                                    <strong>Origem: </strong>{{item.origem}}
-		                                    <br/>
-		                                    <strong>Comissao: </strong>{{item.comissao}}
-		                                    <br/>
-		                                    <strong>Ordem na Pauta: </strong>{{item.seqOrdemPauta}}
-		                                    <br/>
-		                                </p>
-		                            </div>
-		                            <div class="col-sm-5">
-		                                <div class="divider-left fontsize-sm">
-		                                    <div class="clearfix">
-		                                        <div class="col-md-10">
-		                                            <textarea class="form-control" rows="3" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
-		                                        </div>
-		                                        <div class="col-md-2">
-		                                            <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i>
-		                                            </button>
-		                                        </div>
-		                                    </div>
-		                                    <div class="divider-top clearfix">
-		                                        <div class="col-md-6">
-		                                            <strong> <a href="javascript:;" ng-click="abrirModalComentarios(item)"><i class="fa fa-comment"></i> {{item.listaComentario.length || 0}} comentários</a></strong>
-		                                        </div>
-		                                        <div class="col-md-6 text-right">
-		                                            <strong><a href="javascript:;" ng-click="abrirModalEncaminhamentos(item)"> {{item.listaEncaminhamentoProposicao.length || 0}} encaminhamentos</a></strong>
-		                                        </div>
-		                                    </div>
-		
-		                                    <div class="divider-top form-inline">
-		                                        <div class="form-group">
-		                                            <label>Posicionamento:</label>
-		                                            <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" 
-		                                            	typeahead-on-select="save()" class="form-control">
-		                                        </div>
-		                                    </div>
-		                                    <div class="divider-top form-inline">
-		                                        <div class="form-group">
-		                                            <label>Responsável: </label>
-		                                            <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue)" 
-		                                            	typeahead-on-select="save()" class="form-control">
-		                                        </div>
-		                                    </div>
-		                                    <div class="divider-top">
-		                                        <label>Tags: </label>
-		                                        <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save()" min-length="1">
-		                                            <auto-complete source="loadTags($query)"></auto-complete>
-		                                        </tags-input>
-		                                    </div>
-		                                </div>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		                <!-- /item -->
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-	</div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="pull-left divider-left pl-lg"><a href="javascript:;" data-toggle="modal" ng-click="buscarProposicoes()" ng-disabled="!reuniao.data" class="btn btn-success"><i class="fa fa-plus"></i> Buscar/Adicionar proposições</a>
+                        </div>
+                    </div>
+                    <p class="fontsize-sm text-red mt-xs mb-0">Para montar a pauta da reunião, é preciso escolher a data em que ela ocorrerá</p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="clearfix">
+                        <div class="col-sm-8 fontsize-sm">
+                            <div class="row" role="form">
+                                <div ng-show="listaReuniaoProposicoes.length > 0">
+                                    <div class="col-sm-4">
+                                        <label>Filtrar proposições:</label>
+                                        <input type="text" class="form-control" ng-model="filtroGlobal.$" placeholder="Filtrar as proposições">
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>Filtrar por casa legislativa:</label>
+                                        <select ng-model="filtroOrigem.origem" ng-options="item.origem as item.origem for item in listaRPOrigem | unique:'origem'" class="form-control" ng-change="changeFiltroOrigem()">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>Filtrar por comissão:</label>
+                                        <select ng-model="filtroComissao.comissao" ng-options="item.comissao as item.comissao for item in listaRPComissao | filter:filtroOrigem | unique:'comissao'" ng-change="changeFiltroComissao()" class="form-control">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 text-right">
+                            <button type="button" class="btn btn-default ml-lg" ng-show="reuniao.data" ng-click="abrirModalRelatorio()">Imprimir listagem</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+
+                    <div class="list-group">
+                        <div ng-repeat="item in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | orderBy : 'comissao'">
+                            <div class="list-group-item active" ng-show="showHeaderComissao(item)">
+                                <h4 class="list-group-item-heading">{{item.comissao}}</h4>
+                            </div>
+
+                            <div class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
+
+                                <button type="button" class="close" ng-click="removerProposicao(item.id); $event.stopPropagation()">
+                                    <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
+                                </button>
+
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        <a href="javascript:;" ng-click="getProposicao(item.id)"><h3 class="list-group-item-heading">{{item.sigla}}</h3></a>
+                                        <p>{{item.ementa}}
+                                            <br/>
+                                            <strong>Autor: </strong>{{item.autor}}
+                                            <br/>
+                                            <strong>Origem: </strong>{{item.origem}}
+                                            <br/>
+                                            <strong>Comissao: </strong>{{item.comissao}}
+                                            <br/>
+                                            <strong>Ordem na Pauta: </strong>{{item.seqOrdemPauta}}
+                                            <br/>
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="divider-left fontsize-sm">
+                                            <div class="clearfix">
+                                                <div class="col-md-10">
+                                                    <textarea class="form-control" rows="3" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="divider-top clearfix">
+                                                <div class="col-md-6">
+                                                    <strong> <a href="javascript:;" ng-click="abrirModalComentarios(item)"><i class="fa fa-comment"></i> {{item.listaComentario.length || 0}} comentários</a></strong>
+                                                </div>
+                                                <div class="col-md-6 text-right">
+                                                    <strong><a href="javascript:;" ng-click="abrirModalEncaminhamentos(item)"> {{item.listaEncaminhamentoProposicao.length || 0}} encaminhamentos</a></strong>
+                                                </div>
+                                            </div>
+
+                                            <div class="divider-top form-inline">
+                                                <div class="form-group">
+                                                    <label>Posicionamento:</label>
+                                                    <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-on-select="save()" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="divider-top form-inline">
+                                                <div class="form-group">
+                                                    <label>Responsável: </label>
+                                                    <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue)" typeahead-on-select="save()" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="divider-top">
+                                                <label>Tags: </label>
+                                                <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save()" min-length="1">
+                                                    <auto-complete source="loadTags($query)"></auto-complete>
+                                                </tags-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /item -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Porção que vai ser renderizada quando o usuário clicar em 'imprimir' -->
