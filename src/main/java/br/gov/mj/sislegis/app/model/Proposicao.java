@@ -1,7 +1,5 @@
 package br.gov.mj.sislegis.app.model;
 
-import java.sql.Clob;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -17,13 +15,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import br.gov.mj.sislegis.app.enumerated.Origem;
-import br.gov.mj.sislegis.app.util.Conversores;
 
 @Entity
 @XmlRootElement
