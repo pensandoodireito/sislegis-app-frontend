@@ -191,7 +191,6 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 				$scope.openCalendar = function($event, id) {
 					$event.preventDefault();
 					$event.stopPropagation();
-					http://localhost:8080/sisl$scope.selected = "dadosPreliminares";egis-app/rest/elaboracaonormativa
 					var opened = 'opened_'+id;
 					var model = $parse(opened);
 					model.assign($scope, true);
