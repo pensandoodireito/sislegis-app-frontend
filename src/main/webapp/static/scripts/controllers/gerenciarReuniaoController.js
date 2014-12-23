@@ -5,8 +5,6 @@ angular.module('sislegisapp').controller(
 				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService) {
     
 	var self = this;
-    $scope.disabled = false;
-    $scope.$location = $location;
 
     $scope.arrayComissao = new Array();
     $scope.selectedFiltro = new Object();
