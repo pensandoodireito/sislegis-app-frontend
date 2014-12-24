@@ -48,7 +48,7 @@
                             <a href="#" class="dropdown-toggle">Administrar <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                             <li role="presentation" class="dropdown-header"><i class="fa fa-users"></i> Reuniões:</li>
-                                <li><a href="#/Reuniaos/gerenciar">Reuniões</a>
+                                <li><a href="#/Reuniaos/reuniaonova">Reuniões</a>
                                 </li>
                                 <li><a href="#/Posicionamentos">Posicionamentos</a>
                                 </li>
@@ -56,6 +56,8 @@
                                 </li>
                                 <li><a href="#/AreaConsultadas">Áreas Consultadas</a>
                                 </li>
+                                <li><a href="#/Orgaos">Órgão</a>
+                                </li>                                
                                 <li><a href="#/StatusSidof">Status SIDOF</a>
                                 </li>
                                 <li class="divider"></li>
@@ -144,6 +146,7 @@
     <script src="lib/angular-ui-utils/ui-utils.min.js"></script>
     <script src="lib/angular-animate/angular-animate.min.js"></script>
     <script src="lib/angularjs-toaster/toaster.js"></script>
+    <script src="lib/angular-filter/dist/angular-filter.min.js"></script>
 
     <script src="scripts/app.js"></script>
     <script src="scripts/offcanvas.js"></script>
@@ -224,6 +227,12 @@
     <script src="scripts/controllers/newAreaConsultadaController.js"></script>
     <script src="scripts/controllers/searchAreaConsultadaController.js"></script>
     <script src="scripts/controllers/editAreaConsultadaController.js"></script>
+    
+    <!-- Orgao -->
+    <script src="scripts/services/OrgaoFactory.js"></script>
+    <script src="scripts/controllers/newOrgaoController.js"></script>
+    <script src="scripts/controllers/searchOrgaoController.js"></script>
+    <script src="scripts/controllers/editOrgaoController.js"></script>    
 
     <script src="scripts/services/ElaboracaoNormativaConsultaFactory.js"></script>
     

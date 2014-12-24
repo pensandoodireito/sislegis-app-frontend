@@ -78,23 +78,7 @@ angular.module('sislegisapp').controller(
         
     	ProposicaoResource.get({ProposicaoId: id}, successCallback, errorCallback);
     }
-    
-    $scope.showHeaderComissao = function(item) {
-    	var obj = new Object();
-    	obj.id = item.id;
-    	obj.comissao = item.comissao;
-    	for (var int = 0; int < $scope.arrayComissao.length; int++) {
-			var array_element = $scope.arrayComissao[int];
-			
-			if(array_element.comissao == item.comissao && array_element.id != item.id){
-				return false;
-			}
-		}
-		obj.show = true;
-		$scope.arrayComissao.push(obj);
-    	return true;
-	}	
-    
+
     $scope.removerProposicao = function(id){
     	if(confirm("Deseja realmente excluir esse registro?")){
     		var successCallback = function(){
