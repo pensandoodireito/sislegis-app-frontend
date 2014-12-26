@@ -12,7 +12,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			$scope.elaboracaoNormativaConsulta = new ElaboracaoNormativaConsultaResource();
 			
 		    $scope.loadTags = function(query) {
-		    	return TagResource.listarTodos().$promise;
+		    	return TagResource.buscarPorSufixo({sufixo: query}).$promise;
 		    }; 
 			
 			$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta = [];

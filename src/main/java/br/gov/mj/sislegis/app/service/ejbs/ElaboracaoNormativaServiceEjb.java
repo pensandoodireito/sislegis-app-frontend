@@ -36,6 +36,7 @@ import br.gov.mj.sislegis.app.service.AreaConsultadaService;
 import br.gov.mj.sislegis.app.service.ElaboracaoNormativaService;
 import br.gov.mj.sislegis.app.service.OrgaoService;
 import br.gov.mj.sislegis.app.service.OrigemElaboracaoNormativaService;
+import br.gov.mj.sislegis.app.service.TagElaboracaoNormativaService;
 import br.gov.mj.sislegis.app.service.TagService;
 import br.gov.mj.sislegis.app.service.UsuarioService;
 
@@ -53,6 +54,9 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 	
 	@Inject
 	public OrigemElaboracaoNormativaService origemElaboracaoNormativaService;
+	
+	@Inject
+	public TagElaboracaoNormativaService tagElaboracaoNormativaService;
 	
 	@Inject
 	public OrgaoService orgaoService;
@@ -92,6 +96,8 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		if(!Objects.isNull(elaboracaoNormativa.getEquipe()))
 			elaboracaoNormativa.getEquipe().setListaEquipeUsuario(null);
 		
+		processaExclusaoTagElaboracaoNormativa(elaboracaoNormativa);
+		
 		elaboracaoNormativa.setTagsElaboracaoNormativa(populaTagsElaboracaoNormativa(elaboracaoNormativa));
 		
 		if(!Objects.isNull(elaboracaoNormativa.getOrigem())
@@ -100,18 +106,39 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 					.findByProperty("nome", elaboracaoNormativa.getOrigem().getNome());
 			elaboracaoNormativa.setOrigem(orgao);
 		}
-		
-		for(ElaboracaoNormativaConsulta elaboracaoNormativaConsulta:elaboracaoNormativa.getListaElaboracaoNormativaConsulta()){
-			elaboracaoNormativaConsulta.setElaboracaoNormativa(elaboracaoNormativa);
-			if(!Objects.isNull(elaboracaoNormativaConsulta.getAreaConsultada())
-					&&Objects.isNull(elaboracaoNormativaConsulta.getAreaConsultada().getId())){
-				AreaConsultada areaConsultada = areaConsultadaService
-						.findByProperty("descricao", elaboracaoNormativaConsulta.getAreaConsultada().getDescricao());
-				elaboracaoNormativaConsulta.setAreaConsultada(areaConsultada);
+		if(!Objects.isNull(elaboracaoNormativa.getListaElaboracaoNormativaConsulta())){
+			for(ElaboracaoNormativaConsulta elaboracaoNormativaConsulta:elaboracaoNormativa.getListaElaboracaoNormativaConsulta()){
+				elaboracaoNormativaConsulta.setElaboracaoNormativa(elaboracaoNormativa);
+				if(!Objects.isNull(elaboracaoNormativaConsulta.getAreaConsultada())
+						&&Objects.isNull(elaboracaoNormativaConsulta.getAreaConsultada().getId())){
+					AreaConsultada areaConsultada = areaConsultadaService
+							.findByProperty("descricao", elaboracaoNormativaConsulta.getAreaConsultada().getDescricao());
+					elaboracaoNormativaConsulta.setAreaConsultada(areaConsultada);
+				}
 			}
 		}
 		
 		save(elaboracaoNormativa);
+	}
+
+	private void processaExclusaoTagElaboracaoNormativa(
+			ElaboracaoNormativa elaboracaoNormativa) {
+		if(!Objects.isNull(elaboracaoNormativa.getId())){
+			List<TagElaboracaoNormativa> listaRemocao = new ArrayList<TagElaboracaoNormativa>();
+			List<TagElaboracaoNormativa> lista = tagElaboracaoNormativaService.buscaTagsElaboracaoNormativa(elaboracaoNormativa.getId());
+			c:for(TagElaboracaoNormativa tagElaboracaoNormativa:lista){
+				for(TagJSON tagJSON:elaboracaoNormativa.getTags()){
+					if(tagJSON.getText().equals(tagElaboracaoNormativa.getTag().getTag()))
+						continue c;
+				}
+				//listaRemocao.add(tagElaboracaoNormativa);
+				tagElaboracaoNormativaService.deleteTagElaboracaoNormativa(tagElaboracaoNormativa);
+			}
+			
+/*			for(TagElaboracaoNormativa tagElaboracaoNormativa:listaRemocao){
+				tagElaboracaoNormativaService.deleteTagElaboracaoNormativa(tagElaboracaoNormativa);
+			}*/
+		}
 	}
 	
 	@SuppressWarnings("unchecked")

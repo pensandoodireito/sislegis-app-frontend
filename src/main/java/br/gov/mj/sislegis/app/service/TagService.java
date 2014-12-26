@@ -14,5 +14,6 @@ public interface TagService extends Service<Tag> {
 	public List<TagJSON> listarTodasTags();
 	public List<TagJSON> populaListaTagsJSON(Collection<Tag> listaTags);
 	public List<TagJSON> populaListaTagsProposicaoJSON(Collection<TagProposicao> listaTags);
+	public List<TagJSON> buscaPorSufixo(String sufixo);
 
 }
