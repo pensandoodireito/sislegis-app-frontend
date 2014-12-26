@@ -18,6 +18,11 @@ angular.module('sislegisapp').factory('TagResource',
 					url : "../rest/tags/listarTodos",
 					method : 'GET',
 					isArray : true
+				},				
+				'buscarPorSufixo' : {
+					url : "../rest/tags/buscarPorSufixo",
+					method : 'GET',
+					isArray : true
 				}
 			});
 		});

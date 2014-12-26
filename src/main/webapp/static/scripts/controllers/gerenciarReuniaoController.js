@@ -22,7 +22,7 @@ angular.module('sislegisapp').controller(
     $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
     
     $scope.loadTags = function(query) {
-    	return TagResource.listarTodos().$promise;
+    	return TagResource.buscarPorSufixo({sufixo: query}).$promise;
     }; 
     
     $scope.setSelectedProposicao = function(item) {

@@ -107,10 +107,10 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private Usuario parecerista;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "elaboracaoNormativa", fetch = FetchType.EAGER)
-	private Set<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta;
+	private List<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Comentario> listaComentario;
+	private List<Comentario> listaComentario;
 	
 	@Column
 	private Comentario comentario;
@@ -287,12 +287,12 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		this.elaboracaoNormativaNorma = elaboracaoNormativaNorma;
 	}
 
-	public Set<ElaboracaoNormativaConsulta> getListaElaboracaoNormativaConsulta() {
+	public List<ElaboracaoNormativaConsulta> getListaElaboracaoNormativaConsulta() {
 		return listaElaboracaoNormativaConsulta;
 	}
 
 	public void setListaElaboracaoNormativaConsulta(
-			Set<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta) {
+			List<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta) {
 		this.listaElaboracaoNormativaConsulta = listaElaboracaoNormativaConsulta;
 	}
 
@@ -403,12 +403,12 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	}
 
 
-	public Set<Comentario> getListaComentario() {
+	public List<Comentario> getListaComentario() {
 		return listaComentario;
 	}
 
 
-	public void setListaComentario(Set<Comentario> listaComentario) {
+	public void setListaComentario(List<Comentario> listaComentario) {
 		this.listaComentario = listaComentario;
 	}
 
