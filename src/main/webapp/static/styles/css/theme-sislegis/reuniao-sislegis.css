@@ -1,0 +1,20 @@
+.modal .list-proposicao{}
+.modal .list-proposicao .list-proposicao-item{
+	padding: 15px;
+	margin:3px;
+	border-bottom: 1px solid #ccc;
+
+}
+.modal .list-proposicao .list-proposicao-item:hover{
+	background-color: #F5F5F5;
+	cursor: pointer;
+}
+.modal .list-proposicao .list-proposicao-item:active{
+	background-color: #E4FDF2;
+	cursor: pointer;
+}
+
+.modal .list-proposicao .active{
+	background-color: #E4FDF2;
+}
+.modal .list-proposicao .list-proposicao-item p{margin:3px;}
