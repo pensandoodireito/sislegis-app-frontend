@@ -22,9 +22,7 @@ public class ProposicaoJSON implements Serializable {
 	private String ano;
 
 	private String numero;
-
-	private Date dataApresentacao;
-
+	
 	private String autor;
 
 	private String ementa;
@@ -145,15 +143,7 @@ public class ProposicaoJSON implements Serializable {
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
-
-	public Date getDataApresentacao() {
-		return dataApresentacao;
-	}
-
-	public void setDataApresentacao(Date dataApresentacao) {
-		this.dataApresentacao = dataApresentacao;
-	}
-
+	
 	public String getAutor() {
 		return autor;
 	}

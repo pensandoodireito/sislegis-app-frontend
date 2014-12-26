@@ -266,6 +266,15 @@ public class Proposicao implements AbstractEntity {
 		this.listaComentario = listaComentario;
 	}
 
+	public Set<EncaminhamentoProposicao> getListaEncaminhamentoProposicao() {
+		return listaEncaminhamentoProposicao;
+	}
+
+	public void setListaEncaminhamentoProposicao(
+			Set<EncaminhamentoProposicao> listaEncaminhamentoProposicao) {
+		this.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
+	}
+
 	public Set<TagProposicao> getTags() {
 		return tags;
 	}
