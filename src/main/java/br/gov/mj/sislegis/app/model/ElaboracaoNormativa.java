@@ -70,6 +70,9 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private ElaboracaoNormativaTipo tipo;
 	
 	@Transient
+	private List<ElaboracaoNormativaTipo> tipos;
+	
+	@Transient
 	private String valueTipo;
 	
 	@Column
@@ -111,6 +114,9 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Comentario> listaComentario;
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "elaboracaoNormativa")
+	private List<ElaboracaoNormativaTiposMarcados> listaElaboracaoNormativaTiposMarcados;
 	
 	@Column
 	private Comentario comentario;
@@ -547,6 +553,27 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	public void setElaboracaoNormativaBotao(
 			ElaboracaoNormativaBotao elaboracaoNormativaBotao) {
 		this.elaboracaoNormativaBotao = elaboracaoNormativaBotao;
+	}
+
+
+	public List<ElaboracaoNormativaTiposMarcados> getListaElaboracaoNormativaTiposMarcados() {
+		return listaElaboracaoNormativaTiposMarcados;
+	}
+
+
+	public void setListaElaboracaoNormativaTiposMarcados(
+			List<ElaboracaoNormativaTiposMarcados> listaElaboracaoNormativaTiposMarcados) {
+		this.listaElaboracaoNormativaTiposMarcados = listaElaboracaoNormativaTiposMarcados;
+	}
+
+
+	public List<ElaboracaoNormativaTipo> getTipos() {
+		return tipos;
+	}
+
+
+	public void setTipos(List<ElaboracaoNormativaTipo> tipos) {
+		this.tipos = tipos;
 	}
 
 

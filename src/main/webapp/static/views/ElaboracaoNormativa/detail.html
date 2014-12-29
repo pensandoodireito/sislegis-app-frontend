@@ -11,12 +11,18 @@
  
   <div ng-show="selected == 'dadosPreliminares'" class="tab_content">
       <div class="row divider-top">
-          <div class="col-md-3">
+          <div class="col-md-6">
               <div class="form-group">
-                  <label for="">Tipo:</label>
-			<select ng-model="elaboracaoNormativa.tipo" ng-options="tipo.shade as tipo.name for tipo in tipos" class="form-control"></select>
+	<!-- 		<select ng-model="elaboracaoNormativa.tipo" ng-options="tipo.shade as tipo.name for tipo in tipos" class="form-control"></select> -->
+
+		 		<div ng-repeat="tipo in tipos" class="form-group">
+				  <input type="checkbox" checklist-model="elaboracaoNormativa.tipos" checklist-value="tipo.shade"> {{ tipo.name }}
+				</div> 
               </div>
           </div>
+      </div>  
+  
+      <div class="row divider-top">
           <div class="col-md-3">
               <div class="form-group">
                   <label for="">Objeto: </label>
@@ -24,7 +30,7 @@
               		
               </div>
           </div>
-    	<div class="col-md-2">
+    	<div class="col-md-3">
               <div class="form-group">
                   <label for="">Número: </label>
                   <input type="text" class="form-control" ng-model="elaboracaoNormativa.numero">
