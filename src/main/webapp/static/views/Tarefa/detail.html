@@ -1,106 +1,183 @@
-<div class="row">
-	<div class="col-sm-4">
-		<div class="panel panel-default">
-			<div class="panel-heading clearfix">
-				<div class="pull-left">Minhas Tarefas - <strong>Nome do Usuario logado</strong></div>
-			</div>
+<link href="styles/css/theme-sislegis/tarefas.css" rel="stylesheet" type="text/css" />
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h4 class="mt-0">Você possui <strong class="text-red">{{(listaTarefas | filter:{finalizada:false}).length}}</strong> novas tarefas</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-inline" ng-show="listaTarefas.length > 0">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Filtrar tarefas" ng-model="filtroTarefa">
+                </div>
+                <div class="form-group">
+                    <select class="form-control">
+                        <option value="" selected>Todas</option>
+                        <option>Finalizadas</option>
+                        <option>Novas</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <div class="input-group width-grid-2">
+                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="campoData" date-type="string" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close" readonly /> <span class="input-group-btn">
+							<button type="button" class="btn btn-default" ng-click="openCalendar($event)">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+						</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-			<div class="row pt-sm pb-sm" ng-show="listaTarefas.length > 0">
-				<div class="col-xs-5 text-right">Filtrar tarefas:</div>
-				    <div class="row">
-				        <div class="col-md-6">
-				            <p class="input-group">
-				            	<input type="text" ng-model="filtroTarefa">
-				            </p>
-				        </div>
-				    </div>
-			</div>
-		
-			<div class="list-group rol-vert height-full" ng-repeat="tarefa in listaTarefas | orderBy:['finalizada','encaminhamentoProposicao.dataHoraLimite'] | filter: filtroTarefa">
-				<!-- TODO: mudar style inline -->
-				<a href="#/Tarefas/edit/{{tarefa.id}}" class="list-group-item" style="{{tarefa.finalizada === true ? 'background-color:#9ED9C5' : 'background-color:#E77471'}}">
-					<h4 class="list-group-item-heading">{{tarefa.tipoTarefa}} - {{tarefa.encaminhamentoProposicao.encaminhamento.nome}}</h4>
-					<div class="list-group-item-text" >
-						<p>
-							<strong>Data limite da tarefa: </strong>{{tarefa.encaminhamentoProposicao.dataHoraLimite | date:'dd/MM/yyyy'}}
-						</p>
-						<p>
-							<strong>Status da tarefa: </strong>{{tarefa.finalizada === true ? 'Finalizada' : 'Não-finalizada'}}
-						</p>
-					</div>
-				</a>
-			</div>
-		</div>
-	</div>
-	<!-- Detalhes da tarefa -->
-	<div class="col-sm-8" ng-show="detalhamentoTarefa">
-		<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
-		<div class="panel panel-default ">
-			<div class="panel-heading">Detalhamento da tarefa de: {{tarefa.tipoTarefa}} - {{tarefa.encaminhamentoProposicao.encaminhamento.nome}}</div>
-				<div ng-show="detalhamentoTarefa">
-					<div class="panel-body rol-vert ">
-						<p class="fontsize-sm">
-							<strong>Data limite da tarefa: </strong>
-							{{tarefa.encaminhamentoProposicao.dataHoraLimite | date:'dd/MM/yyyy'}}
-						</p>
-						<p class="fontsize-sm">
-							<strong>Data de registro da tarefa: </strong>
-							{{tarefa.data | date:'dd/MM/yyyy'}}
-						</p>
-						<p class="fontsize-sm">
-							<strong>Status da tarefa: </strong>
-							{{tarefa.finalizada === true ? 'Finalizada' : 'Não-finalizada'}}
-						</p>
-						<p class="fontsize-sm" ng-show="!tarefa.finalizada">
-							<input type="button" ng-click="finalizarTarefa()" value="Marcar tarefa como finalizada" />
-						</p>
-						
-						
-						<p class="fontsize-sm">
-							<h3><a href="{{selectedProposicao.linkProposicao}}" target="_blank">{{tarefa.encaminhamentoProposicao.proposicao.sigla}}</a></h3>
-							<p class="divider-top">{{tarefa.encaminhamentoProposicao.proposicao.ementa}}</p>
-							<p class="fontsize-sm">
-								<strong>Autor:  </strong>{{tarefa.encaminhamentoProposicao.proposicao.autor}}
-							</p>
-							<p class="fontsize-sm">
-								<strong>Origem:  </strong>{{tarefa.encaminhamentoProposicao.proposicao.origem}}
-							</p>
-							<p class="fontsize-sm">
-								<a href="{{tarefa.encaminhamentoProposicao.proposicao.linkProposicao}}" target="_blank"><strong>Link da proposição</strong></a>
-							</p>
-							<div class="divider-bottom">
-							
-							
-							<p><h3>Comentários</h3></p>
-							<div class="list-group" ng-repeat="item in listaComentario | orderBy:'dataCriacao':true">
-								<div class="divider-bottom">
-									<p>{{item.descricao}}</p>
-									<div class="mt-sm">
-										<p>
-											Feito por: <strong>{{item.autor.nome}}</strong> <span class="ml-lg">Data: {{item.dataCriacao | date: 'dd/MM/yyyy'}}<span class="ml-lg"></span>
-										</p>
-									</div>
-								</div>
-							</div>
+    <div class="tarefas mt-md">
+        <div class="tarefa-urgente mb-md">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="clearfix">
+                        <div class="col-sm-6">
+                            <h4 class="mt-0 tarefa-titulo"><i class="fa fa-exclamation-circle"></i> Fazer contato telefônico: PL 5016/2005</h4>
+                        </div>
+                        <div class="col-sm-3 tarefa-dtlimite">
+                            <p>Data limite: <span>00/00/0000 - 15h30m</span>
+                            </p>
+                        </div>
+                        <div class="col-sm-3 tarefa-status">
+                            <p>Status: <span>Não finalizada</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="divider-top">
+                        <div class="clearfix tarefa-opcoes">
+                            <div class="col-sm-7">
+                                <p class="fontsize-sm">Data de registro da tarefa: 00/00/0000</p>
+                                <p>Estabelece penalidades para o trabalho escravo, altera dispositivos do Decreto-Lei nº 2.848, de 7 de dezembro de 1940 (Código Penal), e da Lei nº 5.889, de 8 de junho de 1973, que regula o trabalho rural, e dá outras providências.</p>
+                            </div>
+                            <div class="col-sm-4 divider-left">
+                                <a href="#"><i class="fa fa-thumbs-o-up"></i> Marcar como finalizada</a>
+                                <div class="divider-top">
+                                    <p><a href="#"><i class="fa fa-comments"></i> Comentários</a>
+                                    </p>
+                                    <p><a href="#" class="mt-sm"><i class="fa fa-share-square-o"></i> Outros encaminhamentos desta proposição</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-							<p><h3>Encaminhamentos</h3></p>
-							<div class="list-group" ng-repeat="item in listaEncaminhamentoProposicao | orderBy:'comentario.dataCriacao':true">
-								<div class="divider-bottom">
-									<p><strong>{{item.encaminhamento.nome}}</strong></p>
-									<p><strong>Responsável: </strong>{{item.responsavel.nome}}</p>
-									<p><strong>Data e Hora Limite: </strong>{{item.dataHoraLimite | date: 'dd/MM/yyyy HH:mm'}}</p>
-									<p>{{item.comentario.descricao}}</p>
-									<div class="mt-sm">
-										<p>
-											Feito por: <strong>{{item.comentario.autor.nome}}</strong> <span class="ml-lg">Data: {{item.comentario.dataCriacao | date: 'dd/MM/yyyy'}}<span class="ml-lg"></span>
-										</p>
-									</div>
-								</div>
-							</div>
-							
-						</p>
-					</div>
-				</div>
-		</div>
-	</div>
+        <div class="tarefa-nova mb-md">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="clearfix">
+                        <div class="col-sm-6">
+                            <h4 class="mt-0 tarefa-titulo">Fazer contato telefônico: PL 5016/2005</h4>
+                        </div>
+                        <div class="col-sm-3 tarefa-dtlimite">
+                            <p>Data limite: <span>00/00/0000 - 15h30m</span>
+                            </p>
+                        </div>
+                        <div class="col-sm-3 tarefa-status">
+                            <p>Status: <span>Não finalizada</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="divider-top">
+                        <div class="clearfix tarefa-opcoes">
+                            <div class="col-sm-7">
+                                <p class="fontsize-sm">Data de registro da tarefa: 00/00/0000</p>
+                                <p>Estabelece penalidades para o trabalho escravo, altera dispositivos do Decreto-Lei nº 2.848, de 7 de dezembro de 1940 (Código Penal), e da Lei nº 5.889, de 8 de junho de 1973, que regula o trabalho rural, e dá outras providências.</p>
+                            </div>
+                            <div class="col-sm-4 divider-left">
+                                <a href="#"><i class="fa fa-thumbs-o-up"></i> Marcar como finalizada</a>
+                                <div class="divider-top">
+                                    <p><a href="#"><i class="fa fa-comments"></i> Comentários</a>
+                                    </p>
+                                    <p><a href="#" class="mt-sm"><i class="fa fa-share-square-o"></i> Outros encaminhamentos desta proposição</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tarefa-ok mb-md">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="clearfix">
+                        <div class="col-sm-6">
+                            <h4 class="mt-0 tarefa-titulo">Fazer contato telefônico: PL 5016/2005</h4>
+                        </div>
+                        <div class="col-sm-3 tarefa-dtlimite">
+                            <p>Data limite: <span>00/00/0000 - 15h30m</span>
+                            </p>
+                        </div>
+                        <div class="col-sm-3 tarefa-status">
+                            <p>Status: <span>Não finalizada</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="divider-top">
+                        <div class="clearfix tarefa-opcoes">
+                            <div class="col-sm-7">
+                                <p class="fontsize-sm">Data de registro da tarefa: 00/00/0000</p>
+                                <p>Estabelece penalidades para o trabalho escravo, altera dispositivos do Decreto-Lei nº 2.848, de 7 de dezembro de 1940 (Código Penal), e da Lei nº 5.889, de 8 de junho de 1973, que regula o trabalho rural, e dá outras providências.</p>
+                            </div>
+                            <div class="col-sm-4 divider-left">
+                                <a href="#"><i class="fa fa-thumbs-o-up"></i> Marcar como finalizada</a>
+                                <div class="divider-top">
+                                    <p><a href="#"><i class="fa fa-comments"></i> Comentários</a>
+                                    </p>
+                                    <p><a href="#" class="mt-sm"><i class="fa fa-share-square-o"></i> Outros encaminhamentos desta proposição</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tarefa-conc mb-md">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="clearfix">
+                        <div class="col-sm-6">
+                            <h4 class="mt-0 tarefa-titulo">Fazer contato telefônico: PL 5016/2005</h4>
+                        </div>
+                        <div class="col-sm-3 tarefa-dtlimite">
+                            <p>Data limite: <span>00/00/0000 - 15h30m</span>
+                            </p>
+                        </div>
+                        <div class="col-sm-3 tarefa-status">
+                            <p>Status: <span>Não finalizada</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="divider-top">
+                        <div class="clearfix tarefa-opcoes">
+                            <div class="col-sm-7">
+                                <p class="fontsize-sm">Data de registro da tarefa: 00/00/0000</p>
+                                <p>Estabelece penalidades para o trabalho escravo, altera dispositivos do Decreto-Lei nº 2.848, de 7 de dezembro de 1940 (Código Penal), e da Lei nº 5.889, de 8 de junho de 1973, que regula o trabalho rural, e dá outras providências.</p>
+                            </div>
+                            <div class="col-sm-4 divider-left">
+                                <a href="#"><i class="fa fa-thumbs-o-up"></i> Marcar como finalizada</a>
+                                <div class="divider-top">
+                                    <p><a href="#"><i class="fa fa-comments"></i> Comentários</a>
+                                    </p>
+                                    <p><a href="#" class="mt-sm"><i class="fa fa-share-square-o"></i> Outros encaminhamentos desta proposição</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

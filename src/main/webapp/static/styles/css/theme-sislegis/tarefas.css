@@ -1,0 +1,25 @@
+/* tarefa urgente */
+.tarefas .tarefa-urgente .panel{ border-color: #8d0d0d; border-left: 5px solid #8d0d0d; }
+	.tarefas .tarefa-urgente .tarefa-titulo, 
+	.tarefas .tarefa-urgente .tarefa-dtlimite span,
+	.tarefas .tarefa-urgente .tarefa-status span { color:#8d0d0d; }
+
+/* tarefa nova */
+.tarefas .tarefa-nova .panel{ border-color: #ff6600; border-left: 5px solid #ff6600; }
+	.tarefas .tarefa-nova .tarefa-titulo, 
+	.tarefas .tarefa-nova .tarefa-dtlimite span,
+	.tarefas .tarefa-nova .tarefa-status span { color:#ff6600; }
+
+/* tarefa ok */
+.tarefas .tarefa-ok .panel{ border-color: #54960d; border-left: 5px solid #54960d; }
+	.tarefas .tarefa-ok .tarefa-titulo, 
+	.tarefas .tarefa-ok .tarefa-dtlimite span,
+	.tarefas .tarefa-ok .tarefa-status span { color:#54960d; }
+
+/* tarefa concluida */
+.tarefas .tarefa-conc .panel{ border-color: #808080; border-left: 5px solid #808080;  }
+	.tarefas .tarefa-conc .panel a, 
+	.tarefas .tarefa-conc .panel{ color: #808080;}	
+	.tarefas .tarefa-conc .tarefa-titulo,
+	.tarefas .tarefa-conc .tarefa-dtlimite span,
+	.tarefas .tarefa-conc .tarefa-status span { color:#808080; text-decoration: line-through;}
