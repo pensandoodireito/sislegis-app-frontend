@@ -57,8 +57,8 @@
                                 <p>{{tarefa.proposicao.ementa}}</p>
                             </div>
                             <div class="col-sm-4 divider-left">
-                                <a href="javascript:;" ng-click="finalizarTarefa(tarefa)"><i class="fa fa-thumbs-o-up"></i> Marcar como finalizada</a>
-                                <div class="divider-top">
+                                <a ng-show="!tarefa.finalizada" href="javascript:;" ng-click="finalizarTarefa(tarefa)"><i class="fa fa-thumbs-o-up"></i> Marcar como finalizada</a>
+                                <div class="{{tarefa.finalizada ? '' : 'divider-top' }}">
                                     <p><a href="#"><i class="fa fa-comments"></i> Comentários</a>
                                     </p>
                                     <p><a href="#" class="mt-sm"><i class="fa fa-share-square-o"></i> Outros encaminhamentos desta proposição</a>
