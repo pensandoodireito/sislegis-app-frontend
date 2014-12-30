@@ -1,13 +1,13 @@
 <link href="styles/css/theme-sislegis/tarefas.css" rel="stylesheet" type="text/css" />
 <div class="container">
-    <div class="row">
+    <div class="row" ng-show="listaTarefas.length > 0 && !editTarefaId">
         <div class="col-xs-12">
             <h4 class="mt-0">Você possui <strong class="text-red">{{(listaTarefas | filter:{finalizada:false}).length}}</strong> novas tarefas</h4>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-12">
-            <div class="form-inline" ng-show="listaTarefas.length > 0">
+            <div class="form-inline" ng-show="listaTarefas.length > 0 && !editTarefaId">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Filtrar tarefas" ng-model="filtroTarefa">
                 </div>
@@ -32,30 +32,32 @@
     </div>
 
     <div class="tarefas mt-md">
-        <div class="tarefa-urgente mb-md">
-            <div class="panel panel-default">
+        <!-- tipos: conc, nova, ok, urgente -->
+        <div class="tarefa-{{tarefa.finalizada === true ? 'conc' : 'nova'}} mb-md" ng-repeat="tarefa in listaTarefas | orderBy:['finalizada','encaminhamentoProposicao.dataHoraLimite'] | filter: {id : editTarefaId}">
+ 			<div class="panel panel-default">
                 <div class="panel-body">
                     <div class="clearfix">
                         <div class="col-sm-6">
-                            <h4 class="mt-0 tarefa-titulo"><i class="fa fa-exclamation-circle"></i> Fazer contato telefônico: PL 5016/2005</h4>
+                            <h4 class="mt-0 tarefa-titulo"><i class="fa fa-exclamation-circle"></i> {{tarefa.tipoTarefa}} - {{tarefa.encaminhamentoProposicao.encaminhamento.nome}}</h4>
                         </div>
                         <div class="col-sm-3 tarefa-dtlimite">
-                            <p>Data limite: <span>00/00/0000 - 15h30m</span>
+                            <p>Data limite: <span>{{tarefa.encaminhamentoProposicao.dataHoraLimite | date:'dd/MM/yyyy'}}</span>
                             </p>
                         </div>
                         <div class="col-sm-3 tarefa-status">
-                            <p>Status: <span>Não finalizada</span>
+                            <p>Status: <span>{{tarefa.finalizada === true ? 'Finalizada' : 'Não finalizada'}}</span>
                             </p>
                         </div>
                     </div>
                     <div class="divider-top">
                         <div class="clearfix tarefa-opcoes">
                             <div class="col-sm-7">
-                                <p class="fontsize-sm">Data de registro da tarefa: 00/00/0000</p>
-                                <p>Estabelece penalidades para o trabalho escravo, altera dispositivos do Decreto-Lei nº 2.848, de 7 de dezembro de 1940 (Código Penal), e da Lei nº 5.889, de 8 de junho de 1973, que regula o trabalho rural, e dá outras providências.</p>
+                                <p class="fontsize-sm">Data de registro da tarefa: {{tarefa.data | date:'dd/MM/yyyy'}}</p>
+                                <p>{{tarefa.proposicao.sigla}}</p>
+                                <p>{{tarefa.proposicao.ementa}}</p>
                             </div>
                             <div class="col-sm-4 divider-left">
-                                <a href="#"><i class="fa fa-thumbs-o-up"></i> Marcar como finalizada</a>
+                                <a href="javascript:;" ng-click="finalizarTarefa(tarefa)"><i class="fa fa-thumbs-o-up"></i> Marcar como finalizada</a>
                                 <div class="divider-top">
                                     <p><a href="#"><i class="fa fa-comments"></i> Comentários</a>
                                     </p>
@@ -68,116 +70,4 @@
                 </div>
             </div>
         </div>
-
-        <div class="tarefa-nova mb-md">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="clearfix">
-                        <div class="col-sm-6">
-                            <h4 class="mt-0 tarefa-titulo">Fazer contato telefônico: PL 5016/2005</h4>
-                        </div>
-                        <div class="col-sm-3 tarefa-dtlimite">
-                            <p>Data limite: <span>00/00/0000 - 15h30m</span>
-                            </p>
-                        </div>
-                        <div class="col-sm-3 tarefa-status">
-                            <p>Status: <span>Não finalizada</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="divider-top">
-                        <div class="clearfix tarefa-opcoes">
-                            <div class="col-sm-7">
-                                <p class="fontsize-sm">Data de registro da tarefa: 00/00/0000</p>
-                                <p>Estabelece penalidades para o trabalho escravo, altera dispositivos do Decreto-Lei nº 2.848, de 7 de dezembro de 1940 (Código Penal), e da Lei nº 5.889, de 8 de junho de 1973, que regula o trabalho rural, e dá outras providências.</p>
-                            </div>
-                            <div class="col-sm-4 divider-left">
-                                <a href="#"><i class="fa fa-thumbs-o-up"></i> Marcar como finalizada</a>
-                                <div class="divider-top">
-                                    <p><a href="#"><i class="fa fa-comments"></i> Comentários</a>
-                                    </p>
-                                    <p><a href="#" class="mt-sm"><i class="fa fa-share-square-o"></i> Outros encaminhamentos desta proposição</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tarefa-ok mb-md">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="clearfix">
-                        <div class="col-sm-6">
-                            <h4 class="mt-0 tarefa-titulo">Fazer contato telefônico: PL 5016/2005</h4>
-                        </div>
-                        <div class="col-sm-3 tarefa-dtlimite">
-                            <p>Data limite: <span>00/00/0000 - 15h30m</span>
-                            </p>
-                        </div>
-                        <div class="col-sm-3 tarefa-status">
-                            <p>Status: <span>Não finalizada</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="divider-top">
-                        <div class="clearfix tarefa-opcoes">
-                            <div class="col-sm-7">
-                                <p class="fontsize-sm">Data de registro da tarefa: 00/00/0000</p>
-                                <p>Estabelece penalidades para o trabalho escravo, altera dispositivos do Decreto-Lei nº 2.848, de 7 de dezembro de 1940 (Código Penal), e da Lei nº 5.889, de 8 de junho de 1973, que regula o trabalho rural, e dá outras providências.</p>
-                            </div>
-                            <div class="col-sm-4 divider-left">
-                                <a href="#"><i class="fa fa-thumbs-o-up"></i> Marcar como finalizada</a>
-                                <div class="divider-top">
-                                    <p><a href="#"><i class="fa fa-comments"></i> Comentários</a>
-                                    </p>
-                                    <p><a href="#" class="mt-sm"><i class="fa fa-share-square-o"></i> Outros encaminhamentos desta proposição</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="tarefa-conc mb-md">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="clearfix">
-                        <div class="col-sm-6">
-                            <h4 class="mt-0 tarefa-titulo">Fazer contato telefônico: PL 5016/2005</h4>
-                        </div>
-                        <div class="col-sm-3 tarefa-dtlimite">
-                            <p>Data limite: <span>00/00/0000 - 15h30m</span>
-                            </p>
-                        </div>
-                        <div class="col-sm-3 tarefa-status">
-                            <p>Status: <span>Não finalizada</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="divider-top">
-                        <div class="clearfix tarefa-opcoes">
-                            <div class="col-sm-7">
-                                <p class="fontsize-sm">Data de registro da tarefa: 00/00/0000</p>
-                                <p>Estabelece penalidades para o trabalho escravo, altera dispositivos do Decreto-Lei nº 2.848, de 7 de dezembro de 1940 (Código Penal), e da Lei nº 5.889, de 8 de junho de 1973, que regula o trabalho rural, e dá outras providências.</p>
-                            </div>
-                            <div class="col-sm-4 divider-left">
-                                <a href="#"><i class="fa fa-thumbs-o-up"></i> Marcar como finalizada</a>
-                                <div class="divider-top">
-                                    <p><a href="#"><i class="fa fa-comments"></i> Comentários</a>
-                                    </p>
-                                    <p><a href="#" class="mt-sm"><i class="fa fa-share-square-o"></i> Outros encaminhamentos desta proposição</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
