@@ -8,7 +8,7 @@ angular.module('sislegisapp').controller('TarefaController', function($scope, $r
         	$scope.listaTarefas = data;
         };
         var errorCallback = function() {
-            console.error('Erro ao lista tarefas do usuario');
+        	toaster.pop('error', 'Erro ao lista tarefas do usuario');
         };
         
         TarefaResource.buscarPorUsuario({
@@ -60,6 +60,7 @@ angular.module('sislegisapp').controller('TarefaController', function($scope, $r
         });
     };
 
+    // Caso o usuário clique numa tarefa específica, colocamos seu id no escopo para realizar o filtro
     if ($location.path().indexOf("edit") > -1) {
         if ($routeParams.TarefaId != undefined) {
         	$scope.editTarefaId = $routeParams.TarefaId;
@@ -71,27 +72,6 @@ angular.module('sislegisapp').controller('TarefaController', function($scope, $r
     });
 
     $scope.getListaTarefas();
-
-    // CALENDARIO, pra filtrar por data.
-    $scope.campoData = new Date();
-
-    $scope.setCalendar = function() {
-        $scope.openCalendar = function($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-
-            $scope.opened = true;
-        };
-
-        $scope.dateOptions = {
-            formatYear: 'yy',
-            startingDay: 1
-        };
-
-        $scope.format = 'dd/MM/yyyy';
-    }
-
-    $scope.setCalendar();
 });
 
 
