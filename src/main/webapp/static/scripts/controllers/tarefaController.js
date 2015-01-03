@@ -1,5 +1,5 @@
 angular.module('sislegisapp').controller('TarefaController', function($scope, $routeParams, $location,
-    $rootScope, $timeout, toaster, locationParser, TarefaResource, ProposicaoResource, ComentarioResource, EncaminhamentoProposicaoResource) {
+    $rootScope, $timeout, $modal, toaster, locationParser, TarefaResource, ProposicaoResource, ComentarioResource, EncaminhamentoProposicaoResource) {
 
 	$scope.tarefa = new TarefaResource();
 	
@@ -16,38 +16,7 @@ angular.module('sislegisapp').controller('TarefaController', function($scope, $r
         }, successCallback, errorCallback);
 
     }
-
-    $scope.setProposicao = function(idProposicao) {
-    	 var successCallback = function(data) {
-            $scope.proposicao = data;
-         };
-         var errorCallback = function() {};
-    	
-        ProposicaoResource.get({
-            ProposicaoId: idProposicao
-        }, successCallback, errorCallback);
-    }
-
-    $scope.setComentarios = function(idProposicao) {
-        var successCallback = function(data) {
-            $scope.listaComentario = data;
-        };
-        var errorCallback = function() {};
-        ComentarioResource.findByProposicao({
-            ProposicaoId: idProposicao
-        }, successCallback, errorCallback);
-    }
-
-    $scope.setEncaminhamentoProposicao = function(idProposicao) {
-        var successCallback = function(data) {
-            $scope.listaEncaminhamentoProposicao = data;
-        };
-        var errorCallback = function() {};
-        EncaminhamentoProposicaoResource.findByProposicao({
-            ProposicaoId: idProposicao
-        }, successCallback, errorCallback);
-    }
-
+    
     $scope.finalizarTarefa = function(tarefa) {
         var successCallback = function() {
             toaster.pop('success', 'Tarefa finalizada com sucesso');
@@ -56,10 +25,39 @@ angular.module('sislegisapp').controller('TarefaController', function($scope, $r
         	toaster.pop('error', 'Falha ao finalizar tarefa');
         };
 
-        console.log(tarefa);
         $scope.tarefa = tarefa;
         $scope.tarefa.finalizada = true
         $scope.tarefa.$update(successCallback, errorCallback);
+    };
+    
+    $scope.abrirModalComentarios = function(idProposicao) {
+        var modalInstance = $modal.open({
+          templateUrl: 'views/Tarefa/modal-comentarios.html',
+          controller: 'ModalComentariosCtrl',
+          size: 'lg',
+          resolve: {
+        	  comentarios: function () {
+            	return  ComentarioResource.findByProposicao({
+                    ProposicaoId: idProposicao
+                });
+            }
+          }
+        });
+    };
+    
+    $scope.abrirModalEncaminhamentos = function(idProposicao) {
+        var modalInstance = $modal.open({
+          templateUrl: 'views/Tarefa/modal-encaminhamentos.html',
+          controller: 'ModalEncaminhamentosCtrl',
+          size: 'lg',
+          resolve: {
+        	  encaminhamentos: function () {
+            	return  EncaminhamentoProposicaoResource.findByProposicao({
+                    ProposicaoId: idProposicao
+                });
+            }
+          }
+        });
     };
 
     if ($location.path().indexOf("edit") > -1) {
@@ -94,4 +92,29 @@ angular.module('sislegisapp').controller('TarefaController', function($scope, $r
     }
 
     $scope.setCalendar();
+});
+
+
+angular.module('sislegisapp').controller('ModalComentariosCtrl', function ($scope, $modalInstance, comentarios) {
+	  $scope.comentarios = comentarios;
+	
+	  $scope.ok = function () {
+	    $modalInstance.close();
+	  };
+
+	  $scope.cancel = function () {
+	    $modalInstance.dismiss('cancel');
+	  };
+});
+
+angular.module('sislegisapp').controller('ModalEncaminhamentosCtrl', function ($scope, $modalInstance, encaminhamentos) {
+	  $scope.encaminhamentos = encaminhamentos;
+	
+	  $scope.ok = function () {
+	    $modalInstance.close();
+	  };
+
+	  $scope.cancel = function () {
+	    $modalInstance.dismiss('cancel');
+	  };
 });

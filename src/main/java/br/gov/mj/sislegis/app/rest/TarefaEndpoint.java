@@ -75,7 +75,7 @@ public class TarefaEndpoint {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		// Retorna apenas certos campos da proposicao. A definição do filtro fica na propria classe Proposicao
-		FilterProvider filters = new SimpleFilterProvider().addFilter("tarefaFilter", SimpleBeanPropertyFilter.filterOutAllExcept("sigla", "ementa"));
+		FilterProvider filters = new SimpleFilterProvider().addFilter("tarefaFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id", "sigla", "ementa"));
 		mapper.setFilters(filters);
 		
 		List<Tarefa> buscarPorUsuario = tarefaService.buscarPorUsuario(idUsuario);
