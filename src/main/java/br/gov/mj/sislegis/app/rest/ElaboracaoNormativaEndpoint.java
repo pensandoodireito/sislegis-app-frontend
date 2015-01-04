@@ -1,11 +1,11 @@
 package br.gov.mj.sislegis.app.rest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.OptimisticLockException;
 import javax.ws.rs.Consumes;
@@ -26,7 +26,6 @@ import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaSituacao;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
 import br.gov.mj.sislegis.app.json.ComboJSON;
 import br.gov.mj.sislegis.app.model.ElaboracaoNormativa;
-import br.gov.mj.sislegis.app.model.StatusSidof;
 import br.gov.mj.sislegis.app.service.ElaboracaoNormativaService;
 import br.gov.mj.sislegis.app.service.Service;
 
@@ -79,17 +78,25 @@ public class ElaboracaoNormativaEndpoint {
 	@Path("/searchElaboracaoNormativa")
 	@Produces("application/json")
 	public List<ElaboracaoNormativa> searchElaboracaoNormativa(
-			@QueryParam("tipo") String tipo,
-			@QueryParam("nup") String nup,
-			@QueryParam("identificacao") String identificacao,
-			@QueryParam("autor") Long idAutor,
-			@QueryParam("origem") Long idOrigem) {
+			@QueryParam("numero") String numero,
+			@QueryParam("ano") String ano,
+			@QueryParam("listaOrigensSelecionadosDropdown") String listaOrigensSelecionadosDropdown,
+			@QueryParam("listaCoAutoresSelecionadosDropdown") String listaCoAutoresSelecionadosDropdown,
+			@QueryParam("ementa") String ementa,
+			@QueryParam("statusSidof") Long statusSidof,
+			@QueryParam("objeto") String objeto,
+			@QueryParam("distribuicao") Long distribuicao,
+			@QueryParam("parecerista") Long parecerista) {
 		Map<String, Object> mapaCampos = new HashMap<String, Object>();
-		mapaCampos.put("tipo", tipo);
-		mapaCampos.put("nup", nup);
-		mapaCampos.put("identificacao", identificacao);
-		mapaCampos.put("autor", idAutor);
-		mapaCampos.put("origem", idOrigem);
+		mapaCampos.put("numero", numero);
+		mapaCampos.put("ano", ano);
+		mapaCampos.put("listaOrigensSelecionadosDropdown", Arrays.asList(listaOrigensSelecionadosDropdown));
+		mapaCampos.put("listaCoAutoresSelecionadosDropdown", Arrays.asList(listaCoAutoresSelecionadosDropdown));
+		mapaCampos.put("ementa", ementa);
+		mapaCampos.put("statusSidof", statusSidof);
+		mapaCampos.put("identificacao", objeto);
+		mapaCampos.put("distribuicao", distribuicao);
+		mapaCampos.put("parecerista", parecerista);
 		return elaboracaoNormativaService.buscaPorParametros(mapaCampos);
 	}
 	
@@ -154,4 +161,6 @@ public class ElaboracaoNormativaEndpoint {
 
 		return Response.noContent().build();
 	}
+	
+	
 }

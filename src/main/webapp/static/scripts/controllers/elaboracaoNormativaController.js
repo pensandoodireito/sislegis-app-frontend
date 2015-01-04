@@ -5,14 +5,6 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 				StatusSidofResource, OrgaoResource) {
 	
 	
-	  		$scope.roles = [
-	                  'guest', 
-	                  'user', 
-	                  'customer', 
-	                  'admin'
-	                ];
-            $scope.tiposSelecionados = {};	
-	
 			var self = this;
 			$scope.disabled = false;
 		    $scope.$location = $location;
