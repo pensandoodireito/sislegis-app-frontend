@@ -3,6 +3,8 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 				EquipeResource, FileUploader, TagResource, ComentarioResource, AreaConsultadaResource, 
 				OrigemElaboracaoNormativaResource, UsuarioResource, ElaboracaoNormativaConsultaResource, 
 				StatusSidofResource, OrgaoResource) {
+	
+	
 			var self = this;
 			$scope.disabled = false;
 		    $scope.$location = $location;

@@ -25,6 +25,7 @@ import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaObjeto;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaSituacao;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
+import br.gov.mj.sislegis.app.json.DropdownMultiselectJSON;
 import br.gov.mj.sislegis.app.json.TagJSON;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -42,17 +43,22 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	}
 	
 
-	public ElaboracaoNormativa(Long id, Date dataRegistro, ElaboracaoNormativaTipo tipo,
-			String nup,
-			ElaboracaoNormativaObjeto identificacao,
-			String origemDescricao
+	public ElaboracaoNormativa(Long id, Integer ano, String numero,
+			String origemDescricao, String coAutores, String ementa,
+			String statusSidof, ElaboracaoNormativaObjeto identificacao,
+			String equipe, String parecerista
 			) {
 		this.id=id;
-		this.dataRegistro=dataRegistro;
-		this.tipo=tipo;
-		this.nup=nup;
-		this.identificacao=identificacao;
+		this.ano=ano;
+		this.numero=numero;
 		this.origemDescricao=origemDescricao;
+		this.coAutoresDescricao=coAutores;
+		this.ementa=ementa;
+		this.statusSidofDescricao=statusSidof;
+		this.identificacao=identificacao;
+		this.valueIdentificacao=Objects.isNull(identificacao)?null:identificacao.getValue();
+		this.equipeDescricao=equipe;
+		this.pareceristaDescricao=parecerista;
 	}
 
 	@Id
@@ -68,6 +74,9 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Column
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaTipo tipo;
+	
+	@Transient
+	private List<ElaboracaoNormativaTipo> tipos;
 	
 	@Transient
 	private String valueTipo;
@@ -100,10 +109,10 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Column
 	private Date dataDistribuicao;
 	
-	@Column
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Equipe equipe;
 	
-	@Column
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Usuario parecerista;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "elaboracaoNormativa", fetch = FetchType.EAGER)
@@ -111,6 +120,9 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Comentario> listaComentario;
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "elaboracaoNormativa")
+	private List<ElaboracaoNormativaTiposMarcados> listaElaboracaoNormativaTiposMarcados;
 	
 	@Column
 	private Comentario comentario;
@@ -147,7 +159,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Column
 	private Date dataAssinaturaSIDOF;
 	
-	@Column
+	@ManyToOne(fetch = FetchType.EAGER)
 	private StatusSidof statusSidof;
 	
 	@Column
@@ -178,8 +190,23 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Transient
 	private String origemDescricao;
 	
-
-
+	@Transient
+	private List<DropdownMultiselectJSON> listaOrigensSelecionadosDropdown;
+	
+	@Transient
+	private List<DropdownMultiselectJSON> listaCoAutoresSelecionadosDropdown;
+	
+	@Transient
+	private String coAutoresDescricao;
+	
+	@Transient
+	private String statusSidofDescricao;
+	
+	@Transient
+	private String equipeDescricao;
+	
+	@Transient
+	private String pareceristaDescricao;
 
 	public Long getId() {
 		return id;
@@ -547,6 +574,89 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	public void setElaboracaoNormativaBotao(
 			ElaboracaoNormativaBotao elaboracaoNormativaBotao) {
 		this.elaboracaoNormativaBotao = elaboracaoNormativaBotao;
+	}
+
+
+	public List<ElaboracaoNormativaTiposMarcados> getListaElaboracaoNormativaTiposMarcados() {
+		return listaElaboracaoNormativaTiposMarcados;
+	}
+
+
+	public void setListaElaboracaoNormativaTiposMarcados(
+			List<ElaboracaoNormativaTiposMarcados> listaElaboracaoNormativaTiposMarcados) {
+		this.listaElaboracaoNormativaTiposMarcados = listaElaboracaoNormativaTiposMarcados;
+	}
+
+
+	public List<ElaboracaoNormativaTipo> getTipos() {
+		return tipos;
+	}
+
+
+	public void setTipos(List<ElaboracaoNormativaTipo> tipos) {
+		this.tipos = tipos;
+	}
+
+
+	public List<DropdownMultiselectJSON> getListaOrigensSelecionadosDropdown() {
+		return listaOrigensSelecionadosDropdown;
+	}
+
+
+	public void setListaOrigensSelecionadosDropdown(
+			List<DropdownMultiselectJSON> listaOrigensSelecionadosDropdown) {
+		this.listaOrigensSelecionadosDropdown = listaOrigensSelecionadosDropdown;
+	}
+
+
+	public List<DropdownMultiselectJSON> getListaCoAutoresSelecionadosDropdown() {
+		return listaCoAutoresSelecionadosDropdown;
+	}
+
+
+	public void setListaCoAutoresSelecionadosDropdown(
+			List<DropdownMultiselectJSON> listaCoAutoresSelecionadosDropdown) {
+		this.listaCoAutoresSelecionadosDropdown = listaCoAutoresSelecionadosDropdown;
+	}
+
+
+	public String getCoAutoresDescricao() {
+		return coAutoresDescricao;
+	}
+
+
+	public void setCoAutoresDescricao(String coAutoresDescricao) {
+		this.coAutoresDescricao = coAutoresDescricao;
+	}
+
+
+	public String getStatusSidofDescricao() {
+		return statusSidofDescricao;
+	}
+
+
+	public void setStatusSidofDescricao(String statusSidofDescricao) {
+		this.statusSidofDescricao = statusSidofDescricao;
+	}
+
+
+	public String getEquipeDescricao() {
+		return equipeDescricao;
+	}
+
+
+	public void setEquipeDescricao(String equipeDescricao) {
+		this.equipeDescricao = equipeDescricao;
+	}
+
+
+	public String getPareceristaDescricao() {
+		return pareceristaDescricao;
+	}
+
+
+	public void setPareceristaDescricao(String pareceristaDescricao) {
+		this.pareceristaDescricao = pareceristaDescricao;
 	}
 
 
