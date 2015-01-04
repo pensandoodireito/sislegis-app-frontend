@@ -12,7 +12,12 @@ angular.module('sislegisapp').factory('OrgaoResource', function($resource) {
 		},
 		'update' : {
 			method : 'PUT'
-		}
+		},
+		'orgaosDropdownSelect' : {
+			url : "../rest/orgaos/listAllDropdownMultiple",
+			method : 'GET',
+			isArray : true
+		}		
 	});
 	return resource;
 });

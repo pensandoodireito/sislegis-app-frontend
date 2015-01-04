@@ -1,5 +1,6 @@
 package br.gov.mj.sislegis.app.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.Response.Status;
 
+import br.gov.mj.sislegis.app.json.DropdownMultiselectJSON;
 import br.gov.mj.sislegis.app.model.Orgao;
 import br.gov.mj.sislegis.app.service.OrgaoService;
 
@@ -66,6 +68,21 @@ public class OrgaoEndpoint {
 			@QueryParam("max") Integer maxResult) {
 		final List<Orgao> results = orgaoService.listAll();
 		return results;
+	}
+	
+	@GET
+	@Path("/listAllDropdownMultiple")
+	@Produces("application/json")
+	public List<DropdownMultiselectJSON> listAllDropdownMultiple() {
+		final List<Orgao> results = orgaoService.listAll();
+		List<DropdownMultiselectJSON> listaDropdownMultiselectJSON = new ArrayList<DropdownMultiselectJSON>();
+		for(Orgao orgao:results){
+			DropdownMultiselectJSON dropdownMultiselectJSON = new DropdownMultiselectJSON();
+			dropdownMultiselectJSON.setId(orgao.getId());
+			dropdownMultiselectJSON.setLabel(orgao.getNome());
+			listaDropdownMultiselectJSON.add(dropdownMultiselectJSON);
+		}
+		return listaDropdownMultiselectJSON;
 	}
 
 	@PUT
