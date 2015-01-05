@@ -19,6 +19,7 @@ import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import br.gov.mj.sislegis.app.enumerated.TipoTarefa;
+import br.gov.mj.sislegis.app.json.ProposicaoJSON;
 
 @Entity
 @Table(name = "tarefa")
@@ -49,7 +50,7 @@ public class Tarefa implements AbstractEntity {
 	private Usuario usuario;
 	
 	@Transient
-	private Proposicao proposicao;
+	private ProposicaoJSON proposicao;
 
 	public Long getId() {
 		return this.id;
@@ -100,11 +101,11 @@ public class Tarefa implements AbstractEntity {
 		this.usuario = usuario;
 	}
 
-	public Proposicao getProposicao() {
+	public ProposicaoJSON getProposicao() {
 		return proposicao;
 	}
 
-	public void setProposicao(Proposicao proposicao) {
+	public void setProposicao(ProposicaoJSON proposicao) {
 		this.proposicao = proposicao;
 	}
 
