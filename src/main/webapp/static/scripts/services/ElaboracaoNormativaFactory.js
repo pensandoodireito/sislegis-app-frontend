@@ -15,6 +15,11 @@ angular.module('sislegisapp').factory(
 						'update' : {
 							method : 'PUT'
 						},
+						'search' : {
+							url : "../rest/elaboracaonormativa/search",
+							method : 'GET',
+							isArray : true
+						},						
 						'tipos' : {
 							url : "../rest/elaboracaonormativa/tipos",
 							method : 'GET',
@@ -37,10 +42,6 @@ angular.module('sislegisapp').factory(
 						},						
 						'searchElaboracaoNormativa' : {
 							url : "../rest/elaboracaonormativa/searchElaboracaoNormativa",
-						    params: {
-							        tipo: '@tipo',
-							        nup: '@nup'
-							      },
 							method : 'GET',
 							isArray : true
 						}						

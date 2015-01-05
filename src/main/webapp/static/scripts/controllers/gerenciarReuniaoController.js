@@ -6,6 +6,9 @@ angular.module('sislegisapp').controller(
     
 	var self = this;
 
+    // faz as ações de cada proposição abrir e fechar (collapse)
+    $scope.showAcoes = true;
+
     $scope.arrayComissao = new Array();
     $scope.selectedFiltro = new Object();
     
@@ -17,7 +20,7 @@ angular.module('sislegisapp').controller(
     $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
     
     $scope.loadTags = function(query) {
-    	return TagResource.listarTodos().$promise;
+    	return TagResource.buscarPorSufixo({sufixo: query}).$promise;
     }; 
     
     $scope.setSelectedProposicao = function(item) {

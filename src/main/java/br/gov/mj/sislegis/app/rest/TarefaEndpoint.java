@@ -21,6 +21,12 @@ import br.gov.mj.sislegis.app.model.Tarefa;
 import br.gov.mj.sislegis.app.service.Service;
 import br.gov.mj.sislegis.app.service.TarefaService;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+
 
 @Path("/tarefas")
 public class TarefaEndpoint {
@@ -65,8 +71,24 @@ public class TarefaEndpoint {
 	@GET
 	@Path("/usuario")
 	@Produces("application/json")
-	public List<Tarefa> buscarPorUsuario(@QueryParam("idUsuario") Long idUsuario) {
-		return tarefaService.buscarPorUsuario(idUsuario);
+	public String buscarPorUsuario(@QueryParam("idUsuario") Long idUsuario) {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		// Retorna apenas certos campos da proposicao. A definição do filtro fica na propria classe Proposicao
+		FilterProvider filters = new SimpleFilterProvider().addFilter("tarefaFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id", "sigla", "ementa"));
+		mapper.setFilters(filters);
+		
+		List<Tarefa> buscarPorUsuario = tarefaService.buscarPorUsuario(idUsuario);
+		
+		String json = "";
+		
+		try {
+			json = mapper.writeValueAsString(buscarPorUsuario);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
+		return json;
 	}
 
 	@PUT

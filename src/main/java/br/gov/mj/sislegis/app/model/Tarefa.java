@@ -49,7 +49,7 @@ public class Tarefa implements AbstractEntity {
 	private Usuario usuario;
 	
 	@Transient
-	private Long idProposicao;
+	private Proposicao proposicao;
 
 	public Long getId() {
 		return this.id;
@@ -100,12 +100,12 @@ public class Tarefa implements AbstractEntity {
 		this.usuario = usuario;
 	}
 
-	public Long getIdProposicao() {
-		return idProposicao;
+	public Proposicao getProposicao() {
+		return proposicao;
 	}
 
-	public void setIdProposicao(Long idProposicao) {
-		this.idProposicao = idProposicao;
+	public void setProposicao(Proposicao proposicao) {
+		this.proposicao = proposicao;
 	}
 
 	@Override

@@ -1,0 +1,21 @@
+.group-pills {
+    margin: 0;
+    padding: 0;
+    & ul, & li {
+        list-style-type: none;
+    }
+    .group-pills-item {
+        float: left;
+        width: auto;
+        border-radius: @border-radius-base;
+        border: 1px solid #19B232;
+        background-color: #ECFFEF;
+        margin: 3px;
+        padding: 3px;
+        .close {
+            margin: -3px 0 0 5px;
+        }
+        &:hover{ background-color:#BEFFC9; }
+    }
+    .clearfix();
+}

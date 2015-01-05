@@ -25,8 +25,10 @@ import br.gov.mj.sislegis.app.json.TagJSON;
 import br.gov.mj.sislegis.app.model.AreaConsultada;
 import br.gov.mj.sislegis.app.model.ElaboracaoNormativa;
 import br.gov.mj.sislegis.app.model.ElaboracaoNormativaConsulta;
+import br.gov.mj.sislegis.app.model.ElaboracaoNormativaTiposMarcados;
+import br.gov.mj.sislegis.app.model.Equipe;
 import br.gov.mj.sislegis.app.model.Orgao;
-import br.gov.mj.sislegis.app.model.OrigemElaboracaoNormativa;
+import br.gov.mj.sislegis.app.model.StatusSidof;
 import br.gov.mj.sislegis.app.model.Tag;
 import br.gov.mj.sislegis.app.model.TagElaboracaoNormativa;
 import br.gov.mj.sislegis.app.model.TagElaboracaoNormativaPK;
@@ -34,8 +36,10 @@ import br.gov.mj.sislegis.app.model.Usuario;
 import br.gov.mj.sislegis.app.service.AbstractPersistence;
 import br.gov.mj.sislegis.app.service.AreaConsultadaService;
 import br.gov.mj.sislegis.app.service.ElaboracaoNormativaService;
+import br.gov.mj.sislegis.app.service.ElaboracaoNormativaTiposMarcadosService;
 import br.gov.mj.sislegis.app.service.OrgaoService;
 import br.gov.mj.sislegis.app.service.OrigemElaboracaoNormativaService;
+import br.gov.mj.sislegis.app.service.TagElaboracaoNormativaService;
 import br.gov.mj.sislegis.app.service.TagService;
 import br.gov.mj.sislegis.app.service.UsuarioService;
 
@@ -53,6 +57,12 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 	
 	@Inject
 	public OrigemElaboracaoNormativaService origemElaboracaoNormativaService;
+	
+	@Inject
+	public TagElaboracaoNormativaService tagElaboracaoNormativaService;
+	
+	@Inject
+	public ElaboracaoNormativaTiposMarcadosService elaboracaoNormativaTiposMarcadosService;
 	
 	@Inject
 	public OrgaoService orgaoService;
@@ -80,6 +90,11 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		}
 		elaboracaoNormativa.setTagsElaboracaoNormativa(null);
 		
+		elaboracaoNormativa.setTipos(new ArrayList<ElaboracaoNormativaTipo>());
+		for(ElaboracaoNormativaTiposMarcados elaboracaoNormativaTiposMarcados:elaboracaoNormativa.getListaElaboracaoNormativaTiposMarcados()){
+			elaboracaoNormativa.getTipos().add(elaboracaoNormativaTiposMarcados.getTipo());
+		}
+		
 		if(!Objects.isNull(elaboracaoNormativa.getEquipe()))
 			elaboracaoNormativa.setPareceristas(usuarioService.findByIdEquipe(elaboracaoNormativa.getEquipe().getId()));
 		
@@ -88,9 +103,10 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 
 	@Override
 	public void salvar(ElaboracaoNormativa elaboracaoNormativa) {
-		// TODO Auto-generated method stub
 		if(!Objects.isNull(elaboracaoNormativa.getEquipe()))
 			elaboracaoNormativa.getEquipe().setListaEquipeUsuario(null);
+		
+		processaExclusaoTagElaboracaoNormativa(elaboracaoNormativa);
 		
 		elaboracaoNormativa.setTagsElaboracaoNormativa(populaTagsElaboracaoNormativa(elaboracaoNormativa));
 		
@@ -100,18 +116,72 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 					.findByProperty("nome", elaboracaoNormativa.getOrigem().getNome());
 			elaboracaoNormativa.setOrigem(orgao);
 		}
-		
-		for(ElaboracaoNormativaConsulta elaboracaoNormativaConsulta:elaboracaoNormativa.getListaElaboracaoNormativaConsulta()){
-			elaboracaoNormativaConsulta.setElaboracaoNormativa(elaboracaoNormativa);
-			if(!Objects.isNull(elaboracaoNormativaConsulta.getAreaConsultada())
-					&&Objects.isNull(elaboracaoNormativaConsulta.getAreaConsultada().getId())){
-				AreaConsultada areaConsultada = areaConsultadaService
-						.findByProperty("descricao", elaboracaoNormativaConsulta.getAreaConsultada().getDescricao());
-				elaboracaoNormativaConsulta.setAreaConsultada(areaConsultada);
+		if(!Objects.isNull(elaboracaoNormativa.getListaElaboracaoNormativaConsulta())){
+			for(ElaboracaoNormativaConsulta elaboracaoNormativaConsulta:elaboracaoNormativa.getListaElaboracaoNormativaConsulta()){
+				elaboracaoNormativaConsulta.setElaboracaoNormativa(elaboracaoNormativa);
+				if(!Objects.isNull(elaboracaoNormativaConsulta.getAreaConsultada())
+						&&Objects.isNull(elaboracaoNormativaConsulta.getAreaConsultada().getId())){
+					AreaConsultada areaConsultada = areaConsultadaService
+							.findByProperty("descricao", elaboracaoNormativaConsulta.getAreaConsultada().getDescricao());
+					elaboracaoNormativaConsulta.setAreaConsultada(areaConsultada);
+				}
 			}
 		}
 		
+		List<ElaboracaoNormativaTiposMarcados> listaExclusao=null;
+		if(!Objects.isNull(elaboracaoNormativa.getListaElaboracaoNormativaTiposMarcados())){
+			listaExclusao = new ArrayList<ElaboracaoNormativaTiposMarcados>();
+			c:for(ElaboracaoNormativaTiposMarcados elaboracaoNormativaTiposMarcados: elaboracaoNormativa.getListaElaboracaoNormativaTiposMarcados()){
+				for(ElaboracaoNormativaTipo elaboracaoNormativaTipo: elaboracaoNormativa.getTipos()){
+					if(elaboracaoNormativaTiposMarcados.getTipo().equals(elaboracaoNormativaTipo)){
+						continue c;
+					}
+				}
+				listaExclusao.add(elaboracaoNormativaTiposMarcados);
+			}
+			elaboracaoNormativa.setListaElaboracaoNormativaTiposMarcados(null);
+		}
+		
+		if(!Objects.isNull(listaExclusao)){
+			for(ElaboracaoNormativaTiposMarcados elaboracaoNormativaTiposMarcados:listaExclusao){
+				elaboracaoNormativaTiposMarcadosService.deleteElaboracaoNormativaTiposMarcado(elaboracaoNormativaTiposMarcados.getId());
+			}
+		}
+		
+		c:for(ElaboracaoNormativaTipo elaboracaoNormativaTipo: elaboracaoNormativa.getTipos()){
+			if(!Objects.isNull(elaboracaoNormativa.getListaElaboracaoNormativaTiposMarcados())){
+				for(ElaboracaoNormativaTiposMarcados elaboracaoNormativaTiposMarcados:elaboracaoNormativa.getListaElaboracaoNormativaTiposMarcados()){
+					if(elaboracaoNormativaTiposMarcados.getTipo().equals(elaboracaoNormativaTipo)){
+						continue c;
+					}
+				}				
+			}else{
+				elaboracaoNormativa.setListaElaboracaoNormativaTiposMarcados(new ArrayList<ElaboracaoNormativaTiposMarcados>());
+			}
+
+			ElaboracaoNormativaTiposMarcados elaboracaoNormativaTiposMarcados = new ElaboracaoNormativaTiposMarcados();
+			elaboracaoNormativaTiposMarcados.setTipo(elaboracaoNormativaTipo);
+			elaboracaoNormativaTiposMarcados.setElaboracaoNormativa(elaboracaoNormativa);
+			elaboracaoNormativa.getListaElaboracaoNormativaTiposMarcados().add(elaboracaoNormativaTiposMarcados);
+		}
+		
+		
+		
 		save(elaboracaoNormativa);
+	}
+
+	private void processaExclusaoTagElaboracaoNormativa(
+			ElaboracaoNormativa elaboracaoNormativa) {
+		if(!Objects.isNull(elaboracaoNormativa.getId())){
+			List<TagElaboracaoNormativa> lista = tagElaboracaoNormativaService.buscaTagsElaboracaoNormativa(elaboracaoNormativa.getId());
+			c:for(TagElaboracaoNormativa tagElaboracaoNormativa:lista){
+				for(TagJSON tagJSON:elaboracaoNormativa.getTags()){
+					if(tagJSON.getText().equals(tagElaboracaoNormativa.getTag().getTag()))
+						continue c;
+				}
+				tagElaboracaoNormativaService.deleteTagElaboracaoNormativa(tagElaboracaoNormativa);
+			}
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -163,6 +233,7 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<ElaboracaoNormativa> buscaPorParametros(
 			Map<String, Object> mapaCampos) {
@@ -171,33 +242,41 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		CriteriaQuery<ElaboracaoNormativa> cq = cb.createQuery(ElaboracaoNormativa.class);
 		Root<ElaboracaoNormativa> en = cq.from(ElaboracaoNormativa.class);
 		Join<ElaboracaoNormativa, Orgao> oen = en.join("origem", JoinType.LEFT);
+		Join<ElaboracaoNormativa, Orgao> ca = en.join("coAutor", JoinType.LEFT);
+		Join<ElaboracaoNormativa, StatusSidof> ss = en.join("statusSidof", JoinType.LEFT);
+		Join<ElaboracaoNormativa, Equipe> eq = en.join("equipe", JoinType.LEFT);
+		Join<ElaboracaoNormativa, Usuario> us = en.join("parecerista", JoinType.LEFT);
 		cq.select(cb.construct(ElaboracaoNormativa.class, 
 				en.get("id"), 
-				en.get("dataRegistro"), 
-				en.get("tipo"),
-				en.get("nup"),
+				en.get("ano"), 
+				en.get("numero"),
+				oen.get("nome"),
+				ca.get("nome"),
+				en.get("ementa"),
+				ss.get("descricao"),
 				en.get("identificacao"),
-				oen.get("nome")
+				eq.get("nome"),
+				us.get("nome")
 				));
 
 		List<Predicate> predicates=new ArrayList<Predicate>();
-		if(!Objects.isNull(mapaCampos.get("tipo"))){
-			Predicate tipo =cb.equal(en.get("tipo"), ElaboracaoNormativaTipo.get((String)mapaCampos.get("tipo")));
-			predicates.add(tipo);
+		if(!Objects.isNull(mapaCampos.get("ano"))){
+			Predicate ano =cb.equal(en.get("ano"), mapaCampos.get("ano"));
+			predicates.add(ano);
 		}
-		if(!Objects.isNull(mapaCampos.get("nup"))
-				&&!mapaCampos.get("nup").equals("")){
-			Predicate nup =cb.equal(en.get("nup"), mapaCampos.get("nup"));
-			predicates.add(nup);			
+		if(!Objects.isNull(mapaCampos.get("numero"))
+				&&!mapaCampos.get("numero").equals("")){
+			Predicate numero =cb.equal(en.get("numero"), mapaCampos.get("numero"));
+			predicates.add(numero);			
 		}
 		if(!Objects.isNull(mapaCampos.get("identificacao"))){
 			Predicate identificacao =cb.equal(en.get("identificacao"), 
 					ElaboracaoNormativaObjeto.get((String)mapaCampos.get("identificacao")));
 			predicates.add(identificacao);			
 		}
-		if(!Objects.isNull(mapaCampos.get("origem"))){
-			Predicate nup =cb.equal(oen.get("id"), mapaCampos.get("origem"));
-			predicates.add(nup);			
+		if(!Objects.isNull(mapaCampos.get("statusSidof"))){
+			Predicate statusSidof =cb.equal(ss.get("id"), mapaCampos.get("statusSidof"));
+			predicates.add(statusSidof);			
 		}		
 		
 		cq.where(predicates.toArray(new Predicate[]{}));
@@ -206,5 +285,7 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		return result;
 				
 	}
+
+
 
 }
