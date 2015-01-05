@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 @Entity
 @XmlRootElement
 // Usado pela parte de tarefa para filtrar certos campos dessa entidade: http://wiki.fasterxml.com/JacksonFeatureJsonFilter
-@JsonFilter("tarefaFilter")
+//@JsonFilter("tarefaFilter")
 public class Proposicao implements AbstractEntity {
 
 	private static final long serialVersionUID = 7949894944142814382L;
