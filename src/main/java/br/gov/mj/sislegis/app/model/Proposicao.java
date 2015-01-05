@@ -20,8 +20,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import br.gov.mj.sislegis.app.enumerated.Origem;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+
 @Entity
 @XmlRootElement
+// Usado pela parte de tarefa para filtrar certos campos dessa entidade: http://wiki.fasterxml.com/JacksonFeatureJsonFilter
+@JsonFilter("tarefaFilter")
 public class Proposicao implements AbstractEntity {
 
 	private static final long serialVersionUID = 7949894944142814382L;

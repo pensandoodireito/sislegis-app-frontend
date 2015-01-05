@@ -1,97 +1,69 @@
 angular.module('sislegisapp').controller('TarefaController', function($scope, $routeParams, $location,
-    $rootScope, $timeout, toaster, locationParser, TarefaResource, ProposicaoResource, ComentarioResource, EncaminhamentoProposicaoResource) {
+    $rootScope, $timeout, $modal, toaster, locationParser, TarefaResource, ProposicaoResource, ComentarioResource, EncaminhamentoProposicaoResource) {
 
-
-    $scope.tarefa = new TarefaResource();
-
+	$scope.tarefa = new TarefaResource();
+	
     $scope.getListaTarefas = function() {
-        var successCallback = function(success) {
-
+        var successCallback = function(data) {
+        	$scope.listaTarefas = data;
         };
         var errorCallback = function() {
-            console.error('Erro ao lista tarefas do usuario');
+        	toaster.pop('error', 'Erro ao lista tarefas do usuario');
         };
-
-        $scope.detalhamentoTarefa = false;
-
-        $scope.listaTarefas = TarefaResource.buscarPorUsuario({
+        
+        TarefaResource.buscarPorUsuario({
             idUsuario: 999 // ToDo: Mudar para o usuario corrente
         }, successCallback, errorCallback);
 
     }
-
-    /**
-     * Chamado quando o usuario clica em uma tarefa especifica a partir do notification bar
-     */
-    $scope.getTarefa = function(id) {
-        var successCallback = function(data) {
-            $scope.detalhamentoTarefa = true;
-            var idProposicao = $scope.tarefa.encaminhamentoProposicao.proposicao.id;
-            $scope.setProposicao(idProposicao);
-            $scope.setComentarios(idProposicao);
-            $scope.setEncaminhamentoProposicao(idProposicao);
-        };
-
-        var errorCallback = function(data) {
-
-        };
-
-        $scope.tarefa = TarefaResource.get({
-            TarefaId: id
-        }, successCallback, errorCallback);
-    }
-
-
-    $scope.setProposicao = function(idProposicao) {
-        $scope.tarefa.encaminhamentoProposicao.proposicao = ProposicaoResource.get({
-            ProposicaoId: idProposicao
-        });
-    }
-
-    $scope.setComentarios = function(idProposicao) {
-        var successCallback = function(data) {
-            $scope.listaComentario = data;
-        };
-        var errorCallback = function() {};
-        ComentarioResource.findByProposicao({
-            ProposicaoId: idProposicao
-        }, successCallback, errorCallback);
-    }
-
-    $scope.setEncaminhamentoProposicao = function(idProposicao) {
-        var successCallback = function(data) {
-            $scope.listaEncaminhamentoProposicao = data;
-        };
-        var errorCallback = function() {};
-        EncaminhamentoProposicaoResource.findByProposicao({
-            ProposicaoId: idProposicao
-        }, successCallback, errorCallback);
-    }
-
-    $scope.finalizarTarefa = function() {
+    
+    $scope.finalizarTarefa = function(tarefa) {
         var successCallback = function() {
             toaster.pop('success', 'Tarefa finalizada com sucesso');
-
-            // Atualiza também a lista da esquerda, para constar como finalizada
-            for (var i = 0; i < $scope.listaTarefas.length; i++) {
-                if ($scope.listaTarefas[i].id == $scope.tarefa.id) {
-                    $scope.listaTarefas[i] = $scope.tarefa;
-                }
-            }
         };
         var errorCallback = function() {
-
+        	toaster.pop('error', 'Falha ao finalizar tarefa');
         };
 
-        // Marca a tarefa como finalizada
-        $scope.tarefa.finalizada = true;
-
+        $scope.tarefa = tarefa;
+        $scope.tarefa.finalizada = true
         $scope.tarefa.$update(successCallback, errorCallback);
     };
+    
+    $scope.abrirModalComentarios = function(idProposicao) {
+        var modalInstance = $modal.open({
+          templateUrl: 'views/Tarefa/modal-comentarios.html',
+          controller: 'ModalComentariosCtrl',
+          size: 'lg',
+          resolve: {
+        	  comentarios: function () {
+            	return  ComentarioResource.findByProposicao({
+                    ProposicaoId: idProposicao
+                });
+            }
+          }
+        });
+    };
+    
+    $scope.abrirModalEncaminhamentos = function(idProposicao) {
+        var modalInstance = $modal.open({
+          templateUrl: 'views/Tarefa/modal-encaminhamentos.html',
+          controller: 'ModalEncaminhamentosCtrl',
+          size: 'lg',
+          resolve: {
+        	  encaminhamentos: function () {
+            	return  EncaminhamentoProposicaoResource.findByProposicao({
+                    ProposicaoId: idProposicao
+                });
+            }
+          }
+        });
+    };
 
+    // Caso o usuário clique numa tarefa específica, colocamos seu id no escopo para realizar o filtro
     if ($location.path().indexOf("edit") > -1) {
         if ($routeParams.TarefaId != undefined) {
-            $scope.getTarefa($routeParams.TarefaId);
+        	$scope.editTarefaId = $routeParams.TarefaId;
         }
     }
 
@@ -100,26 +72,29 @@ angular.module('sislegisapp').controller('TarefaController', function($scope, $r
     });
 
     $scope.getListaTarefas();
-
-    // CALENDARIO, pra filtrar por data.
-    $scope.campoData = new Date();
+});
 
 
-    $scope.setCalendar = function() {
-        $scope.openCalendar = function($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
+angular.module('sislegisapp').controller('ModalComentariosCtrl', function ($scope, $modalInstance, comentarios) {
+	  $scope.comentarios = comentarios;
+	
+	  $scope.ok = function () {
+	    $modalInstance.close();
+	  };
 
-            $scope.opened = true;
-        };
+	  $scope.cancel = function () {
+	    $modalInstance.dismiss('cancel');
+	  };
+});
 
-        $scope.dateOptions = {
-            formatYear: 'yy',
-            startingDay: 1
-        };
+angular.module('sislegisapp').controller('ModalEncaminhamentosCtrl', function ($scope, $modalInstance, encaminhamentos) {
+	  $scope.encaminhamentos = encaminhamentos;
+	
+	  $scope.ok = function () {
+	    $modalInstance.close();
+	  };
 
-        $scope.format = 'dd/MM/yyyy';
-    }
-
-    $scope.setCalendar();
+	  $scope.cancel = function () {
+	    $modalInstance.dismiss('cancel');
+	  };
 });
