@@ -11,6 +11,7 @@ import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 
+import br.gov.mj.sislegis.app.model.Proposicao;
 import br.gov.mj.sislegis.app.model.Tarefa;
 import br.gov.mj.sislegis.app.service.AbstractPersistence;
 import br.gov.mj.sislegis.app.service.TarefaService;
@@ -34,7 +35,7 @@ public class TarefaServiceEjb extends AbstractPersistence<Tarefa, Long> implemen
 	@Override
 	public Tarefa save(Tarefa entity, String referer){
 		entity = super.save(entity);
-		sendEmailNotification(entity, referer);
+		//sendEmailNotification(entity, referer);
 		return entity;
 	}
 	
@@ -105,15 +106,18 @@ public class TarefaServiceEjb extends AbstractPersistence<Tarefa, Long> implemen
 
 	@Override
 	public List<Tarefa> buscarPorUsuario(Long idUsuario) {
-		TypedQuery<Tarefa> findByIdQuery = em.createQuery("SELECT t FROM Tarefa t WHERE t.usuario.id = :idUsuario", Tarefa.class);
+		TypedQuery<Tarefa> findByIdQuery = em.createQuery("SELECT t FROM Tarefa t "
+				+ "WHERE t.usuario.id = :idUsuario", Tarefa.class);
 		findByIdQuery.setParameter("idUsuario", idUsuario);
 		List<Tarefa> resultList = findByIdQuery.getResultList();
-		// Carrega para evitar lazy exception
+
 		for (Tarefa tarefa : resultList) {
 			if (tarefa.getEncaminhamentoProposicao() != null) {
-				tarefa.getEncaminhamentoProposicao().getProposicao();
+				Proposicao prop = em.find(Proposicao.class, tarefa.getEncaminhamentoProposicao().getProposicao().getId());
+				tarefa.setProposicao(prop);
 			}
 		}
+		
 		return resultList;
 	}
 	
@@ -122,13 +126,11 @@ public class TarefaServiceEjb extends AbstractPersistence<Tarefa, Long> implemen
 		TypedQuery<Tarefa> findByIdQuery = em.createQuery("SELECT t FROM Tarefa t WHERE t.encaminhamentoProposicao.id = :idEncaminhamentoProposicao", Tarefa.class);
 		findByIdQuery.setParameter("idEncaminhamentoProposicao", idEncaminhamentoProposicao);
 		List<Tarefa> resultList = findByIdQuery.getResultList();
-		// Carrega para evitar lazy exception
+
 		if (resultList.size() > 0) {
 			return resultList.get(0);
 		}
+
 		return null;
 	}
-	
-	
-
 }
