@@ -117,13 +117,22 @@ angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', 
     		listaCoAutoresSelecionadosDropdown[index] = value.id;
     	});
     	
-    	$scope.searchResults = ElaboracaoNormativaResource.searchElaboracaoNormativa({numero: $scope.elaboracaoNormativa.numero, 
-    		ano: $scope.elaboracaoNormativa.ano, listaOrigensSelecionadosDropdown: listaOrigensSelecionadosDropdown,
-    		listaCoAutoresSelecionadosDropdown: listaCoAutoresSelecionadosDropdown,
-    		ementa: $scope.elaboracaoNormativa.ementa, 
-    		statusSidof: $scope.elaboracaoNormativa.statusSidof===undefined?null:$scope.elaboracaoNormativa.statusSidof.id,
-    		objeto: $scope.elaboracaoNormativa.identificacao, 
-    		distribuicao: $scope.elaboracaoNormativa.equipe===undefined?null:$scope.elaboracaoNormativa.equipe.id,
-    		parecerista: $scope.elaboracaoNormativa.parecerista===undefined?null:$scope.elaboracaoNormativa.parecerista.id});
+    	$scope.searchResults = ElaboracaoNormativaResource
+    		.searchElaboracaoNormativa({numero: checkEmpty($scope.elaboracaoNormativa.numero), 
+	    		ano: checkEmpty($scope.elaboracaoNormativa.ano), 
+	    		listaOrigensSelecionadosDropdown: listaOrigensSelecionadosDropdown,
+	    		listaCoAutoresSelecionadosDropdown: listaCoAutoresSelecionadosDropdown,
+	    		ementa: checkEmpty($scope.elaboracaoNormativa.ementa), 
+	    		statusSidof: $scope.elaboracaoNormativa.statusSidof===undefined?null:$scope.elaboracaoNormativa.statusSidof.id,
+	    		objeto: $scope.elaboracaoNormativa.identificacao, 
+	    		distribuicao: $scope.elaboracaoNormativa.equipe===undefined?null:$scope.elaboracaoNormativa.equipe.id,
+	    		parecerista: $scope.elaboracaoNormativa.parecerista===undefined?null:$scope.elaboracaoNormativa.parecerista.id});
     };
+    
+    function checkEmpty(str){
+    	if(!str || !/[^\s]+/.test(str)){
+    		return null;
+    	}
+        return str;
+    }
 });

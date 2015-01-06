@@ -19,6 +19,9 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaObjeto;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
 import br.gov.mj.sislegis.app.json.TagJSON;
@@ -42,6 +45,7 @@ import br.gov.mj.sislegis.app.service.OrigemElaboracaoNormativaService;
 import br.gov.mj.sislegis.app.service.TagElaboracaoNormativaService;
 import br.gov.mj.sislegis.app.service.TagService;
 import br.gov.mj.sislegis.app.service.UsuarioService;
+import br.gov.mj.sislegis.app.util.SislegisUtil;
 
 @Stateless
 public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<ElaboracaoNormativa, Long> implements ElaboracaoNormativaService {
@@ -274,17 +278,47 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 					ElaboracaoNormativaObjeto.get((String)mapaCampos.get("identificacao")));
 			predicates.add(identificacao);			
 		}
+		if(!Objects.isNull(mapaCampos.get("distribuicao"))){
+			Predicate distribuicao =cb.equal(en.get("distribuicao"), mapaCampos.get("distribuicao"));
+			predicates.add(distribuicao);			
+		}	
+		if(!Objects.isNull(mapaCampos.get("parecerista"))){
+			Predicate parecerista =cb.equal(en.get("parecerista"), mapaCampos.get("parecerista"));
+			predicates.add(parecerista);			
+		}				
 		if(!Objects.isNull(mapaCampos.get("statusSidof"))){
 			Predicate statusSidof =cb.equal(ss.get("id"), mapaCampos.get("statusSidof"));
 			predicates.add(statusSidof);			
+		}
+		if(!Objects.isNull(mapaCampos.get("ementa"))){
+			Predicate ementa =cb.like(en.<String>get("ementa"), mapaCampos.get("ementa").toString());
+			predicates.add(ementa);			
 		}		
 		
+		if(!Objects.isNull(mapaCampos.get("listaOrigensSelecionadosDropdown"))){
+			List<String> lista = SislegisUtil.jsonArrayToList(mapaCampos.get("listaOrigensSelecionadosDropdown").toString());
+			if(!lista.isEmpty()){
+				Predicate listaOrigensSelecionadosDropdown =oen.get("id").in(lista);
+				predicates.add(listaOrigensSelecionadosDropdown);			
+			}
+		}
+
+		if(!Objects.isNull(mapaCampos.get("listaCoAutoresSelecionadosDropdown"))){
+			List<String> lista = SislegisUtil.jsonArrayToList(mapaCampos.get("listaCoAutoresSelecionadosDropdown").toString());
+			if(!lista.isEmpty()){
+				Predicate listaCoAutoresSelecionadosDropdown =ca.get("id").in(lista);
+				predicates.add(listaCoAutoresSelecionadosDropdown);			
+			}
+		}
+
 		cq.where(predicates.toArray(new Predicate[]{}));
 		Query query = getEntityManager().createQuery(cq);
 		List<ElaboracaoNormativa> result = query.getResultList();
 		return result;
 				
 	}
+
+
 
 
 
