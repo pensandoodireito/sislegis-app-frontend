@@ -11,6 +11,7 @@ import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 
+import br.gov.mj.sislegis.app.json.ProposicaoJSON;
 import br.gov.mj.sislegis.app.model.Proposicao;
 import br.gov.mj.sislegis.app.model.Tarefa;
 import br.gov.mj.sislegis.app.service.AbstractPersistence;
@@ -114,11 +115,34 @@ public class TarefaServiceEjb extends AbstractPersistence<Tarefa, Long> implemen
 		for (Tarefa tarefa : resultList) {
 			if (tarefa.getEncaminhamentoProposicao() != null) {
 				Proposicao prop = em.find(Proposicao.class, tarefa.getEncaminhamentoProposicao().getProposicao().getId());
-				tarefa.setProposicao(prop);
+				tarefa.setProposicao(populaProposicaoJSON(prop));
 			}
 		}
 		
 		return resultList;
+	}
+	
+	public ProposicaoJSON populaProposicaoJSON(Proposicao proposicao) {	
+		ProposicaoJSON proposicaoJSON = new ProposicaoJSON(proposicao.getId(), 
+				proposicao.getIdProposicao(), 
+				proposicao.getTipo(), 
+				proposicao.getAno(),
+				proposicao.getNumero(), 
+				proposicao.getAutor(), 
+				proposicao.getEmenta(), 
+				proposicao.getOrigem(), 
+				proposicao.getSigla(),
+				proposicao.getComissao(), 
+				proposicao.getSeqOrdemPauta(), 
+				proposicao.getLinkProposicao(), 
+				proposicao.getLinkPauta(),
+				null,
+				null, 
+				proposicao.getPosicionamento(), 
+				null,
+				proposicao.getResponsavel());
+
+		return proposicaoJSON;
 	}
 	
 	@Override
