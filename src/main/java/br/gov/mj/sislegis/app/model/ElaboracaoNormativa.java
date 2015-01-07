@@ -93,6 +93,8 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Orgao coAutor;
+	
+	
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Orgao origem;
@@ -117,6 +119,9 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "elaboracaoNormativa", fetch = FetchType.EAGER)
 	private List<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "elaboracaoNormativa", fetch = FetchType.EAGER)
+	private List<ElaboracaoNormativaCoAutores> listaElaboracaoNormativaCoAutor;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Comentario> listaComentario;
@@ -657,6 +662,17 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 
 	public void setPareceristaDescricao(String pareceristaDescricao) {
 		this.pareceristaDescricao = pareceristaDescricao;
+	}
+
+
+	public List<ElaboracaoNormativaCoAutores> getListaElaboracaoNormativaCoAutor() {
+		return listaElaboracaoNormativaCoAutor;
+	}
+
+
+	public void setListaElaboracaoNormativaCoAutor(
+			List<ElaboracaoNormativaCoAutores> listaElaboracaoNormativaCoAutor) {
+		this.listaElaboracaoNormativaCoAutor = listaElaboracaoNormativaCoAutor;
 	}
 
 

@@ -1,7 +1,5 @@
 package br.gov.mj.sislegis.app.service.ejbs;
 
-import java.util.List;
-
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -33,7 +31,6 @@ implements ElaboracaoNormativaTiposMarcadosService{
 				+ "where id  = :id", ElaboracaoNormativaTiposMarcados.class)
 				.setParameter("id", id)
 				.executeUpdate();
-		
 	}
 
 

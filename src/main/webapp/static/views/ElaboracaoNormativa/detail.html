@@ -55,8 +55,7 @@
           <div class="col-md-3">
               <div class="form-group">
                   <label for="">Co-Autor</label>
-                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.coAutor" placeholder="Pesquisar..."
-	              			typeahead="item as item.nome for item in getCoAutor($viewValue)">
+				  <div ng-dropdown-multiselect="" options="orgaos" selected-model="elaboracaoNormativa.listaCoAutoresSelecionadosDropdown"></div>
               </div>
           </div>
       </div>
