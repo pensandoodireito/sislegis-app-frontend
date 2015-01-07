@@ -49,6 +49,9 @@ public class Proposicao implements AbstractEntity {
 	@Enumerated(EnumType.STRING)
 	@Column
 	private Origem origem;
+	
+	@Column(length=2000)
+	private String resultadoASPAR;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "proposicao")
 	private Set<ReuniaoProposicao> listaReuniaoProposicoes;
@@ -299,4 +302,11 @@ public class Proposicao implements AbstractEntity {
 		this.reuniao = reuniao;
 	}
 
+	public String getResultadoASPAR() {
+		return resultadoASPAR;
+	}
+
+	public void setResultadoASPAR(String resultadoASPAR) {
+		this.resultadoASPAR = resultadoASPAR;
+	}
 }

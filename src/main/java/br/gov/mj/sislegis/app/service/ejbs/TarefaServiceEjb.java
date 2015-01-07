@@ -136,6 +136,7 @@ public class TarefaServiceEjb extends AbstractPersistence<Tarefa, Long> implemen
 				proposicao.getSeqOrdemPauta(), 
 				proposicao.getLinkProposicao(), 
 				proposicao.getLinkPauta(),
+				proposicao.getResultadoASPAR(),
 				null,
 				null, 
 				proposicao.getPosicionamento(), 
