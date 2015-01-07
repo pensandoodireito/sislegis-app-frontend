@@ -190,6 +190,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		proposicao.setLinkPauta(isNull(p.getLinkPauta()) ? proposicao.getLinkPauta() : p.getLinkPauta());
 		proposicao.setLinkProposicao(isNull(p.getLinkProposicao()) ? proposicao.getLinkProposicao() : p.getLinkProposicao());
 		proposicao.setResponsavel(isNull(p.getResponsavel()) ? proposicao.getResponsavel() : p.getResponsavel());
+		proposicao.setResultadoASPAR(isNull(p.getResultadoASPAR()) ? proposicao.getResultadoASPAR() : p.getResultadoASPAR());
 	}
 
 	public boolean isNull(Object obj) {
@@ -223,6 +224,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 				proposicao.getSeqOrdemPauta(), 
 				proposicao.getLinkProposicao(), 
 				proposicao.getLinkPauta(),
+				proposicao.getResultadoASPAR(),
 				comentarioService.findByProposicao(proposicao.getId()),
 				encaminhamentoProposicaoService.findByProposicao(proposicao.getId()), 
 				proposicao.getPosicionamento(), 
@@ -296,6 +298,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		proposicao.setSeqOrdemPauta(proposicaoJSON.getSeqOrdemPauta());
 		proposicao.setPosicionamento(proposicaoJSON.getPosicionamento());
 		proposicao.setResponsavel(proposicaoJSON.getResponsavel());
+		proposicao.setResultadoASPAR(proposicaoJSON.getResultadoASPAR());
 		Set<TagProposicao> tags = populaTagsProposicao(proposicaoJSON, proposicao);
 		proposicao.setTags(tags);
 		return proposicao;

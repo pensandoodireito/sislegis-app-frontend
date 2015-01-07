@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+
 import br.gov.mj.sislegis.app.enumerated.Origem;
 import br.gov.mj.sislegis.app.model.Posicionamento;
 import br.gov.mj.sislegis.app.model.Usuario;
@@ -33,6 +35,8 @@ public class ProposicaoJSON implements Serializable {
 
 	private String comissao;
 
+	private String resultadoASPAR;
+
 	private Integer seqOrdemPauta;
 
 	private String linkProposicao;
@@ -56,6 +60,7 @@ public class ProposicaoJSON implements Serializable {
 			String ano, String numero, String autor,
 			String ementa, Origem origem, String sigla, String comissao,
 			Integer seqOrdemPauta, String linkProposicao, String linkPauta,
+			String resultadoASPAR,
 			List<ComentarioJSON> listaComentario,
 			List<EncaminhamentoProposicaoJSON> listaEncaminhamentoProposicao,
 			Posicionamento posicionamento, List<TagJSON> tags,
@@ -73,6 +78,7 @@ public class ProposicaoJSON implements Serializable {
 		this.seqOrdemPauta=seqOrdemPauta;
 		this.linkProposicao=linkProposicao;
 		this.linkPauta=linkPauta;
+		this.resultadoASPAR=resultadoASPAR;
 		this.listaComentario=listaComentario;
 		this.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
 		this.posicionamento=posicionamento;
@@ -222,5 +228,13 @@ public class ProposicaoJSON implements Serializable {
 
 	public void setListaEncaminhamentoProposicao(List<EncaminhamentoProposicaoJSON> listaEncaminhamentoProposicao) {
 		this.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
+	}
+
+	public String getResultadoASPAR() {
+		return resultadoASPAR;
+	}
+
+	public void setResultadoASPAR(String resultadoASPAR) {
+		this.resultadoASPAR = resultadoASPAR;
 	}
 }

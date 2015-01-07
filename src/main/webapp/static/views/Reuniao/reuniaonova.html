@@ -131,6 +131,18 @@
                                                     <auto-complete source="loadTags($query)"></auto-complete>
                                                 </tags-input>
                                             </div>
+											<div class="divider-top">
+												<label>Resultado: </label>
+                                                <div class="form-group">
+                                                	<div class="col-md-10">
+                                                    	<textarea class="form-control fontsize-sm" rows="3" placeholder="Adicione um resultado" ng-model="item.resultadoASPAR"></textarea>
+                                        			</div>
+                                        			<div class="col-md-2">
+	                                                    <button type="button" class="btn btn-success btn-sm" ng-click="save(item)"><i class="fa fa-check"></i>
+	                                                    </button>
+                                                    </div>
+                                                 </div>
+                                            </div>
                                         </div>
                                     </div>
 
