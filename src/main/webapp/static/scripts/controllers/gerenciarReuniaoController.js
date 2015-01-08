@@ -1,8 +1,8 @@
 angular.module('sislegisapp').controller(
 		'GerenciarReuniaoController',
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
-				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource,
-				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService) {
+				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
+				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource) {
     
 	var self = this;
 
@@ -18,6 +18,26 @@ angular.module('sislegisapp').controller(
     
     $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
     $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
+    
+    $scope.listaEquipe = EquipeResource.queryAll(function(success) {
+    	$scope.listaEquipe = success;
+    	for (var int = 0; int < $scope.listaEquipe.length; int++) {
+			var equipe = $scope.listaEquipe[int];
+
+			equipe.listaUsuario = UsuarioResource.findByIdEquipe({idEquipe: equipe.id});
+		}
+	});
+    
+
+    $scope.status = {
+      isopen: false
+    };
+
+    $scope.toggleDropdown = function($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      $scope.status.isopen = !$scope.status.isopen;
+    };
     
     $scope.loadTags = function(query) {
     	return TagResource.buscarPorSufixo({sufixo: query}).$promise;

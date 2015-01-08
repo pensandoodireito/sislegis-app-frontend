@@ -101,9 +101,13 @@ INSERT INTO Usuario (id, nome, email) VALUES(nextval ('hibernate_sequence'), 'Ya
 INSERT INTO Usuario (id, nome, email) VALUES(999, 'Guilherme Hott', 'guilhermehott@gmail.com');
 
 -- equipe
-insert into equipe(id, nome) values (nextval ('hibernate_sequence'), 'Equipe 1');
-insert into equipe(id, nome) values (nextval ('hibernate_sequence'), 'Equipe 2');
-insert into equipe(id, nome) values (nextval ('hibernate_sequence'), 'Equipe 3');
+insert into equipe(id, nome) values (800, 'Equipe 1');
+insert into equipe(id, nome) values (801, 'Equipe 2');
+insert into equipe(id, nome) values (802, 'Equipe 3');
+
+-- EquipeUsuario
+insert into EquipeUsuario(idEquipe, idUsuario) values (800, 999);
+insert into EquipeUsuario(idEquipe, idUsuario) values (802, 999);
 
 -- OrigemElaboracaoNormativa
 insert into OrigemElaboracaoNormativa(id, descricao) values (nextval ('hibernate_sequence'), 'Origem 1');
