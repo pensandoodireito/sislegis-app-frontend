@@ -30,19 +30,6 @@ angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', 
     
     $scope.equipes = EquipeResource.queryAll();
 
-/*    $scope.performSearch = function() {
-        $scope.searchResults = ElaboracaoNormativaResource.queryAll(function(){
-            $scope.numberOfPages();
-        });
-        var successCallback = function(){
-        	toaster.pop('success', 'Elaboração Normativa salvo com sucesso');
-        };
-        var errorCallback = function() {
-        	toaster.pop('error', 'Falha na inclusão');
-        };
-        
-        $scope.searchResults = ElaboracaoNormativaResource.search($scope.elaboracaoNormativa, successCallback, errorCallback);        
-    };*/
     
     $scope.selectParecerista = function(){
     	console.log($scope.elaboracaoNormativa.equipe);
@@ -62,7 +49,6 @@ angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', 
        }
     };
     
-    $scope.example1model = []; 
     
 	$scope.orgaos = OrgaoResource.orgaosDropdownSelect();
 	
