@@ -26,14 +26,14 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="container" ng-show="listaReuniaoProposicoes.length > 0">
         <div class="row">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="clearfix">
                         <div class="col-sm-8 fontsize-sm">
                             <div class="row" role="form">
-                                <div ng-show="listaReuniaoProposicoes.length > 0">
+                                <div>
                                     <div class="col-sm-4">
                                         <label>Filtrar proposições:</label>
                                         <input type="text" class="form-control" ng-model="filtroGlobal.$" placeholder="Filtrar as proposições">
