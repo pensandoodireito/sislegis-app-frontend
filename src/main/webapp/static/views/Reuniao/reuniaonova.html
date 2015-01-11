@@ -50,6 +50,24 @@
                                             <option value=""></option>
                                         </select>
                                     </div>
+                                    <div class="col-sm-4">
+                                        <label>Filtrar por responsável:</label>
+                                        <div class="btn-group" dropdown is-open="status.isopen">
+									      <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle ng-click="toggleDropdown($event)">
+									        Button dropdown <span class="caret"></span>
+									      </button>
+									      <ul class="dropdown-menu" role="menu">
+									        <li ng-repeat="equ in listaEquipe">
+									        	<a href="javascript:;"><b>{{equ.nome}}</b></a>
+									        	<ul class="dropdown-menu" role="menu">
+											        <li ng-repeat="usr in equ.listaUsuario">
+											        	<a href="javascript:;"><b>{{usr.nome}}</b></a>
+										        	</li>
+											      </ul>
+								        	</li>
+									      </ul>
+									    </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
