@@ -59,11 +59,11 @@
 									      <ul class="dropdown-menu" role="menu">
 									        <li ng-repeat="equ in listaEquipe">
 									        	<a href="javascript:;"><b>{{equ.nome}}</b></a>
-									        	<ul class="dropdown-menu" role="menu">
-											        <li ng-repeat="usr in equ.listaUsuario">
-											        	<a href="javascript:;"><b>{{usr.nome}}</b></a>
+									        	<ul style="list-style: outside none none;">
+											        <li ng-repeat="eu in equ.listaEquipeUsuario">
+											        	<a href="javascript:;" class="dropdown-menu-link">{{eu.usuario.nome}}</a>
 										        	</li>
-											      </ul>
+											    </ul>
 								        	</li>
 									      </ul>
 									    </div>

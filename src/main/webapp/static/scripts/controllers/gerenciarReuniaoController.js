@@ -21,11 +21,13 @@ angular.module('sislegisapp').controller(
     
     $scope.listaEquipe = EquipeResource.queryAll(function(success) {
     	$scope.listaEquipe = success;
-    	for (var int = 0; int < $scope.listaEquipe.length; int++) {
-			var equipe = $scope.listaEquipe[int];
-
-			equipe.listaUsuario = UsuarioResource.findByIdEquipe({idEquipe: equipe.id});
-		}
+//    	for (var int = 0; int < $scope.listaEquipe.length; int++) {
+//			var equipe = $scope.listaEquipe[int];
+//
+//			UsuarioResource.findByIdEquipe({idEquipe: equipe.id}, function(success) {
+//				equipe.listaUsuario = success;
+//			});
+//		}
 	});
     
 
