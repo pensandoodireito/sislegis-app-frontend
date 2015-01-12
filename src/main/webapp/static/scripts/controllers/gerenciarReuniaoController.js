@@ -19,28 +19,6 @@ angular.module('sislegisapp').controller(
     $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
     $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
     
-    $scope.listaEquipe = EquipeResource.queryAll(function(success) {
-    	$scope.listaEquipe = success;
-//    	for (var int = 0; int < $scope.listaEquipe.length; int++) {
-//			var equipe = $scope.listaEquipe[int];
-//
-//			UsuarioResource.findByIdEquipe({idEquipe: equipe.id}, function(success) {
-//				equipe.listaUsuario = success;
-//			});
-//		}
-	});
-    
-
-    $scope.status = {
-      isopen: false
-    };
-
-    $scope.toggleDropdown = function($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-      $scope.status.isopen = !$scope.status.isopen;
-    };
-    
     $scope.loadTags = function(query) {
     	return TagResource.buscarPorSufixo({sufixo: query}).$promise;
     }; 
@@ -298,7 +276,6 @@ angular.module('sislegisapp').controller(
           });
     };
 	        
-    
     
     // CALENDARIO
     $scope.setCalendar = function() {
