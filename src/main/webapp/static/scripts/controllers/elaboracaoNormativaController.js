@@ -25,6 +25,8 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			
 		    $scope.tipos = ElaboracaoNormativaResource.tipos();
 		    
+		    $scope.subTipos = ElaboracaoNormativaResource.subTipos();
+		    
 		    $scope.identificacoes = ElaboracaoNormativaResource.identificacoes();
 		    
 		    $scope.listaStatusSidof = StatusSidofResource.queryAll();
@@ -225,6 +227,46 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    
 		    //Aba default
 		    $scope.selected = "dadosPreliminares";
+		    
+		    $scope.mostraSubTipo = function(){
+		    	var retorno = false;
+		    	if($scope.elaboracaoNormativa.tipo!==undefined){
+		    		if(angular.equals($scope.elaboracaoNormativa.tipo, 'EXPOSICAOMOTIVOS')){
+		    			retorno = true;
+		    		}
+		    	}
+		    	return retorno;
+		    }
+		    
+		    $scope.validaCampos = function(campo){
+		    	return checkEmpty(campo);
+		    }
+		    
+		    $scope.validaForm = function(){
+		    	if($scope.elaboracaoNormativa.tipo!==undefined){
+		    		if(angular.equals($scope.elaboracaoNormativa.tipo, 'EXPOSICAOMOTIVOS')){
+		    			return checkEmpty($scope.elaboracaoNormativa.subTipo);
+		    		}
+		    		if(checkEmpty($scope.elaboracaoNormativa.tipo) 
+		    				||checkEmpty($scope.elaboracaoNormativa.ementa)
+		    				||checkEmpty($scope.elaboracaoNormativa.identificacao)
+		    				||checkEmpty($scope.elaboracaoNormativa.ano)
+		    				||checkEmpty($scope.elaboracaoNormativa.origem)){
+		    			return true;
+		    		}
+		    	}else{
+		    		return true;
+		    	}
+		    	return false;
+		    }
 	
+		    function checkEmpty(str){
+		    	if(!str || !/[^\s]+/.test(str)){
+		    		return true;
+		    	}
+		        return false;
+		    }
+		    
+		    
 
 		});
