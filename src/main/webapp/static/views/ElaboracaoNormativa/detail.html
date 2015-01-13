@@ -305,7 +305,10 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label for="">Tipo norma:</label>
-                <select class="form-control" ng-model="elaboracaoNormativa.elaboracaoNormativaNorma" ng-options="norma.shade as norma.name for norma in normas"></select>
+                <select class="form-control" ng-model="elaboracaoNormativa.elaboracaoNormativaNorma" 
+                		ng-options="norma.shade as norma.name for norma in normas">
+                <option value="" label=""></option>
+                </select>
             </div>
         </div>
 
@@ -319,13 +322,15 @@
               </div>
           </div>        
     	  <div class="col-md-2">
-              <div class="form-group">
+              <div class="form-group" 
+              		ng-class="{'has-error': validaCamposNormaGerada(elaboracaoNormativa.elaboracaoNormativaNorma, elaboracaoNormativa.normaGeradaNumero)}">
                   <label for="">Número: </label>
                   <input type="text" class="form-control" ng-model="elaboracaoNormativa.normaGeradaNumero">
               </div>
           </div>
     	<div class="col-md-1">
-              <div class="form-group">
+              <div class="form-group" 
+              	ng-class="{'has-error': validaCamposNormaGerada(elaboracaoNormativa.elaboracaoNormativaNorma, elaboracaoNormativa.normaGeradaAno)}">
                   <label for="">Ano: </label>
                   <input type="text" class="form-control" ng-model="elaboracaoNormativa.normaGeradaAno">
               </div>

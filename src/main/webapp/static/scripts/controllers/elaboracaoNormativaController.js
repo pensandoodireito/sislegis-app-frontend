@@ -242,10 +242,20 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    	return checkEmpty(campo);
 		    }
 		    
+		    $scope.validaCamposNormaGerada = function(campoElaboracaoNormativaNorma, campo){
+		    	return (!checkEmpty(campoElaboracaoNormativaNorma) && checkEmpty(campo));
+		    }
+		    
 		    $scope.validaForm = function(){
 		    	if($scope.elaboracaoNormativa.tipo!==undefined){
 		    		if(angular.equals($scope.elaboracaoNormativa.tipo, 'EXPOSICAOMOTIVOS')){
 		    			return checkEmpty($scope.elaboracaoNormativa.subTipo);
+		    		}
+		    		if(!checkEmpty($scope.elaboracaoNormativa.elaboracaoNormativaNorma)){
+			    		if(checkEmpty($scope.elaboracaoNormativa.normaGeradaNumero) 
+			    				||checkEmpty($scope.elaboracaoNormativa.normaGeradaAno)){
+			    			return true;
+			    		}
 		    		}
 		    		if(checkEmpty($scope.elaboracaoNormativa.tipo) 
 		    				||checkEmpty($scope.elaboracaoNormativa.ementa)
