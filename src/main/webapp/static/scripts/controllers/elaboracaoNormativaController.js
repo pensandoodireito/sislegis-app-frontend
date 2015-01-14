@@ -8,7 +8,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			var self = this;
 			$scope.disabled = false;
 		    $scope.$location = $location;
-			$scope.elaboracaoNormativa = $scope.elaboracaoNormativa || {};//new ElaboracaoNormativaResource();
+			$scope.elaboracaoNormativa = $scope.elaboracaoNormativa || {};
 			$scope.equipes = EquipeResource.queryAll();
 			
 			$scope.elaboracaoNormativaConsulta = new ElaboracaoNormativaConsultaResource();
@@ -19,6 +19,8 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			
 			$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta = [];
 			
+			$scope.elaboracaoNormativa.listaCoAutoresSelecionadosDropdown = $scope.elaboracaoNormativa.listaCoAutoresSelecionadosDropdown || [];
+			
 			$scope.elaboracaoNormativa.listaComentario = [];
 			
 		    $scope.tipos = ElaboracaoNormativaResource.tipos();
@@ -28,6 +30,8 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    $scope.listaStatusSidof = StatusSidofResource.queryAll();
 		    
 		    $scope.situacoes = ElaboracaoNormativaResource.situacoes();
+		    
+		    $scope.orgaos = OrgaoResource.orgaosDropdownSelect();
 		    
 		    // inicio config upload
 			$scope.distribuicaoUploader = new FileUploader( {
@@ -83,7 +87,12 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			$scope.salvar = function() {
 
 		        var successCallback = function(){
-		        	$scope.elaboracaoNormativa = new ElaboracaoNormativaResource();
+		        	$scope.elaboracaoNormativa = new ElaboracaoNormativaResource(self.original);
+					$scope.elaboracaoNormativa.listaCoAutoresSelecionadosDropdown = [];
+					$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta = [];
+					$scope.elaboracaoNormativa.listaCoAutoresSelecionadosDropdown = [];
+					$scope.elaboracaoNormativa.listaComentario = [];
+					
 		        	$scope.selected = "dadosPreliminares";
 		        	toaster.pop('success', 'Elaboração Normativa salvo com sucesso');
 		        };
@@ -104,6 +113,9 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		        var successCallback = function(data){
 		            self.original = data;
 		            $scope.elaboracaoNormativa = new ElaboracaoNormativaResource(self.original);
+					$scope.elaboracaoNormativa.listaCoAutoresSelecionadosDropdown = $scope.elaboracaoNormativa.listaCoAutoresSelecionadosDropdown || [];
+					$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta = [];
+					$scope.elaboracaoNormativa.listaComentario = [];
 		        };
 		        var errorCallback = function() {
 		            $location.path("/ElaboracaoNormativa");

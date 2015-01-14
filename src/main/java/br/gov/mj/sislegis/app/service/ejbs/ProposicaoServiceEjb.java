@@ -14,6 +14,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.rowset.serial.SerialException;
 
@@ -22,11 +23,13 @@ import br.gov.mj.sislegis.app.json.ComentarioJSON;
 import br.gov.mj.sislegis.app.json.EncaminhamentoProposicaoJSON;
 import br.gov.mj.sislegis.app.json.ProposicaoJSON;
 import br.gov.mj.sislegis.app.json.TagJSON;
+import br.gov.mj.sislegis.app.model.ElaboracaoNormativa;
 import br.gov.mj.sislegis.app.model.Proposicao;
 import br.gov.mj.sislegis.app.model.Reuniao;
 import br.gov.mj.sislegis.app.model.ReuniaoProposicao;
 import br.gov.mj.sislegis.app.model.ReuniaoProposicaoPK;
 import br.gov.mj.sislegis.app.model.Tag;
+import br.gov.mj.sislegis.app.model.TagElaboracaoNormativa;
 import br.gov.mj.sislegis.app.model.TagProposicao;
 import br.gov.mj.sislegis.app.model.TagProposicaoPK;
 import br.gov.mj.sislegis.app.parser.camara.ParserPautaCamara;
@@ -72,6 +75,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 	
 	@Inject
 	private TagService tagService;
+	
 
 	@PersistenceContext
 	private EntityManager em;
@@ -261,16 +265,6 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 			}
 		}
 
-		/*Query query = em.createNativeQuery("select p.* from Proposicao p " 
-				+ "inner join ReuniaoProposicao rp " 
-				+ "on p.id = rp.proposicao_id "
-				+ "inner join Reuniao r "
-				+ "on r.id = rp.reuniao_id "
-				+ "where r.data = :P_DATA", Proposicao.class);
-		query.setParameter("P_DATA", Conversores.dateToString(dataReuniao, "yyyy-MM-dd"));
-
-		List<Proposicao> listaProposicoes = query.getResultList();*/
-		
 
 		return listaProposicaoJSON;
 
@@ -282,8 +276,33 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 
 	@Override
 	public void atualizarProposicaoJSON(ProposicaoJSON proposicaoJSON) {
+		processaExclusaoTagProposicao(proposicaoJSON);
 		Proposicao proposicao = proposicaoJsonToProposicao(proposicaoJSON);
+		
 		save(proposicao);
+	}
+	
+	private void processaExclusaoTagProposicao(ProposicaoJSON proposicaoJSON) {
+		if(!Objects.isNull(proposicaoJSON.getId())){
+			Query query = em.createNativeQuery("SELECT tp.* FROM TagProposicao tp WHERE tp.proposicao_id = :idProposicao",
+					TagProposicao.class);
+			query.setParameter("idProposicao", proposicaoJSON.getId());
+			List<TagProposicao> listaTagsProposicao = query.getResultList();
+
+			c:for(TagProposicao tagProposicao:listaTagsProposicao){
+				for(TagJSON tagJSON:proposicaoJSON.getTags()){
+					if(tagJSON.getText().equals(tagProposicao.getTag().getTag()))
+						continue c;
+				}
+				 em.createNativeQuery("delete FROM TagProposicao tp WHERE "
+				 		+ "tp.proposicao_id = :idProposicao "
+				 		+ "and tp.tag_id = :tag",
+							TagProposicao.class)
+							.setParameter("idProposicao", tagProposicao.getProposicao().getId())
+							.setParameter("tag", tagProposicao.getTag())
+							.executeUpdate();
+			}
+		}
 	}
 
 	private Proposicao proposicaoJsonToProposicao(ProposicaoJSON proposicaoJSON) {

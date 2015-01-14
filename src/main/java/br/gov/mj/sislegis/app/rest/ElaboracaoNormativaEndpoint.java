@@ -90,8 +90,8 @@ public class ElaboracaoNormativaEndpoint {
 		Map<String, Object> mapaCampos = new HashMap<String, Object>();
 		mapaCampos.put("numero", numero);
 		mapaCampos.put("ano", ano);
-		mapaCampos.put("listaOrigensSelecionadosDropdown", Arrays.asList(listaOrigensSelecionadosDropdown));
-		mapaCampos.put("listaCoAutoresSelecionadosDropdown", Arrays.asList(listaCoAutoresSelecionadosDropdown));
+		mapaCampos.put("listaOrigensSelecionadosDropdown", listaOrigensSelecionadosDropdown);
+		mapaCampos.put("listaCoAutoresSelecionadosDropdown", listaCoAutoresSelecionadosDropdown);
 		mapaCampos.put("ementa", ementa);
 		mapaCampos.put("statusSidof", statusSidof);
 		mapaCampos.put("identificacao", objeto);
