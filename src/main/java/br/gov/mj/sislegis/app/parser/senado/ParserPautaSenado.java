@@ -15,8 +15,8 @@ public class ParserPautaSenado {
 		ParserPautaSenado parser = new ParserPautaSenado();
 		
 		// TODO: Informação que vem do filtro
-		String siglaComissao = "CAE";
-		String datIni = "20140801";
+		String siglaComissao = "CDH";
+		String datIni = "20141201";
 		System.out.println(parser.getProposicoes(siglaComissao, datIni).toString());
 	}
 	
@@ -72,6 +72,7 @@ public class ParserPautaSenado {
 		xstream.alias("Comissao", ComissaoBean.class);
 		xstream.alias("Parte", ParteBean.class);
 		xstream.alias("Item", ItemBean.class);
+		xstream.alias("Evento", EventoBean.class);
 		xstream.alias("Materia", Proposicao.class);
 		
 		xstream.aliasField("Partes", ReuniaoBean.class, "partes");
@@ -80,7 +81,11 @@ public class ParserPautaSenado {
 		xstream.aliasField("Sigla", ComissaoBean.class, "sigla");
 		xstream.aliasField("Nome", ComissaoBean.class, "nome");
 		xstream.aliasField("Itens", ParteBean.class, "itens");
+		xstream.aliasField("Eventos", ParteBean.class, "eventos");
 		xstream.aliasField("Materia", ItemBean.class, "proposicao");
+		xstream.aliasAttribute(ItemBean.class, "tipo", "tipo");
+		xstream.aliasField("MateriasRelacionadas", EventoBean.class, "proposicoes");
+		xstream.aliasField("Materia", ListaProposicoes.class, "proposicao");
 		xstream.aliasField("SeqOrdemPauta", ItemBean.class, "seqOrdemPauta");
 		xstream.aliasField("Codigo", Proposicao.class, "idProposicao");
 		xstream.aliasField("Subtipo", Proposicao.class, "tipo");
@@ -99,6 +104,7 @@ class ListaReunioes {
 }
 
 class ReuniaoBean {
+	private static final String MATERIA = "MATE";
 	protected Integer codigo;
 	protected List<ComissaoBean> comissoes = new ArrayList<ComissaoBean>();
 	protected List<ParteBean> partes = new ArrayList<ParteBean>();
@@ -120,13 +126,30 @@ class ReuniaoBean {
 		
 		for (ParteBean parteBean : this.getPartes()) {
 			List<ItemBean> itens = parteBean.getItens();
-		
+			List<EventoBean> eventos = parteBean.getEventos(); // tipicamente aparece em audiencias publicas
+
 			for (ItemBean itemBean : itens) {
-				itemBean.getProposicao().setComissao(comissoes.get(0).getSigla() + " - " + comissoes.get(0).getNome());
-				itemBean.getProposicao().setOrigem(Origem.SENADO);
-				itemBean.getProposicao().setLinkProposicao("http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate="+itemBean.getProposicao().getIdProposicao());
-				itemBean.getProposicao().setLinkPauta("http://legis.senado.leg.br/comissoes/reuniao?reuniao="+getCodigo());
-				materias.add(itemBean.getProposicao());
+				// Não adicionamos por exemplo, os requerimentos, pois não são tratados como proposições
+				if (itemBean.tipo.equalsIgnoreCase(MATERIA)) {
+					Proposicao prop = itemBean.getProposicao();
+					prop.setComissao(comissoes.get(0).getSigla() + " - " + comissoes.get(0).getNome());
+					prop.setOrigem(Origem.SENADO);
+					prop.setLinkProposicao("http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate="+prop.getIdProposicao());
+					prop.setLinkPauta("http://legis.senado.leg.br/comissoes/reuniao?reuniao="+getCodigo());
+					materias.add(prop);
+				}
+			}
+			
+			for (EventoBean eventoBean : eventos) {
+				List<Proposicao> proposicoes = eventoBean.getProposicoes();
+				
+				for (Proposicao prop : proposicoes) {
+					prop.setComissao(comissoes.get(0).getSigla() + " - " + comissoes.get(0).getNome());
+					prop.setOrigem(Origem.SENADO);
+					prop.setLinkProposicao("http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate="+prop.getIdProposicao());
+					prop.setLinkPauta("http://legis.senado.leg.br/comissoes/reuniao?reuniao="+getCodigo());
+					materias.add(prop);
+				}
 			}
 		}
 		
@@ -148,6 +171,7 @@ class ComissaoBean {
 
 class ParteBean {
 	protected List<ItemBean> itens = new ArrayList<ItemBean>();
+	protected List<EventoBean> eventos = new ArrayList<EventoBean>();
 
 	protected List<ItemBean> getItens() {
 		return itens;
@@ -156,11 +180,20 @@ class ParteBean {
 	protected void setItens(List<ItemBean> itens) {
 		this.itens = itens;
 	}
+
+	public List<EventoBean> getEventos() {
+		return eventos;
+	}
+
+	public void setEventos(List<EventoBean> eventos) {
+		this.eventos = eventos;
+	}
 }
 
 class ItemBean {
 	protected Integer seqOrdemPauta;
 	protected Proposicao proposicao;
+	protected String tipo;
 
 	protected Proposicao getProposicao() {
 		proposicao.setSeqOrdemPauta(seqOrdemPauta);
@@ -169,5 +202,29 @@ class ItemBean {
 
 	protected Integer getSeqOrdemPauta() {
 		return seqOrdemPauta;
+	}
+}
+
+class EventoBean {
+	protected Integer seqOrdemPauta;
+	protected List<Proposicao> proposicoes;
+	
+	public List<Proposicao> getProposicoes() {
+		return proposicoes;
+	}
+	public void setProposicoes(List<Proposicao> proposicoes) {
+		this.proposicoes = proposicoes;
+	}
+}
+
+class ListaProposicoes {
+	protected Proposicao proposicao;
+
+	public Proposicao getProposicao() {
+		return proposicao;
+	}
+
+	public void setProposicao(Proposicao proposicao) {
+		this.proposicao = proposicao;
 	}
 }
