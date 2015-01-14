@@ -1,7 +1,5 @@
 package br.gov.mj.sislegis.app.model;
 
-import java.io.Serializable;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,9 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaSubTipo;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
 
 @Entity
@@ -39,6 +37,10 @@ public class ElaboracaoNormativaTiposMarcados implements AbstractEntity{
 	@Column
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaTipo tipo;
+	
+	@Column
+	@Enumerated(EnumType.ORDINAL)
+	private ElaboracaoNormativaSubTipo subTipo;
 	
 	public Long getId() {
 		return id;
@@ -88,6 +90,14 @@ public class ElaboracaoNormativaTiposMarcados implements AbstractEntity{
 
 	public void setElaboracaoNormativa(ElaboracaoNormativa elaboracaoNormativa) {
 		this.elaboracaoNormativa = elaboracaoNormativa;
+	}
+
+	public ElaboracaoNormativaSubTipo getSubTipo() {
+		return subTipo;
+	}
+
+	public void setSubTipo(ElaboracaoNormativaSubTipo subTipo) {
+		this.subTipo = subTipo;
 	}
 	
 
