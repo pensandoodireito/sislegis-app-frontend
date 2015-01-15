@@ -5,6 +5,26 @@ angular.module('sislegisapp').controller(
 				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource) {
     
 	var self = this;
+	
+	var isConsulta = $location.path().indexOf('consultar') >= 0 ? true : false;
+	
+	$scope.buscarTodasProposicoes = function() {
+		var successCallback = function(){
+			if ($scope.listaReuniaoProposicoes.length == 0) {
+				toaster.pop('info', 'Nenhuma Proposição encontrada.');
+			}
+		};
+		var errorCallback = function() {
+			toaster.pop('error', 'Falha ao consultar Proposição.');
+		};
+		
+		$scope.listaReuniaoProposicoes = ProposicaoResource.queryAll(successCallback, errorCallback);
+	}
+	
+	if(isConsulta){
+		toaster.pop('info', 'Consultando...');
+		$scope.buscarTodasProposicoes();
+	}
 
     // faz as ações de cada proposição abrir e fechar (collapse)
     $scope.showAcoes = true;

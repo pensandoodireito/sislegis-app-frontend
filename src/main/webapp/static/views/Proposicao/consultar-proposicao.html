@@ -8,23 +8,17 @@
                         <div class="col-sm-8 fontsize-sm">
                             <div class="row" role="form">
                                 <div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <label>Filtrar proposições:</label>
                                         <input type="text" class="form-control" ng-model="filtroGlobal.$" placeholder="Filtrar as proposições">
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <label>Filtrar por casa legislativa:</label>
                                         <select ng-model="filtroOrigem.origem" ng-options="item.origem as item.origem for item in listaRPOrigem | unique:'origem'" class="form-control" ng-change="changeFiltroOrigem()">
                                             <option value=""></option>
                                         </select>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <label>Filtrar por comissão:</label>
-                                        <select ng-model="filtroComissao.comissao" ng-options="item.comissao as item.comissao for item in listaRPComissao | filter:filtroOrigem | unique:'comissao'" ng-change="changeFiltroComissao()" class="form-control">
-                                            <option value=""></option>
-                                        </select>
-                                    </div>
-									<div class="col-sm-3">
+									<div class="col-sm-4">
                                         <label>Filtrar por favoritas:</label>
                                         <select ng-model="filtroFavorita" class="form-control">
                                             <option value=""></option>
@@ -42,18 +36,8 @@
                 </div>
                 <div class="panel-body">
 
-                    <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | filter:{favorita:filtroFavorita} |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
 
-                        <div class="list-group-item active">
-                            <h4 class="list-group-item-heading">{{comissao}}</h4>
-                        </div>
-
-                        <div ng-repeat="item in value | orderBy : 'seqOrdemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
-                            <div class="clearfix">
-                                <button type="button" class="close" ng-click="removerProposicao(item.id); $event.stopPropagation()">
-                                    <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
-                                </button>
-                            </div>
+                        <div ng-repeat="item in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:{favorita:filtroFavorita} | orderBy : 'seqOrdemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
                             <div class="row">
                                 <div class="col-sm-7">
                                 	
@@ -67,10 +51,6 @@
                                         <strong>Autor: </strong>{{item.autor}}
                                         <br/>
                                         <strong>Origem: </strong>{{item.origem}}
-                                        <br/>
-                                        <strong>Comissao: </strong>{{item.comissao}}
-                                        <br/>
-                                        <strong>Ordem na Pauta: </strong>{{item.seqOrdemPauta}}
                                         <br/>
                                         <div ng-show="item.origem == 'SENADO'"><a href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a></div>
                                         <div ng-show="item.origem == 'CAMARA'"><a href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{item.idProposicao}}#tramitacoes" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a></div>
@@ -137,7 +117,6 @@
                             </div>
                         </div>
 
-                    </div>
                 </div>
             </div>
         </div>
