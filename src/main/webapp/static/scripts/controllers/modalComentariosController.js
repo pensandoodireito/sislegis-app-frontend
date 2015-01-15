@@ -3,9 +3,6 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 				ProposicaoResource, UsuarioResource, ComentarioService) {
 
 			var self = this;
-			$scope.disabled = false;
-			$scope.showDetalhamentoComentario = false;
-			$scope.$location = $location;
 
 			$scope.proposicao = proposicao || new ProposicaoResource();
 		    $scope.comentario = $scope.comentario || new ComentarioResource();

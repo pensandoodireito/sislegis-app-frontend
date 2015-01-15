@@ -9,6 +9,8 @@ angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap','
     	.when('/Reuniaos/gerenciar',{templateUrl:'views/Reuniao/gerenciar.html',controller:'GerenciarReuniaoController'})
 		.when('/Reuniaos/gerenciar/:ReuniaoId',{templateUrl:'views/Reuniao/gerenciar.html',controller:'GerenciarReuniaoController'})
 		
+		.when('/Proposicao/consultar',{templateUrl:'views/Proposicao/consultar-proposicao.html',controller:'GerenciarReuniaoController'})
+		
 		.when('/Posicionamentos',{templateUrl:'views/Posicionamento/search.html',controller:'SearchPosicionamentoController'})
 		.when('/Posicionamentos/new',{templateUrl:'views/Posicionamento/detail.html',controller:'NewPosicionamentoController'})
 		.when('/Posicionamentos/edit/:PosicionamentoId',{templateUrl:'views/Posicionamento/detail.html',controller:'EditPosicionamentoController'})
