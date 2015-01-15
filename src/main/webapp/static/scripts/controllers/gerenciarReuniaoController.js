@@ -6,9 +6,7 @@ angular.module('sislegisapp').controller(
     
 	var self = this;
 	
-	var isConsulta = $location.path().indexOf('consultar') >= 0 ? true : false;
-	
-	$scope.buscarTodasProposicoes = function() {
+	$scope.consultarProposicoes = function() {
 		var successCallback = function(){
 			if ($scope.listaReuniaoProposicoes.length == 0) {
 				toaster.pop('info', 'Nenhuma Proposição encontrada.');
@@ -19,11 +17,6 @@ angular.module('sislegisapp').controller(
 		};
 		
 		$scope.listaReuniaoProposicoes = ProposicaoResource.queryAll(successCallback, errorCallback);
-	}
-	
-	if(isConsulta){
-		toaster.pop('info', 'Consultando...');
-		$scope.buscarTodasProposicoes();
 	}
 
     // faz as ações de cada proposição abrir e fechar (collapse)

@@ -1,127 +1,119 @@
 <link href="styles/css/theme-sislegis/reuniao-sislegis.css" rel="stylesheet" type="text/css" />
-<div class="hidden-print">
-    <div class="container">
-        <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="clearfix">
-                        <div class="col-sm-8 fontsize-sm">
-                            <div class="row" role="form">
-                                <div>
-                                    <div class="col-sm-4">
-                                        <label>Filtrar proposições:</label>
-                                        <input type="text" class="form-control" ng-model="filtroGlobal.$" placeholder="Filtrar as proposições">
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label>Filtrar por casa legislativa:</label>
-                                        <select ng-model="filtroOrigem.origem" ng-options="item.origem as item.origem for item in listaRPOrigem | unique:'origem'" class="form-control" ng-change="changeFiltroOrigem()">
-                                            <option value=""></option>
-                                        </select>
-                                    </div>
-									<div class="col-sm-4">
-                                        <label>Filtrar por favoritas:</label>
-                                        <select ng-model="filtroFavorita" class="form-control">
-                                            <option value=""></option>
-                                            <option value="true">Favoritas</option>
-                                            <option value="false">Não-favoritas</option>
-                                        </select>
-                                    </div>
+<div class="container" ng-init="consultarProposicoes()">
+   	<h3>Consultar Proposições</h3>
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="clearfix">
+                    <div class="col-sm-8 fontsize-sm">
+                        <div class="row" role="form">
+                            <div>
+                                <div class="col-sm-4">
+                                    <label>Filtrar proposições:</label>
+                                    <input type="text" class="form-control" ng-model="filtroGlobal.$" placeholder="Filtrar as proposições">
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>Filtrar por casa legislativa:</label>
+                                    <select ng-model="filtroOrigem.origem" ng-options="item.origem as item.origem for item in listaRPOrigem | unique:'origem'" class="form-control" ng-change="changeFiltroOrigem()">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+					<div class="col-sm-4">
+                                    <label>Filtrar por favoritas:</label>
+                                    <select ng-model="filtroFavorita" class="form-control">
+                                        <option value=""></option>
+                                        <option value="true">Favoritas</option>
+                                        <option value="false">Não-favoritas</option>
+                                    </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-4 text-right">
-                            <button type="button" class="btn btn-default ml-lg" ng-show="reuniao.data" ng-show="listaReuniaoProposicoes.length > 0" ng-click="abrirModalRelatorio()">Imprimir listagem</button>
                         </div>
                     </div>
                 </div>
-                <div class="panel-body">
+            </div>
+            <div class="panel-body">
 
-
-                        <div ng-repeat="item in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:{favorita:filtroFavorita} | orderBy : 'seqOrdemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
-                            <div class="row">
-                                <div class="col-sm-7">
-                                	
-                                    <h3 class="list-group-item-heading">
-                                    	<i class="fa fa-star-o" ng-show="!item.favorita" ng-click="item.favorita=true;save(item)"></i>
-                                		<i class="fa fa-star" style="color:orange" ng-show="item.favorita" ng-click="item.favorita=false;save(item)"></i>
-                                    	<a href="{{selectedProposicao.linkProposicao}}" target="_blank">{{item.sigla}}</a>
-                                    </h3>
-                                    <p>{{item.ementa}}
-                                        <br/>
-                                        <strong>Autor: </strong>{{item.autor}}
-                                        <br/>
-                                        <strong>Origem: </strong>{{item.origem}}
-                                        <br/>
-                                        <div ng-show="item.origem == 'SENADO'"><a href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a></div>
-                                        <div ng-show="item.origem == 'CAMARA'"><a href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{item.idProposicao}}#tramitacoes" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a></div>
-                                    </p>
-                                </div>
-                                <div class="col-sm-5">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading cursor-pointer" ng-click="showAcoes = !showAcoes">
-                                            Ações <i class="fa fa-sort"></i>
+                    <div ng-repeat="item in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:{favorita:filtroFavorita} | orderBy : 'seqOrdemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
+                        <div class="row">
+                            <div class="col-sm-7">
+                            	
+                                <h3 class="list-group-item-heading">
+                                	<i class="fa fa-star-o" ng-show="!item.favorita" ng-click="item.favorita=true;save(item)"></i>
+                            		<i class="fa fa-star" style="color:orange" ng-show="item.favorita" ng-click="item.favorita=false;save(item)"></i>
+                                	<a href="{{selectedProposicao.linkProposicao}}" target="_blank">{{item.sigla}}</a>
+                                </h3>
+                                <p>{{item.ementa}}
+                                    <br/>
+                                    <strong>Autor: </strong>{{item.autor}}
+                                    <br/>
+                                    <strong>Origem: </strong>{{item.origem}}
+                                    <br/>
+                                    <div ng-show="item.origem == 'SENADO'"><a href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a></div>
+                                    <div ng-show="item.origem == 'CAMARA'"><a href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{item.idProposicao}}#tramitacoes" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a></div>
+                                </p>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading cursor-pointer" ng-click="showAcoes = !showAcoes">
+                                        Ações <i class="fa fa-sort"></i>
+                                    </div>
+                                    <div class="panel-body" collapse="showAcoes">
+                                        <div class="clearfix">
+                                            <div class="col-md-10">
+                                                <textarea class="form-control fontsize-sm" rows="3" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div class="panel-body" collapse="showAcoes">
-                                            <div class="clearfix">
-                                                <div class="col-md-10">
-                                                    <textarea class="form-control fontsize-sm" rows="3" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i>
-                                                    </button>
-                                                </div>
+                                        <div class="divider-top clearfix">
+                                            <div class="col-md-6">
+                                                <strong> <a href="javascript:;" ng-click="abrirModalComentarios(item)"><i class="fa fa-comment"></i> {{item.listaComentario.length || 0}} comentários</a></strong>
                                             </div>
-                                            <div class="divider-top clearfix">
-                                                <div class="col-md-6">
-                                                    <strong> <a href="javascript:;" ng-click="abrirModalComentarios(item)"><i class="fa fa-comment"></i> {{item.listaComentario.length || 0}} comentários</a></strong>
-                                                </div>
-                                                <div class="col-md-6 text-right">
-                                                    <strong><a href="javascript:;" ng-click="abrirModalEncaminhamentos(item)"> {{item.listaEncaminhamentoProposicao.length || 0}} encaminhamentos</a></strong>
-                                                </div>
+                                            <div class="col-md-6 text-right">
+                                                <strong><a href="javascript:;" ng-click="abrirModalEncaminhamentos(item)"> {{item.listaEncaminhamentoProposicao.length || 0}} encaminhamentos</a></strong>
                                             </div>
+                                        </div>
 
-                                            <div class="divider-top form-inline">
-                                                <div class="form-group">
-                                                    <label>Posicionamento:</label>
-                                                    <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-on-select="save(item)" class="form-control">
+                                        <div class="divider-top form-inline">
+                                            <div class="form-group">
+                                                <label>Posicionamento:</label>
+                                                <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-on-select="save(item)" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="divider-top form-inline">
+                                            <div class="form-group">
+                                                <label>Responsável: </label>
+                                                <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue)" typeahead-on-select="save(item)" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="divider-top">
+                                            <label>Tags: </label>
+                                            <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1">
+                                                <auto-complete source="loadTags($query)"></auto-complete>
+                                            </tags-input>
+                                        </div>
+							<div class="divider-top">
+								<label>Resultado: </label>
+                                            <div class="form-group">
+                                            	<div class="col-md-10">
+                                                	<textarea class="form-control fontsize-sm" rows="3" placeholder="Adicione um resultado" ng-model="item.resultadoASPAR"></textarea>
+                                    			</div>
+                                    			<div class="col-md-2">
+                                                 <button type="button" class="btn btn-success btn-sm" ng-click="save(item)"><i class="fa fa-check"></i>
+                                                 </button>
                                                 </div>
-                                            </div>
-                                            <div class="divider-top form-inline">
-                                                <div class="form-group">
-                                                    <label>Responsável: </label>
-                                                    <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue)" typeahead-on-select="save(item)" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="divider-top">
-                                                <label>Tags: </label>
-                                                <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1">
-                                                    <auto-complete source="loadTags($query)"></auto-complete>
-                                                </tags-input>
-                                            </div>
-											<div class="divider-top">
-												<label>Resultado: </label>
-                                                <div class="form-group">
-                                                	<div class="col-md-10">
-                                                    	<textarea class="form-control fontsize-sm" rows="3" placeholder="Adicione um resultado" ng-model="item.resultadoASPAR"></textarea>
-                                        			</div>
-                                        			<div class="col-md-2">
-	                                                    <button type="button" class="btn btn-success btn-sm" ng-click="save(item)"><i class="fa fa-check"></i>
-	                                                    </button>
-                                                    </div>
-                                                 </div>
-                                            </div>
+                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
+
                             </div>
                         </div>
+                    </div>
 
-                </div>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Porção que vai ser renderizada quando o usuário clicar em 'imprimir' -->
-<div class="visible-print-block" ng-include="'views/Reuniao/imprimir.html'"></div>
