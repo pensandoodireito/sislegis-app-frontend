@@ -24,6 +24,7 @@ import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaBotao;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaObjeto;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaSituacao;
+import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaSubTipo;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
 import br.gov.mj.sislegis.app.json.DropdownMultiselectJSON;
 import br.gov.mj.sislegis.app.json.TagJSON;
@@ -75,8 +76,15 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaTipo tipo;
 	
+	@Column
+	@Enumerated(EnumType.ORDINAL)
+	private ElaboracaoNormativaSubTipo subTipo;	
+	
 	@Transient
 	private List<ElaboracaoNormativaTipo> tipos;
+
+	@Transient
+	private List<ElaboracaoNormativaSubTipo> subTipos;
 	
 	@Transient
 	private String valueTipo;
@@ -673,6 +681,26 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	public void setListaElaboracaoNormativaCoAutor(
 			List<ElaboracaoNormativaCoAutores> listaElaboracaoNormativaCoAutor) {
 		this.listaElaboracaoNormativaCoAutor = listaElaboracaoNormativaCoAutor;
+	}
+
+
+	public ElaboracaoNormativaSubTipo getSubTipo() {
+		return subTipo;
+	}
+
+
+	public void setSubTipo(ElaboracaoNormativaSubTipo subTipo) {
+		this.subTipo = subTipo;
+	}
+
+
+	public List<ElaboracaoNormativaSubTipo> getSubTipos() {
+		return subTipos;
+	}
+
+
+	public void setSubTipos(List<ElaboracaoNormativaSubTipo> subTipos) {
+		this.subTipos = subTipos;
 	}
 
 

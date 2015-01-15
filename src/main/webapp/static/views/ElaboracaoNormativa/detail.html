@@ -6,27 +6,36 @@
   <div ng-click="selected = 'dadosPreliminares'" ng-class="{'selected': selected == 'dadosPreliminares'}" class="tab">Dados preliminares</div>
   <div ng-click="selected = 'dadosAnalise'" ng-class="{'selected': selected == 'dadosAnalise'}" class="tab">Dados de análise/Distribuição</div>
   <div ng-click="selected = 'manifestacao'" ng-class="{'selected': selected == 'manifestacao'}" class="tab">Manifestação</div>
+  <div ng-click="selected = 'normaGerada'" ng-class="{'selected': selected == 'normaGerada'}" class="tab">Norma Gerada</div>
  </div>
  
- 
-  <div ng-show="selected == 'dadosPreliminares'" class="tab_content">
+  <div ng-show="selected == 'dadosPreliminares'" class="tab_content rol-vert height-full">
       <div class="row divider-top">
-          <div class="col-md-6">
-              <div class="form-group">
-	<!-- 		<select ng-model="elaboracaoNormativa.tipo" ng-options="tipo.shade as tipo.name for tipo in tipos" class="form-control"></select> -->
-
-		 		<div ng-repeat="tipo in tipos" class="form-group">
-				  <input type="checkbox" checklist-model="elaboracaoNormativa.tipos" checklist-value="tipo.shade"> {{ tipo.name }}
+          <div class="col-md-3">
+              <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.tipo)}">
+              <label for="">Tipos: </label>
+		 		<div ng-repeat="tipo in tipos" class="form-group" >
+				  <!-- <input type="checkbox" checklist-model="elaboracaoNormativa.tipos" checklist-value="tipo.shade"> {{ tipo.name }} -->
+				  <input type="radio" ng-model="elaboracaoNormativa.tipo" ng-value="tipo.shade" ng-required="true">  {{ tipo.name }} <br/>
 				</div> 
               </div>
           </div>
+          <div class="col-md-3" ng-show="mostraSubTipo()">
+              <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.subTipo)}">
+               <label for="">Subtipos Exposição de Motivos: </label>
+		 		<div ng-repeat="subTipo in subTipos" class="form-group">
+				 <!--  <input type="radio" checklist-model="elaboracaoNormativa.subTipos" checklist-value="subTipo.shade"> {{ subTipo.name }} -->
+				 <input type="radio" ng-model="elaboracaoNormativa.subTipo" ng-value="subTipo.shade">  {{ subTipo.name }} <br/>
+				</div> 
+              </div>
+          </div>          
       </div>  
   
       <div class="row divider-top">
           <div class="col-md-3">
-              <div class="form-group">
+              <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.identificacao)}">
                   <label for="">Objeto: </label>
-                  <select ng-model="elaboracaoNormativa.identificacao" ng-options="identificacao.shade as identificacao.name for identificacao in identificacoes" class="form-control"></select>
+                  <select ng-model="elaboracaoNormativa.identificacao" ng-options="identificacao.shade as identificacao.name for identificacao in identificacoes" class="form-control" ng-required="true"></select>
               		
               </div>
           </div>
@@ -37,19 +46,19 @@
               </div>
           </div>
     	<div class="col-md-1">
-              <div class="form-group">
+              <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.ano)}">
                   <label for="">Ano: </label>
-                  <input type="text" size="4" class="form-control" ng-model="elaboracaoNormativa.ano">
+                  <input type="text" size="4" class="form-control" ng-model="elaboracaoNormativa.ano" ng-required="true">
               </div>
           </div>          
       </div>
 
       <div class="row divider-top">
           <div class="col-md-3">
-              <div class="form-group">
+              <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.origem)}">
                   <label for="">Órgão de Origem:</label>
                   <input type="text" class="form-control" ng-model="elaboracaoNormativa.origem" placeholder="Pesquisar..."
-	              			typeahead="item as item.nome for item in getOrigemElaboracaoNormativas($viewValue)">
+	              			typeahead="item as item.nome for item in getOrigemElaboracaoNormativas($viewValue)" ng-required="true">
               </div>
           </div>
           <div class="col-md-3">
@@ -62,9 +71,9 @@
   
       <div class="row divider-top">
           <div class="col-md-6">
-              <div class="form-group">
+              <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.ementa)}">
                   <label for="">Ementa:</label>
-                  <textarea class="form-control" ng-model="elaboracaoNormativa.ementa" />
+                  <textarea class="form-control" ng-model="elaboracaoNormativa.ementa" ng-required="true" />
               </div>
           </div>
       </div>
@@ -126,14 +135,9 @@
           </div>
       </div>   
 
-	 <div>
-	    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="distribuicaoUploader.isUploading || manifestacaoUploader.isUploading">Salvar como Minuta</button>
-	    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="distribuicaoUploader.isUploading || manifestacaoUploader.isUploading">Salvar como Proposta Oficial</button>
-	</div>
-
 
 </div>
-  <div ng-show="selected == 'dadosAnalise'" class="tab_content">
+  <div ng-show="selected == 'dadosAnalise'" class="tab_content rol-vert height-full">
        <div class="row divider-top">
 
              <div class="col-sm-3">
@@ -254,12 +258,8 @@
               </div>
             </div>
      </div>   
-	 <div>
-	    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="distribuicaoUploader.isUploading || manifestacaoUploader.isUploading">Salvar como Minuta</button>
-	    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="distribuicaoUploader.isUploading || manifestacaoUploader.isUploading">Salvar como Proposta Oficial</button>
-	</div>     
 </div>
- <div ng-show="selected == 'manifestacao'" class="tab_content">
+ <div ng-show="selected == 'manifestacao'" class="tab_content rol-vert height-full">
     <div class="row divider-top">
          <div class="col-md-4">
              <div class="form-group">
@@ -296,12 +296,19 @@
 			 </div>
             </div>
         </div>
-        
+     
+ </div>
+ 
+  <div ng-show="selected == 'normaGerada'" class="tab_content rol-vert height-full">
+       
      <div class="row divider-top">
         <div class="col-md-4">
             <div class="form-group">
-                <label for="">Norma Gerada:</label>
-                <select class="form-control" ng-model="elaboracaoNormativa.elaboracaoNormativaNorma" ng-options="norma.shade as norma.name for norma in normas"></select>
+                <label for="">Tipo norma:</label>
+                <select class="form-control" ng-model="elaboracaoNormativa.elaboracaoNormativaNorma" 
+                		ng-options="norma.shade as norma.name for norma in normas">
+                <option value="" label=""></option>
+                </select>
             </div>
         </div>
 
@@ -315,29 +322,28 @@
               </div>
           </div>        
     	  <div class="col-md-2">
-              <div class="form-group">
+              <div class="form-group" 
+              		ng-class="{'has-error': validaCamposNormaGerada(elaboracaoNormativa.elaboracaoNormativaNorma, elaboracaoNormativa.normaGeradaNumero)}">
                   <label for="">Número: </label>
                   <input type="text" class="form-control" ng-model="elaboracaoNormativa.normaGeradaNumero">
               </div>
           </div>
     	<div class="col-md-1">
-              <div class="form-group">
+              <div class="form-group" 
+              	ng-class="{'has-error': validaCamposNormaGerada(elaboracaoNormativa.elaboracaoNormativaNorma, elaboracaoNormativa.normaGeradaAno)}">
                   <label for="">Ano: </label>
                   <input type="text" class="form-control" ng-model="elaboracaoNormativa.normaGeradaAno">
               </div>
           </div>  
       </div>              
      
-	 <div>
-	    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="distribuicaoUploader.isUploading || manifestacaoUploader.isUploading">Salvar como Minuta</button>
-	    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="distribuicaoUploader.isUploading || manifestacaoUploader.isUploading">Salvar como Proposta Oficial</button>
-	</div>      
-        
  </div>
-  
+ 
+ 	 <div>
+	    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="validaForm()">Salvar</button>
+	</div> 
 
   
-
 
 
 

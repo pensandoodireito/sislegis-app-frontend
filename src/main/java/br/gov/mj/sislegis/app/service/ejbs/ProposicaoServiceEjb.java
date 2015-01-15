@@ -23,13 +23,11 @@ import br.gov.mj.sislegis.app.json.ComentarioJSON;
 import br.gov.mj.sislegis.app.json.EncaminhamentoProposicaoJSON;
 import br.gov.mj.sislegis.app.json.ProposicaoJSON;
 import br.gov.mj.sislegis.app.json.TagJSON;
-import br.gov.mj.sislegis.app.model.ElaboracaoNormativa;
 import br.gov.mj.sislegis.app.model.Proposicao;
 import br.gov.mj.sislegis.app.model.Reuniao;
 import br.gov.mj.sislegis.app.model.ReuniaoProposicao;
 import br.gov.mj.sislegis.app.model.ReuniaoProposicaoPK;
 import br.gov.mj.sislegis.app.model.Tag;
-import br.gov.mj.sislegis.app.model.TagElaboracaoNormativa;
 import br.gov.mj.sislegis.app.model.TagProposicao;
 import br.gov.mj.sislegis.app.model.TagProposicaoPK;
 import br.gov.mj.sislegis.app.parser.camara.ParserPautaCamara;
@@ -41,6 +39,7 @@ import br.gov.mj.sislegis.app.service.AbstractPersistence;
 import br.gov.mj.sislegis.app.service.ComentarioService;
 import br.gov.mj.sislegis.app.service.EncaminhamentoProposicaoService;
 import br.gov.mj.sislegis.app.service.ProposicaoService;
+import br.gov.mj.sislegis.app.service.ReuniaoProposicaoService;
 import br.gov.mj.sislegis.app.service.ReuniaoService;
 import br.gov.mj.sislegis.app.service.TagService;
 import br.gov.mj.sislegis.app.util.Conversores;
@@ -69,6 +68,9 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 	
 	@Inject
 	private ReuniaoService reuniaoService;
+	
+	@Inject
+	private ReuniaoProposicaoService reuniaoProposicaoService;
 	
 	@Inject
 	private EncaminhamentoProposicaoService encaminhamentoProposicaoService;
@@ -195,6 +197,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		proposicao.setLinkProposicao(isNull(p.getLinkProposicao()) ? proposicao.getLinkProposicao() : p.getLinkProposicao());
 		proposicao.setResponsavel(isNull(p.getResponsavel()) ? proposicao.getResponsavel() : p.getResponsavel());
 		proposicao.setResultadoASPAR(isNull(p.getResultadoASPAR()) ? proposicao.getResultadoASPAR() : p.getResultadoASPAR());
+		proposicao.setFavorita(isNull(p.isFavorita()) ? proposicao.isFavorita() : p.isFavorita());
 	}
 
 	public boolean isNull(Object obj) {
@@ -229,6 +232,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 				proposicao.getLinkProposicao(), 
 				proposicao.getLinkPauta(),
 				proposicao.getResultadoASPAR(),
+				proposicao.isFavorita(),
 				comentarioService.findByProposicao(proposicao.getId()),
 				encaminhamentoProposicaoService.findByProposicao(proposicao.getId()), 
 				proposicao.getPosicionamento(), 
@@ -253,6 +257,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		
 		if (!Objects.isNull(reuniao)) {
 			Set<ReuniaoProposicao> listaReuniaoProposicoes = reuniao.getListaReuniaoProposicoes();
+			// Copiamos alguns valores de ReuniaoProposicao para Proposicao, afim de retornar somente uma entidade com alguns valores transientes
 			for (ReuniaoProposicao reuniaoProposicao : listaReuniaoProposicoes) {
 				Proposicao proposicao = reuniaoProposicao.getProposicao();
 				proposicao.setComissao(reuniaoProposicao.getSiglaComissao());
@@ -318,6 +323,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		proposicao.setPosicionamento(proposicaoJSON.getPosicionamento());
 		proposicao.setResponsavel(proposicaoJSON.getResponsavel());
 		proposicao.setResultadoASPAR(proposicaoJSON.getResultadoASPAR());
+		proposicao.setFavorita(proposicaoJSON.isFavorita());
 		Set<TagProposicao> tags = populaTagsProposicao(proposicaoJSON, proposicao);
 		proposicao.setTags(tags);
 		return proposicao;

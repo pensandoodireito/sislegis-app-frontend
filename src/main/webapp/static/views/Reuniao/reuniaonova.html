@@ -26,28 +26,36 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="container" ng-show="listaReuniaoProposicoes.length > 0">
         <div class="row">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="clearfix">
                         <div class="col-sm-8 fontsize-sm">
                             <div class="row" role="form">
-                                <div ng-show="listaReuniaoProposicoes.length > 0">
-                                    <div class="col-sm-4">
+                                <div>
+                                    <div class="col-sm-3">
                                         <label>Filtrar proposições:</label>
                                         <input type="text" class="form-control" ng-model="filtroGlobal.$" placeholder="Filtrar as proposições">
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <label>Filtrar por casa legislativa:</label>
                                         <select ng-model="filtroOrigem.origem" ng-options="item.origem as item.origem for item in listaRPOrigem | unique:'origem'" class="form-control" ng-change="changeFiltroOrigem()">
                                             <option value=""></option>
                                         </select>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <label>Filtrar por comissão:</label>
                                         <select ng-model="filtroComissao.comissao" ng-options="item.comissao as item.comissao for item in listaRPComissao | filter:filtroOrigem | unique:'comissao'" ng-change="changeFiltroComissao()" class="form-control">
                                             <option value=""></option>
+                                        </select>
+                                    </div>
+									<div class="col-sm-3">
+                                        <label>Filtrar por favoritas:</label>
+                                        <select ng-model="filtroFavorita" class="form-control">
+                                            <option value=""></option>
+                                            <option value="true">Favoritas</option>
+                                            <option value="false">Não-favoritas</option>
                                         </select>
                                     </div>
                                 </div>
@@ -60,7 +68,7 @@
                 </div>
                 <div class="panel-body">
 
-                    <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
+                    <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | filter:{favorita:filtroFavorita} |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
 
                         <div class="list-group-item active">
                             <h4 class="list-group-item-heading">{{comissao}}</h4>
@@ -74,7 +82,12 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-7">
-                                    <a href="{{selectedProposicao.linkProposicao}}" target="_blank"><h3 class="list-group-item-heading">{{item.sigla}}</h3></a>
+                                	
+                                    <h3 class="list-group-item-heading">
+                                    	<i class="fa fa-star-o" ng-show="!item.favorita" ng-click="item.favorita=true;save(item)"></i>
+                                		<i class="fa fa-star" style="color:orange" ng-show="item.favorita" ng-click="item.favorita=false;save(item)"></i>
+                                    	<a href="{{selectedProposicao.linkProposicao}}" target="_blank">{{item.sigla}}</a>
+                                    </h3>
                                     <p>{{item.ementa}}
                                         <br/>
                                         <strong>Autor: </strong>{{item.autor}}

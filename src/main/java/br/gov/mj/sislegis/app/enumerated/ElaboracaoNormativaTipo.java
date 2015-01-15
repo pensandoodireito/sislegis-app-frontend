@@ -2,9 +2,7 @@ package br.gov.mj.sislegis.app.enumerated;
 
 public enum ElaboracaoNormativaTipo {
     MINUTA("Minuta"), 
-    EXPOSICAOMOTIVOS("Exposição de Motivos"), 
-    EXPOSICAOMOTIVOSINTERMINISTERIAL("Exposição de Motivos Interministerial"), 
-    OUTROS("Outros");
+    EXPOSICAOMOTIVOS("Exposição de Motivos");
     
     private String value;
     private String nome;

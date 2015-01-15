@@ -132,16 +132,7 @@ public class TarefaServiceEjb extends AbstractPersistence<Tarefa, Long> implemen
 				proposicao.getEmenta(), 
 				proposicao.getOrigem(), 
 				proposicao.getSigla(),
-				proposicao.getComissao(), 
-				proposicao.getSeqOrdemPauta(), 
-				proposicao.getLinkProposicao(), 
-				proposicao.getLinkPauta(),
-				proposicao.getResultadoASPAR(),
-				null,
-				null, 
-				proposicao.getPosicionamento(), 
-				null,
-				proposicao.getResponsavel());
+				proposicao.getComissao());
 
 		return proposicaoJSON;
 	}

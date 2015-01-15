@@ -244,9 +244,21 @@ angular.module('sislegisapp').controller(
           controller: 'ModalRelatorioReuniaoController',
           size: 'lg',
           resolve: {
-        	  listaReuniaoProposicoes: function () {
+        	listaReuniaoProposicoes: function () {
             	return $scope.listaReuniaoProposicoes;
-            }
+            },
+            filtroGlobal: function() {
+        		return $scope.filtroGlobal;
+        	},
+        	filtroOrigem: function() {
+        		return $scope.filtroOrigem;
+        	},
+        	filtroComissao: function() {
+        		return $scope.filtroComissao;
+        	},
+        	filtroFavorita: function() {
+        		return $scope.filtroFavorita;
+        	}
           }
         });
     };
