@@ -25,6 +25,11 @@ angular.module('sislegisapp').factory(
 							method : 'GET',
 							isArray : true
 						},
+						'subTipos' : {
+							url : "../rest/elaboracaonormativa/subTipos",
+							method : 'GET',
+							isArray : true
+						},						
 						'identificacoes' : {
 							url : "../rest/elaboracaonormativa/identificacoes",
 							method : 'GET',

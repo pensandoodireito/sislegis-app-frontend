@@ -1,7 +1,6 @@
 package br.gov.mj.sislegis.app.rest;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +22,7 @@ import javax.ws.rs.core.UriBuilder;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaObjeto;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaSituacao;
+import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaSubTipo;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
 import br.gov.mj.sislegis.app.json.ComboJSON;
 import br.gov.mj.sislegis.app.model.ElaboracaoNormativa;
@@ -111,6 +111,17 @@ public class ElaboracaoNormativaEndpoint {
 		}
 		return lista;
 	}
+	
+	@GET
+	@Path("/subTipos")
+	@Produces("application/json")
+	public List<ComboJSON<ElaboracaoNormativaSubTipo>> subTipos() {
+		List<ComboJSON<ElaboracaoNormativaSubTipo>> lista = new ArrayList<ComboJSON<ElaboracaoNormativaSubTipo>>();
+		for(ElaboracaoNormativaSubTipo elaboracaoNormativaSubTipo:ElaboracaoNormativaSubTipo.values()){
+			lista.add(new ComboJSON<ElaboracaoNormativaSubTipo>(elaboracaoNormativaSubTipo.name(), elaboracaoNormativaSubTipo.getValue()));
+		}
+		return lista;
+	}	
 
 	@GET
 	@Path("/identificacoes")
