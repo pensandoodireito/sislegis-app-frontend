@@ -77,7 +77,6 @@ public class Proposicao implements AbstractEntity {
 	@Column
 	private Posicionamento posicionamento;
 	
-
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Usuario responsavel;
 
@@ -92,6 +91,9 @@ public class Proposicao implements AbstractEntity {
 	
 	@Transient
 	private Reuniao reuniao;
+	
+	@Column
+	private Boolean isFavorita;
 
 	public String getSigla() {
 		if (Objects.isNull(sigla))
@@ -233,34 +235,6 @@ public class Proposicao implements AbstractEntity {
 		return true;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public String toString() {
-		String result = getClass().getSimpleName() + " ";
-		if (idProposicao != null)
-			result += "idProposicao: " + idProposicao;
-		if (tipo != null && !tipo.trim().isEmpty())
-			result += ", tipo: " + tipo;
-		if (ano != null && !ano.trim().isEmpty())
-			result += ", ano: " + ano;
-		if (numero != null && !numero.trim().isEmpty())
-			result += ", numero: " + numero;
-		if (autor != null && !autor.trim().isEmpty())
-			result += ", autor: " + autor;
-		if (comissao != null && !comissao.trim().isEmpty())
-			result += ", comissao: " + comissao;
-		if (seqOrdemPauta != null)
-			result += ", seqOrdemPauta: " + seqOrdemPauta;
-		return result;
-	}
-
 	public Set<Comentario> getListaComentario() {
 		return this.listaComentario;
 	}
@@ -308,5 +282,41 @@ public class Proposicao implements AbstractEntity {
 
 	public void setResultadoASPAR(String resultadoASPAR) {
 		this.resultadoASPAR = resultadoASPAR;
+	}
+	
+	public Boolean isFavorita() {
+		return isFavorita;
+	}
+
+	public void setFavorita(Boolean isFavorita) {
+		this.isFavorita = isFavorita;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		String result = getClass().getSimpleName() + " ";
+		if (idProposicao != null)
+			result += "idProposicao: " + idProposicao;
+		if (tipo != null && !tipo.trim().isEmpty())
+			result += ", tipo: " + tipo;
+		if (ano != null && !ano.trim().isEmpty())
+			result += ", ano: " + ano;
+		if (numero != null && !numero.trim().isEmpty())
+			result += ", numero: " + numero;
+		if (autor != null && !autor.trim().isEmpty())
+			result += ", autor: " + autor;
+		if (comissao != null && !comissao.trim().isEmpty())
+			result += ", comissao: " + comissao;
+		if (seqOrdemPauta != null)
+			result += ", seqOrdemPauta: " + seqOrdemPauta;
+		return result;
 	}
 }
