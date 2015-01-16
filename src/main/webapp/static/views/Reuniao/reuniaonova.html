@@ -17,7 +17,7 @@
 
                             </div>
                         </div>
-                        <div class="pull-left divider-left pl-lg"><a href="javascript:;" data-toggle="modal" ng-click="buscarProposicoes()" ng-disabled="!reuniao.data" class="btn btn-success"><i class="fa fa-plus"></i> Buscar/Adicionar proposições</a>
+                        <div class="pull-left divider-left pl-lg"><a data-toggle="modal" ng-click="buscarProposicoes()" ng-disabled="!reuniao.data" class="btn btn-success"><i class="fa fa-plus"></i> Buscar/Adicionar proposições</a>
                         </div>
                     </div>
                     <p class="fontsize-sm text-red mt-xs mb-0">Para montar a pauta da reunião, é preciso escolher a data em que ela ocorrerá</p>
@@ -119,10 +119,10 @@
                                             </div>
                                             <div class="divider-top clearfix">
                                                 <div class="col-md-6">
-                                                    <strong> <a href="javascript:;" ng-click="abrirModalComentarios(item)"><i class="fa fa-comment"></i> {{item.listaComentario.length || 0}} comentários</a></strong>
+                                                    <strong> <a ng-click="abrirModalComentarios(item)"><i class="fa fa-comment"></i> {{item.listaComentario.length || 0}} comentários</a></strong>
                                                 </div>
                                                 <div class="col-md-6 text-right">
-                                                    <strong><a href="javascript:;" ng-click="abrirModalEncaminhamentos(item)"> {{item.listaEncaminhamentoProposicao.length || 0}} encaminhamentos</a></strong>
+                                                    <strong><a ng-click="abrirModalEncaminhamentos(item)"> {{item.listaEncaminhamentoProposicao.length || 0}} encaminhamentos</a></strong>
                                                 </div>
                                             </div>
 
