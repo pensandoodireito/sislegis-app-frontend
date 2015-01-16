@@ -1,12 +1,23 @@
 angular.module('sislegisapp').controller(
 		'GerenciarReuniaoController',
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
-				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource,
-				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService) {
+				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
+				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource) {
     
 	var self = this;
-    $scope.disabled = false;
-    $scope.$location = $location;
+	
+	$scope.consultarProposicoes = function() {
+		var successCallback = function(){
+			if ($scope.listaReuniaoProposicoes.length == 0) {
+				toaster.pop('info', 'Nenhuma Proposição encontrada.');
+			}
+		};
+		var errorCallback = function() {
+			toaster.pop('error', 'Falha ao consultar Proposição.');
+		};
+		
+		$scope.listaReuniaoProposicoes = ProposicaoResource.queryAll(successCallback, errorCallback);
+	}
 
     // faz as ações de cada proposição abrir e fechar (collapse)
     $scope.showAcoes = true;
@@ -71,19 +82,6 @@ angular.module('sislegisapp').controller(
         ReuniaoResource.remove({ReuniaoId:$scope.reuniao.id})
     };
     
-    $scope.getProposicao = function(id) {
-        var successCallback = function(data){
-        	$scope.selectedProposicao = data;
-        	$scope.detalhamentoProposicao = true;
-            $scope.displayError = false;
-        };
-        var errorCallback = function(error) {
-            $scope.displayError=true;
-        };
-        
-    	ProposicaoResource.get({ProposicaoId: id}, successCallback, errorCallback);
-    }
-
     $scope.removerProposicao = function(id){
     	if(confirm("Deseja realmente excluir esse registro?")){
     		var successCallback = function(){
@@ -93,7 +91,6 @@ angular.module('sislegisapp').controller(
             		$scope.listaReuniaoProposicoes = sucess;
             		if($scope.selectedProposicao.id == id){
             			$scope.selectedProposicao = null;
-            			$scope.detalhamentoProposicao = false;
             		}
             	},function(){
                 	$scope.displayError=true;
@@ -128,7 +125,6 @@ angular.module('sislegisapp').controller(
             };
     		
     		$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()}, successCallback, errorCallback);
-    		$scope.detalhamentoProposicao = false;
     	}
 
     });
@@ -246,9 +242,21 @@ angular.module('sislegisapp').controller(
           controller: 'ModalRelatorioReuniaoController',
           size: 'lg',
           resolve: {
-        	  listaReuniaoProposicoes: function () {
+        	listaReuniaoProposicoes: function () {
             	return $scope.listaReuniaoProposicoes;
-            }
+            },
+            filtroGlobal: function() {
+        		return $scope.filtroGlobal;
+        	},
+        	filtroOrigem: function() {
+        		return $scope.filtroOrigem;
+        	},
+        	filtroComissao: function() {
+        		return $scope.filtroComissao;
+        	},
+        	filtroFavorita: function() {
+        		return $scope.filtroFavorita;
+        	}
           }
         });
     };
@@ -278,7 +286,6 @@ angular.module('sislegisapp').controller(
           });
     };
 	        
-    
     
     // CALENDARIO
     $scope.setCalendar = function() {

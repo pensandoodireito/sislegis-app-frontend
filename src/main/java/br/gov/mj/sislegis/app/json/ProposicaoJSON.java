@@ -2,10 +2,7 @@ package br.gov.mj.sislegis.app.json;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import javax.persistence.Column;
 
 import br.gov.mj.sislegis.app.enumerated.Origem;
 import br.gov.mj.sislegis.app.model.Posicionamento;
@@ -43,6 +40,8 @@ public class ProposicaoJSON implements Serializable {
 
 	private String linkPauta;
 	
+	private Boolean isFavorita;
+	
 	private Usuario responsavel;
 
 	private List<ComentarioJSON> listaComentario = new ArrayList<ComentarioJSON>();
@@ -51,7 +50,6 @@ public class ProposicaoJSON implements Serializable {
 
 	private Posicionamento posicionamento;
 
-	
 	private List<TagJSON> tags;
 	
 	public ProposicaoJSON(){}
@@ -61,6 +59,7 @@ public class ProposicaoJSON implements Serializable {
 			String ementa, Origem origem, String sigla, String comissao,
 			Integer seqOrdemPauta, String linkProposicao, String linkPauta,
 			String resultadoASPAR,
+			Boolean isFavorita,
 			List<ComentarioJSON> listaComentario,
 			List<EncaminhamentoProposicaoJSON> listaEncaminhamentoProposicao,
 			Posicionamento posicionamento, List<TagJSON> tags,
@@ -79,11 +78,27 @@ public class ProposicaoJSON implements Serializable {
 		this.linkProposicao=linkProposicao;
 		this.linkPauta=linkPauta;
 		this.resultadoASPAR=resultadoASPAR;
+		this.isFavorita=isFavorita;
 		this.listaComentario=listaComentario;
 		this.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
 		this.posicionamento=posicionamento;
 		this.tags=tags;
 		this.responsavel=responsavel;
+	}
+	
+	public ProposicaoJSON(Long id, Integer idProposicao, String tipo,
+			String ano, String numero, String autor,
+			String ementa, Origem origem, String sigla, String comissao) {
+		this.id=id;
+		this.idProposicao=idProposicao;
+		this.tipo=tipo;
+		this.ano=ano;
+		this.numero=numero;
+		this.autor=autor;
+		this.ementa=ementa;
+		this.origem=origem;
+		this.sigla=sigla;
+		this.comissao=comissao;
 	}
 
 	public String getComissao() {
@@ -236,5 +251,13 @@ public class ProposicaoJSON implements Serializable {
 
 	public void setResultadoASPAR(String resultadoASPAR) {
 		this.resultadoASPAR = resultadoASPAR;
+	}
+
+	public Boolean isFavorita() {
+		return isFavorita;
+	}
+
+	public void setFavorita(Boolean isFavorita) {
+		this.isFavorita = isFavorita;
 	}
 }
