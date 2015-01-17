@@ -95,8 +95,7 @@ angular.module('sislegisapp').controller(
             ReuniaoProposicaoResource.remove({ReuniaoId:idReuniao, ProposicaoId: idProposicao}, successCallback, errorCallback);
     	}
 
-    }; 
-    
+    };
     
     $scope.dataFormatada = function(){
         var formattedDate = $filter('date')(new Date($scope.reuniao.data),
@@ -183,7 +182,9 @@ angular.module('sislegisapp').controller(
         });
         
         modalInstance.result.then(function (listaProposicaoSelecao) {
-        	$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
+        	if (listaProposicaoSelecao.length > 0) {
+        		$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
+        	}
         }, function () {
             // $log.info('Modal dismissed at: ' + new Date());
         });
