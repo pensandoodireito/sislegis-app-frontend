@@ -91,12 +91,7 @@ angular.module('sislegisapp').controller(
             var errorCallback = function() {
             	toaster.pop('error', 'Falha ao remover a proposição');
             };
-            
-            //ReuniaoProposicaoResource.remove({ProposicaoId: id}, successCallback, errorCallback);
-            
-        	//ProposicaoResource.remove({ProposicaoId: id}, successCallback, errorCallback);
-            //ProposicaoResourceAux.remove({ProposicaoId: id, ReuniaoId:1}, successCallback, errorCallback);
-            console.log(idReuniao + ' ' + idProposicao);
+
             ReuniaoProposicaoResource.remove({ReuniaoId:idReuniao, ProposicaoId: idProposicao}, successCallback, errorCallback);
     	}
 
