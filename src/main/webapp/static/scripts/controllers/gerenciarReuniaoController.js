@@ -76,31 +76,28 @@ angular.module('sislegisapp').controller(
     var clear = function() {
     	delete $scope.selectedProposicao.comentarioTmp;
 	}
-
-    $scope.remove = function() {
-        toaster.pop('success', 'Registro excluído com sucesso.');
-        ReuniaoResource.remove({ReuniaoId:$scope.reuniao.id})
-    };
     
-    $scope.removerProposicao = function(id){
+    $scope.removerProposicao = function(idReuniao, idProposicao){
     	if(confirm("Deseja realmente excluir esse registro?")){
-    		var successCallback = function(){
-            	
+    		var successCallback = function() {
+    			toaster.pop('success', 'Registro excluído com sucesso');
             	ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()},
-            	function(sucess){
-            		$scope.listaReuniaoProposicoes = sucess;
-            		if($scope.selectedProposicao.id == id){
-            			$scope.selectedProposicao = null;
-            		}
-            	},function(){
-                	$scope.displayError=true;
+            	function(response) {
+            		$scope.listaReuniaoProposicoes = response;
+            	}, function() {
+            		console.error('Erro ao carregar proposições');
             	});
             };
             var errorCallback = function() {
-            	$scope.displayError=true;
+            	toaster.pop('error', 'Falha ao remover a proposição');
             };
             
-        	ProposicaoResource.remove({ProposicaoId: id}, successCallback, errorCallback);
+            //ReuniaoProposicaoResource.remove({ProposicaoId: id}, successCallback, errorCallback);
+            
+        	//ProposicaoResource.remove({ProposicaoId: id}, successCallback, errorCallback);
+            //ProposicaoResourceAux.remove({ProposicaoId: id, ReuniaoId:1}, successCallback, errorCallback);
+            console.log(idReuniao + ' ' + idProposicao);
+            ReuniaoProposicaoResource.remove({ReuniaoId:idReuniao, ProposicaoId: idProposicao}, successCallback, errorCallback);
     	}
 
     }; 
@@ -192,9 +189,9 @@ angular.module('sislegisapp').controller(
         
         modalInstance.result.then(function (listaProposicaoSelecao) {
         	$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()});
-          }, function () {
-            $log.info('Modal dismissed at: ' + new Date());
-          });
+        }, function () {
+            // $log.info('Modal dismissed at: ' + new Date());
+        });
     };
     
     

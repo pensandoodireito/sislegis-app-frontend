@@ -1,17 +1,11 @@
 package br.gov.mj.sislegis.app.model;
 
-import java.io.Serializable;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -23,11 +17,11 @@ public class ReuniaoProposicao implements AbstractEntity {
 	@EmbeddedId
 	private ReuniaoProposicaoPK reuniaoProposicaoPK;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("idReuniao")
 	private Reuniao reuniao;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("idProposicao")
 	private Proposicao proposicao;
 	

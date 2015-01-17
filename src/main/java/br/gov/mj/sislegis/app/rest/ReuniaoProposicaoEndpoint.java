@@ -2,7 +2,6 @@ package br.gov.mj.sislegis.app.rest;
 
 import java.util.List;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.OptimisticLockException;
 import javax.ws.rs.Consumes;
@@ -17,13 +16,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 import br.gov.mj.sislegis.app.model.ReuniaoProposicao;
-import br.gov.mj.sislegis.app.service.Service;
+import br.gov.mj.sislegis.app.service.ReuniaoProposicaoService;
 
 @Path("/reuniaoProposicao")
 public class ReuniaoProposicaoEndpoint {
 
 	@Inject
-	private Service<ReuniaoProposicao> service;
+	private ReuniaoProposicaoService service;
 	
 	
 	@POST
@@ -34,11 +33,11 @@ public class ReuniaoProposicaoEndpoint {
 				UriBuilder.fromResource(ReuniaoProposicaoEndpoint.class)
 						.path(String.valueOf(entity.getId())).build()).build();
 	}
-
+	
 	@DELETE
-	@Path("/{id:[0-9][0-9]*}")
-	public Response deleteById(@PathParam("id") Long id) {
-		service.deleteById(id);
+	@Path("/{idReuniao:[0-9][0-9]*}/{idProposicao:[0-9][0-9]*}")
+	public Response deleteById(@PathParam("idReuniao") Long idReuniao, @PathParam("idProposicao") Long idProposicao) {
+		service.deleteById(idReuniao, idProposicao);
 		return Response.noContent().build();
 	}
 
@@ -46,6 +45,7 @@ public class ReuniaoProposicaoEndpoint {
 	@Path("/{id:[0-9][0-9]*}")
 	@Produces("application/json")
 	public Response findById(@PathParam("id") Long id) {
+		// FIXME: fazer parecido com o deleteById pois é uma tabela associativa
 		return Response.ok(service.findById(id)).build();
 	}
 
@@ -67,13 +67,5 @@ public class ReuniaoProposicaoEndpoint {
 		}
 
 		return Response.noContent().build();
-	}
-
-	public Service<ReuniaoProposicao> getService() {
-		return service;
-	}
-
-	public void setService(Service<ReuniaoProposicao> service) {
-		this.service = service;
 	}
 }

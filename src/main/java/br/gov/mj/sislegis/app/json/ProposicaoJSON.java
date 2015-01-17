@@ -42,6 +42,8 @@ public class ProposicaoJSON implements Serializable {
 	
 	private Boolean isFavorita;
 	
+	private Long idReuniao;
+	
 	private Usuario responsavel;
 
 	private List<ComentarioJSON> listaComentario = new ArrayList<ComentarioJSON>();
@@ -60,6 +62,7 @@ public class ProposicaoJSON implements Serializable {
 			Integer seqOrdemPauta, String linkProposicao, String linkPauta,
 			String resultadoASPAR,
 			Boolean isFavorita,
+			Long idReuniao,
 			List<ComentarioJSON> listaComentario,
 			List<EncaminhamentoProposicaoJSON> listaEncaminhamentoProposicao,
 			Posicionamento posicionamento, List<TagJSON> tags,
@@ -79,6 +82,7 @@ public class ProposicaoJSON implements Serializable {
 		this.linkPauta=linkPauta;
 		this.resultadoASPAR=resultadoASPAR;
 		this.isFavorita=isFavorita;
+		this.idReuniao=idReuniao;
 		this.listaComentario=listaComentario;
 		this.listaEncaminhamentoProposicao = listaEncaminhamentoProposicao;
 		this.posicionamento=posicionamento;
@@ -259,5 +263,13 @@ public class ProposicaoJSON implements Serializable {
 
 	public void setFavorita(Boolean isFavorita) {
 		this.isFavorita = isFavorita;
+	}
+
+	public Long getIdReuniao() {
+		return idReuniao;
+	}
+
+	public void setIdReuniao(Long idReuniao) {
+		this.idReuniao = idReuniao;
 	}
 }

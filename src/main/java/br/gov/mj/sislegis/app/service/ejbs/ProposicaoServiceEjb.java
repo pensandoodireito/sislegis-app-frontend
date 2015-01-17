@@ -198,6 +198,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		proposicao.setResponsavel(isNull(p.getResponsavel()) ? proposicao.getResponsavel() : p.getResponsavel());
 		proposicao.setResultadoASPAR(isNull(p.getResultadoASPAR()) ? proposicao.getResultadoASPAR() : p.getResultadoASPAR());
 		proposicao.setFavorita(isNull(p.isFavorita()) ? proposicao.isFavorita() : p.isFavorita());
+		proposicao.setReuniao(isNull(p.getReuniao()) ? proposicao.getReuniao() : p.getReuniao());
 	}
 
 	public boolean isNull(Object obj) {
@@ -233,6 +234,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 				proposicao.getLinkPauta(),
 				proposicao.getResultadoASPAR(),
 				proposicao.isFavorita(),
+				proposicao.getReuniao().getId(),
 				comentarioService.findByProposicao(proposicao.getId()),
 				encaminhamentoProposicaoService.findByProposicao(proposicao.getId()), 
 				proposicao.getPosicionamento(), 
@@ -263,6 +265,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 				proposicao.setComissao(reuniaoProposicao.getSiglaComissao());
 				proposicao.setSeqOrdemPauta(reuniaoProposicao.getSeqOrdemPauta());
 				proposicao.setLinkPauta(reuniaoProposicao.getLinkPauta());
+				proposicao.setReuniao(reuniaoProposicao.getReuniao());
 				
 				ProposicaoJSON proposicaoJSON = populaProposicaoJSON(proposicao);
 				populaComentarioProposicao(proposicao, proposicaoJSON);
