@@ -33,5 +33,13 @@ public class ReuniaoProposicaoServiceEjb extends AbstractPersistence<ReuniaoProp
 		em.remove(reuniaoProposicao);
 	}
 	
+	public ReuniaoProposicao findById(Long idReuniao, Long idProposicao) {
+		ReuniaoProposicaoPK pk = new ReuniaoProposicaoPK();
+		pk.setIdReuniao(idReuniao);
+		pk.setIdProposicao(idProposicao);
+		
+		return em.find(ReuniaoProposicao.class, pk);
+	}
+	
 
 }
