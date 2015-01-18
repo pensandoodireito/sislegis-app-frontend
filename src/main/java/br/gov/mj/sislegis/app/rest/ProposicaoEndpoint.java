@@ -120,7 +120,6 @@ public class ProposicaoEndpoint {
 	@DELETE
 	@Path("/{id:[0-9][0-9]*}/{reuniaoId:[0-9][0-9]*}")
 	public Response deleteById(@PathParam("id") Long id, @PathParam("reuniaoId") Long reuniaoId) {
-		System.out.println("entrou...");
 		return Response.noContent().build();
 	}
 
