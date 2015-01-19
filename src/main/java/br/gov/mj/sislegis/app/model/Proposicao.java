@@ -92,8 +92,8 @@ public class Proposicao implements AbstractEntity {
 	@Transient
 	private Reuniao reuniao;
 	
-	@Column
-	private Boolean isFavorita;
+	@Column(nullable = false)
+	private boolean isFavorita;
 
 	public String getSigla() {
 		if (Objects.isNull(sigla))
@@ -217,24 +217,6 @@ public class Proposicao implements AbstractEntity {
 		this.listaReuniaoProposicoes = listaReuniaoProposicoes;
 	}
 
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof Proposicao)) {
-			return false;
-		}
-		Proposicao other = (Proposicao) obj;
-		if (id != null) {
-			if (!id.equals(other.id)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
 	public Set<Comentario> getListaComentario() {
 		return this.listaComentario;
 	}
@@ -284,12 +266,30 @@ public class Proposicao implements AbstractEntity {
 		this.resultadoASPAR = resultadoASPAR;
 	}
 	
-	public Boolean isFavorita() {
+	public boolean isFavorita() {
 		return isFavorita;
 	}
 
-	public void setFavorita(Boolean isFavorita) {
+	public void setFavorita(boolean isFavorita) {
 		this.isFavorita = isFavorita;
+	}
+	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Proposicao)) {
+			return false;
+		}
+		Proposicao other = (Proposicao) obj;
+		if (id != null) {
+			if (!id.equals(other.id)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override

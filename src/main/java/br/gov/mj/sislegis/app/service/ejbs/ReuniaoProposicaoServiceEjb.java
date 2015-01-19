@@ -1,17 +1,13 @@
 package br.gov.mj.sislegis.app.service.ejbs;
 
-import java.util.List;
-
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 import br.gov.mj.sislegis.app.model.ReuniaoProposicao;
 import br.gov.mj.sislegis.app.model.ReuniaoProposicaoPK;
 import br.gov.mj.sislegis.app.service.AbstractPersistence;
 import br.gov.mj.sislegis.app.service.ReuniaoProposicaoService;
-import br.gov.mj.sislegis.app.util.Conversores;
 
 @Stateless
 public class ReuniaoProposicaoServiceEjb extends AbstractPersistence<ReuniaoProposicao, Long> implements ReuniaoProposicaoService  {
@@ -28,7 +24,22 @@ public class ReuniaoProposicaoServiceEjb extends AbstractPersistence<ReuniaoProp
 		return em;
 	}
 
+	public void deleteById(Long idReuniao, Long idProposicao) {
+		ReuniaoProposicaoPK pk = new ReuniaoProposicaoPK();
+		pk.setIdReuniao(idReuniao);
+		pk.setIdProposicao(idProposicao);
+		
+		ReuniaoProposicao reuniaoProposicao = em.find(ReuniaoProposicao.class, pk);
+		em.remove(reuniaoProposicao);
+	}
 	
+	public ReuniaoProposicao findById(Long idReuniao, Long idProposicao) {
+		ReuniaoProposicaoPK pk = new ReuniaoProposicaoPK();
+		pk.setIdReuniao(idReuniao);
+		pk.setIdProposicao(idProposicao);
+		
+		return em.find(ReuniaoProposicao.class, pk);
+	}
 	
 
 }

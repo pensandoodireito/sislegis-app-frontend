@@ -1,6 +1,5 @@
 package br.gov.mj.sislegis.app.service.ejbs;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -16,7 +15,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.sql.rowset.serial.SerialException;
 
 import br.gov.mj.sislegis.app.enumerated.Origem;
 import br.gov.mj.sislegis.app.json.ComentarioJSON;
@@ -125,12 +123,12 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 	@Override
 	public void salvarListaProposicao(List<Proposicao> listaProposicao) {
 		Reuniao reuniao = null;
-		// Cria/obtém a reuniao
+
 		if (! listaProposicao.isEmpty()) {
 			Proposicao proposicao = listaProposicao.get(0); // uma forma de obter a data da reuniao é através do objeto proposicao
 			reuniao = reuniaoService.buscaReuniaoPorData(proposicao.getReuniao().getData());
 			
-			// a primeira vez, salva o objeto
+			// Caso a reunião não exista, salva pela primeira vez
 			if (Objects.isNull(reuniao)) {
 				reuniao = new Reuniao();
 				reuniao.setData(proposicao.getReuniao().getData());
@@ -138,29 +136,35 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 			}
 		}
 		
-		// Agora vamos salvar cada proposição
-		for (Proposicao p : listaProposicao) {
+		// Agora vamos salvar/associar as proposições na reunião
+		for (Proposicao proposicaoFromBusca : listaProposicao) {
 			try {
-				Proposicao proposicao = buscarPorIdProposicao(p.getIdProposicao());
+				Proposicao proposicao = buscarPorIdProposicao(proposicaoFromBusca.getIdProposicao());
 				
-				// Evita incluir proposicoes duplicadas na mesma reunião
-				for (ReuniaoProposicao rp : reuniao.getListaReuniaoProposicoes()) {
-					if (rp.getProposicao().getIdProposicao().equals(p.getIdProposicao())) {
-						continue;
-					}
-				}
-				
+				// Caso a proposição não exista, salvamos ela e associamos a reunião
 				if (Objects.isNull(proposicao)) {
-					if (p.getOrigem().equals(Origem.CAMARA)) {
-						proposicao = detalharProposicaoCamaraWS(Long.valueOf(p.getIdProposicao()));
-					} else if (p.getOrigem().equals(Origem.SENADO)) {
-						proposicao = detalharProposicaoSenadoWS(Long.valueOf(p.getIdProposicao()));
+					if (proposicaoFromBusca.getOrigem().equals(Origem.CAMARA)) {
+						proposicao = detalharProposicaoCamaraWS(Long.valueOf(proposicaoFromBusca.getIdProposicao()));
+					} else if (proposicaoFromBusca.getOrigem().equals(Origem.SENADO)) {
+						proposicao = detalharProposicaoSenadoWS(Long.valueOf(proposicaoFromBusca.getIdProposicao()));
+					}
+
+					save(proposicao);
+					
+					ReuniaoProposicao rp = getReuniaoProposicao(reuniao, proposicaoFromBusca, proposicao);
+					
+					reuniaoProposicaoService.save(rp);				
+				} else { // proposição já existe
+					ReuniaoProposicao reuniaoProposicao = reuniaoProposicaoService.findById(reuniao.getId(), proposicao.getId());
+					
+					// Se a proposição não existe na reunião, associamos ela
+					if (reuniaoProposicao == null) {						
+						ReuniaoProposicao rp = getReuniaoProposicao(reuniao, proposicaoFromBusca, proposicao);
+
+						reuniaoProposicaoService.save(rp);
 					}
 				}
 				
-				popularProposicao(reuniao, p, proposicao);
-
-				save(proposicao);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -168,36 +172,20 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		}
 	}
 
-	private void popularProposicao(Reuniao reuniao, Proposicao p, Proposicao proposicao) throws SerialException, SQLException {
-		String siglaComissao = isNull(p.getComissao()) ? proposicao.getComissao() : p.getComissao();
-		Integer seqOrdemPauta = isNull(p.getSeqOrdemPauta()) ? proposicao.getSeqOrdemPauta() : p.getSeqOrdemPauta();
-		String linkPauta = isNull(p.getLinkPauta()) ? proposicao.getLinkPauta() : p.getLinkPauta();
-		for (ReuniaoProposicao rp : p.getListaReuniaoProposicoes()) {
-			ReuniaoProposicaoPK reuniaoProposicaoPK = new ReuniaoProposicaoPK();
-			rp.setReuniaoProposicaoPK(reuniaoProposicaoPK);
-			rp.setSiglaComissao(siglaComissao);
-			rp.setSeqOrdemPauta(seqOrdemPauta);
-			rp.setLinkPauta(linkPauta);
-			
-			rp.setReuniao(reuniao);
-			rp.setProposicao(proposicao);
-		}
-		proposicao.setEmenta(p.getEmenta());
-		proposicao.setListaReuniaoProposicoes(p.getListaReuniaoProposicoes());
-		proposicao.setOrigem(isNull(p.getOrigem()) ? proposicao.getOrigem() : p.getOrigem());
-		proposicao.setSeqOrdemPauta(isNull(p.getSeqOrdemPauta()) ? proposicao.getSeqOrdemPauta() : p.getSeqOrdemPauta());
-		proposicao.setAno(isNull(p.getAno()) ? proposicao.getAno() : p.getAno());
-		proposicao.setComissao(isNull(p.getComissao()) ? proposicao.getComissao() : p.getComissao());
-		proposicao.setAutor(isNull(p.getAutor()) ? proposicao.getAutor() : p.getAutor());
-		proposicao.setLinkPauta(isNull(p.getLinkPauta()) ? proposicao.getLinkPauta() : p.getLinkPauta());
-		proposicao.setLinkProposicao(isNull(p.getLinkProposicao()) ? proposicao.getLinkProposicao() : p.getLinkProposicao());
-		proposicao.setNumero(isNull(p.getNumero()) ? proposicao.getNumero() : p.getNumero());
-		proposicao.setTipo(isNull(p.getTipo()) ? proposicao.getTipo() : p.getTipo());
-		proposicao.setLinkPauta(isNull(p.getLinkPauta()) ? proposicao.getLinkPauta() : p.getLinkPauta());
-		proposicao.setLinkProposicao(isNull(p.getLinkProposicao()) ? proposicao.getLinkProposicao() : p.getLinkProposicao());
-		proposicao.setResponsavel(isNull(p.getResponsavel()) ? proposicao.getResponsavel() : p.getResponsavel());
-		proposicao.setResultadoASPAR(isNull(p.getResultadoASPAR()) ? proposicao.getResultadoASPAR() : p.getResultadoASPAR());
-		proposicao.setFavorita(isNull(p.isFavorita()) ? proposicao.isFavorita() : p.isFavorita());
+	private ReuniaoProposicao getReuniaoProposicao(Reuniao reuniao,
+			Proposicao proposicaoFromBusca, Proposicao proposicao) {
+		ReuniaoProposicao rp = new ReuniaoProposicao();
+		ReuniaoProposicaoPK reuniaoProposicaoPK = new ReuniaoProposicaoPK();
+		reuniaoProposicaoPK.setIdReuniao(reuniao.getId());
+		reuniaoProposicaoPK.setIdProposicao(proposicao.getId());
+		
+		rp.setReuniaoProposicaoPK(reuniaoProposicaoPK);
+		rp.setSiglaComissao(proposicaoFromBusca.getComissao());
+		rp.setSeqOrdemPauta(proposicaoFromBusca.getSeqOrdemPauta());
+		rp.setLinkPauta(proposicaoFromBusca.getLinkPauta());
+		rp.setReuniao(reuniao);
+		rp.setProposicao(proposicao);
+		return rp;
 	}
 
 	public boolean isNull(Object obj) {
@@ -233,6 +221,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 				proposicao.getLinkPauta(),
 				proposicao.getResultadoASPAR(),
 				proposicao.isFavorita(),
+				proposicao.getReuniao() == null ? null : proposicao.getReuniao().getId(),
 				comentarioService.findByProposicao(proposicao.getId()),
 				encaminhamentoProposicaoService.findByProposicao(proposicao.getId()), 
 				proposicao.getPosicionamento(), 
@@ -263,6 +252,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 				proposicao.setComissao(reuniaoProposicao.getSiglaComissao());
 				proposicao.setSeqOrdemPauta(reuniaoProposicao.getSeqOrdemPauta());
 				proposicao.setLinkPauta(reuniaoProposicao.getLinkPauta());
+				proposicao.setReuniao(reuniaoProposicao.getReuniao());
 				
 				ProposicaoJSON proposicaoJSON = populaProposicaoJSON(proposicao);
 				populaComentarioProposicao(proposicao, proposicaoJSON);
