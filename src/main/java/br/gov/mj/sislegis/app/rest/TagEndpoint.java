@@ -1,5 +1,6 @@
 package br.gov.mj.sislegis.app.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -17,6 +18,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
+import br.gov.mj.sislegis.app.json.DropdownMultiselectJSON;
+import br.gov.mj.sislegis.app.json.DropdownMultiselectStringJSON;
 import br.gov.mj.sislegis.app.json.TagJSON;
 import br.gov.mj.sislegis.app.model.Tag;
 import br.gov.mj.sislegis.app.service.TagService;
@@ -83,5 +86,20 @@ public class TagEndpoint {
 
 		return Response.noContent().build();
 	}
+	
+	@GET
+	@Path("/listAllDropdownMultiple")
+	@Produces("application/json")
+	public List<DropdownMultiselectStringJSON> listAllDropdownMultiple() {
+		final List<TagJSON> results = tagService.listarTodasTags();
+		List<DropdownMultiselectStringJSON> listaDropdownMultiselectJSON = new ArrayList<DropdownMultiselectStringJSON>();
+		for(TagJSON tag:results){
+			DropdownMultiselectStringJSON dropdownMultiselectJSON = new DropdownMultiselectStringJSON();
+			dropdownMultiselectJSON.setLabel(tag.getText());
+			dropdownMultiselectJSON.setId(tag.getText());
+			listaDropdownMultiselectJSON.add(dropdownMultiselectJSON);
+		}
+		return listaDropdownMultiselectJSON;
+	}	
 
 }
