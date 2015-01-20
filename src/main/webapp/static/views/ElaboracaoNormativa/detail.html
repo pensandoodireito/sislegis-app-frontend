@@ -124,13 +124,17 @@
           <div class="col-md-3">
               <div class="form-group">
                   <label for="">Situação:</label>
-              	<select ng-model="elaboracaoNormativa.elaboracaoNormativaSituacao" ng-options="elaboracaoNormativaSituacao.shade as elaboracaoNormativaSituacao.name for elaboracaoNormativaSituacao in situacoes" class="form-control"></select>
+              	<select ng-model="elaboracaoNormativa.elaboracaoNormativaSituacao" ng-options="elaboracaoNormativaSituacao.shade as elaboracaoNormativaSituacao.name for elaboracaoNormativaSituacao in situacoes" class="form-control">
+              		<option label="" value="" />
+              	</select>
               </div>
           </div>
           <div class="col-md-3">
               <div class="form-group">
               	<label for="">Status no SIDOF: </label>
-              	<select ng-model="elaboracaoNormativa.statusSidof.id" ng-options="statusSidof.id as statusSidof.descricao for statusSidof in listaStatusSidof" class="form-control"></select>
+              	<select ng-model="elaboracaoNormativa.statusSidof.id" ng-options="statusSidof.id as statusSidof.descricao for statusSidof in listaStatusSidof" class="form-control">
+              		<option label="" value="" />
+              	</select>
               </div>
           </div>
       </div>   

@@ -82,21 +82,32 @@ public class ElaboracaoNormativaEndpoint {
 			@QueryParam("ano") String ano,
 			@QueryParam("listaOrigensSelecionadosDropdown") String listaOrigensSelecionadosDropdown,
 			@QueryParam("listaCoAutoresSelecionadosDropdown") String listaCoAutoresSelecionadosDropdown,
+			@QueryParam("listaTagsSelecionadosDropdown") String listaTagsSelecionadosDropdown,			
 			@QueryParam("ementa") String ementa,
 			@QueryParam("statusSidof") Long statusSidof,
 			@QueryParam("objeto") String objeto,
 			@QueryParam("distribuicao") Long distribuicao,
-			@QueryParam("parecerista") Long parecerista) {
+			@QueryParam("parecerista") Long parecerista,
+			@QueryParam("tipo") String tipo,
+			@QueryParam("subTipo") String subTipo,
+			@QueryParam("elaboracaoNormativaNorma") String elaboracaoNormativaNorma,
+			@QueryParam("elaboracaoNormativaSituacao") String elaboracaoNormativaSituacao) {
 		Map<String, Object> mapaCampos = new HashMap<String, Object>();
 		mapaCampos.put("numero", numero);
 		mapaCampos.put("ano", ano);
 		mapaCampos.put("listaOrigensSelecionadosDropdown", listaOrigensSelecionadosDropdown);
 		mapaCampos.put("listaCoAutoresSelecionadosDropdown", listaCoAutoresSelecionadosDropdown);
+		mapaCampos.put("listaTagsSelecionadosDropdown", listaTagsSelecionadosDropdown);
 		mapaCampos.put("ementa", ementa);
 		mapaCampos.put("statusSidof", statusSidof);
 		mapaCampos.put("identificacao", objeto);
 		mapaCampos.put("distribuicao", distribuicao);
 		mapaCampos.put("parecerista", parecerista);
+		mapaCampos.put("tipo", tipo);
+		mapaCampos.put("subTipo", subTipo);
+		mapaCampos.put("elaboracaoNormativaNorma", elaboracaoNormativaNorma);
+		mapaCampos.put("elaboracaoNormativaSituacao", elaboracaoNormativaSituacao);
+		
 		return elaboracaoNormativaService.buscaPorParametros(mapaCampos);
 	}
 	
