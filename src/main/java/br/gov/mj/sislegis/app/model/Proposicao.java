@@ -139,6 +139,9 @@ public class Proposicao implements AbstractEntity {
 	}
 
 	public String getTipo() {
+		if (tipo != null && !tipo.isEmpty()) {
+			tipo = tipo.trim();
+		}
 		return tipo;
 	}
 
