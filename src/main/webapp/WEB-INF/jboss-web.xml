@@ -1,0 +1,4 @@
+<jboss-web>
+    <context-root>/</context-root>
+    <virtual-host>sislegis</virtual-host>
+</jboss-web>

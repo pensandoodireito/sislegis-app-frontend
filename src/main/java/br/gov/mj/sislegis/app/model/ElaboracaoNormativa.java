@@ -44,12 +44,17 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	}
 	
 
-	public ElaboracaoNormativa(Long id, Integer ano, String numero,
+	public ElaboracaoNormativa(Long id, ElaboracaoNormativaTipo tipo, ElaboracaoNormativaSubTipo subTipo, 
+			ElaboracaoNormativaSituacao elaboracaoNormativaSituacao, ElaboracaoNormativaNorma elaboracaoNormativaNorma,
+			Integer ano, String numero,
 			String origemDescricao, String coAutores, String ementa,
 			String statusSidof, ElaboracaoNormativaObjeto identificacao,
 			String equipe, String parecerista
 			) {
 		this.id=id;
+		this.valueTipoSubTipo=Objects.isNull(tipo)?"":tipo.getValue()+" "+(Objects.isNull(subTipo)?"":subTipo.getValue());
+		this.situacaoDescricao=Objects.isNull(elaboracaoNormativaSituacao)?"":elaboracaoNormativaSituacao.getValue();
+		this.tipoNormaDescricao=Objects.isNull(elaboracaoNormativaNorma)?"":elaboracaoNormativaNorma.getValue();
 		this.ano=ano;
 		this.numero=numero;
 		this.origemDescricao=origemDescricao;
@@ -98,6 +103,9 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	
 	@Transient
 	private String valueIdentificacao;
+	
+	@Transient
+	private String valueTipoSubTipo;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Orgao coAutor;
@@ -204,10 +212,19 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private String origemDescricao;
 	
 	@Transient
+	private String situacaoDescricao;
+	
+	@Transient
+	private String tipoNormaDescricao;
+	
+	@Transient
 	private List<DropdownMultiselectJSON> listaOrigensSelecionadosDropdown;
 	
 	@Transient
 	private List<DropdownMultiselectJSON> listaCoAutoresSelecionadosDropdown;
+	
+	@Transient
+	private List<DropdownMultiselectJSON> listaTagsSelecionadosDropdown;	
 	
 	@Transient
 	private String coAutoresDescricao;
@@ -701,6 +718,47 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 
 	public void setSubTipos(List<ElaboracaoNormativaSubTipo> subTipos) {
 		this.subTipos = subTipos;
+	}
+
+
+	public String getValueTipoSubTipo() {
+		return valueTipoSubTipo;
+	}
+
+
+	public void setValueTipoSubTipo(String valueTipoSubTipo) {
+		this.valueTipoSubTipo = valueTipoSubTipo;
+	}
+
+
+	public String getSituacaoDescricao() {
+		return situacaoDescricao;
+	}
+
+
+	public void setSituacaoDescricao(String situacaoDescricao) {
+		this.situacaoDescricao = situacaoDescricao;
+	}
+
+
+	public String getTipoNormaDescricao() {
+		return tipoNormaDescricao;
+	}
+
+
+	public void setTipoNormaDescricao(String tipoNormaDescricao) {
+		this.tipoNormaDescricao = tipoNormaDescricao;
+	}
+
+
+	public List<DropdownMultiselectJSON> getListaTagsSelecionadosDropdown() {
+		return listaTagsSelecionadosDropdown;
+	}
+
+
+	public void setListaTagsSelecionadosDropdown(
+			List<DropdownMultiselectJSON> listaTagsSelecionadosDropdown) {
+		this.listaTagsSelecionadosDropdown = listaTagsSelecionadosDropdown;
 	}
 
 

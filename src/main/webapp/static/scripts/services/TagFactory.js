@@ -19,6 +19,11 @@ angular.module('sislegisapp').factory('TagResource',
 					method : 'GET',
 					isArray : true
 				},				
+				'tagsDropdownSelect' : {
+					url : "../rest/tags/listAllDropdownMultiple",
+					method : 'GET',
+					isArray : true
+				},					
 				'buscarPorSufixo' : {
 					url : "../rest/tags/buscarPorSufixo",
 					method : 'GET',
