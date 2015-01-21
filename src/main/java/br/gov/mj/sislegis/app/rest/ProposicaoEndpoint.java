@@ -1,5 +1,6 @@
 package br.gov.mj.sislegis.app.rest;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -136,6 +137,15 @@ public class ProposicaoEndpoint {
 		List<ProposicaoJSON> results = proposicaoService.listarTodos();
 		return results;
 	}
+	
+	@GET
+	@Path("/buscarPorSufixo")
+	@Produces("application/json")
+	public List<ProposicaoJSON> buscarPorSufixo(@QueryParam("sufixo")String sufixo) {
+		List<ProposicaoJSON> results = proposicaoService.listarTodos();
+		return results;
+	}
+
 
 	@PUT
 	@Path("/{id:[0-9][0-9]*}")
