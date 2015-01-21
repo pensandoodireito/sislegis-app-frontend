@@ -142,8 +142,19 @@ public class ProposicaoEndpoint {
 	@Path("/buscarPorSufixo")
 	@Produces("application/json")
 	public List<ProposicaoJSON> buscarPorSufixo(@QueryParam("sufixo")String sufixo) {
-		List<ProposicaoJSON> results = proposicaoService.listarTodos();
-		return results;
+		List<Proposicao> proposicoes = proposicaoService.buscarPorSufixo(sufixo);
+		List<ProposicaoJSON> proposicaoJsonList = new ArrayList<ProposicaoJSON>();
+		
+		for (Proposicao proposicao : proposicoes) {
+			ProposicaoJSON proposicaoJSON = new ProposicaoJSON();
+			proposicaoJSON.setId(proposicao.getId());
+			proposicaoJSON.setIdProposicao(proposicao.getIdProposicao());
+			proposicaoJSON.setSigla(proposicao.getSigla());
+			
+			proposicaoJsonList.add(proposicaoJSON);
+		}
+		
+		return proposicaoJsonList;
 	}
 
 

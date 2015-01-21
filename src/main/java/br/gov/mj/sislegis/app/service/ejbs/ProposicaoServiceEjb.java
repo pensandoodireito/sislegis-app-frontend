@@ -402,4 +402,13 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		
 		super.deleteById(id);
 	}
+	
+	@Override
+	public List<Proposicao> buscarPorSufixo(String sufixo) {
+		TypedQuery<Proposicao> findByIdQuery = getEntityManager().createQuery(
+				"SELECT p FROM Proposicao p WHERE upper(CONCAT(p.tipo,' ',p.numero,'/',p.ano)) like upper(:sigla)",
+				Proposicao.class);
+		findByIdQuery.setParameter("sigla", "%"+sufixo+"%");
+		return findByIdQuery.getResultList();
+	}
 }
