@@ -31,6 +31,11 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource) 
 			url : "../rest/proposicaos/buscarPorSufixo",
 			method : 'GET',
 			isArray : true
+		},
+		'consultar' : {
+			url : "../rest/proposicaos/consultar",
+			method : 'GET',
+			isArray : true
 		}
 	});
 	return resource;
