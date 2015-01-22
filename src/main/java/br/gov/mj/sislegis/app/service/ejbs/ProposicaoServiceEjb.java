@@ -205,7 +205,57 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		return listaProposicaoJSON;
 	}
 
-	public ProposicaoJSON populaProposicaoJSON(Proposicao proposicao) {
+	@Override
+	public List<ProposicaoJSON> consultar(String sigla, String autor, String ementa, String origem, String isFavorita, Integer offset, Integer limit) {
+		StringBuilder query = new StringBuilder("SELECT p FROM Proposicao p WHERE 1=1");
+		if(Objects.nonNull(sigla) && !sigla.equals("")){
+			query.append(" AND upper(CONCAT(p.tipo,' ',p.numero,'/',p.ano)) like upper(:sigla)");
+		}
+		if(Objects.nonNull(ementa) && !ementa.equals("")){
+			query.append(" AND upper(p.ementa) like upper(:ementa)");
+		}
+		if(Objects.nonNull(autor) && !autor.equals("")){
+			query.append(" AND upper(p.autor) like upper(:autor)");
+		}
+		if(Objects.nonNull(origem) && !origem.equals("")){
+			query.append(" AND p.origem = :origem");
+		}
+		if(Objects.nonNull(isFavorita) && !isFavorita.equals("")){
+			query.append(" AND p.isFavorita = :isFavorita");
+		}
+		
+		TypedQuery<Proposicao> findByIdQuery = getEntityManager().createQuery(query.toString(),	Proposicao.class);
+		
+		if(Objects.nonNull(sigla) && !sigla.equals("")){
+			findByIdQuery.setParameter("sigla", "%"+sigla+"%");
+		}
+		if(Objects.nonNull(ementa) && !ementa.equals("")){
+			findByIdQuery.setParameter("ementa", "%"+ementa+"%");
+		}
+		if(Objects.nonNull(autor) && !autor.equals("")){
+			findByIdQuery.setParameter("autor", "%"+autor+"%");
+		}
+		if(Objects.nonNull(origem) && !origem.equals("")){
+			findByIdQuery.setParameter("origem", Origem.valueOf(origem));
+		}
+		if(Objects.nonNull(isFavorita) && !isFavorita.equals("")){
+			findByIdQuery.setParameter("isFavorita", new Boolean(isFavorita));
+		}
+		List<Proposicao> lista = findByIdQuery
+		         .setFirstResult(offset) // offset
+		         .setMaxResults(limit) // limit
+		         .getResultList();
+
+		List<ProposicaoJSON> listaProposicaoJSON = new ArrayList<ProposicaoJSON>();
+		for (Proposicao proposicao : lista) {
+			ProposicaoJSON proposicaoJSON = populaProposicaoJSON(proposicao);
+			listaProposicaoJSON.add(proposicaoJSON);
+		}
+
+		return listaProposicaoJSON;
+	}
+
+	public ProposicaoJSON populaProposicaoJSON(Proposicao proposicao) {	
 		ProposicaoJSON proposicaoJSON = new ProposicaoJSON(proposicao.getId(), 
 				proposicao.getIdProposicao(), 
 				proposicao.getTipo(), 

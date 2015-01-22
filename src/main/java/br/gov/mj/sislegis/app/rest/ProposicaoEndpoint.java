@@ -137,6 +137,16 @@ public class ProposicaoEndpoint {
 		List<ProposicaoJSON> results = proposicaoService.listarTodos();
 		return results;
 	}
+
+	@GET
+	@Path("/consultar")
+	@Produces("application/json")
+	public List<ProposicaoJSON> consultar(@QueryParam("ementa") String ementa, @QueryParam("autor") String autor, 
+			@QueryParam("sigla") String sigla, @QueryParam("origem") String origem, @QueryParam("isFavorita") String isFavorita, 
+			@QueryParam("limit") Integer limit, @QueryParam("offset") Integer offset) {
+		List<ProposicaoJSON> results = proposicaoService.consultar(sigla, autor, ementa, origem, isFavorita, offset, limit);
+		return results;
+	}
 	
 	@GET
 	@Path("/buscarPorSufixo")

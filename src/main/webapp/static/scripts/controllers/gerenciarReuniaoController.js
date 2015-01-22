@@ -5,19 +5,8 @@ angular.module('sislegisapp').controller(
 				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource) {
     
 	var self = this;
-	
-	$scope.consultarProposicoes = function() {
-		var successCallback = function(){
-			if ($scope.listaReuniaoProposicoes.length == 0) {
-				toaster.pop('info', 'Nenhuma Proposição encontrada.');
-			}
-		};
-		var errorCallback = function() {
-			toaster.pop('error', 'Falha ao consultar Proposição.');
-		};
-		
-		$scope.listaReuniaoProposicoes = ProposicaoResource.queryAll(successCallback, errorCallback);
-	}
+	$scope.listaReuniaoProposicoes = [];
+	$scope.filtro = {};
 
     // faz as ações de cada proposição abrir e fechar (collapse)
     $scope.showAcoes = true;
@@ -34,6 +23,61 @@ angular.module('sislegisapp').controller(
     
     $scope.allProposicoes = [];
     
+	$scope.infiniteScroll = {
+			busy: false,
+			limit: 5,
+			offset: 0
+	}
+	
+	$scope.consultarProposicoes = function() {
+		if ($scope.infiniteScroll.busy) return;
+		$scope.infiniteScroll.busy = true;
+    	$rootScope.inactivateSpinner = true;
+		
+		var successCallback = function(data){
+	    	$rootScope.inactivateSpinner = false;
+		    if (data.length == 0) return;
+
+		    for (var i = 0; i < data.length; i++) {
+		    	$scope.listaReuniaoProposicoes.push(data[i]);
+		    }
+		    if ($scope.listaReuniaoProposicoes.length == 0) {
+		    	toaster.pop('info', 'Nenhuma Proposição encontrada.');
+		    	return;
+		    }
+		    $scope.infiniteScroll.offset += $scope.infiniteScroll.limit;
+		    $scope.infiniteScroll.busy = false;
+	    	$rootScope.inactivateSpinner = false;
+		};
+		var errorCallback = function() {
+			toaster.pop('error', 'Falha ao consultar Proposição.');
+	    	$rootScope.inactivateSpinner = false;
+		};
+		
+		ProposicaoResource.consultar(
+				{
+					sigla: $scope.filtro.sigla,
+					ementa: $scope.filtro.ementa,
+					autor: $scope.filtro.autor,
+					origem: $scope.filtro.origem,
+					isFavorita: $scope.filtro.isFavorita,
+					limit: $scope.infiniteScroll.limit, 
+					offset: $scope.infiniteScroll.offset
+				},successCallback, errorCallback);
+	}
+	
+	$scope.filtrarConsulta = function() {
+		$scope.listaReuniaoProposicoes = [];
+	    $scope.infiniteScroll.busy = false;
+	    $scope.infiniteScroll.offset = 0;
+		$scope.consultarProposicoes();
+	}
+	
+	$scope.filtrarConsultaInput = function(value) {
+		if(angular.isUndefined(value) || value == '') return false;
+		$scope.filtrarConsulta();
+	}
+
     $scope.loadTags = function(query) {
     	return TagResource.buscarPorSufixo({sufixo: query}).$promise;
     };

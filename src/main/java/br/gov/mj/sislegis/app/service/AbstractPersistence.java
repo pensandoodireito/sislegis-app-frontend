@@ -53,6 +53,16 @@ public abstract class AbstractPersistence<T extends AbstractEntity, PK extends N
 		return getEntityManager().createQuery(cq).getResultList();
 	}
 
+	public List<T> listAll(Integer offset, Integer limit) {
+		CriteriaQuery cq = getEntityManager().getCriteriaBuilder()
+				.createQuery();
+		cq.select(cq.from(entityClass));
+		return getEntityManager().createQuery(cq)
+		         .setFirstResult(offset) // offset
+		         .setMaxResults(limit) // limit
+		         .getResultList();
+	}
+
 	public List<T> findByProperty(String property, Object value, String orderBy) {
 		TypedQuery<T> findByIdQuery = getEntityManager().createQuery(
 				"SELECT c FROM "+entityClass.getSimpleName()+" c WHERE upper(c."+property+") like upper(:"+property+") ORDER BY c."+property+" "+orderBy+"",

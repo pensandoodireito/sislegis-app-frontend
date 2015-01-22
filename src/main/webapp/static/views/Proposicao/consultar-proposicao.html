@@ -1,26 +1,35 @@
 <link href="styles/css/theme-sislegis/reuniao-sislegis.css" rel="stylesheet" type="text/css" />
-<div class="container" ng-init="consultarProposicoes()">
+<div class="container">
    	<h3>Consultar Proposições</h3>
     <div class="row">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="clearfix">
-                    <div class="col-sm-8 fontsize-sm">
                         <div class="row" role="form">
                             <div>
-                                <div class="col-sm-4">
-                                    <label>Filtrar proposições:</label>
-                                    <input type="text" class="form-control" ng-model="filtroGlobal.$" placeholder="Filtrar as proposições">
+                                <div class="col-sm-2">
+                                    <label>Filtrar pela sigla:</label>
+                                    <input type="text" class="form-control" ng-model="filtro.sigla" placeholder="Filtrar pela sigla" ng-keyup="filtrarConsultaInput(filtro.sigla)">
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
+                                    <label>Filtrar pela ementa:</label>
+                                    <input type="text" class="form-control" ng-model="filtro.ementa" placeholder="Filtrar pela ementa" ng-keyup="filtrarConsultaInput(filtro.ementa)">
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Filtrar por autor:</label>
+                                    <input type="text" class="form-control" ng-model="filtro.autor" placeholder="Filtrar por autor" ng-keyup="filtrarConsultaInput(filtro.autor)">
+                                </div>
+                                <div class="col-sm-2">
                                     <label>Filtrar por casa legislativa:</label>
-                                    <select ng-model="filtroOrigem.origem" ng-options="item.origem as item.origem for item in listaRPOrigem | unique:'origem'" class="form-control" ng-change="changeFiltroOrigem()">
+                                    <select ng-model="filtro.origem" class="form-control" ng-change="filtrarConsulta()">
                                         <option value=""></option>
+                                        <option value="CAMARA">CAMARA</option>
+                                        <option value="SENADO">SENADO</option>
                                     </select>
                                 </div>
-					<div class="col-sm-4">
+								<div class="col-sm-2">
                                     <label>Filtrar por favoritas:</label>
-                                    <select ng-model="filtroFavorita" class="form-control">
+                                    <select ng-model="filtro.isFavorita" class="form-control" ng-change='filtrarConsulta()'>
                                         <option value=""></option>
                                         <option value="true">Favoritas</option>
                                         <option value="false">Não-favoritas</option>
@@ -28,12 +37,11 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
             <div class="panel-body">
-
-                    <div ng-repeat="item in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:{favorita:filtroFavorita} | orderBy : 'seqOrdemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
+				<div infinite-scroll='consultarProposicoes()' infinite-scroll-disabled='infiniteScroll.busy'>
+                    <div ng-repeat="item in listaReuniaoProposicoes | orderBy : 'seqOrdemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
                         <div class="row">
                             <div class="col-sm-7">
                             	
@@ -112,7 +120,7 @@
                             </div>
                         </div>
                     </div>
-
+				</div>
             </div>
         </div>
     </div>
