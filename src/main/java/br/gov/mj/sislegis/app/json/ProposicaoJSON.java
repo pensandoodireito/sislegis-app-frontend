@@ -3,11 +3,15 @@ package br.gov.mj.sislegis.app.json;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import br.gov.mj.sislegis.app.enumerated.Origem;
 import br.gov.mj.sislegis.app.model.Posicionamento;
 import br.gov.mj.sislegis.app.model.Usuario;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ProposicaoJSON implements Serializable {
 
 	private static final long serialVersionUID = 7949894944142814382L;
@@ -54,6 +58,8 @@ public class ProposicaoJSON implements Serializable {
 
 	private List<TagJSON> tags;
 	
+	private Set<ProposicaoJSON> proposicoesFilha;
+	
 	public ProposicaoJSON(){}
 
 	public ProposicaoJSON(Long id, Integer idProposicao, String tipo,
@@ -66,7 +72,7 @@ public class ProposicaoJSON implements Serializable {
 			List<ComentarioJSON> listaComentario,
 			List<EncaminhamentoProposicaoJSON> listaEncaminhamentoProposicao,
 			Posicionamento posicionamento, List<TagJSON> tags,
-			Usuario responsavel) {
+			Usuario responsavel, Set<ProposicaoJSON> proposicoesFilha) {
 		this.id=id;
 		this.idProposicao=idProposicao;
 		this.tipo=tipo;
@@ -88,6 +94,7 @@ public class ProposicaoJSON implements Serializable {
 		this.posicionamento=posicionamento;
 		this.tags=tags;
 		this.responsavel=responsavel;
+		this.proposicoesFilha=proposicoesFilha;
 	}
 	
 	public ProposicaoJSON(Long id, Integer idProposicao, String tipo,
@@ -271,5 +278,13 @@ public class ProposicaoJSON implements Serializable {
 
 	public void setIdReuniao(Long idReuniao) {
 		this.idReuniao = idReuniao;
+	}
+
+	public Set<ProposicaoJSON> getProposicoesFilha() {
+		return proposicoesFilha;
+	}
+
+	public void setProposicoesFilha(Set<ProposicaoJSON> proposicoesFilha) {
+		this.proposicoesFilha = proposicoesFilha;
 	}
 }
