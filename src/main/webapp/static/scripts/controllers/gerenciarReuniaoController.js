@@ -18,10 +18,8 @@ angular.module('sislegisapp').controller(
 		$scope.infiniteScroll.busy = true;
 		
 		var successCallback = function(data){
-		    if (data.length == 0) {
-			    $scope.infiniteScroll.busy = false;
-		    	return;
-		    }
+		    if (data.length == 0) return;
+
 		    for (var i = 0; i < data.length; i++) {
 		    	$scope.listaReuniaoProposicoes.push(data[i]);
 		    }
@@ -34,7 +32,6 @@ angular.module('sislegisapp').controller(
 		};
 		var errorCallback = function() {
 			toaster.pop('error', 'Falha ao consultar Proposição.');
-		    $scope.infiniteScroll.busy = false;
 		};
 		
 		ProposicaoResource.queryAll(
