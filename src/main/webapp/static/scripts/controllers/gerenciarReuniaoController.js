@@ -5,18 +5,43 @@ angular.module('sislegisapp').controller(
 				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource) {
     
 	var self = this;
+	$scope.listaReuniaoProposicoes = [];
+	
+	$scope.infiniteScroll = {
+			busy: false,
+			limit: 5,
+			offset: 0
+	}
 	
 	$scope.consultarProposicoes = function() {
-		var successCallback = function(){
-			if ($scope.listaReuniaoProposicoes.length == 0) {
-				toaster.pop('info', 'Nenhuma Proposição encontrada.');
-			}
+		if ($scope.infiniteScroll.busy) return;
+		$scope.infiniteScroll.busy = true;
+		
+		var successCallback = function(data){
+		    if (data.length == 0) {
+			    $scope.infiniteScroll.busy = false;
+		    	return;
+		    }
+		    for (var i = 0; i < data.length; i++) {
+		    	$scope.listaReuniaoProposicoes.push(data[i]);
+		    }
+		    if ($scope.listaReuniaoProposicoes.length == 0) {
+		    	toaster.pop('info', 'Nenhuma Proposição encontrada.');
+		    	return;
+		    }
+		    $scope.infiniteScroll.offset += $scope.infiniteScroll.limit;
+		    $scope.infiniteScroll.busy = false;
 		};
 		var errorCallback = function() {
 			toaster.pop('error', 'Falha ao consultar Proposição.');
+		    $scope.infiniteScroll.busy = false;
 		};
 		
-		$scope.listaReuniaoProposicoes = ProposicaoResource.queryAll(successCallback, errorCallback);
+		ProposicaoResource.queryAll(
+				{
+					limit: $scope.infiniteScroll.limit, 
+					offset: $scope.infiniteScroll.offset
+				},successCallback, errorCallback);
 	}
 
     // faz as ações de cada proposição abrir e fechar (collapse)

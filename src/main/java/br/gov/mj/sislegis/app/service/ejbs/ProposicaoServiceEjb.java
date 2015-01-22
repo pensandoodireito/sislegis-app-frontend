@@ -205,6 +205,19 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		return listaProposicaoJSON;
 	}
 
+	@Override
+	public List<ProposicaoJSON> listarTodos(Integer offset, Integer limit) {
+		List<Proposicao> lista = listAll(offset, limit);
+
+		List<ProposicaoJSON> listaProposicaoJSON = new ArrayList<ProposicaoJSON>();
+		for (Proposicao proposicao : lista) {
+			ProposicaoJSON proposicaoJSON = populaProposicaoJSON(proposicao);
+			listaProposicaoJSON.add(proposicaoJSON);
+		}
+
+		return listaProposicaoJSON;
+	}
+
 	public ProposicaoJSON populaProposicaoJSON(Proposicao proposicao) {	
 		ProposicaoJSON proposicaoJSON = new ProposicaoJSON(proposicao.getId(), 
 				proposicao.getIdProposicao(), 

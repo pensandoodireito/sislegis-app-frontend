@@ -1,6 +1,6 @@
 <link href="styles/css/theme-sislegis/reuniao-sislegis.css" rel="stylesheet" type="text/css" />
-<div class="container" ng-init="consultarProposicoes()">
-   	<h3>Consultar Proposições</h3>
+<div class="container">
+   	<h3>Consultar Proposições {{listaReuniaoProposicoes.length}}</h3>
     <div class="row">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="panel-body">
-
+				<div infinite-scroll='consultarProposicoes()' infinite-scroll-disabled='infiniteScroll.busy' infinite-scroll-distance='0'>
                     <div ng-repeat="item in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:{favorita:filtroFavorita} | orderBy : 'seqOrdemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
                         <div class="row">
                             <div class="col-sm-7">
@@ -112,7 +112,7 @@
                             </div>
                         </div>
                     </div>
-
+				</div>
             </div>
         </div>
     </div>

@@ -22,4 +22,5 @@ public interface ProposicaoService extends Service<Proposicao> {
 	public List<ProposicaoJSON> buscarProposicoesPorDataReuniao(Date dataReuniao);
 	public void atualizarProposicaoJSON(ProposicaoJSON proposicaoJSON);
 	public Proposicao buscarPorIdProposicao(Integer idProposicao);
+	public List<ProposicaoJSON> listarTodos(Integer offset, Integer limit);
 }

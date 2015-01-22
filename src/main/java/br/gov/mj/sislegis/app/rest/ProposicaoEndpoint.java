@@ -132,8 +132,8 @@ public class ProposicaoEndpoint {
 
 	@GET
 	@Produces("application/json")
-	public List<ProposicaoJSON> listAll() {
-		List<ProposicaoJSON> results = proposicaoService.listarTodos();
+	public List<ProposicaoJSON> listAll(@QueryParam("limit") Integer limit, @QueryParam("offset") Integer offset) {
+		List<ProposicaoJSON> results = proposicaoService.listarTodos(offset, limit);
 		return results;
 	}
 
