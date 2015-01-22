@@ -7,11 +7,11 @@
 --insert into ReuniaoProposicao(dataReuniao, siglaComissao, idProposicao, idReuniao) values (CURRENT_DATE, 'C_TESTE', 1, 1);
 
 -- Posicionamentos
+DELETE FROM Posicionamento;
 insert into Posicionamento (nome, id) values ('Acompanhar Relator', nextval ('hibernate_sequence'));
 insert into Posicionamento (nome, id) values ('Acompanhar Substitutivo', nextval ('hibernate_sequence'));
 insert into Posicionamento (nome, id) values ('Contrário', nextval ('hibernate_sequence'));
 insert into Posicionamento (nome, id) values ('Contrário com Emendas', nextval ('hibernate_sequence'));
-insert into Posicionamento (nome, id) values ('Contrário', nextval ('hibernate_sequence'));
 insert into Posicionamento (nome, id) values ('Elaborar VTS', nextval ('hibernate_sequence'));
 insert into Posicionamento (nome, id) values ('Favorável', nextval ('hibernate_sequence'));
 insert into Posicionamento (nome, id) values ('Favorável com Emendas', nextval ('hibernate_sequence'));
@@ -106,8 +106,7 @@ insert into equipe(id, nome) values (801, 'Equipe 2');
 insert into equipe(id, nome) values (802, 'Equipe 3');
 
 -- EquipeUsuario
-insert into EquipeUsuario(idEquipe, idUsuario) values (800, 999);
-insert into EquipeUsuario(idEquipe, idUsuario) values (802, 999);
+
 
 -- OrigemElaboracaoNormativa
 insert into OrigemElaboracaoNormativa(id, descricao) values (nextval ('hibernate_sequence'), 'Origem 1');
@@ -122,7 +121,16 @@ insert into AreaConsultada(id, descricao) values (nextval ('hibernate_sequence')
 --Status Sidof
 insert into StatusSidof(id, descricao) values (nextval ('hibernate_sequence'), 'Em Trâmite na PR');
 insert into StatusSidof(id, descricao) values (nextval ('hibernate_sequence'), 'Em análise no co-autor');
+insert into StatusSidof(id, descricao) values (nextval ('hibernate_sequence'), 'Aguardando assinatura do ministro');
+insert into StatusSidof(id, descricao) values (nextval ('hibernate_sequence'), 'Em elaboração');
 insert into StatusSidof(id, descricao) values (nextval ('hibernate_sequence'), 'Em trâmite no co-autor');
+insert into StatusSidof(id, descricao) values (nextval ('hibernate_sequence'), 'Aguardando parecer jurídico de ministério co-autor');
+insert into StatusSidof(id, descricao) values (nextval ('hibernate_sequence'), 'Aguardando assinatura do consultor jurídico');
+insert into StatusSidof(id, descricao) values (nextval ('hibernate_sequence'), 'Publicado');
+insert into StatusSidof(id, descricao) values (nextval ('hibernate_sequence'), 'Arquivado');
+    
+    
+     
 
 
 -- Órgão

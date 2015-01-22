@@ -239,9 +239,25 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 				encaminhamentoProposicaoService.findByProposicao(proposicao.getId()), 
 				proposicao.getPosicionamento(), 
 				tagService.populaListaTagsProposicaoJSON(proposicao.getTags()),
-				proposicao.getResponsavel());
+				proposicao.getResponsavel(),
+				populaProposicoesFilhasJSON(proposicao.getProposicoesFilha()));
 
 		return proposicaoJSON;
+	}
+	
+	public Set<ProposicaoJSON> populaProposicoesFilhasJSON(Set<Proposicao> proposicaoList) {	
+		Set<ProposicaoJSON> proposicaoJsonList = new HashSet<ProposicaoJSON>();
+		
+		for (Proposicao proposicao : proposicaoList) {
+			ProposicaoJSON proposicaoJSON = new ProposicaoJSON();
+			proposicaoJSON.setId(proposicao.getId());
+			proposicaoJSON.setIdProposicao(proposicao.getIdProposicao());
+			proposicaoJSON.setSigla(proposicao.getSigla());
+			
+			proposicaoJsonList.add(proposicaoJSON);
+		}
+		
+		return proposicaoJsonList;
 	}
 
 	@Override
@@ -327,6 +343,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		proposicao.setResponsavel(proposicaoJSON.getResponsavel());
 		proposicao.setResultadoASPAR(proposicaoJSON.getResultadoASPAR());
 		proposicao.setFavorita(proposicaoJSON.isFavorita());
+		proposicao.setProposicoesFilha(populaProposicoesFilha(proposicaoJSON, proposicao));
 		Set<TagProposicao> tags = populaTagsProposicao(proposicaoJSON, proposicao);
 		proposicao.setTags(tags);
 		return proposicao;
@@ -347,6 +364,26 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 			tagsProposicao.add(tagProposicao);
 		}
 		return tagsProposicao;
+	}
+	
+	private Set<Proposicao> populaProposicoesFilha(ProposicaoJSON proposicaoJSON, Proposicao proposicao) {
+		Set<Proposicao> proposicoesFilhas = new HashSet<Proposicao>();
+
+		for (ProposicaoJSON proposicaoFilha : proposicaoJSON.getProposicoesFilha()) {	
+			Proposicao proposicaoFilhaTemp = new Proposicao();
+			proposicaoFilhaTemp.setId(proposicaoFilha.getId());
+			proposicaoFilhaTemp.setIdProposicao(proposicaoFilha.getIdProposicao());
+			
+			if (proposicaoFilhaTemp.getProposicoesPai() == null) {
+				proposicaoFilhaTemp.setProposicoesPai(new HashSet<Proposicao>()) ;
+			}
+			proposicaoFilhaTemp.getProposicoesPai().add(proposicao);
+			
+
+			proposicoesFilhas.add(proposicaoFilhaTemp);	
+		}
+		
+		return proposicoesFilhas;		
 	}
 
 	@Override
@@ -377,5 +414,14 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		}
 		
 		super.deleteById(id);
+	}
+	
+	@Override
+	public List<Proposicao> buscarPorSufixo(String sufixo) {
+		TypedQuery<Proposicao> findByIdQuery = getEntityManager().createQuery(
+				"SELECT p FROM Proposicao p WHERE upper(CONCAT(p.tipo,' ',p.numero,'/',p.ano)) like upper(:sigla)",
+				Proposicao.class);
+		findByIdQuery.setParameter("sigla", "%"+sufixo+"%");
+		return findByIdQuery.getResultList();
 	}
 }

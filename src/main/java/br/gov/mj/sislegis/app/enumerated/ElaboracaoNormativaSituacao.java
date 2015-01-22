@@ -15,15 +15,15 @@ public enum ElaboracaoNormativaSituacao {
 		return value;
 	}
     
-	public static ElaboracaoNormativaObjeto get(String id) {
-		ElaboracaoNormativaObjeto elaboracaoNormativaIdentificacao = null; // Default
-		for (ElaboracaoNormativaObjeto en : ElaboracaoNormativaObjeto.values()) {
+	public static ElaboracaoNormativaSituacao get(String id) {
+		ElaboracaoNormativaSituacao elaboracaoNormativaSituacao = null; // Default
+		for (ElaboracaoNormativaSituacao en : ElaboracaoNormativaSituacao.values()) {
 			if (en.name().equals(id)) {
-				elaboracaoNormativaIdentificacao = en;
+				elaboracaoNormativaSituacao = en;
 				break;
 			}
 		}
-		return elaboracaoNormativaIdentificacao;
+		return elaboracaoNormativaSituacao;
 	}    	
 
 }

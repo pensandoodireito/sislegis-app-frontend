@@ -18,8 +18,11 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
+import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaObjeto;
+import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaSituacao;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaSubTipo;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
 import br.gov.mj.sislegis.app.json.DropdownMultiselectJSON;
@@ -344,6 +347,10 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		Join<ElaboracaoNormativa, Usuario> us = en.join("parecerista", JoinType.LEFT);
 		cq.select(cb.construct(ElaboracaoNormativa.class, 
 				en.get("id"), 
+				en.get("tipo"),
+				en.get("subTipo"),
+				en.get("elaboracaoNormativaSituacao"),
+				en.get("elaboracaoNormativaNorma"),
 				en.get("ano"), 
 				en.get("numero"),
 				oen.get("nome"),
@@ -354,7 +361,7 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 				eq.get("nome"),
 				us.get("nome")
 				));
-
+		
 		List<Predicate> predicates=new ArrayList<Predicate>();
 		if(!Objects.isNull(mapaCampos.get("ano"))){
 			Predicate ano =cb.equal(en.get("ano"), mapaCampos.get("ano"));
@@ -382,6 +389,27 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 			Predicate statusSidof =cb.equal(ss.get("id"), mapaCampos.get("statusSidof"));
 			predicates.add(statusSidof);			
 		}
+		if(!Objects.isNull(mapaCampos.get("elaboracaoNormativaNorma"))){
+			Predicate elaboracaoNormativaNorma =cb.equal(en.get("elaboracaoNormativaNorma"), 
+					ElaboracaoNormativaNorma.get((String)mapaCampos.get("elaboracaoNormativaNorma")));
+			predicates.add(elaboracaoNormativaNorma);			
+		}		
+		if(!Objects.isNull(mapaCampos.get("elaboracaoNormativaSituacao"))){
+			Predicate elaboracaoNormativaSituacao =cb.equal(en.get("elaboracaoNormativaSituacao"), 
+					ElaboracaoNormativaSituacao.get((String)mapaCampos.get("elaboracaoNormativaSituacao")));
+			predicates.add(elaboracaoNormativaSituacao);			
+		}		
+		if(!Objects.isNull(mapaCampos.get("tipo"))){
+			Predicate tipo =cb.equal(en.get("tipo"), 
+					ElaboracaoNormativaTipo.get((String)mapaCampos.get("tipo")));
+			predicates.add(tipo);			
+		}				
+		if(!Objects.isNull(mapaCampos.get("subTipo"))){
+			Predicate subTipo =cb.equal(en.get("subTipo"), 
+					ElaboracaoNormativaSubTipo.get((String)mapaCampos.get("subTipo")));
+			predicates.add(subTipo);			
+		}				
+		
 		if(!Objects.isNull(mapaCampos.get("ementa"))){
 			Predicate ementa =cb.like(en.<String>get("ementa"), mapaCampos.get("ementa").toString());
 			predicates.add(ementa);			
@@ -394,6 +422,19 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 				predicates.add(listaOrigensSelecionadosDropdown);			
 			}
 		}
+		
+		if(!Objects.isNull(mapaCampos.get("listaTagsSelecionadosDropdown"))){
+			Subquery<TagElaboracaoNormativa> subqueryTags = cq.subquery(TagElaboracaoNormativa.class);
+			@SuppressWarnings("rawtypes")
+			Root fromTagElaboracaoNormativa = subqueryTags.from(TagElaboracaoNormativa.class);
+			subqueryTags.select(fromTagElaboracaoNormativa.get("elaboracaoNormativa"));
+			Join<TagElaboracaoNormativa, Tag> tag = fromTagElaboracaoNormativa.join("tag", JoinType.INNER);
+			List<String> lista = SislegisUtil.jsonArrayToList(mapaCampos.get("listaTagsSelecionadosDropdown").toString());
+			if(!lista.isEmpty()){
+				subqueryTags.where(tag.get("tag").in(lista));
+				predicates.add(en.get("id").in(subqueryTags));		
+			}
+		}	
 
 		if(!Objects.isNull(mapaCampos.get("listaCoAutoresSelecionadosDropdown"))){
 			List<String> lista = SislegisUtil.jsonArrayToList(mapaCampos.get("listaCoAutoresSelecionadosDropdown").toString());

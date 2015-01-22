@@ -23,4 +23,5 @@ public interface ProposicaoService extends Service<Proposicao> {
 	public void atualizarProposicaoJSON(ProposicaoJSON proposicaoJSON);
 	public Proposicao buscarPorIdProposicao(Integer idProposicao);
 	public List<ProposicaoJSON> listarTodos(Integer offset, Integer limit);
+	public List<Proposicao> buscarPorSufixo(String sufixo);
 }

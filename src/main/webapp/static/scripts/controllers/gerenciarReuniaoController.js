@@ -57,9 +57,15 @@ angular.module('sislegisapp').controller(
     $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
     $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
     
+    $scope.allProposicoes = [];
+    
     $scope.loadTags = function(query) {
     	return TagResource.buscarPorSufixo({sufixo: query}).$promise;
-    }; 
+    };
+    
+    $scope.loadProposicoes = function(query) {
+    	return ProposicaoResource.buscarPorSufixo({sufixo: query}).$promise;
+    };
     
     $scope.setSelectedProposicao = function(item) {
     	$scope.selectedProposicao = item;
@@ -174,8 +180,6 @@ angular.module('sislegisapp').controller(
 	      });
 	    });
 	  };
-
-	  
 
     /**
      * MODALs

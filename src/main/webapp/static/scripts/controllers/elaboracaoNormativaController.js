@@ -248,8 +248,9 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    
 		    $scope.validaForm = function(){
 		    	if($scope.elaboracaoNormativa.tipo!==undefined){
-		    		if(angular.equals($scope.elaboracaoNormativa.tipo, 'EXPOSICAOMOTIVOS')){
-		    			return checkEmpty($scope.elaboracaoNormativa.subTipo);
+		    		if(angular.equals($scope.elaboracaoNormativa.tipo, 'EXPOSICAOMOTIVOS')
+		    				&& checkEmpty($scope.elaboracaoNormativa.subTipo)){
+		    			return true;
 		    		}
 		    		if(!checkEmpty($scope.elaboracaoNormativa.elaboracaoNormativaNorma)){
 			    		if(checkEmpty($scope.elaboracaoNormativa.normaGeradaNumero) 

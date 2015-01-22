@@ -1,5 +1,5 @@
 <div class="form-horizontal">
-	<h3>Adicionar nova Elaboracao Normativa</h3>
+	<h3>Adicionar nova Elaboração Normativa</h3>
 	<div class="form-group">
 		<div class="col-md-offset-2 col-sm-2">
 			<a id="Create" name="Create" class="btn btn-primary"
@@ -10,9 +10,20 @@
 </div>
 <hr />
 <div>
-	<h3>Pesquisar por Elaboracao Normativas</h3>
+	<h3>Pesquisar por Elaboração Normativa</h3>
 	<form id="ElaboracaoNormativaSearch" class="form-horizontal">
-
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Tipos: </label>
+	 		<div ng-repeat="tipo in tipos" class="col-sm-3" >
+			  <input type="radio" ng-model="elaboracaoNormativa.tipo" ng-value="tipo.shade">  {{ tipo.name }} <br/>
+			</div> 
+	     </div>
+        <div class="form-group" ng-show="mostraSubTipo()">
+          <label class="col-sm-2 control-label">Subtipos: </label>
+	 		<div ng-repeat="subTipo in subTipos" class="col-sm-3">
+			 <input type="radio" ng-model="elaboracaoNormativa.subTipo" ng-value="subTipo.shade">  {{ subTipo.name }} <br/>
+			</div> 
+	    </div>
 		<div class="form-group">
             <label class="col-sm-2 control-label">Número: </label>
             <div class="col-sm-3">
@@ -25,47 +36,70 @@
             </div>
 		</div>
 		<div class="form-group">
-			<label class="col-sm-2 control-label">Origem</label>
+			<label class="col-sm-2 control-label">Origem:</label>
 			<div class="col-sm-3" ng-dropdown-multiselect="" options="orgaos" selected-model="elaboracaoNormativa.listaOrigensSelecionadosDropdown"></div>
 
-			<label class="col-sm-2 control-label">Co-autores</label>
+			<label class="col-sm-2 control-label">Co-autores:</label>
 			<div class="col-sm-3" ng-dropdown-multiselect="" options="orgaos" selected-model="elaboracaoNormativa.listaCoAutoresSelecionadosDropdown"></div> 
 		</div>
 
 		<div class="form-group">
              <label class="col-sm-2 control-label">Ementa:</label>
-             <div class="col-sm-6">
+             <div class="col-sm-3">
              	<textarea class="form-control" ng-model="elaboracaoNormativa.ementa" />
              </div>
+
+			<label class="col-sm-2 control-label">Tags:</label>
+			<div class="col-sm-3" ng-dropdown-multiselect="" options="tags" selected-model="elaboracaoNormativa.listaTagsSelecionadosDropdown"></div>
 		</div>
-		
-		<div class="form-group">
-              <label class="col-sm-2 control-label">Status no SIDOF: </label>
-              <div class="col-sm-3">
-              	<select ng-model="elaboracaoNormativa.statusSidof.id" ng-options="statusSidof.id as statusSidof.descricao for statusSidof in listaStatusSidof" class="form-control"></select>
-              </div>
-		</div>			
 		
 		<div class="form-group">
              <label class="col-sm-2 control-label">Objeto: </label>
              <div class="col-sm-3">
-               	<select ng-model="elaboracaoNormativa.identificacao" ng-options="identificacao.shade as identificacao.name for identificacao in identificacoes" class="form-control"></select>
+               	<select ng-model="elaboracaoNormativa.identificacao" ng-options="identificacao.shade as identificacao.name for identificacao in identificacoes" class="form-control">
+               		<option label="" value="" />
+               	</select>
           	 </div>
+              <label class="col-sm-2 control-label">Status no SIDOF: </label>
+              <div class="col-sm-3">
+              	<select ng-model="elaboracaoNormativa.statusSidof.id" ng-options="statusSidof.id as statusSidof.descricao for statusSidof in listaStatusSidof" class="form-control">
+              		<option label="" value="" />
+              	</select>
+              </div>          	 
 		</div>		
 		
         <div class="form-group">
             <label class="col-sm-2 control-label">Distribuição:</label>
             <div class="col-sm-3">
-            	<select ng-change="selectParecerista()" ng-model="elaboracaoNormativa.equipe.id" ng-options="equipe.id as equipe.nome for equipe in equipes" class="form-control"></select>
+            	<select ng-change="selectParecerista()" ng-model="elaboracaoNormativa.equipe.id" ng-options="equipe.id as equipe.nome for equipe in equipes" class="form-control">
+            		<option label="" value="" />
+            	</select>
             </div>
+             <label class="col-sm-2 control-label">Parecerista:</label>
+              <div class="col-sm-3">
+            	 <select ng-model="elaboracaoNormativa.parecerista.id" ng-options="usuario.id as usuario.nome for usuario in elaboracaoNormativa.pareceristas" class="form-control">
+            	 	<option label="" value="" />
+            	 </select>
+         	  </div>            
         </div>
         
         <div class="form-group">
-             <label class="col-sm-2 control-label">Parecerista:</label>
-              <div class="col-sm-3">
-            	 <select ng-model="elaboracaoNormativa.parecerista.id" ng-options="usuario.id as usuario.nome for usuario in elaboracaoNormativa.pareceristas" class="form-control"></select>
-         	  </div>
-		</div>
+            <label class="col-sm-2 control-label">Situação:</label>
+        	<div class="col-sm-3">
+        		<select ng-model="elaboracaoNormativa.elaboracaoNormativaSituacao" ng-options="elaboracaoNormativaSituacao.shade as elaboracaoNormativaSituacao.name for elaboracaoNormativaSituacao in situacoes" class="form-control">
+        			<option label="" value="" />
+        		</select>
+        	</div>	
+             <label class="col-sm-2 control-label">Tipo norma:</label>
+             <div class="col-sm-3">
+	             <select class="form-control" ng-model="elaboracaoNormativa.elaboracaoNormativaNorma" 
+	             		ng-options="norma.shade as norma.name for norma in normas">
+	             <option value="" label=""></option>
+	             </select>
+             </div>        	
+        </div>
+        
+		
 		<div class="form-group">
 			<div class="col-md-offset-2 col-sm-10">
 				<a id="Search" name="Search" class="btn btn-primary"
@@ -81,26 +115,24 @@
 			class="table table-responsive table-bordered table-striped clearfix">
 			<thead>
 				<tr>
+					<th>Tipo</th>
 					<th>Ano</th>
-					<th>Número</th>
 					<th>Status Sidof</th>
 					<th>Identificacao</th>
-					<th>Co-Autor</th>
 					<th>Origem</th>
-					<th>Distribuição</th>
-					<th>Parecerista</th>
+					<th>Situação</th>
+					<th>Tipo Norma</th>
 				</tr>
 			</thead>
 			<tbody id="search-results-body">
 				<tr
 					ng-repeat="result in searchResults | searchFilter:searchResults | startFrom:currentPage*pageSize | limitTo:pageSize | orderBy:'dataRegistro':true">
+					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.valueTipoSubTipo}}</a></td>
 					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.ano}}</a></td>
-					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.numero}}</a></td>
 					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.statusSidofDescricao}}</a></td>
 					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.valueIdentificacao}}</a></td>
-					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.coAutoresDescricao}}</a></td>
 					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.origemDescricao}}</a></td>
-					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.equipeDescricao}}</a></td>
+					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.situacaoDescricao}}</a></td>
 					<td><a href="#/ElaboracaoNormativa/edit/{{result.id}}">{{result.pareceristaDescricao}}</a></td>
 				</tr>
 			</tbody>

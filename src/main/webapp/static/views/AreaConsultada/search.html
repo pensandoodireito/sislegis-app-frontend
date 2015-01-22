@@ -1,5 +1,5 @@
 <div class="form-horizontal">
-    <h3>Create a new AreaConsultada</h3>
+    <h3>Adicionar nova Área Consultada</h3>
     <div class="form-group">
         <div class="col-md-offset-2 col-sm-2">
             <a id="Create" name="Create" class="btn btn-primary" href="#/AreaConsultadas/new"><span class="glyphicon glyphicon-plus-sign"></span> Create</a>
@@ -8,11 +8,11 @@
 </div>
 <hr/>
 <div>
-    <h3>Search for AreaConsultadas</h3>
+    <h3>Pesquisar por Área Consultada</h3>
     <form id="AreaConsultadaSearch" class="form-horizontal">
         
     <div class="form-group">
-        <label for="descricao" class="col-sm-2 control-label">Descricao</label>
+        <label for="descricao" class="col-sm-2 control-label">Descrição</label>
         <div class="col-sm-10">
             <input id="descricao" name="descricao" class="form-control" type="text" ng-model="search.descricao" placeholder="Enter the AreaConsultada Descricao"></input>
         </div>
@@ -21,7 +21,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-sm-10">
-                <a id="Search" name="Search" class="btn btn-primary" ng-click="performSearch()"><span class="glyphicon glyphicon-search"></span> Search</a>
+                <a id="Search" name="Search" class="btn btn-primary" ng-click="performSearch()"><span class="glyphicon glyphicon-search"></span> Pesquisar</a>
             </div>
         </div>
     </form>
@@ -31,7 +31,7 @@
         <table class="table table-responsive table-bordered table-striped clearfix">
             <thead>
                 <tr>
-                    <th>Descricao</th>
+                    <th>Descrição</th>
                 </tr>
             </thead>
             <tbody id="search-results-body">
