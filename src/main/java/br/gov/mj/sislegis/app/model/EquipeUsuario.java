@@ -5,52 +5,65 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 @Entity
 @Table(name = "equipe_usuario")
 @XmlRootElement
 // http://stackoverflow.com/questions/15130494/how-to-implement-a-complex-many-to-many-relationship-in-jpa
-public class EquipeUsuario implements Serializable {
+public class EquipeUsuario implements AbstractEntity {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	
 	@EmbeddedId
-    private EquipeUsuarioPK id;
+    private EquipeUsuarioPK equipeUsuarioPK;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("idEquipe")
 	private Equipe equipe;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("idUsuario")
 	private Usuario usuario;
+	
+	
+	 public Usuario build() {
+	    return new Usuario();
+	  }
 	
 	@Column
 	private Boolean isCoordenador;
 
 	public EquipeUsuario() {
 		super();
-		id = new EquipeUsuarioPK();
+		equipeUsuarioPK = new EquipeUsuarioPK();
 	}
 
 	public EquipeUsuario(EquipeUsuarioPK id, Equipe equipe, Usuario usuario,
 			Boolean isCoordenador) {
 		super();
-		this.id = id;
+		this.equipeUsuarioPK = id;
 		this.equipe = equipe;
 		this.usuario = usuario;
 		this.isCoordenador = isCoordenador;
 	}
 
-	public EquipeUsuarioPK getId() {
-		return id;
+	public Number getId() {
+		return equipeUsuarioPK.hashCode();
 	}
-
-	public void setId(EquipeUsuarioPK id) {
-		this.id = id;
-	}
+	
 
 	public Equipe getEquipe() {
 		return equipe;
@@ -76,28 +89,12 @@ public class EquipeUsuario implements Serializable {
 		this.isCoordenador = isCoordenador;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
+
+	public EquipeUsuarioPK getEquipeUsuarioPK() {
+		return equipeUsuarioPK;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		EquipeUsuario other = (EquipeUsuario) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+	public void setEquipeUsuarioPK(EquipeUsuarioPK equipeUsuarioPK) {
+		this.equipeUsuarioPK = equipeUsuarioPK;
 	} 
 }

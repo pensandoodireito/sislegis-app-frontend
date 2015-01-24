@@ -25,11 +25,13 @@ import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaObjeto;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaSituacao;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaSubTipo;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
-import br.gov.mj.sislegis.app.json.DropdownMultiselectJSON;
+import br.gov.mj.sislegis.app.json.DropdownMultiselectSelecionadosJSON;
 import br.gov.mj.sislegis.app.json.TagJSON;
 import br.gov.mj.sislegis.app.model.AreaConsultada;
+import br.gov.mj.sislegis.app.model.Comentario;
 import br.gov.mj.sislegis.app.model.ElaboracaoNormativa;
 import br.gov.mj.sislegis.app.model.ElaboracaoNormativaCoAutores;
+import br.gov.mj.sislegis.app.model.ElaboracaoNormativaCoAutoresPK;
 import br.gov.mj.sislegis.app.model.ElaboracaoNormativaConsulta;
 import br.gov.mj.sislegis.app.model.ElaboracaoNormativaTiposMarcados;
 import br.gov.mj.sislegis.app.model.Equipe;
@@ -101,17 +103,21 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		}
 		elaboracaoNormativa.setTagsElaboracaoNormativa(null);
 		
+		
+		elaboracaoNormativa.setListaComentario(new ArrayList<Comentario>(elaboracaoNormativa.getListaComentario()));
+		
 		elaboracaoNormativa.setTipos(new ArrayList<ElaboracaoNormativaTipo>());
 		for(ElaboracaoNormativaTiposMarcados elaboracaoNormativaTiposMarcados:elaboracaoNormativa.getListaElaboracaoNormativaTiposMarcados()){
 			elaboracaoNormativa.getTipos().add(elaboracaoNormativaTiposMarcados.getTipo());
 		}
 		
-		elaboracaoNormativa.setListaCoAutoresSelecionadosDropdown(new ArrayList<DropdownMultiselectJSON>());
+		elaboracaoNormativa.setListaCoAutoresSelecionadosDropdown(new ArrayList<DropdownMultiselectSelecionadosJSON>());
 		for(ElaboracaoNormativaCoAutores elaboracaoNormativaCoAutores:elaboracaoNormativa.getListaElaboracaoNormativaCoAutor()){
-			DropdownMultiselectJSON dropdownMultiselectJSON = new DropdownMultiselectJSON();
-			dropdownMultiselectJSON.setId(elaboracaoNormativaCoAutores.getOrgao().getId());
+			DropdownMultiselectSelecionadosJSON dropdownMultiselectJSON = new DropdownMultiselectSelecionadosJSON();
+			dropdownMultiselectJSON.setId(elaboracaoNormativaCoAutores.getElaboracaoNormativaCoAutoresPK().getIdOrgao());
 			elaboracaoNormativa.getListaCoAutoresSelecionadosDropdown().add(dropdownMultiselectJSON);
 		}
+		elaboracaoNormativa.setListaElaboracaoNormativaCoAutor(null);
 		
 		if(!Objects.isNull(elaboracaoNormativa.getEquipe()))
 			elaboracaoNormativa.setPareceristas(usuarioService.findByIdEquipe(elaboracaoNormativa.getEquipe().getId()));
@@ -166,7 +172,9 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 
 	private void precessaListaElaboracaoNormativaCoAutores(
 			ElaboracaoNormativa elaboracaoNormativa) {
-		c:for(DropdownMultiselectJSON dropdownMultiselectJSON:elaboracaoNormativa.getListaCoAutoresSelecionadosDropdown()){
+		elaboracaoNormativa.setListaElaboracaoNormativaCoAutor(elaboracaoNormativaCoAutoresService
+				.pesquisaPorElaboracaoNormativa(elaboracaoNormativa.getId()));		
+		c:for(DropdownMultiselectSelecionadosJSON dropdownMultiselectJSON:elaboracaoNormativa.getListaCoAutoresSelecionadosDropdown()){
 			if(!Objects.isNull(elaboracaoNormativa.getListaElaboracaoNormativaCoAutor())){
 				for(ElaboracaoNormativaCoAutores elaboracaoNormativaCoAutores:elaboracaoNormativa.getListaElaboracaoNormativaCoAutor()){
 					if(dropdownMultiselectJSON.getId().equals(elaboracaoNormativaCoAutores.getOrgao().getId())){
@@ -178,6 +186,8 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 			}
 
 			ElaboracaoNormativaCoAutores elaboracaoNormativaCoAutores = new ElaboracaoNormativaCoAutores();
+			ElaboracaoNormativaCoAutoresPK elaboracaoNormativaCoAutoresPK = new ElaboracaoNormativaCoAutoresPK();
+			elaboracaoNormativaCoAutores.setElaboracaoNormativaCoAutoresPK(elaboracaoNormativaCoAutoresPK);
 			elaboracaoNormativaCoAutores.setOrgao(orgaoService.findById(dropdownMultiselectJSON.getId()));
 			elaboracaoNormativaCoAutores.setElaboracaoNormativa(elaboracaoNormativa);
 			elaboracaoNormativa.getListaElaboracaoNormativaCoAutor().add(elaboracaoNormativaCoAutores);
@@ -210,12 +220,14 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 	
 	private void processaExclusaoElaboracaoNormativaCoAutores(
 			ElaboracaoNormativa elaboracaoNormativa) {
+		elaboracaoNormativa.setListaElaboracaoNormativaCoAutor(elaboracaoNormativaCoAutoresService
+				.pesquisaPorElaboracaoNormativa(elaboracaoNormativa.getId()));			
 		List<ElaboracaoNormativaCoAutores> listaExclusao=null;
 		if(!Objects.isNull(elaboracaoNormativa.getListaCoAutoresSelecionadosDropdown())){
 			listaExclusao = new ArrayList<ElaboracaoNormativaCoAutores>();
 			if(!Objects.isNull(elaboracaoNormativa.getListaElaboracaoNormativaCoAutor())){
 				c:for(ElaboracaoNormativaCoAutores elaboracaoNormativaCoAutor: elaboracaoNormativa.getListaElaboracaoNormativaCoAutor()){
-					for(DropdownMultiselectJSON dropdownMultiselectJSON: elaboracaoNormativa.getListaCoAutoresSelecionadosDropdown()){
+					for(DropdownMultiselectSelecionadosJSON dropdownMultiselectJSON: elaboracaoNormativa.getListaCoAutoresSelecionadosDropdown()){
 						if(dropdownMultiselectJSON.getId().equals(elaboracaoNormativaCoAutor.getOrgao().getId())){
 							continue c;
 						}
@@ -228,7 +240,8 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		
 		if(!Objects.isNull(listaExclusao)){
 			for(ElaboracaoNormativaCoAutores elaboracaoNormativaCoAutores:listaExclusao){
-				elaboracaoNormativaCoAutoresService.deleteElaboracaoNormativaCoAutoresServiceEjb(elaboracaoNormativaCoAutores.getId());
+				elaboracaoNormativaCoAutoresService
+					.deleteElaboracaoNormativaCoAutoresServiceEjb(elaboracaoNormativaCoAutores.getElaboracaoNormativaCoAutoresPK());
 			}
 		}
 	}	
@@ -278,7 +291,7 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 					.createNativeQuery("select ten.* from TagElaboracaoNormativa ten "
 					+ "where ten.elaboracaoNormativa_id = :id", TagElaboracaoNormativa.class)
 					.setParameter("id", elaboracaoNormativa.getId()).getResultList();
-		}		c:for(DropdownMultiselectJSON dropdownMultiselectJSON:elaboracaoNormativa.getListaCoAutoresSelecionadosDropdown()){
+		}		c:for(DropdownMultiselectSelecionadosJSON dropdownMultiselectJSON:elaboracaoNormativa.getListaCoAutoresSelecionadosDropdown()){
 			if(!Objects.isNull(elaboracaoNormativa.getListaElaboracaoNormativaCoAutor())){
 				for(ElaboracaoNormativaCoAutores elaboracaoNormativaCoAutores:elaboracaoNormativa.getListaElaboracaoNormativaCoAutor()){
 					if(dropdownMultiselectJSON.getId().equals(elaboracaoNormativaCoAutores.getOrgao().getId())){
