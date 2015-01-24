@@ -9,15 +9,15 @@
                             <div>
                                 <div class="col-sm-2">
                                     <label>Filtrar pela sigla:</label>
-                                    <input type="text" class="form-control" ng-model="filtro.sigla" placeholder="Filtrar pela sigla" ng-keyup="filtrarConsultaInput(filtro.sigla)">
+                                    <input type="text" class="form-control" ng-model="filtro.sigla" placeholder="Filtrar pela sigla" ng-change="filtrarConsulta()">
                                 </div>
                                 <div class="col-sm-3">
                                     <label>Filtrar pela ementa:</label>
-                                    <input type="text" class="form-control" ng-model="filtro.ementa" placeholder="Filtrar pela ementa" ng-keyup="filtrarConsultaInput(filtro.ementa)">
+                                    <input type="text" class="form-control" ng-model="filtro.ementa" placeholder="Filtrar pela ementa" ng-change="filtrarConsulta()">
                                 </div>
                                 <div class="col-sm-3">
                                     <label>Filtrar por autor:</label>
-                                    <input type="text" class="form-control" ng-model="filtro.autor" placeholder="Filtrar por autor" ng-keyup="filtrarConsultaInput(filtro.autor)">
+                                    <input type="text" class="form-control" ng-model="filtro.autor" placeholder="Filtrar por autor" ng-change="filtrarConsulta()">
                                 </div>
                                 <div class="col-sm-2">
                                     <label>Filtrar por casa legislativa:</label>

@@ -72,11 +72,6 @@ angular.module('sislegisapp').controller(
 	    $scope.infiniteScroll.offset = 0;
 		$scope.consultarProposicoes();
 	}
-	
-	$scope.filtrarConsultaInput = function(value) {
-		if(angular.isUndefined(value) || value == '') return false;
-		$scope.filtrarConsulta();
-	}
 
     $scope.loadTags = function(query) {
     	return TagResource.buscarPorSufixo({sufixo: query}).$promise;
