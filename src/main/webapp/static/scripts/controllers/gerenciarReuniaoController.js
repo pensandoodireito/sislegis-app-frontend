@@ -130,7 +130,7 @@ angular.module('sislegisapp').controller(
     $scope.removerProposicao = function(idReuniao, idProposicao){
     	if(confirm("Deseja realmente excluir esse registro?")){
     		var successCallback = function() {
-    			toaster.pop('success', 'Registro excluído com sucesso');
+    			toaster.pop('success', 'Proposição excluída da reunião');
             	ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()},
             	function(response) {
             		$scope.listaReuniaoProposicoes = response;
@@ -139,7 +139,7 @@ angular.module('sislegisapp').controller(
             	});
             };
             var errorCallback = function() {
-            	toaster.pop('error', 'Falha ao remover a proposição');
+            	toaster.pop('error', 'Erro ao excluir proposição da reunião');
             };
 
             ReuniaoProposicaoResource.remove({ReuniaoId:idReuniao, ProposicaoId: idProposicao}, successCallback, errorCallback);
