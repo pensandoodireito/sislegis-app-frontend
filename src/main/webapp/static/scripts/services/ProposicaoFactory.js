@@ -26,6 +26,16 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource) 
 			url : "../rest/proposicaos/proposicoesPautaSenado",
 			method : 'GET',
 			isArray : true
+		},
+		'buscarPorSufixo' : {
+			url : "../rest/proposicaos/buscarPorSufixo",
+			method : 'GET',
+			isArray : true
+		},
+		'consultar' : {
+			url : "../rest/proposicaos/consultar",
+			method : 'GET',
+			isArray : true
 		}
 	});
 	return resource;

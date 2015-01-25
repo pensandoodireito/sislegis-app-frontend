@@ -1,5 +1,6 @@
 package br.gov.mj.sislegis.app.rest;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -136,6 +137,36 @@ public class ProposicaoEndpoint {
 		List<ProposicaoJSON> results = proposicaoService.listarTodos();
 		return results;
 	}
+
+	@GET
+	@Path("/consultar")
+	@Produces("application/json")
+	public List<ProposicaoJSON> consultar(@QueryParam("ementa") String ementa, @QueryParam("autor") String autor, 
+			@QueryParam("sigla") String sigla, @QueryParam("origem") String origem, @QueryParam("isFavorita") String isFavorita, 
+			@QueryParam("limit") Integer limit, @QueryParam("offset") Integer offset) {
+		List<ProposicaoJSON> results = proposicaoService.consultar(sigla, autor, ementa, origem, isFavorita, offset, limit);
+		return results;
+	}
+	
+	@GET
+	@Path("/buscarPorSufixo")
+	@Produces("application/json")
+	public List<ProposicaoJSON> buscarPorSufixo(@QueryParam("sufixo")String sufixo) {
+		List<Proposicao> proposicoes = proposicaoService.buscarPorSufixo(sufixo);
+		List<ProposicaoJSON> proposicaoJsonList = new ArrayList<ProposicaoJSON>();
+		
+		for (Proposicao proposicao : proposicoes) {
+			ProposicaoJSON proposicaoJSON = new ProposicaoJSON();
+			proposicaoJSON.setId(proposicao.getId());
+			proposicaoJSON.setIdProposicao(proposicao.getIdProposicao());
+			proposicaoJSON.setSigla(proposicao.getSigla());
+			
+			proposicaoJsonList.add(proposicaoJSON);
+		}
+		
+		return proposicaoJsonList;
+	}
+
 
 	@PUT
 	@Path("/{id:[0-9][0-9]*}")
