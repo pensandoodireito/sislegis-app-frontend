@@ -129,26 +129,6 @@ angular.module('sislegisapp').controller(
     	delete $scope.selectedProposicao.comentarioTmp;
 	}
     
-    $scope.removerProposicao = function(idReuniao, idProposicao){
-    	if(confirm("Deseja realmente excluir esse registro?")){
-    		var successCallback = function() {
-    			toaster.pop('success', 'Proposição excluída da reunião');
-            	ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()},
-            	function(response) {
-            		$scope.listaReuniaoProposicoes = response;
-            	}, function() {
-            		console.error('Erro ao carregar proposições');
-            	});
-            };
-            var errorCallback = function() {
-            	toaster.pop('error', 'Erro ao excluir proposição da reunião');
-            };
-
-            ReuniaoProposicaoResource.remove({ReuniaoId:idReuniao, ProposicaoId: idProposicao}, successCallback, errorCallback);
-    	}
-
-    };
-    
     $scope.dataFormatada = function(){
         var formattedDate = $filter('date')(new Date($scope.reuniao.data),
         	'MM/dd/yyyy');
@@ -279,6 +259,31 @@ angular.module('sislegisapp').controller(
           });
     };
     
+    $scope.abrirModalRemoverProposicao = function(item) {
+    	$scope.selectedProposicao = item;
+    	
+    	var modalInstance = $modal.open({
+    		templateUrl: 'views/Reuniao/modal-remover-proposicao.html',
+    		controller: 'ModalRemoverProposicaoController',
+    		size: 'sm',
+    		resolve: {
+                proposicao: function () {
+                	return $scope.selectedProposicao;
+                }
+            }
+    	});
+    	
+    	modalInstance.result.then(function () {
+    		ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()},
+        	function(response) {
+        		$scope.listaReuniaoProposicoes = response;
+        		toaster.pop('success', 'Proposição excluída da reunião');
+        	}, function() {
+        		console.error('Erro ao carregar proposições');
+        	});
+        });
+    }
+    
     $scope.abrirModalRelatorio = function() {
         var modalInstance = $modal.open({
           templateUrl: 'views/Reuniao/modal-relatorio.html',
@@ -349,4 +354,34 @@ angular.module('sislegisapp').controller(
     
     $scope.setCalendar();
     
+});
+
+
+angular.module('sislegisapp').controller('ModalRemoverProposicaoController',
+		function($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, ProposicaoResource, ReuniaoProposicaoResource, ComentarioResource, ComentarioService) {
+	
+	var self = this;
+	
+	$scope.proposicao = proposicao;
+	$scope.comentario = $scope.comentario || new ComentarioResource();
+
+	$scope.ok = function() {
+		$modalInstance.close();
+	};
+
+	$scope.cancel = function() {
+		$modalInstance.dismiss('cancel');
+	};
+	
+	$scope.removerProposicao = function() {
+		var successCallback = function() {
+			$scope.ok();
+        };
+        var errorCallback = function() {
+        	toaster.pop('error', 'Erro ao excluir proposição da reunião');
+        };
+
+        ComentarioService.save($scope.comentario, $scope.proposicao.id);
+        ReuniaoProposicaoResource.remove({ReuniaoId:$scope.proposicao.idReuniao, ProposicaoId: $scope.proposicao.id}, successCallback, errorCallback);
+    };
 });
