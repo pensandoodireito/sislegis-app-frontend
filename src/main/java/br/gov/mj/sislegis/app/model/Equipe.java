@@ -1,6 +1,6 @@
 package br.gov.mj.sislegis.app.model;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,21 +11,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "equipe")
 @XmlRootElement
 //Necessario para evitar bug de recursao do jackson - >http://stackoverflow.com/questions/3325387/infinite-recursion-with-jackson-json-and-hibernate-jpa-issue
-@JsonIdentityReference(alwaysAsId = true)
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id") 
 public class Equipe implements AbstractEntity {
 
 	private static final long serialVersionUID = 8516082010865687791L;
-	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,11 +33,8 @@ public class Equipe implements AbstractEntity {
 	@Column
 	private String nome;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "equipe", fetch = FetchType.EAGER)
-	private List<EquipeUsuario> listaEquipeUsuario;
-	
-	@Transient
-	private List<Long> listaEquipeUsuarioIds;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "equipe", cascade={CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+	private Set<EquipeUsuario> listaEquipeUsuario;
 
 	public Long getId() {
 		return this.id;
@@ -57,11 +52,11 @@ public class Equipe implements AbstractEntity {
 		this.nome = nome;
 	}
 	
-	public List<EquipeUsuario> getListaEquipeUsuario() {
+	public Set<EquipeUsuario> getListaEquipeUsuario() {
 		return listaEquipeUsuario;
 	}
 
-	public void setListaEquipeUsuario(List<EquipeUsuario> listaEquipeUsuario) {
+	public void setListaEquipeUsuario(Set<EquipeUsuario> listaEquipeUsuario) {
 		this.listaEquipeUsuario = listaEquipeUsuario;
 	}
 
@@ -97,13 +92,5 @@ public class Equipe implements AbstractEntity {
 			result += "nome: " + nome;
 
 		return result;
-	}
-
-	public List<Long> getListaEquipeUsuarioIds() {
-		return listaEquipeUsuarioIds;
-	}
-
-	public void setListaEquipeUsuarioIds(List<Long> listaEquipeUsuarioIds) {
-		this.listaEquipeUsuarioIds = listaEquipeUsuarioIds;
 	}
 }

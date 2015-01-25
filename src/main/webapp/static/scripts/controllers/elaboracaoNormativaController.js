@@ -89,12 +89,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			$scope.salvar = function() {
 
 		        var successCallback = function(data,responseHeaders){
-/*		        	$scope.elaboracaoNormativa = new ElaboracaoNormativaResource(self.original);
-					$scope.elaboracaoNormativa.listaCoAutoresSelecionadosDropdown = [];
-					$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta = [];
-					$scope.elaboracaoNormativa.listaCoAutoresSelecionadosDropdown = [];
-					$scope.elaboracaoNormativa.listaComentario = [];*/
-		            var id = locationParser(responseHeaders);
+		            var id = isEditMode()?data.id:locationParser(responseHeaders);
 		            $location.path('/ElaboracaoNormativa/edit/' + id);
 		            $scope.displayError = false;
 					

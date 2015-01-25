@@ -44,6 +44,7 @@ import br.gov.mj.sislegis.app.model.Usuario;
 import br.gov.mj.sislegis.app.service.AbstractPersistence;
 import br.gov.mj.sislegis.app.service.AreaConsultadaService;
 import br.gov.mj.sislegis.app.service.ElaboracaoNormativaCoAutoresService;
+import br.gov.mj.sislegis.app.service.ElaboracaoNormativaConsultaService;
 import br.gov.mj.sislegis.app.service.ElaboracaoNormativaService;
 import br.gov.mj.sislegis.app.service.ElaboracaoNormativaTiposMarcadosService;
 import br.gov.mj.sislegis.app.service.OrgaoService;
@@ -79,6 +80,9 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 	
 	@Inject
 	public ElaboracaoNormativaCoAutoresService elaboracaoNormativaCoAutoresService;
+	
+	@Inject
+	public ElaboracaoNormativaConsultaService elaboracaoNormativaConsultaService;
 	
 	@PersistenceContext
     private EntityManager em;
@@ -141,11 +145,9 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 			elaboracaoNormativa.setOrigem(orgao);
 		}
 		
+		processaExclusaoElaboracaoNormativaConsulta(elaboracaoNormativa);
+		
 		processaListaElaboracaoNormativaConsulta(elaboracaoNormativa);
-		
-		//processaExclusaoElaboracaoNormativaTipo(elaboracaoNormativa);
-		
-		//processaListaElaboracaoNormativaTipo(elaboracaoNormativa);
 		
 		processaExclusaoElaboracaoNormativaCoAutores(elaboracaoNormativa);
 		
@@ -169,6 +171,26 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 			}
 		}
 	}
+	
+	private void processaExclusaoElaboracaoNormativaConsulta(
+			ElaboracaoNormativa elaboracaoNormativa) {
+
+		List<ElaboracaoNormativaConsulta> lista = elaboracaoNormativaConsultaService
+				.pesquisaElaboracaoNormativaConsutaPorIdElaboracaoNormativa(elaboracaoNormativa.getId());
+		List<ElaboracaoNormativaConsulta> listaExclusao = new ArrayList<ElaboracaoNormativaConsulta>();
+		c:for(ElaboracaoNormativaConsulta elaboracaoNormativaConsulta:lista){
+			for(ElaboracaoNormativaConsulta elaboracaoNormativaConsulta2:elaboracaoNormativa.getListaElaboracaoNormativaConsulta()){
+				if(elaboracaoNormativaConsulta.equals(elaboracaoNormativaConsulta2)){
+					continue c;
+				}
+			}
+			listaExclusao.add(elaboracaoNormativaConsulta);
+		}
+		
+		for(ElaboracaoNormativaConsulta elaboracaoNormativaConsulta:listaExclusao){
+			elaboracaoNormativaConsultaService.deleteElaboracaoNormativaConsutaPorIdElaboracaoNormativa(elaboracaoNormativaConsulta.getId());
+		}
+	}	
 
 	private void precessaListaElaboracaoNormativaCoAutores(
 			ElaboracaoNormativa elaboracaoNormativa) {
@@ -194,28 +216,6 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		}
 	}
 
-	private void processaExclusaoElaboracaoNormativaTipo(
-			ElaboracaoNormativa elaboracaoNormativa) {
-		List<ElaboracaoNormativaTiposMarcados> listaExclusao=null;
-		if(!Objects.isNull(elaboracaoNormativa.getListaElaboracaoNormativaTiposMarcados())){
-			listaExclusao = new ArrayList<ElaboracaoNormativaTiposMarcados>();
-			c:for(ElaboracaoNormativaTiposMarcados elaboracaoNormativaTiposMarcados: elaboracaoNormativa.getListaElaboracaoNormativaTiposMarcados()){
-				for(ElaboracaoNormativaTipo elaboracaoNormativaTipo: elaboracaoNormativa.getTipos()){
-					if(elaboracaoNormativaTiposMarcados.getTipo().equals(elaboracaoNormativaTipo)){
-						continue c;
-					}
-				}
-				listaExclusao.add(elaboracaoNormativaTiposMarcados);
-			}
-			elaboracaoNormativa.setListaElaboracaoNormativaTiposMarcados(null);
-		}
-		
-		if(!Objects.isNull(listaExclusao)){
-			for(ElaboracaoNormativaTiposMarcados elaboracaoNormativaTiposMarcados:listaExclusao){
-				elaboracaoNormativaTiposMarcadosService.deleteElaboracaoNormativaTiposMarcado(elaboracaoNormativaTiposMarcados.getId());
-			}
-		}
-	}
 	
 	
 	private void processaExclusaoElaboracaoNormativaCoAutores(
@@ -246,25 +246,6 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		}
 	}	
 
-	private void processaListaElaboracaoNormativaTipo(
-			ElaboracaoNormativa elaboracaoNormativa) {
-		c:for(ElaboracaoNormativaTipo elaboracaoNormativaTipo: elaboracaoNormativa.getTipos()){
-			if(!Objects.isNull(elaboracaoNormativa.getListaElaboracaoNormativaTiposMarcados())){
-				for(ElaboracaoNormativaTiposMarcados elaboracaoNormativaTiposMarcados:elaboracaoNormativa.getListaElaboracaoNormativaTiposMarcados()){
-					if(elaboracaoNormativaTiposMarcados.getTipo().equals(elaboracaoNormativaTipo)){
-						continue c;
-					}
-				}				
-			}else{
-				elaboracaoNormativa.setListaElaboracaoNormativaTiposMarcados(new ArrayList<ElaboracaoNormativaTiposMarcados>());
-			}
-
-			ElaboracaoNormativaTiposMarcados elaboracaoNormativaTiposMarcados = new ElaboracaoNormativaTiposMarcados();
-			elaboracaoNormativaTiposMarcados.setTipo(elaboracaoNormativaTipo);
-			elaboracaoNormativaTiposMarcados.setElaboracaoNormativa(elaboracaoNormativa);
-			elaboracaoNormativa.getListaElaboracaoNormativaTiposMarcados().add(elaboracaoNormativaTiposMarcados);
-		}
-	}
 	
 
 	private void processaExclusaoTagElaboracaoNormativa(

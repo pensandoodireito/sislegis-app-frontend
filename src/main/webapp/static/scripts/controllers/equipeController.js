@@ -5,7 +5,6 @@ angular.module('sislegisapp').controller('EquipeController', function ($scope, $
     $scope.$location = $location;
     $scope.equipe = $scope.equipe || {};
     $scope.equipe.listaEquipeUsuario = $scope.equipe.listaEquipeUsuario || [];
-    $scope.equipe.listaEquipeUsuarioIds = $scope.equipe.listaEquipeUsuarioIds || [];
 
     $scope.usuariosList = UsuarioResource.queryAll(function(items){
         $scope.usuariosSelectionList = $.map(items, function(item) {
@@ -28,10 +27,10 @@ angular.module('sislegisapp').controller('EquipeController', function ($scope, $
             equipeUsuarioItem.isCoordenador = false;
             
             // pk da entidade
-            var equipeUsuarioPK = {};
-            equipeUsuarioPK.idEquipe = $scope.equipe.id;
-            equipeUsuarioPK.idUsuario = usuarioSelecionado.id;
-            equipeUsuarioItem.equipeUsuarioPK = equipeUsuarioPK;
+            var id = {};
+            id.idEquipe = $scope.equipe.id;
+            id.idUsuario = usuarioSelecionado.id;
+            equipeUsuarioItem.id = id;
             
             $scope.equipe.listaEquipeUsuario.push(equipeUsuarioItem);
     	}
