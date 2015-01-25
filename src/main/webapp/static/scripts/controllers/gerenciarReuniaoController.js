@@ -2,7 +2,7 @@ angular.module('sislegisapp').controller(
 		'GerenciarReuniaoController',
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
-				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource) {
+				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource, ElaboracaoNormativaResource) {
     
 	var self = this;
 	$scope.listaReuniaoProposicoes = [];
@@ -20,9 +20,7 @@ angular.module('sislegisapp').controller(
     
     $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
     $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
-    
-    $scope.allProposicoes = [];
-    
+
 	$scope.infiniteScroll = {
 			busy: false,
 			limit: 5,
@@ -84,6 +82,10 @@ angular.module('sislegisapp').controller(
     
     $scope.loadProposicoes = function(query) {
     	return ProposicaoResource.buscarPorSufixo({sufixo: query}).$promise;
+    };
+    
+    $scope.loadElaboracoesNormativas = function(query) {
+    	return ElaboracaoNormativaResource.queryAll().$promise;
     };
     
     $scope.setSelectedProposicao = function(item) {
@@ -256,7 +258,7 @@ angular.module('sislegisapp').controller(
     }
 
     
-    $scope.abrirModalComentarios = function (item) {
+    $scope.abrirModalComentarios = function(item) {
     	$scope.selectedProposicao = item;
     	
         var modalInstance = $modal.open({
