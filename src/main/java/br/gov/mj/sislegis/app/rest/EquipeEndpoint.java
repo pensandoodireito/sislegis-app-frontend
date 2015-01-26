@@ -1,5 +1,6 @@
 package br.gov.mj.sislegis.app.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -18,6 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 import br.gov.mj.sislegis.app.model.Equipe;
+import br.gov.mj.sislegis.app.model.EquipeUsuario;
 import br.gov.mj.sislegis.app.service.EquipeService;
 import br.gov.mj.sislegis.app.service.Service;
 
@@ -53,7 +55,14 @@ public class EquipeEndpoint {
 	@Path("/{id:[0-9][0-9]*}")
 	@Produces("application/json")
 	public Response findById(@PathParam("id") Long id) {
-		return Response.ok(service.findById(id)).build();
+		Equipe equipe = service.findById(id);
+/*		List<EquipeUsuario> lista = new ArrayList<EquipeUsuario>(equipe.getListaEquipeUsuario());
+		equipe.setListaEquipeUsuario(new ArrayList<EquipeUsuario>());
+		for(EquipeUsuario equipeUsuario: lista){
+			equipe.getListaEquipeUsuario().add(new EquipeUsuario(equipeUsuario.getEquipeUsuarioPK(), 
+					equipeUsuario.getEquipe(), equipeUsuario.getUsuario(), equipeUsuario.getIsCoordenador()));
+		}*/
+		return Response.ok(equipe).build();
 	}
 
 	@GET
