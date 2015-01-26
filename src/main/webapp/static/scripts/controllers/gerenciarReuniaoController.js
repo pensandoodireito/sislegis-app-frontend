@@ -6,13 +6,10 @@ angular.module('sislegisapp').controller(
     
 	var self = this;
 	$scope.listaReuniaoProposicoes = [];
-	$scope.filtro = {};
+	$scope.filtro = new ProposicaoResource();
 
     // faz as ações de cada proposição abrir e fechar (collapse)
     $scope.showAcoes = true;
-
-    $scope.arrayComissao = new Array();
-    $scope.selectedFiltro = new Object();
     
     $scope.reuniao = new ReuniaoResource();
     $scope.reuniaoProposicao = new ReuniaoProposicaoResource();
@@ -22,6 +19,9 @@ angular.module('sislegisapp').controller(
     $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
     
     $scope.allProposicoes = [];
+    
+    $scope.tagsProposicaoSelecionadas = [];
+    $scope.tagsProposicao = TagResource.listarTodos();
     
 	$scope.infiniteScroll = {
 			busy: false,
@@ -72,11 +72,6 @@ angular.module('sislegisapp').controller(
 	    $scope.infiniteScroll.offset = 0;
 		$scope.consultarProposicoes();
 	}
-	
-	$scope.filtrarConsultaInput = function(value) {
-		if(angular.isUndefined(value) || value == '') return false;
-		$scope.filtrarConsulta();
-	}
 
     $scope.loadTags = function(query) {
     	return TagResource.buscarPorSufixo({sufixo: query}).$promise;
@@ -114,6 +109,7 @@ angular.module('sislegisapp').controller(
     	$rootScope.inactivateSpinner = true;
         var successCallback = function(){
         	$rootScope.inactivateSpinner = false;
+        	$scope.tagsProposicao = TagResource.listarTodos();
     		toaster.pop('success', 'Proposição atualizada com sucesso.');
         };
         var errorCallback = function() {

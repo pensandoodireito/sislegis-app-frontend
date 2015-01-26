@@ -18,7 +18,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
-import br.gov.mj.sislegis.app.json.DropdownMultiselectJSON;
 import br.gov.mj.sislegis.app.json.DropdownMultiselectStringJSON;
 import br.gov.mj.sislegis.app.json.TagJSON;
 import br.gov.mj.sislegis.app.model.Tag;
