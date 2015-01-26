@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -36,6 +37,7 @@ import br.gov.mj.sislegis.app.model.ElaboracaoNormativaConsulta;
 import br.gov.mj.sislegis.app.model.ElaboracaoNormativaTiposMarcados;
 import br.gov.mj.sislegis.app.model.Equipe;
 import br.gov.mj.sislegis.app.model.Orgao;
+import br.gov.mj.sislegis.app.model.Proposicao;
 import br.gov.mj.sislegis.app.model.StatusSidof;
 import br.gov.mj.sislegis.app.model.Tag;
 import br.gov.mj.sislegis.app.model.TagElaboracaoNormativa;
@@ -444,9 +446,12 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		return result;
 				
 	}
-
-
-
-
-
+	
+	public List<ElaboracaoNormativa> buscarPorSufixo(String sufixo) {
+		TypedQuery<ElaboracaoNormativa> findByIdQuery = getEntityManager().createQuery(
+				"SELECT e FROM ElaboracaoNormativa e WHERE upper(CONCAT(p.tipo,' ',p.numero,'/',p.ano)) like upper(:sufixo)",
+				ElaboracaoNormativa.class);
+		findByIdQuery.setParameter("sufixo", "%"+sufixo+"%");
+		return findByIdQuery.getResultList();
+	}
 }
