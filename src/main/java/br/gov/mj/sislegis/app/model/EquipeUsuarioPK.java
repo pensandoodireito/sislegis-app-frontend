@@ -4,9 +4,15 @@ import java.io.Serializable;
 
 import javax.persistence.Embeddable;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+
 @Embeddable
 public class EquipeUsuarioPK implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long idEquipe;
 	private long idUsuario;
 	
