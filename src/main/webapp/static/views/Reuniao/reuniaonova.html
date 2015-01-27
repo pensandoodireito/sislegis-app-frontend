@@ -60,7 +60,7 @@
                                     </div>
 									<div class="col-sm-3">
                                         <label>Filtrar por tags:</label>
-                                        <div ng-dropdown-multiselect options="tagsProposicao" selected-model="tagsProposicaoSelecionadas" extra-settings="{displayProp: 'text', idProp: 'text'}"></div>
+                                        <div ng-dropdown-multiselect options="tagsProposicao" selected-model="filtroTags" extra-settings="{displayProp: 'text', idProp: 'text'}"></div>
                                     </div>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
                 </div>
                 <div class="panel-body">
 
-                    <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | filter:{favorita:filtroFavorita} | selectedTags:tagsProposicaoSelecionadas |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
+                    <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | filter:{favorita:filtroFavorita} | selectedTags:filtroTags |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
 
                         <div class="list-group-item active">
                             <h4 class="list-group-item-heading">{{comissao}}</h4>
