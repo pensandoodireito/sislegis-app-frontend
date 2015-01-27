@@ -39,7 +39,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @Entity
 @XmlRootElement
 @Table(name = "elaboracao_normativa")
-//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope=ElaboracaoNormativa.class) 
 @JsonIdentityReference(alwaysAsId = true)
 public class ElaboracaoNormativa implements AbstractEntity  {
 	

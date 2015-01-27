@@ -19,8 +19,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Table(name = "equipe")
 @XmlRootElement
-//Necessario para evitar bug de recursao do jackson - >http://stackoverflow.com/questions/3325387/infinite-recursion-with-jackson-json-and-hibernate-jpa-issue
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id") 
 public class Equipe implements AbstractEntity {
 
 	private static final long serialVersionUID = 8516082010865687791L;

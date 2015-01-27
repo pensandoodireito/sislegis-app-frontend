@@ -11,6 +11,8 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			$scope.elaboracaoNormativa = $scope.elaboracaoNormativa || {};
 			$scope.equipes = EquipeResource.queryAll();
 			
+			$scope.onlyNumbers = /^\d+$/;
+			
 			$scope.elaboracaoNormativaConsulta = new ElaboracaoNormativaConsultaResource();
 			
 		    $scope.loadTags = function(query) {
