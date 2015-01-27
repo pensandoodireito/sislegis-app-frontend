@@ -82,7 +82,7 @@ angular.module('sislegisapp').controller(
     };
     
     $scope.loadElaboracoesNormativas = function(query) {
-    	return ElaboracaoNormativaResource.queryAll().$promise;
+    	return ElaboracaoNormativaResource.buscarPorSufixo({sufixo: query}).$promise;
     };
     
     $scope.setSelectedProposicao = function(item) {
