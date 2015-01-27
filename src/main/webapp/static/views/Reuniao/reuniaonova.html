@@ -31,10 +31,10 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="clearfix">
-                        <div class="col-sm-8 fontsize-sm">
+                        <div class="col-sm-10 fontsize-sm">
                             <div class="row" role="form">
                                 <div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <label>Filtrar proposições:</label>
                                         <input type="text" class="form-control" ng-model="filtroGlobal.$" placeholder="Filtrar as proposições">
                                     </div>
@@ -44,13 +44,13 @@
                                             <option value=""></option>
                                         </select>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <label>Filtrar por comissão:</label>
                                         <select ng-model="filtroComissao.comissao" ng-options="item.comissao as item.comissao for item in listaRPComissao | filter:filtroOrigem | unique:'comissao'" ng-change="changeFiltroComissao()" class="form-control">
                                             <option value=""></option>
                                         </select>
                                     </div>
-									<div class="col-sm-3">
+									<div class="col-sm-2">
                                         <label>Filtrar por favoritas:</label>
                                         <select ng-model="filtroFavorita" class="form-control">
                                             <option value=""></option>
@@ -58,17 +58,21 @@
                                             <option value="false">Não-favoritas</option>
                                         </select>
                                     </div>
+									<div class="col-sm-3">
+                                        <label>Filtrar por tags:</label>
+                                        <div ng-dropdown-multiselect options="tagsProposicao" selected-model="tagsProposicaoSelecionadas" extra-settings="{displayProp: 'text', idProp: 'text'}"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4 text-right">
-                            <button type="button" class="btn btn-default ml-lg" ng-show="reuniao.data" ng-show="listaReuniaoProposicoes.length > 0" ng-click="abrirModalRelatorio()">Imprimir listagem</button>
+                        <div class="col-sm-2">
+                            <button type="button" class="btn btn-default" ng-show="reuniao.data" ng-show="listaReuniaoProposicoes.length > 0" ng-click="abrirModalRelatorio()">Imprimir listagem</button>
                         </div>
                     </div>
                 </div>
                 <div class="panel-body">
 
-                    <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | filter:{favorita:filtroFavorita} |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
+                    <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | filter:{favorita:filtroFavorita} | selectedTags:tagsProposicaoSelecionadas |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
 
                         <div class="list-group-item active">
                             <h4 class="list-group-item-heading">{{comissao}}</h4>
@@ -76,7 +80,7 @@
 
                         <div ng-repeat="item in value | orderBy : 'seqOrdemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
                             <div class="clearfix">
-                                <button type="button" class="close" ng-click="removerProposicao(item.idReuniao, item.id); $event.stopPropagation()">
+                                <button type="button" class="close" ng-click="abrirModalRemoverProposicao(item); $event.stopPropagation()">
                                     <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
                                 </button>
                             </div>
@@ -151,6 +155,16 @@
                                                 		add-from-autocomplete-only="true" placeholder="Adicione uma proposição"
                                                 		replaceSpacesWithDashes="false">
                                                     <auto-complete source="loadProposicoes($query)" ></auto-complete>
+                                                </tags-input>
+                                            </div>
+											<div class="divider-top">
+                                                <label>Elaborações Normativas associadas: </label>
+                                                
+                                                <tags-input ng-model="item.elaboracoesNormativas" display-property="numero" ng-class="form-group" 
+                                                	on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1" 
+                                                		add-from-autocomplete-only="true" placeholder="Adicione uma elaboração normativa"
+                                                		replaceSpacesWithDashes="false">
+                                                    <auto-complete source="loadElaboracoesNormativas($query)" ></auto-complete>
                                                 </tags-input>
                                             </div>
 											<div class="divider-top">

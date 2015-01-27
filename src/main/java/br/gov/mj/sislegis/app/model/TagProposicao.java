@@ -1,7 +1,5 @@
 package br.gov.mj.sislegis.app.model;
 
-import java.io.Serializable;
-
 import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -12,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @XmlRootElement
-public class TagProposicao implements Serializable {
+public class TagProposicao implements AbstractEntity {
 	
 	private static final long serialVersionUID = 7949894944142814382L;
 	
@@ -76,6 +74,12 @@ public class TagProposicao implements Serializable {
 
 	public void setTag(Tag tag) {
 		this.tag = tag;
+	}
+
+	@Override
+	public Number getId() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

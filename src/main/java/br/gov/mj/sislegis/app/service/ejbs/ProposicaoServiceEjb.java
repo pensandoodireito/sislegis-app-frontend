@@ -277,7 +277,8 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 				proposicao.getPosicionamento(), 
 				tagService.populaListaTagsProposicaoJSON(proposicao.getTags()),
 				proposicao.getResponsavel(),
-				populaProposicoesFilhasJSON(proposicao.getProposicoesFilha()));
+				populaProposicoesFilhasJSON(proposicao.getProposicoesFilha()),
+				proposicao.getElaboracoesNormativas());
 
 		return proposicaoJSON;
 	}
@@ -381,6 +382,7 @@ public class ProposicaoServiceEjb extends AbstractPersistence<Proposicao, Long> 
 		proposicao.setResultadoASPAR(proposicaoJSON.getResultadoASPAR());
 		proposicao.setFavorita(proposicaoJSON.isFavorita());
 		proposicao.setProposicoesFilha(populaProposicoesFilha(proposicaoJSON, proposicao));
+		proposicao.setElaboracoesNormativas(proposicaoJSON.getElaboracoesNormativas());
 		Set<TagProposicao> tags = populaTagsProposicao(proposicaoJSON, proposicao);
 		proposicao.setTags(tags);
 		return proposicao;
