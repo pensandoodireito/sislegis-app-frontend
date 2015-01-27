@@ -10,10 +10,12 @@ import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "equipe_usuario")
 @XmlRootElement
-// http://stackoverflow.com/questions/15130494/how-to-implement-a-complex-many-to-many-relationship-in-jpa
+@JsonIgnoreProperties({"equipe"})
 public class EquipeUsuario implements Serializable {
 	
 	@EmbeddedId

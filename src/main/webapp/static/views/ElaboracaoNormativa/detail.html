@@ -48,7 +48,7 @@
     	<div class="col-md-1">
               <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.ano)}">
                   <label for="">Ano: </label>
-                  <input type="text" size="4" class="form-control" ng-model="elaboracaoNormativa.ano" ng-required="true">
+                  <input type="text" size="4" class="form-control" ng-model="elaboracaoNormativa.ano" ng-required="true" ng-pattern="onlyNumbers">
               </div>
           </div>          
       </div>

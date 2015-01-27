@@ -21,8 +21,7 @@ angular.module('sislegisapp').controller('EquipeController', function ($scope, $
     	if (typeof usuarioSelecionado != 'undefined') {
     		var equipeUsuarioItem = {};
     		
-    		// o valor 1 vem do fato do json conter @1 como identificador;
-    		equipeUsuarioItem.equipe = isEditMode() ? 1 : null;
+    		equipeUsuarioItem.equipe = $scope.equipe.id;
             equipeUsuarioItem.usuario = usuarioSelecionado;
             equipeUsuarioItem.isCoordenador = false;
             
