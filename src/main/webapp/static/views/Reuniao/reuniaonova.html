@@ -80,7 +80,7 @@
 
                         <div ng-repeat="item in value | orderBy : 'seqOrdemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
                             <div class="clearfix">
-                                <button type="button" class="close" ng-click="removerProposicao(item.idReuniao, item.id); $event.stopPropagation()">
+                                <button type="button" class="close" ng-click="abrirModalRemoverProposicao(item); $event.stopPropagation()">
                                     <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
                                 </button>
                             </div>
@@ -155,6 +155,16 @@
                                                 		add-from-autocomplete-only="true" placeholder="Adicione uma proposição"
                                                 		replaceSpacesWithDashes="false">
                                                     <auto-complete source="loadProposicoes($query)" ></auto-complete>
+                                                </tags-input>
+                                            </div>
+											<div class="divider-top">
+                                                <label>Elaborações Normativas associadas: </label>
+                                                
+                                                <tags-input ng-model="item.elaboracoesNormativas" display-property="numero" ng-class="form-group" 
+                                                	on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1" 
+                                                		add-from-autocomplete-only="true" placeholder="Adicione uma elaboração normativa"
+                                                		replaceSpacesWithDashes="false">
+                                                    <auto-complete source="loadElaboracoesNormativas($query)" ></auto-complete>
                                                 </tags-input>
                                             </div>
 											<div class="divider-top">

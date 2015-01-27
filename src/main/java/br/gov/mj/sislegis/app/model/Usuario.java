@@ -9,13 +9,21 @@ import javax.persistence.ManyToOne;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Entity
 @XmlRootElement
 public class Usuario implements AbstractEntity {
 
 	private static final long serialVersionUID = -8092650497855683601L;
+	
+	
+	public Usuario() {
+		// TODO Auto-generated constructor stub
+	}
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

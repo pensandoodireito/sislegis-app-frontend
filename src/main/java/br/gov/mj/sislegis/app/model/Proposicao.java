@@ -101,7 +101,6 @@ public class Proposicao implements AbstractEntity {
 	@Column(nullable = false)
 	private boolean isFavorita;
 
-	//@OneToMany(fetch = FetchType.EAGER, mappedBy = "pai")
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "proposicoesFilha")
 	private Set<Proposicao> proposicoesPai;
 	
@@ -111,6 +110,12 @@ public class Proposicao implements AbstractEntity {
 	            joinColumns = { @JoinColumn(name = "proposicao_id")}, 
 	            inverseJoinColumns={@JoinColumn(name="proposicao_id_filha")}) 
 	private Set<Proposicao> proposicoesFilha;
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "proposicao_elaboracao_normativa", 
+				joinColumns = { @JoinColumn(name = "proposicao_id") }, 
+				inverseJoinColumns = { @JoinColumn(name = "elaboracao_normativa_id") })
+	private Set<ElaboracaoNormativa> elaboracoesNormativas;
 
 	public String getSigla() {
 		if (Objects.isNull(sigla))
@@ -308,6 +313,15 @@ public class Proposicao implements AbstractEntity {
 
 	public void setProposicoesFilha(Set<Proposicao> proposicoesFilha) {
 		this.proposicoesFilha = proposicoesFilha;
+	}
+	
+	public Set<ElaboracaoNormativa> getElaboracoesNormativas() {
+		return elaboracoesNormativas;
+	}
+
+	public void setElaboracoesNormativas(
+			Set<ElaboracaoNormativa> elaboracoesNormativas) {
+		this.elaboracoesNormativas = elaboracoesNormativas;
 	}
 
 	@Override

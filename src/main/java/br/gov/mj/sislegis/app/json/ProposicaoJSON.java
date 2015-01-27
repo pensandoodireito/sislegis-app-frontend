@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import br.gov.mj.sislegis.app.enumerated.Origem;
+import br.gov.mj.sislegis.app.model.ElaboracaoNormativa;
 import br.gov.mj.sislegis.app.model.Posicionamento;
 import br.gov.mj.sislegis.app.model.Usuario;
 
@@ -60,6 +61,8 @@ public class ProposicaoJSON implements Serializable {
 	
 	private Set<ProposicaoJSON> proposicoesFilha;
 	
+	private Set<ElaboracaoNormativa> elaboracoesNormativas;
+	
 	public ProposicaoJSON(){}
 
 	public ProposicaoJSON(Long id, Integer idProposicao, String tipo,
@@ -72,7 +75,8 @@ public class ProposicaoJSON implements Serializable {
 			List<ComentarioJSON> listaComentario,
 			List<EncaminhamentoProposicaoJSON> listaEncaminhamentoProposicao,
 			Posicionamento posicionamento, List<TagJSON> tags,
-			Usuario responsavel, Set<ProposicaoJSON> proposicoesFilha) {
+			Usuario responsavel, Set<ProposicaoJSON> proposicoesFilha,
+			Set<ElaboracaoNormativa> elaboracoesNormativas) {
 		this.id=id;
 		this.idProposicao=idProposicao;
 		this.tipo=tipo;
@@ -95,6 +99,7 @@ public class ProposicaoJSON implements Serializable {
 		this.tags=tags;
 		this.responsavel=responsavel;
 		this.proposicoesFilha=proposicoesFilha;
+		this.elaboracoesNormativas=elaboracoesNormativas;
 	}
 	
 	public ProposicaoJSON(Long id, Integer idProposicao, String tipo,
@@ -286,5 +291,14 @@ public class ProposicaoJSON implements Serializable {
 
 	public void setProposicoesFilha(Set<ProposicaoJSON> proposicoesFilha) {
 		this.proposicoesFilha = proposicoesFilha;
+	}
+
+	public Set<ElaboracaoNormativa> getElaboracoesNormativas() {
+		return elaboracoesNormativas;
+	}
+
+	public void setElaboracoesNormativas(
+			Set<ElaboracaoNormativa> elaboracoesNormativas) {
+		this.elaboracoesNormativas = elaboracoesNormativas;
 	}
 }

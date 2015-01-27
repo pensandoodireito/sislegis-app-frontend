@@ -27,15 +27,20 @@ import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaSituacao;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaSubTipo;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
 import br.gov.mj.sislegis.app.json.DropdownMultiselectJSON;
+import br.gov.mj.sislegis.app.json.DropdownMultiselectSelecionadosJSON;
 import br.gov.mj.sislegis.app.json.TagJSON;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Entity
 @XmlRootElement
 @Table(name = "elaboracao_normativa")
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id") 
+//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope=ElaboracaoNormativa.class) 
+@JsonIdentityReference(alwaysAsId = true)
 public class ElaboracaoNormativa implements AbstractEntity  {
 	
 	private static final long serialVersionUID = 7722617248451501605L;
@@ -111,10 +116,10 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private Orgao coAutor;
 	
 	
-
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Orgao origem;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	private AreaConsultada areaConsultada;
 	
@@ -136,12 +141,14 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "elaboracaoNormativa", fetch = FetchType.EAGER)
 	private List<ElaboracaoNormativaConsulta> listaElaboracaoNormativaConsulta;
 	
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "elaboracaoNormativa", fetch = FetchType.EAGER)
 	private List<ElaboracaoNormativaCoAutores> listaElaboracaoNormativaCoAutor;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Comentario> listaComentario;
 	
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "elaboracaoNormativa")
 	private List<ElaboracaoNormativaTiposMarcados> listaElaboracaoNormativaTiposMarcados;
 	
@@ -156,6 +163,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	@Enumerated(EnumType.ORDINAL)
 	private ElaboracaoNormativaNorma elaboracaoNormativaNorma;
 	
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "elaboracaoNormativa")
 	private Set<TagElaboracaoNormativa> tagsElaboracaoNormativa;
 	
@@ -221,7 +229,7 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private List<DropdownMultiselectJSON> listaOrigensSelecionadosDropdown;
 	
 	@Transient
-	private List<DropdownMultiselectJSON> listaCoAutoresSelecionadosDropdown;
+	private List<DropdownMultiselectSelecionadosJSON> listaCoAutoresSelecionadosDropdown;
 	
 	@Transient
 	private List<DropdownMultiselectJSON> listaTagsSelecionadosDropdown;	
@@ -639,13 +647,13 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	}
 
 
-	public List<DropdownMultiselectJSON> getListaCoAutoresSelecionadosDropdown() {
+	public List<DropdownMultiselectSelecionadosJSON> getListaCoAutoresSelecionadosDropdown() {
 		return listaCoAutoresSelecionadosDropdown;
 	}
 
 
 	public void setListaCoAutoresSelecionadosDropdown(
-			List<DropdownMultiselectJSON> listaCoAutoresSelecionadosDropdown) {
+			List<DropdownMultiselectSelecionadosJSON> listaCoAutoresSelecionadosDropdown) {
 		this.listaCoAutoresSelecionadosDropdown = listaCoAutoresSelecionadosDropdown;
 	}
 

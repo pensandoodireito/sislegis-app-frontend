@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.ejb.Local;
 
 import br.gov.mj.sislegis.app.model.ElaboracaoNormativa;
+import br.gov.mj.sislegis.app.model.Proposicao;
 
 @Local
 public interface ElaboracaoNormativaService extends Service<ElaboracaoNormativa> {
@@ -13,5 +14,6 @@ public interface ElaboracaoNormativaService extends Service<ElaboracaoNormativa>
 	public ElaboracaoNormativa buscaElaboracaoNormativaPorId(Long id);
 	public List<ElaboracaoNormativa> listarTodos();
 	public List<ElaboracaoNormativa> buscaPorParametros(Map<String, Object> mapaCampos);
+	public List<ElaboracaoNormativa> buscarPorSufixo(String sufixo);
 
 }
