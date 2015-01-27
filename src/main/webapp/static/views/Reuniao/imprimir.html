@@ -1,5 +1,5 @@
  <!-- Tudo que for para o usuario imprimir deve ficar nesse HTML -->
- <div class="list-group" ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | filter:{favorita:filtroFavorita} |  groupBy :'comissao' |  orderBy : 'comissao' ">
+ <div class="list-group" ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | filter:{favorita:filtroFavorita} | selectedTags:filtroTags |  groupBy :'comissao' |  orderBy : 'comissao' ">
      <div class="list-group-item active" >
          <h4 class="list-group-item-heading">{{comissao}}</h4>
      </div>

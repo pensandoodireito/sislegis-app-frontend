@@ -20,7 +20,7 @@ angular.module('sislegisapp').controller(
     
     $scope.allProposicoes = [];
     
-    $scope.tagsProposicaoSelecionadas = [];
+    $scope.filtroTags = [];
     $scope.tagsProposicao = TagResource.listarTodos();
     
 	$scope.infiniteScroll = {
@@ -293,6 +293,9 @@ angular.module('sislegisapp').controller(
         	},
         	filtroFavorita: function() {
         		return $scope.filtroFavorita;
+        	},
+        	filtroTags: function() {
+        		return $scope.filtroTags;
         	}
           }
         });
