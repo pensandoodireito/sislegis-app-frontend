@@ -1,5 +1,6 @@
 package br.gov.mj.sislegis.app.rest;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import javax.xml.rpc.ServiceException;
 
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaObjeto;
@@ -29,6 +31,8 @@ import br.gov.mj.sislegis.app.json.ComboJSON;
 import br.gov.mj.sislegis.app.model.ElaboracaoNormativa;
 import br.gov.mj.sislegis.app.service.ElaboracaoNormativaService;
 import br.gov.mj.sislegis.app.service.Service;
+import br.gov.mj.sislegis.app.ws.RetornoConsultaProcedimento;
+import br.gov.mj.sislegis.app.ws.SeiServiceLocator;
 
 /**
  * 
@@ -41,6 +45,9 @@ public class ElaboracaoNormativaEndpoint {
 	
 	@Inject
 	private ElaboracaoNormativaService elaboracaoNormativaService;
+	
+	@Inject
+	private SeiServiceLocator seiServiceLocator;
 	
 
 	@POST
@@ -108,6 +115,7 @@ public class ElaboracaoNormativaEndpoint {
 		mapaCampos.put("subTipo", subTipo);
 		mapaCampos.put("elaboracaoNormativaNorma", elaboracaoNormativaNorma);
 		mapaCampos.put("elaboracaoNormativaSituacao", elaboracaoNormativaSituacao);
+		
 		
 		return elaboracaoNormativaService.buscaPorParametros(mapaCampos);
 	}

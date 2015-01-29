@@ -7,6 +7,7 @@
   <div ng-click="selected = 'dadosAnalise'" ng-class="{'selected': selected == 'dadosAnalise'}" class="tab">Dados de análise/Distribuição</div>
   <div ng-click="selected = 'manifestacao'" ng-class="{'selected': selected == 'manifestacao'}" class="tab">Manifestação</div>
   <div ng-click="selected = 'normaGerada'" ng-class="{'selected': selected == 'normaGerada'}" class="tab">Norma Gerada</div>
+   <div ng-click="selected = 'procedimentoSei'" ng-class="{'selected': selected == 'procedimentoSei'}" class="tab">Procedimento SEI</div>
  </div>
  
   <div ng-show="selected == 'dadosPreliminares'" class="tab_content rol-vert height-full">
@@ -323,9 +324,15 @@
                   <input type="text" class="form-control" ng-model="elaboracaoNormativa.normaGeradaAno">
               </div>
           </div>  
-      </div>              
+      </div>       
+             
      
  </div>
+ 
+   <div ng-show="selected == 'procedimentoSei'" class="tab_content rol-vert height-full">
+   
+ 		<iframe width="1200" height="300" ng-src="http://seipreprod.mj.gov.br/sei/processo_acesso_externo_consulta.php?id_acesso_externo=13&infra_hash=bec1f7a75b16c7712e9ae9153cca1211"></iframe>
+   </div>
  
  	 <div>
 	    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="validaForm()">Salvar</button>
