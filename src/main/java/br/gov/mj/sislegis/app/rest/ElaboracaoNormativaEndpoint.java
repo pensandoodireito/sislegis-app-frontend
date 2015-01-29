@@ -193,5 +193,12 @@ public class ElaboracaoNormativaEndpoint {
 		return Response.noContent().build();
 	}
 	
+	@GET
+	@Path("/buscarPorSufixo")
+	@Produces("application/json")
+	public List<ElaboracaoNormativa> buscarPorSufixo(@QueryParam("sufixo")String sufixo) {
+		return elaboracaoNormativaService.buscarPorSufixo(sufixo);
+	}
+	
 	
 }

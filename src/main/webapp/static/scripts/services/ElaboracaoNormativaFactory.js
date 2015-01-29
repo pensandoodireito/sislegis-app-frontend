@@ -49,7 +49,12 @@ angular.module('sislegisapp').factory(
 							url : "../rest/elaboracaonormativa/searchElaboracaoNormativa",
 							method : 'GET',
 							isArray : true
-						}						
+						},
+						'buscarPorSufixo' : {
+							url : "../rest/elaboracaonormativa/buscarPorSufixo",
+							method : 'GET',
+							isArray : true
+						}
 					});
 			return resource;
 		});

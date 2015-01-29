@@ -449,7 +449,7 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 	
 	public List<ElaboracaoNormativa> buscarPorSufixo(String sufixo) {
 		TypedQuery<ElaboracaoNormativa> findByIdQuery = getEntityManager().createQuery(
-				"SELECT e FROM ElaboracaoNormativa e WHERE upper(CONCAT(p.tipo,' ',p.numero,'/',p.ano)) like upper(:sufixo)",
+				"SELECT e FROM ElaboracaoNormativa e WHERE upper(e.nup) like upper(:sufixo)",
 				ElaboracaoNormativa.class);
 		findByIdQuery.setParameter("sufixo", "%"+sufixo+"%");
 		return findByIdQuery.getResultList();
