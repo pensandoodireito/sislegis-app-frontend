@@ -109,6 +109,7 @@ public class ElaboracaoNormativaEndpoint {
 		mapaCampos.put("elaboracaoNormativaNorma", elaboracaoNormativaNorma);
 		mapaCampos.put("elaboracaoNormativaSituacao", elaboracaoNormativaSituacao);
 		
+		
 		return elaboracaoNormativaService.buscaPorParametros(mapaCampos);
 	}
 	
