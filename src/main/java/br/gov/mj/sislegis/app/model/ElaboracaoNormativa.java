@@ -225,6 +225,9 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	private String tipoNormaDescricao;
 	
 	@Transient
+	private String linkSei;
+	
+	@Transient
 	private List<DropdownMultiselectJSON> listaOrigensSelecionadosDropdown;
 	
 	@Transient
@@ -766,6 +769,16 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	public void setListaTagsSelecionadosDropdown(
 			List<DropdownMultiselectJSON> listaTagsSelecionadosDropdown) {
 		this.listaTagsSelecionadosDropdown = listaTagsSelecionadosDropdown;
+	}
+
+
+	public String getLinkSei() {
+		return linkSei;
+	}
+
+
+	public void setLinkSei(String linkSei) {
+		this.linkSei = linkSei;
 	}
 
 

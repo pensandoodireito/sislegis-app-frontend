@@ -50,6 +50,16 @@ angular.module('sislegisapp').factory(
 							method : 'GET',
 							isArray : true
 						},
+						'exportarDadosParaExcel' : {
+							url : "../rest/elaboracaonormativa/exportarDadosParaExcel",
+							method : 'GET',
+							isArray : true
+						},	
+						'consultaServicoWS' : {
+							url : "../rest/elaboracaonormativa/consultaServicoWS",
+							method : 'GET',
+							isArray : true
+						},							
 						'buscarPorSufixo' : {
 							url : "../rest/elaboracaonormativa/buscarPorSufixo",
 							method : 'GET',

@@ -1,6 +1,10 @@
 package br.gov.mj.sislegis.app.rest;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +22,21 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriBuilder;
+import javax.xml.rpc.ServiceException;
+
+import jxl.write.DateFormats;
+import jxl.write.DateTime;
+import jxl.write.Label;
+import jxl.write.WritableCellFormat;
+import jxl.write.WritableFont;
+import jxl.write.WritableSheet;
+import jxl.write.WriteException;
+
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaObjeto;
@@ -35,6 +53,7 @@ import br.gov.mj.sislegis.app.service.Service;
  */
 @Path("/elaboracaonormativa")
 public class ElaboracaoNormativaEndpoint {
+	
 
 	@Inject
 	private Service<ElaboracaoNormativa> service;
@@ -65,6 +84,14 @@ public class ElaboracaoNormativaEndpoint {
 	public Response findById(@PathParam("id") Long id) {
 		ElaboracaoNormativa elaboracaoNormativa = elaboracaoNormativaService.buscaElaboracaoNormativaPorId(id);
 		return Response.ok(elaboracaoNormativa).build();
+	}
+	
+	@GET
+	@Path("/consultaServicoWS")
+	@Produces("application/json")
+	public String consultaServicoWS(@QueryParam("nup") String nup){
+		//String linkRetorno = elaboracaoNormativaService.consultaServicoWS(nup);
+		return "({\"id\":3,\"name\":\"Joe\"})";
 	}
 
 	@GET
@@ -109,10 +136,129 @@ public class ElaboracaoNormativaEndpoint {
 		mapaCampos.put("elaboracaoNormativaNorma", elaboracaoNormativaNorma);
 		mapaCampos.put("elaboracaoNormativaSituacao", elaboracaoNormativaSituacao);
 		
+		List<ElaboracaoNormativa> result = elaboracaoNormativaService.buscaPorParametros(mapaCampos);
 		
-		return elaboracaoNormativaService.buscaPorParametros(mapaCampos);
+		return result;
 	}
 	
+	
+	@GET
+	@Path("/exportarDadosParaExcel")
+	@Produces("application/vnd.ms-excel")
+	public Response exportarDadosParaExcel(
+			@QueryParam("numero") String numero,
+			@QueryParam("ano") String ano,
+			@QueryParam("listaOrigensSelecionadosDropdown") String listaOrigensSelecionadosDropdown,
+			@QueryParam("listaCoAutoresSelecionadosDropdown") String listaCoAutoresSelecionadosDropdown,
+			@QueryParam("listaTagsSelecionadosDropdown") String listaTagsSelecionadosDropdown,			
+			@QueryParam("ementa") String ementa,
+			@QueryParam("statusSidof") Long statusSidof,
+			@QueryParam("objeto") String objeto,
+			@QueryParam("distribuicao") Long distribuicao,
+			@QueryParam("parecerista") Long parecerista,
+			@QueryParam("tipo") String tipo,
+			@QueryParam("subTipo") String subTipo,
+			@QueryParam("elaboracaoNormativaNorma") String elaboracaoNormativaNorma,
+			@QueryParam("elaboracaoNormativaSituacao") String elaboracaoNormativaSituacao) {
+		Map<String, Object> mapaCampos = new HashMap<String, Object>();
+		mapaCampos.put("numero", numero);
+		mapaCampos.put("ano", ano);
+		mapaCampos.put("listaOrigensSelecionadosDropdown", listaOrigensSelecionadosDropdown);
+		mapaCampos.put("listaCoAutoresSelecionadosDropdown", listaCoAutoresSelecionadosDropdown);
+		mapaCampos.put("listaTagsSelecionadosDropdown", listaTagsSelecionadosDropdown);
+		mapaCampos.put("ementa", ementa);
+		mapaCampos.put("statusSidof", statusSidof);
+		mapaCampos.put("identificacao", objeto);
+		mapaCampos.put("distribuicao", distribuicao);
+		mapaCampos.put("parecerista", parecerista);
+		mapaCampos.put("tipo", tipo);
+		mapaCampos.put("subTipo", subTipo);
+		mapaCampos.put("elaboracaoNormativaNorma", elaboracaoNormativaNorma);
+		mapaCampos.put("elaboracaoNormativaSituacao", elaboracaoNormativaSituacao);
+		
+		//List<ElaboracaoNormativa> result = elaboracaoNormativaService.buscaPorParametros(mapaCampos);
+		//ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		//Response.ResponseBuilder response = Response.ok(baos.toByteArray());
+		
+		ResponseBuilder response =null;
+		
+		try {
+			String filename = "NewExcelFile.xls";
+			HSSFWorkbook workbook = new HSSFWorkbook();
+			HSSFSheet sheet = workbook.createSheet("FirstSheet");
+
+			HSSFRow rowhead = sheet.createRow((short) 0);
+			rowhead.createCell(0).setCellValue("No.");
+			rowhead.createCell(1).setCellValue("Name");
+			rowhead.createCell(2).setCellValue("Address");
+
+			HSSFRow row = sheet.createRow((short) 1);
+			row.createCell(0).setCellValue("1");
+			row.createCell(1).setCellValue("Raphael");
+			row.createCell(2).setCellValue("India");
+
+			FileOutputStream fileOut = new FileOutputStream(filename);
+			workbook.write(fileOut);
+			fileOut.close();
+
+			response = Response.ok((Object) new File(filename));
+			response.header("Content-Disposition",
+					"attachment; filename=new-excel-file.xls");
+
+		} catch (Exception ex) {
+			System.out.println(ex);
+
+		}
+
+		/*		
+		try{
+			response.header("Content-Disposition", "attachment; filename=teste.xls");
+			WritableWorkbook workbook = Workbook.createWorkbook(baos);
+			WritableSheet sheet = workbook.createSheet("Sheet1", 0);
+			sheet.addCell(new Label(0, 0, "Hello World"));
+			workbook.write();
+			workbook.close();
+			
+			
+			
+				
+		} catch (WriteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		
+		
+/*		File file = new File("NewExcelFile.xls");
+		 
+		ResponseBuilder response = Response.ok((Object) file);
+		response.header("Content-Disposition",
+			"attachment; filename=new-excel-file.xls");*/
+		return response.build();		
+		
+	}
+		
+	
+	
+	private static void writeDataSheet(WritableSheet s, List<ElaboracaoNormativa> lista) throws WriteException {
+		WritableFont wf = new WritableFont(WritableFont.ARIAL, 10,
+				WritableFont.BOLD);
+		WritableCellFormat cf = new WritableCellFormat(wf);
+		cf.setWrap(true);
+
+		/* Creates Label and writes date to one cell of sheet */
+		Label l = new Label(0, 0, "Date", cf);
+		s.addCell(l);
+		WritableCellFormat cf1 = new WritableCellFormat(DateFormats.FORMAT9);
+
+		DateTime dt = new DateTime(0, 1, new Date(), cf1, DateTime.GMT);
+
+		s.addCell(dt);
+
+	}	
+		
 	
 	@GET
 	@Path("/tipos")

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sislegisapp',['ngRoute','ngResource','ngLocale','ui.bootstrap','ngTagsInput', 'angularFileUpload', 'ui.utils', 
-                              'toaster', 'angular.filter', 'checklist-model', 'angularjs-dropdown-multiselect','infinite-scroll'])
+                              'toaster', 'angular.filter', 'checklist-model', 'angularjs-dropdown-multiselect','infinite-scroll', 'ui.mask'])
 
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider

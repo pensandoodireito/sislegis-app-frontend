@@ -130,6 +130,45 @@ angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', 
 	    		elaboracaoNormativaNorma: $scope.elaboracaoNormativa.elaboracaoNormativaNorma===undefined?null:$scope.elaboracaoNormativa.elaboracaoNormativaNorma,
 	    		elaboracaoNormativaSituacao: $scope.elaboracaoNormativa.elaboracaoNormativaSituacao===undefined?null:$scope.elaboracaoNormativa.elaboracaoNormativaSituacao});
     };
+    
+    
+    $scope.exportarDadosParaExcel = function(){
+    	var listaOrigensSelecionadosDropdown = {};
+    	var listaCoAutoresSelecionadosDropdown = {};
+    	var listaTagsSelecionadosDropdown = {};
+    	
+    	$scope.elaboracaoNormativa.listaOrigensSelecionadosDropdown.forEach(function(value, index) {
+    		listaOrigensSelecionadosDropdown[index] = value.id;
+    	});
+    	
+    	$scope.elaboracaoNormativa.listaCoAutoresSelecionadosDropdown.forEach(function(value, index) {
+    		listaCoAutoresSelecionadosDropdown[index] = value.id;
+    	});
+    	
+    	$scope.elaboracaoNormativa.listaTagsSelecionadosDropdown.forEach(function(value, index) {
+    		listaTagsSelecionadosDropdown[index] = value.id;
+    	});    	
+    	
+    	$scope.exportarDadosParaExcel = ElaboracaoNormativaResource
+    		.exportarDadosParaExcel({numero: checkEmpty($scope.elaboracaoNormativa.numero), 
+	    		ano: checkEmpty($scope.elaboracaoNormativa.ano), 
+	    		listaOrigensSelecionadosDropdown: listaOrigensSelecionadosDropdown,
+	    		listaCoAutoresSelecionadosDropdown: listaCoAutoresSelecionadosDropdown,
+	    		listaTagsSelecionadosDropdown: listaTagsSelecionadosDropdown,
+	    		ementa: checkEmpty($scope.elaboracaoNormativa.ementa), 
+	    		statusSidof: $scope.elaboracaoNormativa.statusSidof===undefined?null:$scope.elaboracaoNormativa.statusSidof.id,
+	    		objeto: $scope.elaboracaoNormativa.identificacao, 
+	    		distribuicao: $scope.elaboracaoNormativa.equipe===undefined?null:$scope.elaboracaoNormativa.equipe.id,
+	    		parecerista: $scope.elaboracaoNormativa.parecerista===undefined?null:$scope.elaboracaoNormativa.parecerista.id,
+	    		tipo: $scope.elaboracaoNormativa.tipo===undefined?null:$scope.elaboracaoNormativa.tipo,
+	    		subTipo: $scope.elaboracaoNormativa.subTipo===undefined?null:$scope.elaboracaoNormativa.subTipo,
+	    		elaboracaoNormativaNorma: $scope.elaboracaoNormativa.elaboracaoNormativaNorma===undefined?null:$scope.elaboracaoNormativa.elaboracaoNormativaNorma,
+	    		elaboracaoNormativaSituacao: $scope.elaboracaoNormativa.elaboracaoNormativaSituacao===undefined?null:$scope.elaboracaoNormativa.elaboracaoNormativaSituacao});
+    };    
+    
+    
+    
+    
 
     $scope.mostraSubTipo = function(){
     	var retorno = false;

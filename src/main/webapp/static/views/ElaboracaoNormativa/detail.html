@@ -7,7 +7,7 @@
   <div ng-click="selected = 'dadosAnalise'" ng-class="{'selected': selected == 'dadosAnalise'}" class="tab">Dados de análise/Distribuição</div>
   <div ng-click="selected = 'manifestacao'" ng-class="{'selected': selected == 'manifestacao'}" class="tab">Manifestação</div>
   <div ng-click="selected = 'normaGerada'" ng-class="{'selected': selected == 'normaGerada'}" class="tab">Norma Gerada</div>
-   <div ng-click="selected = 'procedimentoSei'" ng-class="{'selected': selected == 'procedimentoSei'}" class="tab">Procedimento SEI</div>
+   <div ng-click="selected = 'procedimentoSei'" ng-class="{'selected': selected == 'procedimentoSei'}" ng-show="showAbaSEI" class="tab">Procedimento SEI</div>
  </div>
  
   <div ng-show="selected == 'dadosPreliminares'" class="tab_content rol-vert height-full">
@@ -49,7 +49,7 @@
     	<div class="col-md-1">
               <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.ano)}">
                   <label for="">Ano: </label>
-                  <input type="text" size="4" class="form-control" ng-model="elaboracaoNormativa.ano" ng-required="true" ng-pattern="onlyNumbers">
+                  <input type="text"  class="form-control" ui-mask="9999" ng-model="elaboracaoNormativa.ano" ng-required="true" >
               </div>
           </div>          
       </div>
@@ -107,9 +107,9 @@
  
       <div class="row divider-top">
     	<div class="col-md-3">
-              <div class="form-group">
+              <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.nup)}">
                   <label for="">Nº de Protocolo (NUP): </label>
-                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.nup">
+                  <input type="text" class="form-control" ui-mask="99999.999999/9999-99" ng-model="elaboracaoNormativa.nup" ng-required="true">
               </div>
           </div>      
       
@@ -221,22 +221,6 @@
 				             </div>	                         
 
                         </div>
-                        <!-- TODO: Aguardando a definição da infra para armazenamento dos arquivos -->
-<!--                         <div class="row">
-                            <div class="form-group">
-                                <label for="">Anexo:</label>                            <button type="button" class="close" ng-click="excluirElaboracaoNormativa(elaboracaoNormativaConsulta)"><span aria-hidden="true">&times;</span><span class="sr-only">Excluir</span>
-                            </button>
-                                <input type="file" nv-file-select uploader="distribuicaoUploader" ng-click="distribuicaoUploader.clearQueue()" />
-				 				<div ng-repeat="item in distribuicaoUploader.queue">
-									 <div class="progress" style="margin-bottom: 0;">
-										<div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
-										<span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span> 
-										<span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span> 
-										<span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
-										</div>
-									 </div>
-								</div>
-					 	</div> -->                      
                         <div class="form-group">
                         	<button type="button" class="btn btn-primary" ng-click="adicionarElaboracaoNormativaConsulta()"><i class="fa fa-plus"></i> Adicionar</button>
                         </div>
@@ -329,9 +313,8 @@
      
  </div>
  
-   <div ng-show="selected == 'procedimentoSei'" class="tab_content rol-vert height-full">
-   
- 		<iframe width="1200" height="300" ng-src="http://seipreprod.mj.gov.br/sei/processo_acesso_externo_consulta.php?id_acesso_externo=13&infra_hash=bec1f7a75b16c7712e9ae9153cca1211"></iframe>
+   <div ng-show="selected == 'procedimentoSei'" class="tab_content rol-vert height-full" >
+ 		<iframe width="1200" height="500" ng-src="{{linkSei()}}"></iframe>
    </div>
  
  	 <div>
