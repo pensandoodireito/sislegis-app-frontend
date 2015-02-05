@@ -1,5 +1,6 @@
 package br.gov.mj.sislegis.app.service.ejbs;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,6 +21,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
+import javax.xml.rpc.ServiceException;
 
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaNorma;
 import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaObjeto;
@@ -37,12 +39,14 @@ import br.gov.mj.sislegis.app.model.ElaboracaoNormativaConsulta;
 import br.gov.mj.sislegis.app.model.ElaboracaoNormativaTiposMarcados;
 import br.gov.mj.sislegis.app.model.Equipe;
 import br.gov.mj.sislegis.app.model.Orgao;
-import br.gov.mj.sislegis.app.model.Proposicao;
 import br.gov.mj.sislegis.app.model.StatusSidof;
 import br.gov.mj.sislegis.app.model.Tag;
 import br.gov.mj.sislegis.app.model.TagElaboracaoNormativa;
 import br.gov.mj.sislegis.app.model.TagElaboracaoNormativaPK;
 import br.gov.mj.sislegis.app.model.Usuario;
+import br.gov.mj.sislegis.app.seiws.RetornoConsultaProcedimento;
+import br.gov.mj.sislegis.app.seiws.SeiService;
+import br.gov.mj.sislegis.app.seiws.SeiServiceLocator;
 import br.gov.mj.sislegis.app.service.AbstractPersistence;
 import br.gov.mj.sislegis.app.service.AreaConsultadaService;
 import br.gov.mj.sislegis.app.service.ElaboracaoNormativaCoAutoresService;
@@ -86,6 +90,7 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 	@Inject
 	public ElaboracaoNormativaConsultaService elaboracaoNormativaConsultaService;
 	
+	
 	@PersistenceContext
     private EntityManager em;
 	
@@ -128,7 +133,21 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		if(!Objects.isNull(elaboracaoNormativa.getEquipe()))
 			elaboracaoNormativa.setPareceristas(usuarioService.findByIdEquipe(elaboracaoNormativa.getEquipe().getId()));
 		
+		carregaLinkSei(elaboracaoNormativa);
+		
 		return elaboracaoNormativa;
+	}
+
+	private void carregaLinkSei(ElaboracaoNormativa elaboracaoNormativa) {
+		if(!Objects.isNull(elaboracaoNormativa.getNup())
+				&&!elaboracaoNormativa.getNup().equals("")){
+			String link = consultaServicoWS(elaboracaoNormativa.getNup());
+			
+			if(!Objects.isNull(link))
+				link =link.replaceAll("sei.mj", "seipreprod.mj");
+			
+			elaboracaoNormativa.setLinkSei(link);
+		}
 	}
 
 	@Override
@@ -157,6 +176,8 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		
 		
 		save(elaboracaoNormativa);
+		
+		carregaLinkSei(elaboracaoNormativa);
 	}
 
 	private void processaListaElaboracaoNormativaConsulta(
@@ -333,6 +354,7 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 	public List<ElaboracaoNormativa> buscaPorParametros(
 			Map<String, Object> mapaCampos) {
 		
+		
 		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 		CriteriaQuery<ElaboracaoNormativa> cq = cb.createQuery(ElaboracaoNormativa.class);
 		Root<ElaboracaoNormativa> en = cq.from(ElaboracaoNormativa.class);
@@ -443,15 +465,32 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 		cq.where(predicates.toArray(new Predicate[]{}));
 		Query query = getEntityManager().createQuery(cq);
 		List<ElaboracaoNormativa> result = query.getResultList();
+		
 		return result;
 				
 	}
-	
+
+
 	public List<ElaboracaoNormativa> buscarPorSufixo(String sufixo) {
 		TypedQuery<ElaboracaoNormativa> findByIdQuery = getEntityManager().createQuery(
 				"SELECT e FROM ElaboracaoNormativa e WHERE upper(e.nup) like upper(:sufixo)",
 				ElaboracaoNormativa.class);
 		findByIdQuery.setParameter("sufixo", "%"+sufixo+"%");
 		return findByIdQuery.getResultList();
+	}
+
+	@Override
+	public String consultaServicoWS(String nup) {
+		RetornoConsultaProcedimento retorno =null;
+		try {
+			SeiServiceLocator locator = new SeiServiceLocator();
+		    retorno = locator.getSeiPortService().consultarProcedimento("SISLEGIS", "sislegis",
+			    null, nup, null, null, null, null, null, null, null, null, null);
+		} catch (RemoteException | ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return retorno.getLinkAcesso();
 	}
 }

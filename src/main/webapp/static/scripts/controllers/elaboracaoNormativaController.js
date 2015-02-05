@@ -1,5 +1,5 @@
 angular.module('sislegisapp').controller('ElaboracaoNormativaController',
-		function($scope, $http, $routeParams, $location, $locale, $parse, toaster, locationParser, ElaboracaoNormativaResource, 
+		function($scope, $http, $routeParams, $sce, $location, $locale, $parse, toaster, locationParser, ElaboracaoNormativaResource, 
 				EquipeResource, FileUploader, TagResource, ComentarioResource, AreaConsultadaResource, 
 				OrigemElaboracaoNormativaResource, UsuarioResource, ElaboracaoNormativaConsultaResource, 
 				StatusSidofResource, OrgaoResource) {
@@ -7,9 +7,11 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 	
 			var self = this;
 			$scope.disabled = false;
+			$scope.showAbaSEI = false;
 		    $scope.$location = $location;
 			$scope.elaboracaoNormativa = $scope.elaboracaoNormativa || {};
 			$scope.equipes = EquipeResource.queryAll();
+			
 			
 			$scope.onlyNumbers = /^\d+$/;
 			
@@ -61,10 +63,18 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			// fim config upload
 		    
 		    $scope.selectParecerista = function(){
-		    	console.log($scope.elaboracaoNormativa.equipe);
 		    	$scope.elaboracaoNormativa.pareceristas = UsuarioResource.findByIdEquipe({idEquipe : $scope.elaboracaoNormativa.equipe.id});
 		    	
 		    };
+		    
+		    $scope.linkSei = function() {
+		    	if(!checkEmpty($scope.elaboracaoNormativa.nup)
+		    			&&!checkEmpty($scope.elaboracaoNormativa.linkSei)){
+		    		$scope.showAbaSEI = true;
+		    		return $sce.trustAsResourceUrl($scope.elaboracaoNormativa.linkSei);
+		    	}
+				return $sce.trustAsResourceUrl("");
+			};
 		    
 		    $scope.adicionarElaboracaoNormativaConsulta = function(){
 		    	//TODO: Verificar erro quando não é adicionado nenhum arquivo 
@@ -263,6 +273,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    				||checkEmpty($scope.elaboracaoNormativa.ementa)
 		    				||checkEmpty($scope.elaboracaoNormativa.identificacao)
 		    				||checkEmpty($scope.elaboracaoNormativa.ano)
+		    				||checkEmpty($scope.elaboracaoNormativa.nup)
 		    				||checkEmpty($scope.elaboracaoNormativa.origem)){
 		    			return true;
 		    		}

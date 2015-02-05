@@ -15,5 +15,6 @@ public interface ElaboracaoNormativaService extends Service<ElaboracaoNormativa>
 	public List<ElaboracaoNormativa> listarTodos();
 	public List<ElaboracaoNormativa> buscaPorParametros(Map<String, Object> mapaCampos);
 	public List<ElaboracaoNormativa> buscarPorSufixo(String sufixo);
+	public String consultaServicoWS(String nup);
 
 }

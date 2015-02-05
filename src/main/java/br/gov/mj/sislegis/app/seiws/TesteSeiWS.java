@@ -13,15 +13,16 @@ public class TesteSeiWS {
 	
 	try {
 		SeiServiceLocator locator = new SeiServiceLocator();
-	    RetornoConsultaProcedimento retorno = locator.getSeiPortService().consultarProcedimento("SEI", "lu",
-		    "110000834", "08000.000010/2014-61", null, null, null, null, null, null, null, null, null);
+	    RetornoConsultaProcedimento retorno = locator.getSeiPortService().consultarProcedimento("SISLEGIS", "sislegis",
+		    null, "08027.000007/2014-49", null, null, null, null, null, null, null, null, null);
+	    
 	    
 	    //locator.getSeiPortService().incluirDocumento(siglaSistema, identificacaoServico, idUnidade, documento)
 	    
 	    System.out.println(retorno.getLinkAcesso());
 	    // 08000.000010/2014-61
 
-	    Usuario[] usuario = locator.getSeiPortService().listarUsuarios("SEI", "lu", "110000834", "");
+	    Usuario[] usuario = locator.getSeiPortService().listarUsuarios("SISLEGIS", "sislegis", "110001114", "");
 	    for (Usuario us : usuario) {
 		System.out.println("Usuario :" + us.getNome() + " sigla " + us.getSigla() + " id " + us.getIdUsuario());
 	    }
@@ -65,15 +66,15 @@ public class TesteSeiWS {
 	    // locator.getSeiPortService().listarSeries("SEI", "lu",
 	    // "110000834", null);
 
-	    List<Unidade> listaUnidades = Arrays.asList(locator.getSeiPortService().listarUnidades("SEI", "lu", null,
+	    List<Unidade> listaUnidades = Arrays.asList(locator.getSeiPortService().listarUnidades("SISLEGIS", "sislegis", null,
 		    null));
 
 	    
-	    System.out.println("############################## USUÁRIOS DA COMISSÃO DE ANISTIA...");
+	    System.out.println("############################## USUÁRIOS...");
 
 	    for (Unidade unidade : listaUnidades) {
 		 if(unidade.getDescricao().contains("anistia")){
-		    usuario = locator.getSeiPortService().listarUsuarios("SEI", "lu", unidade.getIdUnidade(), "");
+		    usuario = locator.getSeiPortService().listarUsuarios("SISLEGIS", "sislegis", unidade.getIdUnidade(), "");
         	    System.out.println("");
         	    for (Usuario us : usuario) {
         		System.out.println("Usuario :" + us.getNome() + " sigla " + us.getSigla() + " id " + us.getIdUsuario()+" Unidade "+unidade.getDescricao());
