@@ -53,7 +53,7 @@ angular.module('sislegisapp').factory(
 						'exportarDadosParaExcel' : {
 							url : "../rest/elaboracaonormativa/exportarDadosParaExcel",
 							method : 'GET',
-							isArray : true
+							isArray : false
 						},	
 						'consultaServicoWS' : {
 							url : "../rest/elaboracaonormativa/consultaServicoWS",

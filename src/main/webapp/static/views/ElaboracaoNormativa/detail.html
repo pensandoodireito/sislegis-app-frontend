@@ -305,7 +305,7 @@
               <div class="form-group" 
               	ng-class="{'has-error': validaCamposNormaGerada(elaboracaoNormativa.elaboracaoNormativaNorma, elaboracaoNormativa.normaGeradaAno)}">
                   <label for="">Ano: </label>
-                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.normaGeradaAno">
+                  <input type="text" class="form-control" ui-mask="9999" ng-model="elaboracaoNormativa.normaGeradaAno">
               </div>
           </div>  
       </div>       
