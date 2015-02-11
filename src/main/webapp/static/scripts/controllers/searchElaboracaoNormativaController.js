@@ -1,6 +1,6 @@
 
 
-angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', function($scope, $http, toaster, ElaboracaoNormativaResource,
+angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', function($scope, $window, $rootScope, $http, $location, toaster, ElaboracaoNormativaResource,
 		OrigemElaboracaoNormativaResource, OrgaoResource, StatusSidofResource, EquipeResource, UsuarioResource, TagResource) {
 
     $scope.search={};
@@ -26,6 +26,8 @@ angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', 
     $scope.tipos = ElaboracaoNormativaResource.tipos();
     
     $scope.identificacoes = ElaboracaoNormativaResource.identificacoes();
+    
+    $scope.listaStatusSidof = StatusSidofResource.queryAll();
     
     $scope.normas = ElaboracaoNormativaResource.normas();
     
@@ -60,7 +62,7 @@ angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', 
 	
 	$scope.identificacoes = ElaboracaoNormativaResource.identificacoes();
 	
-	$scope.listaStatusSidof = StatusSidofResource.queryAll();
+	$scope.list$routeProvideraStatusSidof = StatusSidofResource.queryAll();
     
     $scope.setPage = function(n) {
        $scope.currentPage = n;
@@ -131,44 +133,44 @@ angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', 
 	    		elaboracaoNormativaSituacao: $scope.elaboracaoNormativa.elaboracaoNormativaSituacao===undefined?null:$scope.elaboracaoNormativa.elaboracaoNormativaSituacao});
     };
     
-    
-    $scope.exportarDadosParaExcel = function(){
-    	var listaOrigensSelecionadosDropdown = {};
-    	var listaCoAutoresSelecionadosDropdown = {};
-    	var listaTagsSelecionadosDropdown = {};
+	$scope.exportarDadosParaExcel = function() {
+		
+    	var listaOrigensSelecionadosDropdown = [];
+    	var listaCoAutoresSelecionadosDropdown = [];
+    	var listaTagsSelecionadosDropdown = [];
     	
     	$scope.elaboracaoNormativa.listaOrigensSelecionadosDropdown.forEach(function(value, index) {
-    		listaOrigensSelecionadosDropdown[index] = value.id;
+    		listaOrigensSelecionadosDropdown.push(value.id);
     	});
     	
     	$scope.elaboracaoNormativa.listaCoAutoresSelecionadosDropdown.forEach(function(value, index) {
-    		listaCoAutoresSelecionadosDropdown[index] = value.id;
+    		listaCoAutoresSelecionadosDropdown.push(value.id);
     	});
     	
     	$scope.elaboracaoNormativa.listaTagsSelecionadosDropdown.forEach(function(value, index) {
-    		listaTagsSelecionadosDropdown[index] = value.id;
-    	});    	
-    	
-    	$scope.exportarDadosParaExcel = ElaboracaoNormativaResource
-    		.exportarDadosParaExcel({numero: checkEmpty($scope.elaboracaoNormativa.numero), 
-	    		ano: checkEmpty($scope.elaboracaoNormativa.ano), 
-	    		listaOrigensSelecionadosDropdown: listaOrigensSelecionadosDropdown,
-	    		listaCoAutoresSelecionadosDropdown: listaCoAutoresSelecionadosDropdown,
-	    		listaTagsSelecionadosDropdown: listaTagsSelecionadosDropdown,
-	    		ementa: checkEmpty($scope.elaboracaoNormativa.ementa), 
-	    		statusSidof: $scope.elaboracaoNormativa.statusSidof===undefined?null:$scope.elaboracaoNormativa.statusSidof.id,
-	    		objeto: $scope.elaboracaoNormativa.identificacao, 
-	    		distribuicao: $scope.elaboracaoNormativa.equipe===undefined?null:$scope.elaboracaoNormativa.equipe.id,
-	    		parecerista: $scope.elaboracaoNormativa.parecerista===undefined?null:$scope.elaboracaoNormativa.parecerista.id,
-	    		tipo: $scope.elaboracaoNormativa.tipo===undefined?null:$scope.elaboracaoNormativa.tipo,
-	    		subTipo: $scope.elaboracaoNormativa.subTipo===undefined?null:$scope.elaboracaoNormativa.subTipo,
-	    		elaboracaoNormativaNorma: $scope.elaboracaoNormativa.elaboracaoNormativaNorma===undefined?null:$scope.elaboracaoNormativa.elaboracaoNormativaNorma,
-	    		elaboracaoNormativaSituacao: $scope.elaboracaoNormativa.elaboracaoNormativaSituacao===undefined?null:$scope.elaboracaoNormativa.elaboracaoNormativaSituacao});
-    };    
-    
-    
-    
-    
+    		listaTagsSelecionadosDropdown.push(value.id);
+    	}); 
+		
+		var url = '../rest/elaboracaonormativa/exportarDadosParaExcel/'
+			+checkEmpty($scope.elaboracaoNormativa.ano)
+			+"/"+checkEmpty($scope.elaboracaoNormativa.numero)
+			+"/"+checkEmpty(listaOrigensSelecionadosDropdown)
+			+"/"+checkEmpty(listaCoAutoresSelecionadosDropdown)
+			+"/"+checkEmpty(listaTagsSelecionadosDropdown)
+			+"/"+checkEmpty($scope.elaboracaoNormativa.ementa)
+			+"/"+($scope.elaboracaoNormativa.statusSidof===undefined?0:$scope.elaboracaoNormativa.statusSidof.id)
+			+"/"+($scope.elaboracaoNormativa.identificacao===undefined?null:$scope.elaboracaoNormativa.identificacao) 
+			+"/"+($scope.elaboracaoNormativa.equipe===undefined?0:$scope.elaboracaoNormativa.equipe.id)
+			+"/"+($scope.elaboracaoNormativa.parecerista===undefined?0:$scope.elaboracaoNormativa.parecerista.id)
+			+"/"+($scope.elaboracaoNormativa.tipo===undefined?null:$scope.elaboracaoNormativa.tipo)
+			+"/"+($scope.elaboracaoNormativa.subTipo===undefined?null:$scope.elaboracaoNormativa.subTipo)
+    		+"/"+($scope.elaboracaoNormativa.elaboracaoNormativaNorma===undefined?null:$scope.elaboracaoNormativa.elaboracaoNormativaNorma)
+    		+"/"+($scope.elaboracaoNormativa.elaboracaoNormativaSituacao===undefined?null:$scope.elaboracaoNormativa.elaboracaoNormativaSituacao);
+		
+			window.open(url);
+		
+	};
+	
 
     $scope.mostraSubTipo = function(){
     	var retorno = false;
@@ -186,4 +188,5 @@ angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', 
     	}
         return str;
     }
+    
 });

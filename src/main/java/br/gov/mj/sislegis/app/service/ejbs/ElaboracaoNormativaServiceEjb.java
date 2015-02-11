@@ -377,11 +377,19 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 				ss.get("descricao"),
 				en.get("identificacao"),
 				eq.get("nome"),
-				us.get("nome")
+				us.get("nome"),
+				en.get("nup"),
+				en.get("dataInclusaoSIDOF"),
+				en.get("dataAssinaturaSIDOF"),
+				en.get("ementaManifestacao"),
+				en.get("dataManifestacao"),
+				en.get("normaGeradaAno"),
+				en.get("normaGeradaNumero")
 				));
 		
 		List<Predicate> predicates=new ArrayList<Predicate>();
-		if(!Objects.isNull(mapaCampos.get("ano"))){
+		if(!Objects.isNull(mapaCampos.get("ano"))
+				&&!mapaCampos.get("ano").equals("")){
 			Predicate ano =cb.equal(en.get("ano"), mapaCampos.get("ano"));
 			predicates.add(ano);
 		}
@@ -390,50 +398,60 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 			Predicate numero =cb.equal(en.get("numero"), mapaCampos.get("numero"));
 			predicates.add(numero);			
 		}
-		if(!Objects.isNull(mapaCampos.get("identificacao"))){
+		if(!Objects.isNull(mapaCampos.get("identificacao"))
+				&&!mapaCampos.get("identificacao").equals("")){
 			Predicate identificacao =cb.equal(en.get("identificacao"), 
 					ElaboracaoNormativaObjeto.get((String)mapaCampos.get("identificacao")));
 			predicates.add(identificacao);			
 		}
-		if(!Objects.isNull(mapaCampos.get("distribuicao"))){
+		if(!Objects.isNull(mapaCampos.get("distribuicao"))
+				&&((Long)mapaCampos.get("distribuicao")).compareTo(0L)!=0L){
 			Predicate distribuicao =cb.equal(en.get("distribuicao"), mapaCampos.get("distribuicao"));
 			predicates.add(distribuicao);			
 		}	
-		if(!Objects.isNull(mapaCampos.get("parecerista"))){
+		if(!Objects.isNull(mapaCampos.get("parecerista"))
+				&&((Long)mapaCampos.get("parecerista")).compareTo(0L)!=0L){
 			Predicate parecerista =cb.equal(en.get("parecerista"), mapaCampos.get("parecerista"));
 			predicates.add(parecerista);			
 		}				
-		if(!Objects.isNull(mapaCampos.get("statusSidof"))){
+		if(!Objects.isNull(mapaCampos.get("statusSidof"))
+				&&((Long)mapaCampos.get("statusSidof")).compareTo(0L)!=0L){
 			Predicate statusSidof =cb.equal(ss.get("id"), mapaCampos.get("statusSidof"));
 			predicates.add(statusSidof);			
 		}
-		if(!Objects.isNull(mapaCampos.get("elaboracaoNormativaNorma"))){
+		if(!Objects.isNull(mapaCampos.get("elaboracaoNormativaNorma"))
+				&&!mapaCampos.get("elaboracaoNormativaNorma").equals("")){
 			Predicate elaboracaoNormativaNorma =cb.equal(en.get("elaboracaoNormativaNorma"), 
 					ElaboracaoNormativaNorma.get((String)mapaCampos.get("elaboracaoNormativaNorma")));
 			predicates.add(elaboracaoNormativaNorma);			
 		}		
-		if(!Objects.isNull(mapaCampos.get("elaboracaoNormativaSituacao"))){
+		if(!Objects.isNull(mapaCampos.get("elaboracaoNormativaSituacao"))
+				&&!mapaCampos.get("elaboracaoNormativaSituacao").equals("")){
 			Predicate elaboracaoNormativaSituacao =cb.equal(en.get("elaboracaoNormativaSituacao"), 
 					ElaboracaoNormativaSituacao.get((String)mapaCampos.get("elaboracaoNormativaSituacao")));
 			predicates.add(elaboracaoNormativaSituacao);			
 		}		
-		if(!Objects.isNull(mapaCampos.get("tipo"))){
+		if(!Objects.isNull(mapaCampos.get("tipo"))
+				&&!mapaCampos.get("tipo").equals("")){
 			Predicate tipo =cb.equal(en.get("tipo"), 
 					ElaboracaoNormativaTipo.get((String)mapaCampos.get("tipo")));
 			predicates.add(tipo);			
 		}				
-		if(!Objects.isNull(mapaCampos.get("subTipo"))){
+		if(!Objects.isNull(mapaCampos.get("subTipo"))
+				&&!mapaCampos.get("subTipo").equals("")){
 			Predicate subTipo =cb.equal(en.get("subTipo"), 
 					ElaboracaoNormativaSubTipo.get((String)mapaCampos.get("subTipo")));
 			predicates.add(subTipo);			
 		}				
 		
-		if(!Objects.isNull(mapaCampos.get("ementa"))){
+		if(!Objects.isNull(mapaCampos.get("ementa"))
+				&&!mapaCampos.get("ementa").equals("")){
 			Predicate ementa =cb.like(en.<String>get("ementa"), mapaCampos.get("ementa").toString());
 			predicates.add(ementa);			
 		}		
 		
-		if(!Objects.isNull(mapaCampos.get("listaOrigensSelecionadosDropdown"))){
+		if(!Objects.isNull(mapaCampos.get("listaOrigensSelecionadosDropdown"))
+				&&!mapaCampos.get("listaOrigensSelecionadosDropdown").equals("")){
 			List<String> lista = SislegisUtil.jsonArrayToList(mapaCampos.get("listaOrigensSelecionadosDropdown").toString());
 			if(!lista.isEmpty()){
 				Predicate listaOrigensSelecionadosDropdown =oen.get("id").in(lista);
@@ -441,7 +459,8 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 			}
 		}
 		
-		if(!Objects.isNull(mapaCampos.get("listaTagsSelecionadosDropdown"))){
+		if(!Objects.isNull(mapaCampos.get("listaTagsSelecionadosDropdown"))
+				&&!mapaCampos.get("listaTagsSelecionadosDropdown").equals("")){
 			Subquery<TagElaboracaoNormativa> subqueryTags = cq.subquery(TagElaboracaoNormativa.class);
 			@SuppressWarnings("rawtypes")
 			Root fromTagElaboracaoNormativa = subqueryTags.from(TagElaboracaoNormativa.class);
@@ -454,7 +473,8 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 			}
 		}	
 
-		if(!Objects.isNull(mapaCampos.get("listaCoAutoresSelecionadosDropdown"))){
+		if(!Objects.isNull(mapaCampos.get("listaCoAutoresSelecionadosDropdown"))
+				&&!mapaCampos.get("listaCoAutoresSelecionadosDropdown").equals("")){
 			List<String> lista = SislegisUtil.jsonArrayToList(mapaCampos.get("listaCoAutoresSelecionadosDropdown").toString());
 			if(!lista.isEmpty()){
 				Predicate listaCoAutoresSelecionadosDropdown =ca.get("id").in(lista);

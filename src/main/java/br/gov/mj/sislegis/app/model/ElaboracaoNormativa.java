@@ -29,6 +29,8 @@ import br.gov.mj.sislegis.app.enumerated.ElaboracaoNormativaTipo;
 import br.gov.mj.sislegis.app.json.DropdownMultiselectJSON;
 import br.gov.mj.sislegis.app.json.DropdownMultiselectSelecionadosJSON;
 import br.gov.mj.sislegis.app.json.TagJSON;
+import br.gov.mj.sislegis.app.util.Conversores;
+import br.gov.mj.sislegis.app.util.SislegisUtil;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -53,8 +55,8 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 			Integer ano, String numero,
 			String origemDescricao, String coAutores, String ementa,
 			String statusSidof, ElaboracaoNormativaObjeto identificacao,
-			String equipe, String parecerista
-			) {
+			String equipe, String parecerista, String nup, Date dataInclusaoSIDOF, Date dataAssinaturaSIDOF,
+			String ementaManifestacao, Date dataManifestacao, Integer normaGeradaAno, String normaGeradaNumero) {
 		this.id=id;
 		this.valueTipoSubTipo=Objects.isNull(tipo)?"":tipo.getValue()+" "+(Objects.isNull(subTipo)?"":subTipo.getValue());
 		this.situacaoDescricao=Objects.isNull(elaboracaoNormativaSituacao)?"":elaboracaoNormativaSituacao.getValue();
@@ -69,6 +71,13 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 		this.valueIdentificacao=Objects.isNull(identificacao)?null:identificacao.getValue();
 		this.equipeDescricao=equipe;
 		this.pareceristaDescricao=parecerista;
+		this.nup=nup;
+		this.dataInclusaoSIDOFFormatada=Objects.isNull(dataInclusaoSIDOF)?"":Conversores.dateToString(dataInclusaoSIDOF);
+		this.dataAssinaturaSIDOFFormatada=Objects.isNull(dataAssinaturaSIDOF)?"":Conversores.dateToString(dataAssinaturaSIDOF);
+		this.ementaManifestacao=ementaManifestacao;
+		this.dataMinifestacaoFormatada=Objects.isNull(dataManifestacao)?"":Conversores.dateToString(dataManifestacao);
+		this.normaGeradaAno=normaGeradaAno;
+		this.normaGeradaNumero=normaGeradaNumero;
 	}
 
 	@Id
@@ -247,6 +256,15 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 	
 	@Transient
 	private String pareceristaDescricao;
+	
+	@Transient
+	private String dataInclusaoSIDOFFormatada;
+	
+	@Transient
+	private String dataAssinaturaSIDOFFormatada;
+	
+	@Transient
+	private String dataMinifestacaoFormatada;
 
 	public Long getId() {
 		return id;
@@ -779,6 +797,36 @@ public class ElaboracaoNormativa implements AbstractEntity  {
 
 	public void setLinkSei(String linkSei) {
 		this.linkSei = linkSei;
+	}
+
+
+	public String getDataInclusaoSIDOFFormatada() {
+		return dataInclusaoSIDOFFormatada;
+	}
+
+
+	public void setDataInclusaoSIDOFFormatada(String dataInclusaoSIDOFFormatada) {
+		this.dataInclusaoSIDOFFormatada = dataInclusaoSIDOFFormatada;
+	}
+
+
+	public String getDataAssinaturaSIDOFFormatada() {
+		return dataAssinaturaSIDOFFormatada;
+	}
+
+
+	public void setDataAssinaturaSIDOFFormatada(String dataAssinaturaSIDOFFormatada) {
+		this.dataAssinaturaSIDOFFormatada = dataAssinaturaSIDOFFormatada;
+	}
+
+
+	public String getDataMinifestacaoFormatada() {
+		return dataMinifestacaoFormatada;
+	}
+
+
+	public void setDataMinifestacaoFormatada(String dataMinifestacaoFormatada) {
+		this.dataMinifestacaoFormatada = dataMinifestacaoFormatada;
 	}
 
 
