@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.persistence.OptimisticLockException;
@@ -103,12 +104,13 @@ public class ElaboracaoNormativaEndpoint {
 			@QueryParam("tipo") String tipo,
 			@QueryParam("subTipo") String subTipo,
 			@QueryParam("elaboracaoNormativaNorma") String elaboracaoNormativaNorma,
-			@QueryParam("elaboracaoNormativaSituacao") String elaboracaoNormativaSituacao) {
+			@QueryParam("elaboracaoNormativaSituacao") String elaboracaoNormativaSituacao,
+			@QueryParam("nup") String nup) {
 		Map<String, Object> mapaCampos = populaMapaCampos(ano, numero, listaOrigensSelecionadosDropdown,
 				listaCoAutoresSelecionadosDropdown,
 				listaTagsSelecionadosDropdown, ementa, statusSidof, objeto,
 				distribuicao, parecerista, tipo, subTipo,
-				elaboracaoNormativaNorma, elaboracaoNormativaSituacao);
+				elaboracaoNormativaNorma, elaboracaoNormativaSituacao, nup);
 		
 		List<ElaboracaoNormativa> result = elaboracaoNormativaService.buscaPorParametros(mapaCampos);
 		
@@ -119,7 +121,7 @@ public class ElaboracaoNormativaEndpoint {
 	@GET
 	@Path("/exportarDadosParaExcel/{ano}/{numero}/{listaOrigensSelecionadosDropdown}/{listaCoAutoresSelecionadosDropdown}"
 			+ "/{listaTagsSelecionadosDropdown}/{ementa}/{statusSidof}/{objeto}/{distribuicao}/{parecerista}/{tipo}"
-			+ "/{subTipo}/{elaboracaoNormativaNorma}/{elaboracaoNormativaSituacao}")
+			+ "/{subTipo}/{elaboracaoNormativaNorma}/{elaboracaoNormativaSituacao}/{nup}")
 	@Produces("application/json")
 	public Response exportarDadosParaExcel(@PathParam("ano") String ano, 
 			@PathParam("numero") String numero,
@@ -134,13 +136,14 @@ public class ElaboracaoNormativaEndpoint {
 			@PathParam("tipo") String tipo,
 			@PathParam("subTipo") String subTipo,
 			@PathParam("elaboracaoNormativaNorma") String elaboracaoNormativaNorma,
-			@PathParam("elaboracaoNormativaSituacao") String elaboracaoNormativaSituacao){
+			@PathParam("elaboracaoNormativaSituacao") String elaboracaoNormativaSituacao,
+			@PathParam("nup") String nup){
 		Map<String, Object> mapaCampos = populaMapaCampos(checkStringNull(ano), checkStringNull(numero), 
 				checkStringNull(listaOrigensSelecionadosDropdown),
 				checkStringNull(listaCoAutoresSelecionadosDropdown),
 				checkStringNull(listaTagsSelecionadosDropdown), checkStringNull(ementa), statusSidof, checkStringNull(objeto),
 				distribuicao, parecerista, checkStringNull(tipo), checkStringNull(subTipo), checkStringNull(elaboracaoNormativaNorma), 
-				checkStringNull(elaboracaoNormativaSituacao));
+				checkStringNull(elaboracaoNormativaSituacao), checkStringNull(nup));
 		
 		List<ElaboracaoNormativa> result = elaboracaoNormativaService.buscaPorParametros(mapaCampos);
 		ResponseBuilder response =null;
@@ -197,7 +200,7 @@ public class ElaboracaoNormativaEndpoint {
 				row.createCell(14).setCellValue(elaboracaoNormativa.getEmentaManifestacao());
 				row.createCell(15).setCellValue(elaboracaoNormativa.getDataMinifestacaoFormatada());
 				row.createCell(16).setCellValue(elaboracaoNormativa.getNormaGeradaNumero());
-				row.createCell(17).setCellValue(elaboracaoNormativa.getNormaGeradaAno());
+				row.createCell(17).setCellValue(checkObjectNull(elaboracaoNormativa.getNormaGeradaAno()));
 				i++;
 			}
 
@@ -207,7 +210,7 @@ public class ElaboracaoNormativaEndpoint {
 			
 			response = Response.ok((Object) new File(filename));
 			response.header("Content-Disposition",
-					"attachment; filename=elaboracaoNormativa.xls");
+					"attachment; filename="+filename);
 			response.header("Content-Type","application/vnd.ms-excel");
 
 		} catch (Exception ex) {
@@ -220,6 +223,10 @@ public class ElaboracaoNormativaEndpoint {
 	private String checkStringNull(String var){
 		return var.equals("null")?"":var;
 	}
+	
+	private String checkObjectNull(Object obj){
+		return Objects.isNull(obj)?"":obj.toString();
+	}
 
 	private Map<String, Object> populaMapaCampos(String ano, String numero,
 			String listaOrigensSelecionadosDropdown,
@@ -227,7 +234,7 @@ public class ElaboracaoNormativaEndpoint {
 			String listaTagsSelecionadosDropdown, String ementa,
 			Long statusSidof, String objeto, Long distribuicao,
 			Long parecerista, String tipo, String subTipo,
-			String elaboracaoNormativaNorma, String elaboracaoNormativaSituacao) {
+			String elaboracaoNormativaNorma, String elaboracaoNormativaSituacao, String nup) {
 		Map<String, Object> mapaCampos = new HashMap<String, Object>();
 		mapaCampos.put("numero", numero);
 		mapaCampos.put("ano", ano);
@@ -243,6 +250,7 @@ public class ElaboracaoNormativaEndpoint {
 		mapaCampos.put("subTipo", subTipo);
 		mapaCampos.put("elaboracaoNormativaNorma", elaboracaoNormativaNorma);
 		mapaCampos.put("elaboracaoNormativaSituacao", elaboracaoNormativaSituacao);
+		mapaCampos.put("nup", nup);
 		return mapaCampos;
 	}
 	

@@ -130,7 +130,8 @@ angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', 
 	    		tipo: $scope.elaboracaoNormativa.tipo===undefined?null:$scope.elaboracaoNormativa.tipo,
 	    		subTipo: $scope.elaboracaoNormativa.subTipo===undefined?null:$scope.elaboracaoNormativa.subTipo,
 	    		elaboracaoNormativaNorma: $scope.elaboracaoNormativa.elaboracaoNormativaNorma===undefined?null:$scope.elaboracaoNormativa.elaboracaoNormativaNorma,
-	    		elaboracaoNormativaSituacao: $scope.elaboracaoNormativa.elaboracaoNormativaSituacao===undefined?null:$scope.elaboracaoNormativa.elaboracaoNormativaSituacao});
+	    		elaboracaoNormativaSituacao: $scope.elaboracaoNormativa.elaboracaoNormativaSituacao===undefined?null:$scope.elaboracaoNormativa.elaboracaoNormativaSituacao,
+	    		nup: checkEmpty($scope.elaboracaoNormativa.nup)});
     };
     
 	$scope.exportarDadosParaExcel = function() {
@@ -165,7 +166,8 @@ angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', 
 			+"/"+($scope.elaboracaoNormativa.tipo===undefined?null:$scope.elaboracaoNormativa.tipo)
 			+"/"+($scope.elaboracaoNormativa.subTipo===undefined?null:$scope.elaboracaoNormativa.subTipo)
     		+"/"+($scope.elaboracaoNormativa.elaboracaoNormativaNorma===undefined?null:$scope.elaboracaoNormativa.elaboracaoNormativaNorma)
-    		+"/"+($scope.elaboracaoNormativa.elaboracaoNormativaSituacao===undefined?null:$scope.elaboracaoNormativa.elaboracaoNormativaSituacao);
+    		+"/"+($scope.elaboracaoNormativa.elaboracaoNormativaSituacao===undefined?null:$scope.elaboracaoNormativa.elaboracaoNormativaSituacao)
+    		+"/"+checkEmpty($scope.elaboracaoNormativa.nup);
 		
 			window.open(url);
 		

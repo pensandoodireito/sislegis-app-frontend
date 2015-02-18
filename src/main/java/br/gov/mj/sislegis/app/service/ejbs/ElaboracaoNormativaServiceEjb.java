@@ -90,6 +90,9 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 	@Inject
 	public ElaboracaoNormativaConsultaService elaboracaoNormativaConsultaService;
 	
+	@Inject
+	public SeiServiceLocator locator;
+	
 	
 	@PersistenceContext
     private EntityManager em;
@@ -481,6 +484,12 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 				predicates.add(listaCoAutoresSelecionadosDropdown);			
 			}
 		}
+		
+		if(!Objects.isNull(mapaCampos.get("nup"))
+				&&!mapaCampos.get("nup").equals("")){
+			Predicate nup =cb.like(en.<String>get("nup"), mapaCampos.get("nup").toString());
+			predicates.add(nup);			
+		}			
 
 		cq.where(predicates.toArray(new Predicate[]{}));
 		Query query = getEntityManager().createQuery(cq);
@@ -503,7 +512,6 @@ public class ElaboracaoNormativaServiceEjb extends AbstractPersistence<Elaboraca
 	public String consultaServicoWS(String nup) {
 		RetornoConsultaProcedimento retorno =null;
 		try {
-			SeiServiceLocator locator = new SeiServiceLocator();
 		    retorno = locator.getSeiPortService().consultarProcedimento("SISLEGIS", "sislegis",
 			    null, nup, null, null, null, null, null, null, null, null, null);
 		} catch (RemoteException | ServiceException e) {

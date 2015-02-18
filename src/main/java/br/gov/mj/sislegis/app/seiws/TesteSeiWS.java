@@ -13,8 +13,8 @@ public class TesteSeiWS {
 	
 	try {
 		SeiServiceLocator locator = new SeiServiceLocator();
-	    RetornoConsultaProcedimento retorno = locator.getSeiPortService().consultarProcedimento("SISLEGIS", "sislegis",
-		    null, "08027.000007/2014-49", null, null, null, null, null, null, null, null, null);
+	    RetornoConsultaProcedimento retorno = locator.getSeiPortService().consultarProcedimento("sislegis", "sislegis",
+		    null, "08027.000010/2015-43", null, null, null, null, null, null, null, null, null);
 	    
 	    
 	    //locator.getSeiPortService().incluirDocumento(siglaSistema, identificacaoServico, idUnidade, documento)
