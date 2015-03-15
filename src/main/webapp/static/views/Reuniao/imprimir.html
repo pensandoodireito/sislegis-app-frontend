@@ -17,6 +17,14 @@
 	                 <br/>
 	                 <strong>Ordem na Pauta: </strong>{{item.seqOrdemPauta}}
 	                 <br/>
+	                 <strong>Responsável: </strong>{{item.responsavel.nome}}
+	                 <br/>
+	                 <strong>Posicionamento: </strong>{{item.posicionamento.nome}}
+	                 <br/>
+	                 <strong>Comentários</strong>
+	                 <div ng-repeat="comentario in item.listaComentario | orderBy :'dataCriacao'" class="list-group-item clearfix">
+	                 	{{comentario.dataCriacao | date: 'dd/MM/yyyy'}}: {{comentario.descricao}}
+	                 </div>
 	                 <strong>Resultado: </strong>{{item.resultadoASPAR}}
 	                 <br/>
 	             </p>
