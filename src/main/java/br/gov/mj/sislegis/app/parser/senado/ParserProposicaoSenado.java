@@ -17,7 +17,7 @@ public class ParserProposicaoSenado {
 	}
 	
 	public Proposicao getProposicao(Long idProposicao) throws Exception {
-		String wsURL = "http://legis.senado.leg.br/dadosabertos/materia/"+idProposicao;
+		String wsURL = "http://legis.senado.leg.br/dadosabertos/materia/"+idProposicao+"?v=3";
 		URL url = new URL(wsURL);
 		
 		XStream xstream = new XStream();
