@@ -1,6 +1,6 @@
 angular.module('sislegisapp').factory('TagResource',
 		function($resource) {
-			return $resource('../rest/tags/:TagId', {
+			return $resource('http://localhost:8080/sislegis/rest/tags/:TagId', {
 				TagId : '@id'
 			}, {
 				'queryAll' : {
@@ -15,17 +15,17 @@ angular.module('sislegisapp').factory('TagResource',
 					method : 'PUT'
 				},
 				'listarTodos' : {
-					url : "../rest/tags/listarTodos",
+					url : "http://localhost:8080/sislegis/rest/tags/listarTodos",
 					method : 'GET',
 					isArray : true
 				},				
 				'tagsDropdownSelect' : {
-					url : "../rest/tags/listAllDropdownMultiple",
+					url : "http://localhost:8080/sislegis/rest/tags/listAllDropdownMultiple",
 					method : 'GET',
 					isArray : true
 				},					
 				'buscarPorSufixo' : {
-					url : "../rest/tags/buscarPorSufixo",
+					url : "http://localhost:8080/sislegis/rest/tags/buscarPorSufixo",
 					method : 'GET',
 					isArray : true
 				}

@@ -1,5 +1,5 @@
 angular.module('sislegisapp').factory('ReuniaoProposicaoResource', function($resource) {
-	var resource = $resource('../rest/reuniaoProposicao/:ReuniaoId/:ProposicaoId/', {
+	var resource = $resource('http://localhost:8080/sislegis/rest/reuniaoProposicao/:ReuniaoId/:ProposicaoId/', {
 		ReuniaoId : '@idReuniao',
 		ProposicaoId : '@idProposicao'
 	}, {

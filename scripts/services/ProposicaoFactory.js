@@ -1,5 +1,5 @@
 angular.module('sislegisapp').factory('ProposicaoResource', function($resource) {
-	var resource = $resource('../rest/proposicaos/:ProposicaoId', {
+	var resource = $resource('http://localhost:8080/sislegis/rest/proposicaos/:ProposicaoId', {
 		ProposicaoId : '@id'
 	}, {
 		'queryAll' : {
@@ -14,26 +14,26 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource) 
 			method : 'PUT'
 		},
 		'salvarProposicoes' : {
-			url : "../rest/proposicaos/salvarProposicoes",
+			url : "http://localhost:8080/sislegis/rest/proposicaos/salvarProposicoes",
 			method : 'POST'
 		},
 		'buscarCamara' : {
-			url : "../rest/proposicaos/proposicoesPautaCamara",
+			url : "http://localhost:8080/sislegis/rest/proposicaos/proposicoesPautaCamara",
 			method : 'GET',
 			isArray : true
 		},
 		'buscarSenado' : {
-			url : "../rest/proposicaos/proposicoesPautaSenado",
+			url : "http://localhost:8080/sislegis/rest/proposicaos/proposicoesPautaSenado",
 			method : 'GET',
 			isArray : true
 		},
 		'buscarPorSufixo' : {
-			url : "../rest/proposicaos/buscarPorSufixo",
+			url : "http://localhost:8080/sislegis/rest/proposicaos/buscarPorSufixo",
 			method : 'GET',
 			isArray : true
 		},
 		'consultar' : {
-			url : "../rest/proposicaos/consultar",
+			url : "http://localhost:8080/sislegis/rest/proposicaos/consultar",
 			method : 'GET',
 			isArray : true
 		}

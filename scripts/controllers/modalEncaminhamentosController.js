@@ -12,7 +12,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 			$scope.listaEncaminhamento = EncaminhamentoResource.queryAll() || [];
 			
 			$scope.getUsuarios = function(val) {
-			    return $http.get('../rest/usuarios/find', {
+			    return $http.get('http://localhost:8080/sislegis/rest/usuarios/find', {
 			      params: {
 			        nome: val
 			      }

@@ -1,5 +1,5 @@
 angular.module('sislegisapp').factory('OrigemElaboracaoNormativaResource', function($resource) {
-	var resource = $resource('../rest/origemelaboracaonormativas/:OrigemElaboracaoNormativaId', {
+	var resource = $resource('http://localhost:8080/sislegis/rest/origemelaboracaonormativas/:OrigemElaboracaoNormativaId', {
 		OrigemElaboracaoNormativaId : '@id'
 	}, {
 		'queryAll' : {
@@ -14,7 +14,7 @@ angular.module('sislegisapp').factory('OrigemElaboracaoNormativaResource', funct
 			method : 'PUT'
 		},
 		'findByDescricao' : {
-			url : "../rest/origemelaboracaonormativas/find",
+			url : "http://localhost:8080/sislegis/rest/origemelaboracaonormativas/find",
 		    params: {
 			        descricao: '@descricao'
 			      },

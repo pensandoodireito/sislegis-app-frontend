@@ -1,5 +1,5 @@
 angular.module('sislegisapp').factory('TarefaResource', function($resource) {
-	var resource = $resource('../rest/tarefas/:TarefaId', {
+	var resource = $resource('http://localhost:8080/sislegis/rest/tarefas/:TarefaId', {
 		TarefaId : '@id'
 	}, {
 		'queryAll' : {
@@ -11,7 +11,7 @@ angular.module('sislegisapp').factory('TarefaResource', function($resource) {
 			isArray : false
 		},
 		'buscarPorUsuario' : {
-			url : "../rest/tarefas/usuario",
+			url : "http://localhost:8080/sislegis/rest/tarefas/usuario",
 			method : 'GET',
 			isArray: true
 		},			

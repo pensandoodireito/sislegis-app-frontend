@@ -59,8 +59,8 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController',
 					$scope.detalharProposicao = function(p) {
 						$http({
 							method: 'GET',
-							url: ($scope.origem.value == 'C') ? "../rest/proposicaos/detalharProposicaoCamaraWS"
-									: "../rest/proposicaos/detalharProposicaoSenadoWS",
+							url: ($scope.origem.value == 'C') ? "http://localhost:8080/sislegis/rest/proposicaos/detalharProposicaoCamaraWS"
+									: "http://localhost:8080/sislegis/rest/proposicaos/detalharProposicaoSenadoWS",
 							params : {'id' : p.idProposicao}
 						}).success(function(data) {
 							$scope.detalheProposicao = data;
@@ -113,13 +113,13 @@ angular.module('sislegisapp').controller('ModalBuscarProposicaoController',
 					$scope.selectOrigemComissoes = function() {
 						var origemSelecionada = $scope.origem.value;
 						if (origemSelecionada == 'S') {
-							$http.get('../rest/comissaos/comissoesSenado')
+							$http.get('http://localhost:8080/sislegis/rest/comissaos/comissoesSenado')
 									.success(function(data) {
 										$scope.comissoes = data;
 									}).error(function(error) {
 									});
 						} else if (origemSelecionada == 'C') {
-							$http.get('../rest/comissaos/comissoesCamara')
+							$http.get('http://localhost:8080/sislegis/rest/comissaos/comissoesCamara')
 									.success(function(data) {
 										$scope.comissoes = data;
 									}).error(function(error) {

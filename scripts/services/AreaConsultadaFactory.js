@@ -1,5 +1,5 @@
 angular.module('sislegisapp').factory('AreaConsultadaResource', function($resource) {
-	var resource = $resource('../rest/areaconsultadas/:AreaConsultadaId', {
+	var resource = $resource('http://localhost:8080/sislegis/rest/areaconsultadas/:AreaConsultadaId', {
 		AreaConsultadaId : '@id'
 	}, {
 		'queryAll' : {

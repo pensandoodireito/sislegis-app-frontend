@@ -1,5 +1,5 @@
 angular.module('sislegisapp').factory('OrgaoResource', function($resource) {
-	var resource = $resource('../rest/orgaos/:OrgaoId', {
+	var resource = $resource('http://localhost:8080/sislegis/rest/orgaos/:OrgaoId', {
 		OrgaoId : '@id'
 	}, {
 		'queryAll' : {
@@ -14,7 +14,7 @@ angular.module('sislegisapp').factory('OrgaoResource', function($resource) {
 			method : 'PUT'
 		},
 		'orgaosDropdownSelect' : {
-			url : "../rest/orgaos/listAllDropdownMultiple",
+			url : "http://localhost:8080/sislegis/rest/orgaos/listAllDropdownMultiple",
 			method : 'GET',
 			isArray : true
 		}		
