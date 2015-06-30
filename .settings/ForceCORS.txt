@@ -1,0 +1,23 @@
+[
+    {
+        "URL": "http://localhost:8080/*",
+        "headers": [
+            {
+                "name": "Access-Control-Allow-Origin",
+                "value": "http://sislegis.local:8080"
+            },
+            {
+                "name": "Access-Control-Allow-Credentials",
+                "value": "true"
+            },
+            {
+                "name": "Access-Control-Allow-Headers",
+                "value": "Origin, X-Requested-With, Content-Type, Accept"
+            },
+            {
+                "name": "Access-Control-Allow-Methods",
+                "value": "POST, PUT, DELETE, GET"
+            }
+        ]
+    }
+]
