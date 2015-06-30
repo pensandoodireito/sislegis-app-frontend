@@ -1,0 +1,8 @@
+{
+  "realm": "sislegis",
+  "realm-public-key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAr/4Cl0h2gExvA73mrNuGjUX9cRllgiMzPh6X0vMq1t06Qg2g6BGkPIQTckRmJB7aV8HiQKiGsqi+T1nGfK7P/fpR1OoWFnsu6b84e7h8VpeAU4Ef2pAWXO3W3iWY44BNyngK7/2YRhTbwC/yWwvVWuVUi3Fj+LwQ2TQ4CiGgSbNJmRdAdmbiuAgsWLtOglujlmuOuLU/pCTXSSTNCQVsPyhYgfAvo5xP6RUMspPZ4MIta6lvc576qqC3UkGlulmLeTO2z5Ndh0sxU+IjeI+GFdCnKk9PIcfFLw+LS31lKOEg19BZ7wC7US0SrRhCxnmcrbULF8PRrfKRBQ0yGqAO3QIDAQAB",
+  "auth-server-url": "http://localhost:8080/auth",
+  "ssl-required": "external",
+  "resource": "sislegis",
+  "public-client": true
+}
