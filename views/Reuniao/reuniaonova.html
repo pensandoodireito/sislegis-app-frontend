@@ -9,7 +9,7 @@
                             <label class="form-group text-danger">Informe a Data para a reunião:</label>
                             <div class="form-group">
                                 <div class="input-group width-grid-2">
-                                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="reuniao.data" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Fechar" readonly/>
+                                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="reuniao.data" is-open="opened" min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Fechar" readonly/>
                                     <span class="input-group-btn">
                                     <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                                   </span>
@@ -113,7 +113,7 @@
                                         <div class="panel-body" collapse="showAcoes">
                                             <div class="clearfix">
                                                 <div class="col-md-10">
-                                                    <textarea class="form-control fontsize-sm" rows="3" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
+                                                    <textarea class="form-control fontsize-sm" rows="3" maxlength="255" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i>
