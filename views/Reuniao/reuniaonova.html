@@ -33,8 +33,8 @@
                     <div class="clearfix">
                         <div class="col-sm-10 fontsize-sm">
                             <div class="row" role="form">
-                                <div>
-                                    <div class="col-sm-2">
+                                <div class="row">
+                                    <div class="col-sm-3">
                                         <label>Filtrar proposições:</label>
                                         <input type="text" class="form-control" ng-model="filtroGlobal.$" placeholder="Filtrar as proposições">
                                     </div>
@@ -58,10 +58,28 @@
                                             <option value="false">Não-favoritas</option>
                                         </select>
                                     </div>
-									<div class="col-sm-3">
+									<div class="col-sm-2">
                                         <label>Filtrar por tags:</label>
                                         <div ng-dropdown-multiselect options="tagsProposicao" selected-model="filtroTags" extra-settings="{displayProp: 'text', idProp: 'text'}"></div>
-                                    </div>
+                                    </div>                                     
+                                </div>
+                                <div class="row">
+									<div class="col-sm-3">
+                                        <label>Responsável não definido?</label>
+                                        <input type="checkbox" ng-model="filtroResponsavelNaoDefinido" ng-true-value="true" ng-change="checkResponsavelNaoDefinido()" />
+                                    </div>                                
+                                    <div class="col-sm-3" ng-hide="filtroResponsavelNaoDefinido">
+                                        <label>Filtrar por responsável:</label>
+										<input type="text" ng-model="filtroResponsavel.responsavel" ng-required="true" typeahead="item.nome as item.nome for item in getUsuarios($viewValue)" class="form-control">
+                                    </div>     
+									<div class="col-sm-3">
+                                        <label>Posicionamento não definido?</label>
+                                        <input type="checkbox" ng-model="filtroPosicionamentoNaoDefido" ng-true-value="true" ng-change="checkPosicionamentoNaoDefido()" />
+                                    </div>                                
+                                    <div class="col-sm-3" ng-hide="filtroPosicionamentoNaoDefido">
+                                        <label>Filtrar por posicionamento:</label>
+										<input class="form-control" type="text" ng-model="filtroPosicionamento.posicionamento" ng-required="true" typeahead="item.nome as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" class="form-control">
+                                    </div>                                                                    
                                 </div>
                             </div>
                         </div>
@@ -72,7 +90,10 @@
                 </div>
                 <div class="panel-body">
 
-                    <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | filter:{favorita:filtroFavorita} | selectedTags:filtroTags |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
+                    <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem 
+                     | filter:filtroComissao | filter:{favorita:filtroFavorita} | filter:filtroResponsavel | filter:filtroPosicionamento
+                     | filter:{responsavelNaoDefinido:filtroResponsavelNaoDefinido} | filter:{posicionamentoNaoDefinido:filtroPosicionamentoNaoDefido} 
+                     | selectedTags:filtroTags |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
 
                         <div class="list-group-item active">
                             <h4 class="list-group-item-heading">{{comissao}}</h4>
@@ -113,7 +134,7 @@
                                         <div class="panel-body" collapse="showAcoes">
                                             <div class="clearfix">
                                                 <div class="col-md-10">
-                                                    <textarea class="form-control fontsize-sm" rows="3" maxlength="255" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
+                                                    <textarea class="form-control fontsize-sm" rows="10" maxlength="8000" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i>
