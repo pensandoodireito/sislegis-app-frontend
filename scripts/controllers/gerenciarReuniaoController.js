@@ -160,6 +160,22 @@ angular.module('sislegisapp').controller(
 			$scope.filtroComissao = null;
 		}
 	}
+    
+    $scope.checkResponsavelNaoDefinido = function(){
+    	if($scope.filtroResponsavelNaoDefinido){
+    		$scope.filtroResponsavel = null;
+    	}else{
+    		$scope.filtroResponsavelNaoDefinido = "";
+    	}
+    }
+    
+    $scope.checkPosicionamentoNaoDefido = function(){
+    	if($scope.filtroPosicionamentoNaoDefido){
+    		$scope.filtroPosicionamento = null;
+    	}else{
+    		$scope.filtroPosicionamentoNaoDefido = "";
+    	}
+    }
 
     $scope.changeFiltroOrigem = function() {
 		if(!$scope.filtroOrigem.origem){
