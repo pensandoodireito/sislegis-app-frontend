@@ -63,6 +63,19 @@
                                         <div ng-dropdown-multiselect options="tagsProposicao" selected-model="filtroTags" extra-settings="{displayProp: 'text', idProp: 'text'}"></div>
                                     </div>
                                 </div>
+                            </div><br>
+                            <div class="row" role="form">
+                                <div>
+                                	<div class="col-sm-5">
+                                        <label>Filtrar por respons&aacute;vel:</label>
+                                        <select ng-model="filtroResponsavel.responsavel" ng-options="item.responsavel.nome as item.responsavel.nome for item in listaRPResponsavel | unique:'responsavel'" ng-change="changeFiltroResponsavel()" class="form-control">
+                                            <option value=""></option>
+                                        </select>
+                                	</div>
+                                	<div class="col-sm-7">
+                                		<label>Filtrar por respons&aacute;vel n&#227;o definido? <input class="form-control" type="checkbox" ng-model="filtroResponsavelNaoDefinido" ng-true-value="true" ng-change="onCheckResponsavelNaoDefinido()"></label>
+                                	</div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-2">
@@ -72,7 +85,7 @@
                 </div>
                 <div class="panel-body">
 
-                    <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | filter:{favorita:filtroFavorita} | selectedTags:filtroTags |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
+                    <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:{responsavelNaoDefinido:filtroResponsavelNaoDefinido} | filter:filtroResponsavel |  filter:filtroComissao | filter:{favorita:filtroFavorita} | selectedTags:filtroTags |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
 
                         <div class="list-group-item active">
                             <h4 class="list-group-item-heading">{{comissao}}</h4>
@@ -113,7 +126,7 @@
                                         <div class="panel-body" collapse="showAcoes">
                                             <div class="clearfix">
                                                 <div class="col-md-10">
-                                                    <textarea class="form-control fontsize-sm" rows="3" maxlength="255" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
+                                                    <textarea class="form-control fontsize-sm" rows="5" maxlength="8000" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i>
@@ -138,7 +151,7 @@
                                             <div class="divider-top form-inline">
                                                 <div class="form-group">
                                                     <label>Responsável: </label>
-                                                    <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue)" typeahead-on-select="save(item)" class="form-control">
+                                                    <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue)" typeahead-on-select="save(item); item.responsavelNaoDefinido = false" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="divider-top">

@@ -12,7 +12,7 @@
 				<div class="form-horizontal" role="form">
 					<div class="input-group">
 						<label for="TextoComentario">Insira um comentário:</label>
-						<textarea class="form-control" maxlength="255" rows="3" name="campoComentario" ng-model="comentario.descricao" ng-required="true"></textarea>
+						<textarea class="form-control" maxlength="8000" rows="5" name="campoComentario" ng-model="comentario.descricao" ng-required="true"></textarea>
 					</div>
 					<br/>
 					<button type="submit" class="btn btn-default" ng-disabled="isClean() || ComentarioForm.$invalid" ng-show="!comentario.id" ng-click="save()">Adicionar</button>
