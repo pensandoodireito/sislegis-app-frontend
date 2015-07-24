@@ -64,6 +64,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row" role="form">
+                                <div class="col-sm-4">
+                                        <label>Filtrar por responsável:</label>
+                                        <input type="text" class="form-control" ng-model="filtroResponsavel.responsavel" placeholder="Filtrar por responsável">
+                                </div>
+                                <div class="col-sm-4">
+                                        <label>Filtrar por posicionamento:</label>
+                                        <input type="text" class="form-control" ng-model="filtroPosicionamento.posicionamento" placeholder="Filtrar por posicionamento">
+                                </div>
+                            </div>
                         </div>
                         <div class="col-sm-2">
                             <button type="button" class="btn btn-default" ng-show="reuniao.data" ng-show="listaReuniaoProposicoes.length > 0" ng-click="abrirModalRelatorio()">Imprimir listagem</button>
@@ -72,7 +82,7 @@
                 </div>
                 <div class="panel-body">
 
-                    <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | filter:{favorita:filtroFavorita} | selectedTags:filtroTags |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
+                    <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | filter:{favorita:filtroFavorita} | filter:{responsavel:filtroResponsavel} | filter:{posicionamento:filtroPosicionamento} | selectedTags:filtroTags |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
 
                         <div class="list-group-item active">
                             <h4 class="list-group-item-heading">{{comissao}}</h4>
@@ -113,7 +123,7 @@
                                         <div class="panel-body" collapse="showAcoes">
                                             <div class="clearfix">
                                                 <div class="col-md-10">
-                                                    <textarea class="form-control fontsize-sm" rows="3" maxlength="255" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
+                                                    <textarea class="form-control fontsize-sm" rows="8" maxlength="8000" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i>
