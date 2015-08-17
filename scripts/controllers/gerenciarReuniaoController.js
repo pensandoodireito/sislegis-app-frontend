@@ -57,6 +57,7 @@ angular.module('sislegisapp').controller(
 		
 		ProposicaoResource.consultar(
 				{
+					posicionamento: $scope.filtro.posicionamento,
 					sigla: $scope.filtro.sigla,
 					ementa: $scope.filtro.ementa,
 					autor: $scope.filtro.autor,
@@ -405,3 +406,4 @@ angular.module('sislegisapp').controller('ModalRemoverProposicaoController',
         ReuniaoProposicaoResource.remove({ReuniaoId:$scope.proposicao.idReuniao, ProposicaoId: $scope.proposicao.id}, successCallback, errorCallback);
     };
 });
+

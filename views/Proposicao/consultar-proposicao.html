@@ -7,6 +7,14 @@
                 <div class="clearfix">
                         <div class="row" role="form">
                             <div>
+                                 <div class="col-sm-2">
+                                    <label>Filtrar por posicionamento:</label>
+                                    <select ng-model="filtro.posicionamento" class="form-control" ng-change="filtrarConsulta()">
+                                    	<option value=""></option>
+                                    	<option value="-1">==Sem posicionamento==</option>
+                                    	<option ng-repeat="item in posicionamentos" value="{{item.id}}">{{item.nome}}</option>
+                                    </select>                                    
+                                </div>
                                 <div class="col-sm-2">
                                     <label>Filtrar pela sigla:</label>
                                     <input type="text" class="form-control" ng-model="filtro.sigla" placeholder="Filtrar pela sigla" ng-change="filtrarConsulta()">
@@ -125,3 +133,4 @@
         </div>
     </div>
 </div>
+
