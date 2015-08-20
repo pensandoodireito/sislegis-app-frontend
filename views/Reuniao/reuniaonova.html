@@ -81,7 +81,7 @@
 										<input class="form-control" type="text" ng-model="filtroPosicionamento.posicionamento" ng-required="true" typeahead="item.nome as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" class="form-control">
                                     </div>                                                                    
                                 </div>
-                            </div>
+                            </div><br>
                         </div>
                         <div class="col-sm-2">
                             <button type="button" class="btn btn-default" ng-show="reuniao.data" ng-show="listaReuniaoProposicoes.length > 0" ng-click="abrirModalRelatorio()">Imprimir listagem</button>
@@ -134,7 +134,7 @@
                                         <div class="panel-body" collapse="showAcoes">
                                             <div class="clearfix">
                                                 <div class="col-md-10">
-                                                    <textarea class="form-control fontsize-sm" rows="10" maxlength="8000" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
+                                                    <textarea class="form-control fontsize-sm" rows="5" maxlength="8000" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i>
@@ -159,7 +159,7 @@
                                             <div class="divider-top form-inline">
                                                 <div class="form-group">
                                                     <label>Responsável: </label>
-                                                    <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue)" typeahead-on-select="save(item)" class="form-control">
+                                                    <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue)" typeahead-on-select="save(item); item.responsavelNaoDefinido = false" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="divider-top">

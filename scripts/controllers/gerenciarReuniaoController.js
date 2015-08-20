@@ -17,6 +17,7 @@ angular.module('sislegisapp').controller(
     
     $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
     $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
+    $scope.listaRPResponsavel = $scope.listaReuniaoProposicoes;
 
     $scope.allProposicoes = [];
     
@@ -114,6 +115,12 @@ angular.module('sislegisapp').controller(
         var successCallback = function(){
         	$rootScope.inactivateSpinner = false;
         	$scope.tagsProposicao = TagResource.listarTodos();
+    		ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()},
+        	function(response) {
+        		$scope.listaReuniaoProposicoes = response;
+        	}, function() {
+        		console.error('Erro ao carregar proposições');
+        	});
     		toaster.pop('success', 'Proposição atualizada com sucesso.');
         };
         var errorCallback = function() {
@@ -153,6 +160,7 @@ angular.module('sislegisapp').controller(
     $scope.$watch('listaReuniaoProposicoes', function() {
         $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
         $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
+        $scope.listaRPResponsavel = $scope.listaReuniaoProposicoes;
 	});
     
     $scope.changeFiltroComissao = function() {
@@ -315,6 +323,9 @@ angular.module('sislegisapp').controller(
         	},
         	filtroComissao: function() {
         		return $scope.filtroComissao;
+        	},
+        	filtroResponsavel: function() {
+        		return $scope.filtroResponsavel;
         	},
         	filtroFavorita: function() {
         		return $scope.filtroFavorita;
