@@ -2,7 +2,7 @@ angular.module('sislegisapp').controller(
 		'GerenciarReuniaoController',
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
-				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource, ElaboracaoNormativaResource) {
+				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource, ElaboracaoNormativaResource, BACKEND) {
     
 	var self = this;
 	$scope.listaReuniaoProposicoes = [];
@@ -185,7 +185,7 @@ angular.module('sislegisapp').controller(
 	}
     
 	$scope.getUsuarios = function(val) {
-	    return $http.get('http://localhost:8080/sislegis/rest/usuarios/find', {
+	    return $http.get(BACKEND + '/usuarios/find', {
 	      params: {
 	        nome: val
 	      }

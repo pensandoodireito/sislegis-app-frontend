@@ -1,7 +1,7 @@
 angular.module('sislegisapp').factory(
 		'PosicionamentoResource',
-		function($resource) {
-			var resource = $resource('http://localhost:8080/sislegis/rest/posicionamentos/:PosicionamentoId',
+		function($resource, BACKEND) {
+			var resource = $resource(BACKEND + '/posicionamentos/:PosicionamentoId',
 					{
 						PosicionamentoId : '@id'
 					}, {

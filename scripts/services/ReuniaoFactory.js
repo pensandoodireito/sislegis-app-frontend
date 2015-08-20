@@ -1,6 +1,6 @@
 angular.module('sislegisapp').factory('ReuniaoResource',
-		function($resource) {
-			return $resource('http://localhost:8080/sislegis/rest/reuniaos/:ReuniaoId', {
+		function($resource, BACKEND) {
+			return $resource(BACKEND + '/reuniaos/:ReuniaoId', {
 				ReuniaoId : '@id'
 			}, {
 				'queryAll' : {
@@ -12,7 +12,7 @@ angular.module('sislegisapp').factory('ReuniaoResource',
 					isArray : false
 				},
 				'buscarReuniaoPorData' : {
-					url : "http://localhost:8080/sislegis/rest/reuniaos/findByData",
+					url : BACKEND + "/reuniaos/findByData",
 					method : 'GET',
 					isArray : true
 				},				
