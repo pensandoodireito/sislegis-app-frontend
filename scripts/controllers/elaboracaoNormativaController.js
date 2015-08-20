@@ -3,8 +3,14 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 				EquipeResource, FileUploader, TagResource, ComentarioResource, AreaConsultadaResource, 
 				OrigemElaboracaoNormativaResource, UsuarioResource, ElaboracaoNormativaConsultaResource, 
 				StatusSidofResource, OrgaoResource) {
-	
-	
+
+			// Constantes para pegar dinamicamente o host
+			// TODO criar o host de forma global para que possa ser usado em qualquer controller
+			var host = location.protocol.concat("//").concat(window.location.hostname);
+			var urlUpload = host.concat('/sislegis/rest/upload');
+			var urlFindOrgaos = host.concat('/sislegis/rest/orgaos/find');
+			var urlFindAreasConsultadas = host.concat('/sislegis/rest/areaconsultadas/find');
+
 			var self = this;
 			$scope.disabled = false;
 			$scope.showAbaSEI = false;
@@ -41,7 +47,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    
 		    // inicio config upload
 			$scope.distribuicaoUploader = new FileUploader( {
-			    url: 'http://localhost:8080/sislegis/rest/upload',
+				url: urlUpload,
 			    onSuccessItem : function(item, response, status, headers) {
 			    	console.log(response);
 			    	$scope.elaboracaoNormativa.elaboracaoNormativaConsulta.arquivo = response;
@@ -51,7 +57,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			});
 			
 			$scope.manifestacaoUploader = new FileUploader( {
-			    url: 'http://localhost:8080/sislegis/rest/upload',
+			    url: urlUpload,
 			    autoUpload : 'true',
 			    //removeAfterUpload : 'true',
 			    onSuccessItem : function(item, response, status, headers) {
@@ -158,7 +164,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    
 
 			$scope.getCoAutor = function(val) {
-			    return $http.get('http://localhost:8080/sislegis/rest/orgaos/find', {
+			    return $http.get(urlFindOrgaos, {
 			      params: {
 			        nome: val
 			      }
@@ -170,7 +176,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			  };
 
 			$scope.getOrigemElaboracaoNormativas = function(val) {
-			    return $http.get('http://localhost:8080/sislegis/rest/orgaos/find', {
+			    return $http.get(urlFindOrgaos, {
 			      params: {
 			        nome: val
 			      }
@@ -189,7 +195,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			  };
 				   
 			$scope.getAreaConsultadas = function(val) {
-			    return $http.get('http://localhost:8080/sislegis/rest/areaconsultadas/find', {
+			    return $http.get(urlFindAreasConsultadas, {
 			      params: {
 			        descricao: val
 			      }
