@@ -51,7 +51,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			});
 			
 			$scope.manifestacaoUploader = new FileUploader( {
-			    url: BACKEND+'/upload',
+			    url: BACKEND + '/upload',
 			    autoUpload : 'true',
 			    //removeAfterUpload : 'true',
 			    onSuccessItem : function(item, response, status, headers) {
@@ -158,7 +158,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    
 
 			$scope.getCoAutor = function(val) {
-			    return $http.get(BACKEND+'/orgaos/find', {
+			    return $http.get(BACKEND + '/orgaos/find', {
 			      params: {
 			        nome: val
 			      }
@@ -170,7 +170,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			  };
 
 			$scope.getOrigemElaboracaoNormativas = function(val) {
-			    return $http.get(BACKEND+'/orgaos/find', {
+			    return $http.get(BACKEND + '/orgaos/find', {
 			      params: {
 			        nome: val
 			      }
@@ -189,7 +189,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			  };
 				   
 			$scope.getAreaConsultadas = function(val) {
-			    return $http.get(BACKEND+'/areaconsultadas/find', {
+			    return $http.get(BACKEND + '/areaconsultadas/find', {
 			      params: {
 			        descricao: val
 			      }

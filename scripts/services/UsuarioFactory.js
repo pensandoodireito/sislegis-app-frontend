@@ -1,5 +1,5 @@
-angular.module('sislegisapp').factory('UsuarioResource', function($resource){
-	    var resource = $resource('http://localhost:8080/sislegis/rest/usuarios/:UsuarioId', {
+angular.module('sislegisapp').factory('UsuarioResource', function($resource, BACKEND){
+	    var resource = $resource(BACKEND + '/usuarios/:UsuarioId', {
 		UsuarioId : '@id'
 	}, {
 		'queryAll' : {
@@ -14,7 +14,7 @@ angular.module('sislegisapp').factory('UsuarioResource', function($resource){
 			method : 'PUT'
 		},
 		'findByIdEquipe' : {
-			url : "http://localhost:8080/sislegis/rest/usuarios/findByIdEquipe",
+			url : BACKEND + "/usuarios/findByIdEquipe",
 			method : 'GET',
 			isArray : true
 		}

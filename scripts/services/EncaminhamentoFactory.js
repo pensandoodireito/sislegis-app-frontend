@@ -1,7 +1,7 @@
 angular.module('sislegisapp').factory(
 		'EncaminhamentoResource',
-		function($resource) {
-			var resource = $resource('http://localhost:8080/sislegis/rest/encaminhamentos/:EncaminhamentoId',
+		function($resource, BACKEND) {
+			var resource = $resource(BACKEND + '/encaminhamentos/:EncaminhamentoId',
 					{
 						EncaminhamentoId : '@id'
 					}, {
