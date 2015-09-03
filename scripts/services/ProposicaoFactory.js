@@ -1,5 +1,5 @@
-angular.module('sislegisapp').factory('ProposicaoResource', function($resource) {
-	var resource = $resource('http://localhost:8080/sislegis/rest/proposicaos/:ProposicaoId', {
+angular.module('sislegisapp').factory('ProposicaoResource', function($resource, BACKEND) {
+	var resource = $resource(BACKEND + '/proposicaos/:ProposicaoId', {
 		ProposicaoId : '@id'
 	}, {
 		'queryAll' : {
@@ -14,26 +14,26 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource) 
 			method : 'PUT'
 		},
 		'salvarProposicoes' : {
-			url : "http://localhost:8080/sislegis/rest/proposicaos/salvarProposicoes",
+			url : BACKEND + "/proposicaos/salvarProposicoes",
 			method : 'POST'
 		},
 		'buscarCamara' : {
-			url : "http://localhost:8080/sislegis/rest/proposicaos/proposicoesPautaCamara",
+			url : BACKEND + "/proposicaos/proposicoesPautaCamara",
 			method : 'GET',
 			isArray : true
 		},
 		'buscarSenado' : {
-			url : "http://localhost:8080/sislegis/rest/proposicaos/proposicoesPautaSenado",
+			url : BACKEND + "/proposicaos/proposicoesPautaSenado",
 			method : 'GET',
 			isArray : true
 		},
 		'buscarPorSufixo' : {
-			url : "http://localhost:8080/sislegis/rest/proposicaos/buscarPorSufixo",
+			url : BACKEND + "/proposicaos/buscarPorSufixo",
 			method : 'GET',
 			isArray : true
 		},
 		'consultar' : {
-			url : "http://localhost:8080/sislegis/rest/proposicaos/consultar",
+			url : BACKEND + "/proposicaos/consultar",
 			method : 'GET',
 			isArray : true
 		}

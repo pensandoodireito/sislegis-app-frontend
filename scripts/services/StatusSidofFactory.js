@@ -1,6 +1,6 @@
 angular.module('sislegisapp').factory('StatusSidofResource',
-		function($resource) {
-			return $resource('http://localhost:8080/sislegis/rest/statussidofs/:StatusSidofId', {
+		function($resource, BACKEND) {
+			return $resource(BACKEND + '/statussidofs/:StatusSidofId', {
 				StatusSidofId : '@id'
 			}, {
 				'queryAll' : {

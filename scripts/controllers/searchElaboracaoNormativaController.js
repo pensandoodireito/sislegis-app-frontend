@@ -1,7 +1,7 @@
 
 
 angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', function($scope, $window, $rootScope, $http, $location, toaster, ElaboracaoNormativaResource,
-		OrigemElaboracaoNormativaResource, OrgaoResource, StatusSidofResource, EquipeResource, UsuarioResource, TagResource) {
+		OrigemElaboracaoNormativaResource, OrgaoResource, StatusSidofResource, EquipeResource, UsuarioResource, TagResource, BACKEND) {
 
     $scope.search={};
     $scope.currentPage = 0;
@@ -69,7 +69,7 @@ angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', 
     };
     
 	$scope.getUsuarios = function(val) {
-	    return $http.get('http://localhost:8080/sislegis/rest/usuarios/find', {
+	    return $http.get(BACKEND + '/usuarios/find', {
 	      params: {
 	        nome: val
 	      }
@@ -81,7 +81,7 @@ angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', 
 	  };    
 	  
 	$scope.getOrigemElaboracaoNormativas = function(val) {
-	    return $http.get('http://localhost:8080/sislegis/rest/origemelaboracaonormativas/find', {
+	    return $http.get(BACKEND + '/origemelaboracaonormativas/find', {
 	      params: {
 	        descricao: val
 	      }
@@ -152,7 +152,7 @@ angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', 
     		listaTagsSelecionadosDropdown.push(value.id);
     	}); 
 		
-		var url = 'http://localhost:8080/sislegis/rest/elaboracaonormativa/exportarDadosParaExcel/'
+		var url = BACKEND + '/elaboracaonormativa/exportarDadosParaExcel/'
 			+checkEmpty($scope.elaboracaoNormativa.ano)
 			+"/"+checkEmpty($scope.elaboracaoNormativa.numero)
 			+"/"+checkEmpty(listaOrigensSelecionadosDropdown)
