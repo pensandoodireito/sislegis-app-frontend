@@ -2,7 +2,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		function($scope, $http, $routeParams, $sce, $location, $locale, $parse, toaster, locationParser, ElaboracaoNormativaResource, 
 				EquipeResource, FileUploader, TagResource, ComentarioResource, AreaConsultadaResource, 
 				OrigemElaboracaoNormativaResource, UsuarioResource, ElaboracaoNormativaConsultaResource, 
-				StatusSidofResource, OrgaoResource) {
+				StatusSidofResource, OrgaoResource, BACKEND) {
 	
 	
 			var self = this;
@@ -41,7 +41,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    
 		    // inicio config upload
 			$scope.distribuicaoUploader = new FileUploader( {
-			    url: 'http://localhost:8080/sislegis/rest/upload',
+			    url: BACKEND+'/upload',
 			    onSuccessItem : function(item, response, status, headers) {
 			    	console.log(response);
 			    	$scope.elaboracaoNormativa.elaboracaoNormativaConsulta.arquivo = response;
@@ -51,7 +51,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			});
 			
 			$scope.manifestacaoUploader = new FileUploader( {
-			    url: 'http://localhost:8080/sislegis/rest/upload',
+			    url: BACKEND+'/upload',
 			    autoUpload : 'true',
 			    //removeAfterUpload : 'true',
 			    onSuccessItem : function(item, response, status, headers) {
@@ -158,7 +158,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		    
 
 			$scope.getCoAutor = function(val) {
-			    return $http.get('http://localhost:8080/sislegis/rest/orgaos/find', {
+			    return $http.get(BACKEND+'/orgaos/find', {
 			      params: {
 			        nome: val
 			      }
@@ -170,7 +170,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			  };
 
 			$scope.getOrigemElaboracaoNormativas = function(val) {
-			    return $http.get('http://localhost:8080/sislegis/rest/orgaos/find', {
+			    return $http.get(BACKEND+'/orgaos/find', {
 			      params: {
 			        nome: val
 			      }
@@ -189,7 +189,7 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			  };
 				   
 			$scope.getAreaConsultadas = function(val) {
-			    return $http.get('http://localhost:8080/sislegis/rest/areaconsultadas/find', {
+			    return $http.get(BACKEND+'/areaconsultadas/find', {
 			      params: {
 			        descricao: val
 			      }
