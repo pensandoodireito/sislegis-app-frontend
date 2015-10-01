@@ -1,5 +1,5 @@
-angular.module('sislegisapp').factory('ElaboracaoNormativaConsultaResource', function($resource) {
-	var resource = $resource('http://localhost:8080/sislegis/rest/elaboracaoNormativaConsulta/:ElaboracaoNormativaConsultaId', {
+angular.module('sislegisapp').factory('ElaboracaoNormativaConsultaResource', function($resource, BACKEND) {
+	var resource = $resource(BACKEND + '/elaboracaoNormativaConsulta/:ElaboracaoNormativaConsultaId', {
 		ElaboracaoNormativaConsultaId : '@id'
 	}, {
 		'queryAll' : {

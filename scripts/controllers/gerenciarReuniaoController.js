@@ -2,7 +2,7 @@ angular.module('sislegisapp').controller(
 		'GerenciarReuniaoController',
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
-				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource, ElaboracaoNormativaResource) {
+				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource, ElaboracaoNormativaResource, BACKEND) {
     
 	var self = this;
 	$scope.listaReuniaoProposicoes = [];
@@ -115,6 +115,12 @@ angular.module('sislegisapp').controller(
         var successCallback = function(){
         	$rootScope.inactivateSpinner = false;
         	$scope.tagsProposicao = TagResource.listarTodos();
+    		ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()},
+        	function(response) {
+        		$scope.listaReuniaoProposicoes = response;
+        	}, function() {
+        		console.error('Erro ao carregar proposições');
+        	});
     		toaster.pop('success', 'Proposição atualizada com sucesso.');
         };
         var errorCallback = function() {
@@ -163,17 +169,19 @@ angular.module('sislegisapp').controller(
 		}
 	}
     
-    $scope.changeFiltroResponsavel = function() {
-    	if(!$scope.filtroResponsavel.responsavel){
-    		$scope.filtroResponsavel = null;
-    	}
-    }
-    
-    $scope.onCheckResponsavelNaoDefinido = function(){
+    $scope.checkResponsavelNaoDefinido = function(){
     	if($scope.filtroResponsavelNaoDefinido){
     		$scope.filtroResponsavel = null;
     	}else{
     		$scope.filtroResponsavelNaoDefinido = "";
+    	}
+    }
+    
+    $scope.checkPosicionamentoNaoDefido = function(){
+    	if($scope.filtroPosicionamentoNaoDefido){
+    		$scope.filtroPosicionamento = null;
+    	}else{
+    		$scope.filtroPosicionamentoNaoDefido = "";
     	}
     }
 
@@ -185,7 +193,7 @@ angular.module('sislegisapp').controller(
 	}
     
 	$scope.getUsuarios = function(val) {
-	    return $http.get('http://localhost:8080/sislegis/rest/usuarios/find', {
+	    return $http.get(BACKEND + '/usuarios/find', {
 	      params: {
 	        nome: val
 	      }

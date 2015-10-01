@@ -1,7 +1,7 @@
 angular.module('sislegisapp').factory(
 		'ElaboracaoNormativaResource',
-		function($resource) {
-			var resource = $resource('http://localhost:8080/sislegis/rest/elaboracaonormativa/:ElaboracaoNormativaId', {
+		function($resource, BACKEND) {
+			var resource = $resource(BACKEND + '/elaboracaonormativa/:ElaboracaoNormativaId', {
 						ElaboracaoNormativaId : '@id'
 					}, {
 						'queryAll' : {
@@ -16,52 +16,52 @@ angular.module('sislegisapp').factory(
 							method : 'PUT'
 						},
 						'search' : {
-							url : "http://localhost:8080/sislegis/rest/elaboracaonormativa/search",
+							url : BACKEND + "/elaboracaonormativa/search",
 							method : 'GET',
 							isArray : true
 						},						
 						'tipos' : {
-							url : "http://localhost:8080/sislegis/rest/elaboracaonormativa/tipos",
+							url : BACKEND + "/elaboracaonormativa/tipos",
 							method : 'GET',
 							isArray : true
 						},
 						'subTipos' : {
-							url : "http://localhost:8080/sislegis/rest/elaboracaonormativa/subTipos",
+							url : BACKEND + "/elaboracaonormativa/subTipos",
 							method : 'GET',
 							isArray : true
 						},						
 						'identificacoes' : {
-							url : "http://localhost:8080/sislegis/rest/elaboracaonormativa/identificacoes",
+							url : BACKEND + "/elaboracaonormativa/identificacoes",
 							method : 'GET',
 							isArray : true
 						},
 						'normas' : {
-							url : "http://localhost:8080/sislegis/rest/elaboracaonormativa/normas",
+							url : BACKEND + "/elaboracaonormativa/normas",
 							method : 'GET',
 							isArray : true
 						},
 						'situacoes' : {
-							url : "http://localhost:8080/sislegis/rest/elaboracaonormativa/situacoes",
+							url : BACKEND + "/elaboracaonormativa/situacoes",
 							method : 'GET',
 							isArray : true
 						},						
 						'searchElaboracaoNormativa' : {
-							url : "http://localhost:8080/sislegis/rest/elaboracaonormativa/searchElaboracaoNormativa",
+							url : BACKEND + "/elaboracaonormativa/searchElaboracaoNormativa",
 							method : 'GET',
 							isArray : true
 						},
 						'exportarDadosParaExcel' : {
-							url : "http://localhost:8080/sislegis/rest/elaboracaonormativa/exportarDadosParaExcel",
+							url : BACKEND + "/elaboracaonormativa/exportarDadosParaExcel",
 							method : 'GET',
 							isArray : false
 						},	
 						'consultaServicoWS' : {
-							url : "http://localhost:8080/sislegis/rest/elaboracaonormativa/consultaServicoWS",
+							url : BACKEND + "/elaboracaonormativa/consultaServicoWS",
 							method : 'GET',
 							isArray : true
 						},							
 						'buscarPorSufixo' : {
-							url : "http://localhost:8080/sislegis/rest/elaboracaonormativa/buscarPorSufixo",
+							url : BACKEND + "/elaboracaonormativa/buscarPorSufixo",
 							method : 'GET',
 							isArray : true
 						}

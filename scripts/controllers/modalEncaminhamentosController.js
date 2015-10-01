@@ -1,6 +1,6 @@
 angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modalInstance, toaster, proposicao, EncaminhamentoResource, 
-				ProposicaoResource, EncaminhamentoProposicaoResource, UsuarioResource, ComentarioResource) {
+				ProposicaoResource, EncaminhamentoProposicaoResource, UsuarioResource, ComentarioResource, BACKEND) {
 
 			var self = this;
 			$scope.disabled = false;
@@ -12,7 +12,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 			$scope.listaEncaminhamento = EncaminhamentoResource.queryAll() || [];
 			
 			$scope.getUsuarios = function(val) {
-			    return $http.get('http://localhost:8080/sislegis/rest/usuarios/find', {
+			    return $http.get(BACKEND + '/usuarios/find', {
 			      params: {
 			        nome: val
 			      }
