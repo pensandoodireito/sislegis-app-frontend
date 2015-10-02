@@ -33,7 +33,9 @@ angular.element(document).ready(function ($http) {
     auth.loggedIn = false;
 
     keycloakAuth.init({ onLoad: 'login-required' }).success(function () {
-        console.log('here login');
+        console.log('here login ',keycloakAuth);
+        keycloakAuth.loadUserInfo();
+        console.log('here b ',keycloakAuth);
         auth.loggedIn = true;
         auth.authz = keycloakAuth;
         auth.logoutUrl = keycloakAuth.authServerUrl + "/realms/" + keycloakAuth.realm + "/tokens/logout?redirect_uri=http://sislegis.local:8080";
@@ -48,12 +50,17 @@ angular.element(document).ready(function ($http) {
     });
 });
 
+module.controller('TestCtrl', ['AgendaComissaoFactory',function($scope, $http) {
+    console.log("asadfas");
+}]);
+
 module.controller('GlobalCtrl', function($scope, $http) {
     $scope.logout = logout;
 });
 
 module.config(['$routeProvider', function($routeProvider) {
     $routeProvider
+    	.when('/Tstes',{templateUrl:'views/Reuniao/reuniaonova.html',controller:'TestCtrl'})
     	.when('/Reuniaos/reuniaonova',{templateUrl:'views/Reuniao/reuniaonova.html',controller:'GerenciarReuniaoController'})	
     	.when('/Reuniaos/gerenciar',{templateUrl:'views/Reuniao/gerenciar.html',controller:'GerenciarReuniaoController'})
 		.when('/Reuniaos/gerenciar/:ReuniaoId',{templateUrl:'views/Reuniao/gerenciar.html',controller:'GerenciarReuniaoController'})
@@ -99,6 +106,9 @@ module.config(['$routeProvider', function($routeProvider) {
 	    .when('/Upload',{templateUrl:'views/Upload/upload.html',controller:'UploadController'})
 	    .when('/Tarefas',{templateUrl:'views/Tarefa/detail.html', controller:'TarefaController'})
 	    .when('/Tarefas/edit/:TarefaId',{templateUrl:'views/Tarefa/detail.html', controller:'TarefaController'})
+	    
+	    .when('/GerenciarComissaoSeguida',{templateUrl:'views/AgendaComissao/search.html',controller:'SearchAgendaComissaoController'})
+	    
 	    .otherwise({
 	    	redirectTo: '/Reuniaos/reuniaonova'
 	    });
