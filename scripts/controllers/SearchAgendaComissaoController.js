@@ -3,23 +3,34 @@ angular.module('sislegisapp').controller(
 		function($scope, $http, AgendaComissaoFactory, ComissaoResource,
 				BACKEND) {
 			$scope.seguidas = [];
-			$scope.isSeguida = function(comissao) {
+			$scope.getCasa = function() {
+				return $scope.origem.value == 'C' ? 'CAMARA' : 'SENADO';
+			};
+			$scope.getIndexAgenda = function(comissao) {
+				var casaAtual = $scope.getCasa();
+
 				for (var i = 0; i < $scope.seguidas.length; i++) {
 					var agenda = $scope.seguidas[i];
-
-					console.log("agenda", agenda);
-					if (comissao.trim() == agenda) {
-						return true;
+					console.log("indice ", agenda);
+					console.log("casa {" + agenda.casa + ":" + agenda.comissao
+							+ "} === {" + casaAtual + ":" + comissao + "}");
+					if (agenda.casa == casaAtual) {
+						console.log("casa =" + agenda.casa);
+						if (comissao.trim() == agenda.comissao) {
+							console.log("achou=" + i);
+							return i;
+						}
 					}
 				}
-				return false;
+				return -1;
+			}
+
+			$scope.isSeguida = function(comissao) {
+
+				return $scope.getIndexAgenda(comissao.trim()) != -1;
 			}
 			AgendaComissaoFactory.listSeguidas(function(data) {
 				$scope.seguidas = data;
-				for (var i = 0; i < data.length; i++) {
-					var agenda = data[i];
-					$scope.seguidas.push(agenda.comissao);
-				}
 			});
 
 			$scope.origens = [ {
@@ -49,31 +60,29 @@ angular.module('sislegisapp').controller(
 				}
 
 			};
-			$scope.search = {};
 			$scope.naoseguir = function(comissao) {
 				AgendaComissaoFactory.unfollow({
+					casa : $scope.getCasa(),
 					comissao : comissao.trim()
 				}, function() {
 					console.log("success");
-					for (var i = 0; i < $scope.seguidas.length; i++) {
-						var agenda = $scope.seguidas[i];
-
-						console.log("agenda", agenda);
-						if (comissao.trim() == agenda) {
-							$scope.seguidas[i] = null;
-							$scope.selectOrigemComissoes();
-							return;
-						}
-					}
+					var index = $scope.getIndexAgenda(comissao);
+					$scope.seguidas.splice(index,1);
+					$scope.selectOrigemComissoes();
 
 				});
 
 			};
 			$scope.seguir = function(comissao) {
 				console.log(AgendaComissaoFactory.follow({
+					casa : $scope.getCasa(),
 					comissao : comissao.trim()
 				}, function() {
-					$scope.seguidas.push(comissao.trim());
+					var agendaTmp = {
+						comissao : comissao.trim(),
+						casa : $scope.getCasa()
+					};
+					$scope.seguidas.push(agendaTmp);
 					$scope.selectOrigemComissoes();
 				}));
 

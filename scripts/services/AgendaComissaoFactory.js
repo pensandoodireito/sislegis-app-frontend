@@ -1,6 +1,9 @@
-angular.module('sislegisapp').factory('AgendaComissaoFactory',
+angular.module('sislegisapp').factory(
+		'AgendaComissaoFactory',
 		function($resource, BACKEND) {
-			var resource = $resource(BACKEND + '/agendacomissao/:comissao', {
+			var resource = $resource(BACKEND
+					+ '/agendacomissao/:casa/:comissao', {
+				casa : '@casa',
 				comissao : '@comissao'
 			}, {
 				'listSeguidas' : {
