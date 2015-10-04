@@ -11,24 +11,22 @@ angular.module('sislegisapp').controller(
 
 				for (var i = 0; i < $scope.seguidas.length; i++) {
 					var agenda = $scope.seguidas[i];
-					console.log("indice ", agenda);
-					console.log("casa {" + agenda.casa + ":" + agenda.comissao
-							+ "} === {" + casaAtual + ":" + comissao + "}");
+
 					if (agenda.casa == casaAtual) {
-						console.log("casa =" + agenda.casa);
+
 						if (comissao.trim() == agenda.comissao) {
-							console.log("achou=" + i);
+
 							return i;
 						}
 					}
 				}
 				return -1;
-			}
+			};
 
 			$scope.isSeguida = function(comissao) {
 
 				return $scope.getIndexAgenda(comissao.trim()) != -1;
-			}
+			};
 			AgendaComissaoFactory.listSeguidas(function(data) {
 				$scope.seguidas = data;
 			});
@@ -67,7 +65,7 @@ angular.module('sislegisapp').controller(
 				}, function() {
 					console.log("success");
 					var index = $scope.getIndexAgenda(comissao);
-					$scope.seguidas.splice(index,1);
+					$scope.seguidas.splice(index, 1);
 					$scope.selectOrigemComissoes();
 
 				});
@@ -90,6 +88,7 @@ angular.module('sislegisapp').controller(
 			$scope.currentPage = 0;
 			$scope.pageSize = 10;
 			$scope.searchResults = [];
+			$scope.filteredResults = [];
 			$scope.pageRange = [];
 			$scope.numberOfPages = function() {
 				var result = Math.ceil($scope.pageSize);
@@ -116,5 +115,6 @@ angular.module('sislegisapp').controller(
 			$scope.setPage = function(n) {
 				$scope.currentPage = n;
 			};
+			$scope.numberOfPages();
 
 		});
