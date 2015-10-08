@@ -103,7 +103,7 @@ angular.module('sislegisapp').controller(
     $scope.isClean = function() {
         return angular.equals(self.original, $scope.reuniao);
     };
-    
+
     $scope.save = function(item) {
     	if(item){
     		$scope.setSelectedProposicao(item);
@@ -192,15 +192,15 @@ angular.module('sislegisapp').controller(
 		$scope.filtroComissao = null;
 	}
     
-	$scope.getUsuarios = function(val) {
-	    return $http.get(BACKEND + '/usuarios/find', {
+	$scope.getUsuarios = function(val, buscaGeral) {
+        var method = (buscaGeral) ? 'ldapSearch' : 'find';
+
+        return $http.get(BACKEND + '/usuarios/' + method, {
 	      params: {
 	        nome: val
 	      }
 	    }).then(function(response){
-	      return response.data.map(function(item){
-	        return item;
-	      });
+            return (response.data.length == 0)?[]:response.data;
 	    });
 	  };
 	  $scope.abrirModalBuscaProposicaoAvulsa = function() {

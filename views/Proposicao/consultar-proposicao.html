@@ -117,51 +117,39 @@
 														encaminhamentos</a></strong>
 											</div>
 										</div>
-
-										<div class="divider-top form-inline">
-											<div class="form-group">
-												<label>Posicionamento:</label> <input class="form-control"
-													type="text" ng-model="item.posicionamento"
-													placeholder="Procurar"
-													typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue"
-													typeahead-on-select="save(item)" class="form-control">
-											</div>
-										</div>
-										<div class="divider-top form-inline">
-											<div class="form-group">
-												<label>Responsável: </label> <input type="text"
-													ng-model="item.responsavel" placeholder="Procurar usuário"
-													ng-required="true"
-													typeahead="item as item.nome for item in getUsuarios($viewValue)"
-													typeahead-on-select="save(item)" class="form-control">
-											</div>
-										</div>
-										<div class="divider-top">
-											<label>Tags: </label>
-											<tags-input ng-model="item.tags" ng-class="form-group"
-												on-tag-added="save(item)" on-tag-removed="save(item)"
-												min-length="1"> <auto-complete
-												source="loadTags($query)"></auto-complete> </tags-input>
-										</div>
-										<div class="divider-top">
-											<label>Resultado: </label>
-											<div class="form-group">
-												<div class="col-md-10">
-													<textarea class="form-control fontsize-sm" rows="3"
-														placeholder="Adicione um resultado"
-														ng-model="item.resultadoASPAR"></textarea>
-												</div>
-												<div class="col-md-2">
-													<button type="button" class="btn btn-success btn-sm"
-														ng-click="save(item)">
-														<i class="fa fa-check"></i>
-													</button>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
+                                        <div class="divider-top form-inline">
+                                            <div class="form-group">
+                                                <label>Posicionamento:</label>
+                                                <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="it as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-min-length="3" typeahead-on-select="save(item)" />
+                                            </div>
+                                        </div>
+                                        <div class="divider-top form-inline">
+                                            <div class="form-group">
+                                                <label>Responsável: </label>
+                                                <input class="form-control" type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="it as item.nome for item in getUsuarios($viewValue, item.buscaGeral) | filter:$viewValue" typeahead-min-length="3" typeahead-on-select="save(item)" />
+                                                <input type="checkbox" ng-model="item.buscaGeral"> Buscar geral
+                                            </div>
+                                        </div>
+                                        <div class="divider-top">
+                                            <label>Tags: </label>
+                                            <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1">
+                                                <auto-complete source="loadTags($query)"></auto-complete>
+                                            </tags-input>
+                                        </div>
+							<div class="divider-top">
+								<label>Resultado: </label>
+                                            <div class="form-group">
+                                            	<div class="col-md-10">
+                                                	<textarea class="form-control fontsize-sm" rows="3" placeholder="Adicione um resultado" ng-model="item.resultadoASPAR"></textarea>
+                                    			</div>
+                                    			<div class="col-md-2">
+                                                 <button type="button" class="btn btn-success btn-sm" ng-click="save(item)"><i class="fa fa-check"></i>
+                                                 </button>
+                                                </div>
+                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
 							</div>
 						</div>
 					</div>
