@@ -3,8 +3,8 @@ angular.module('sislegisapp').factory('ComentarioService', function($q, Comentar
 		'save': function(comentario, idProposicao) {
 			var deferred = $q.defer();
 			comentario = new ComentarioResource(comentario);
-	    	//TODO mock
-	    	UsuarioResource.get({UsuarioId:999},function(data){
+
+	    	UsuarioResource.get({},function(data){
     			comentario.autor = data;
 	    		comentario.dataCriacao = new Date();
 	    		comentario.idProposicao = idProposicao;
