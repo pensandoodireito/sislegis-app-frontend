@@ -203,7 +203,20 @@ angular.module('sislegisapp').controller(
 	      });
 	    });
 	  };
-
+	  $scope.abrirModalBuscaProposicaoAvulsa = function() {
+		  toaster.clear();  
+		  var modalInstance = $modal.open({
+	          templateUrl: 'views/modal-add-proposicao.html',
+	          controller: 'ModalAddProposicaoController',
+	          size: 'lg'
+	        });
+	        
+	        modalInstance.result.then(function () {	        	
+	        	
+	        }, function () {
+	            // $log.info('Modal dismissed at: ' + new Date());
+	        });
+	  };
     /**
      * MODALs
      */
