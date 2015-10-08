@@ -17,6 +17,10 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource, 
 			url : BACKEND + "/proposicaos/salvarProposicoes",
 			method : 'POST'
 		},
+		'salvarProposicaoIndependente' : {
+			url : BACKEND + "/proposicaos/salvarProposicaoExtra",
+			method : 'POST'
+		},
 		'buscarCamara' : {
 			url : BACKEND + "/proposicaos/proposicoesPautaCamara",
 			method : 'GET',
