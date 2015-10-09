@@ -318,8 +318,32 @@ angular.module('sislegisapp').controller(
         	});
         });
     }
+
+    $scope.getPrintPath = function(){
+        return $scope.printPath;
+    }
+
+    $scope.abrirModalProposicao = function(){
+        // Adição para view de impressão da proposição
+        $scope.proposicao = $scope.selectedProposicao;
+        $scope.printPath = 'views/Reuniao/imprimir-proposicao.html';
+        var modalInstance = $modal.open({
+            templateUrl: 'views/Reuniao/modal-relatorio.html',
+            controller: 'ModalRelatorioProposicaoController',
+            size: 'lg',
+            resolve: {
+                proposicao: function(){
+                    return $scope.selectedProposicao;
+                },
+                printPath: function(){
+                    return $scope.printPath;
+                }
+            }
+        });
+    }
     
     $scope.abrirModalRelatorio = function() {
+        $scope.printPath = 'views/Reuniao/imprimir.html';
         var modalInstance = $modal.open({
           templateUrl: 'views/Reuniao/modal-relatorio.html',
           controller: 'ModalRelatorioReuniaoController',
@@ -345,7 +369,10 @@ angular.module('sislegisapp').controller(
         	},
         	filtroTags: function() {
         		return $scope.filtroTags;
-        	}
+        	},
+            printPath: function(){
+                return $scope.printPath;
+            }
           }
         });
     };
