@@ -122,8 +122,11 @@
                                         <br/>
                                         <strong>Ordem na Pauta: </strong>{{item.seqOrdemPauta}}
                                         <br/>
-                                        <div ng-show="item.origem == 'SENADO'"><a href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a></div>
-                                        <div ng-show="item.origem == 'CAMARA'"><a href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{item.idProposicao}}#tramitacoes" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a></div>
+                                        <div>
+                                            <a ng-show="item.origem == 'SENADO'" href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
+                                            <a ng-show="item.origem == 'CAMARA'" href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{item.idProposicao}}#tramitacoes" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
+                                            <a ng-click="setSelectedProposicao(item);"><i class="fa fa-print"></i> Imprimir</a>
+                                        </div>
                                     </p>
                                 </div>
                                 <div class="col-sm-5">
