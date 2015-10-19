@@ -109,7 +109,7 @@
                                 <div class="col-sm-7">
                                     <h3 class="list-group-item-heading">
                                     	<i class="fa fa-star-o" ng-show="!item.favorita" ng-click="item.favorita=true;save(item)"></i>
-                                		<i class="fa fa-star" style="color:orange" ng-show="item.favorita" ng-click="item.favorita=false;save(item)"></i>
+                                		<i class="fa fa-star" style="color:orange" ng-show="item.favorita" ng-click="item.favorita=false; save(item)"></i>
                                     	<a href="{{selectedProposicao.linkProposicao}}" target="_blank">{{item.sigla}}</a>
                                     </h3>
                                     <p>{{item.ementa}}
