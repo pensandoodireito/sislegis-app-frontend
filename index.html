@@ -6,127 +6,86 @@
     <title>Ministério da Justiça - SISLEGIS</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Theme style sislegis -->
-    <link href="styles/css/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="styles/css/theme-sislegis/sislegis.css" rel="stylesheet" type="text/css" />
-    <link href="styles/css/theme-sislegis/core.css" rel="stylesheet" media="screen">
-    <link href="lib/angularjs-toaster/toaster.css" rel="stylesheet" media="screen">
+    <link href="lib/AdminLTE/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="lib/AdminLTE/dist/css/AdminLTE.min.css" />
+    <link rel="stylesheet" href="lib/AdminLTE/dist/css/skins/skin-blue.min.css" />
+    <link rel="stylesheet" href="styles/sislegis/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="styles/sislegis/css/ionicons.min.css" />
+    <link rel="stylesheet" href="styles/sislegis/css/sislegis.css" />
+    <link href="lib/angularjs-toaster/toaster.css" rel="stylesheet" media="screen" />
     <link rel="stylesheet" href="lib/ng-tags-input/ng-tags-input.min.css" />
 </head>
 
-<body class="skin-blue-mj">
-
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <header class="main-header"><a href="index.html" class="logo"><span class="logo-mini">
+        <img src="styles/sislegis/img/brasao-mj.png" class="img-responsive" width="45px">
+    </span><span class="logo-lg">SISLEGIS</span> </a>
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Menu</span> </a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav" ng-controller="TarefaController">
+                    <li class="dropdown notifications-menu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-bell-o"></i> <span class="label label-warning">{{(listaTarefas | filter:{finalizada:false}).length}}</span> </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">Você tem {{(listaTarefas | filter:{finalizada:false}).length}} notificações</li>
+                            <li>
+                                <ul class="menu">
+                                    <li ng-repeat="tarefa in listaTarefas | filter: {finalizada:false} | orderBy : 'encaminhamentoProposicao.dataHoraLimite' | limitTo: 5">
+                                        <a href="#/Tarefas/edit/{{tarefa.id}}">{{tarefa.encaminhamentoProposicao.encaminhamento.nome}} - {{tarefa.encaminhamentoProposicao.dataHoraLimite | date: 'dd/MM/yyyy'}}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#/Tarefas">ver todas</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <form action="#" method="get" class="sidebar-form">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search...">
+          <span class="input-group-btn">
+          <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+          </span></div>
+            </form>
+            <ul class="sidebar-menu">
+                <li class="header">MENU</li>
+                <li class="active"><a href="#/Reuniaos/reuniaonova"><i class="fa fa-calendar"></i><span>Reuniões</span></a></li>
+                <li><a href="#/Proposicao/consultar"><i class="fa fa-files-o"></i><span>Proposições</span></a></li>
+                <li><a href="#/Posicionamentos"><i class="fa fa-file"></i><span>Posicionamentos</span></a></li>
+                <li><a href="#/Encaminhamentos"><i class="fa fa-reply"></i><span>Encaminhamentos</span></a></li>
+                <li><a href="#/AreaConsultadas"><i class="fa fa-search"></i><span>Áreas Consultadas</span></a></li>
+                <li><a href="#/Orgaos"><i class="fa fa-building-o"></i><span>Órgão</span></a></li>
+                <li><a href="#/GerenciarComissaoSeguida"><i class="fa fa-share"></i><span>Seguir Pautas</span></a></li>
+                <li><a href="#/Usuarios"><i class="fa fa-user"></i><span>Usuário</span></a></li>
+                <li><a href="#/Equipes"><i class="fa fa-group"></i><span>Equipe</span></a></li>
+                <li ng-controller="GlobalCtrl" ng-hide="auth.loggedIn"><a href="#" ng-click="logout()"><i class="fa fa-sign-out"></i><span>Logout</span></a></li>
+                <!--li class="treeview"><a href="#"><i class="fa fa-link"></i> <span>Level 1</span>
+                    <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="#/Reuniaos/reuniaonova">Level 2</a></li>
+                    </ul>
+                </li-->
+            </ul>
+        </section>
+    </aside>
     <div id="spinner" style="display:none;">
         <img src="img/ajax-loader.gif" class="ajax-loader" />
     </div>
 
-    <div class="header" id="cabecalho">
-        <div class="container">
-            <div class="row">
-                <div class="logo clearfix">
-                    <a href="#" class="pull-left">
-                        <h1>Ministério da Justiça</h1>
-                    </a>
-                    <a href="#" class="pull-right ml-xs">
-                        <h2 title="Sistema de gerenciamento de proposições"> - SISLEGIS</h2>
-                    </a>
-                </div>
-                <div class="navbar-top navbar-static-top clearfix" role="navigation">
-                    <div id="menu-principal" class="navbar navbar-default" role="navigation">
-
-                        <!-- Brand and toggle get grouped for better mobile display -->
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                                <span class="sr-only">Navegação:</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                        </div>
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <ul class="nav navbar-nav">
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle">Administrar <span class="caret"></span></a>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li role="presentation" class="dropdown-header"><i class="fa fa-users"></i> Reuniões:</li>
-                                        <li><a href="#/Reuniaos/reuniaonova">Reuniões</a>
-                                        </li>
-                                        <li><a href="#/Proposicao/consultar">Proposições</a>
-                                        </li>
-                                        <li><a href="#/Posicionamentos">Posicionamentos</a>
-                                        </li>
-                                        <li><a href="#/Encaminhamentos">Encaminhamentos</a>
-                                        </li>
-                                        <li><a href="#/AreaConsultadas">Áreas Consultadas</a>
-                                        </li>
-                                        <li><a href="#/Orgaos">Órgão</a>
-                                        </li>
-                                        <li><a href="#/StatusSidof">Status SIDOF</a>
-                                        </li>
-                                        <li><a href="#/GerenciarComissaoSeguida">Seguir Pautas</a>
-                                        </li>
-                                        <li class="divider"></li>
-                                        <li role="presentation" class="dropdown-header"><i class="fa fa-user"></i> Usuários:</li>
-                                        <li><a href="#/Usuarios">Usuário</a>
-                                        </li>
-                                        <li><a href="#/Equipes">Equipe</a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle">Elaboração Normativa Preliminar<span class="caret"></span></a>
-                                    <ul class="dropdown-menu" role="menu">
-                                    	<li role="presentation" class="dropdown-header"><i class="fa fa-file-text-o"></i> Proposições:</li>
-                                        <li><a href="#/ElaboracaoNormativa">Elaboração Normativa</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-
-                        </div>
-                        <!-- /.navbar-collapse -->
-
-                    </div>
-                    <!-- /menu principal -->
-                    <div class="navbar-right">
-                        <div ng-controller="GlobalCtrl">
-                            <a ng-click="logout()" ng-hide="auth.loggedIn">logout</a>
-                        </div>
-                        <ul class="nav navbar-nav">
-                            <li class="dropdown notifications-menu" ng-controller="TarefaController">
-                                <a href="#" class="dropdown-toggle">
-                                    <i class="fa fa-warning"></i>
-                                    <span class="label label-danger">{{(listaTarefas | filter:{finalizada:false}).length}}</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="header">{{(listaTarefas | filter:{finalizada:false}).length}} tarefa(s) pendentes</li>
-                                    <li>
-                                        <!-- inner menu: contains the actual data -->
-                                        <ul class="menu">
-                                            <li ng-repeat="tarefa in listaTarefas | filter: {finalizada:false} | orderBy : 'encaminhamentoProposicao.dataHoraLimite' | limitTo: 5">
-                                                <a href="#/Tarefas/edit/{{tarefa.id}}">
-                                                    <i class="ion ion-ios7-people danger"></i> {{tarefa.encaminhamentoProposicao.encaminhamento.nome}} - {{tarefa.encaminhamentoProposicao.dataHoraLimite | date: 'dd/MM/yyyy'}}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="footer"><a href="#/Tarefas">Ver todos</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- /navbar superior -->
-            </div>
-        </div>
-    </div>
-    <!-- /header -->
-
-    <div class="container-fluid mt-md">
+    <div class="content-wrapper">
         <toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-center'}"></toaster-container>
         <div id="main" ng-view></div>
     </div>
+    <div class="control-sidebar-bg"></div>
+
+</div>
 
     <script src="scripts/js/libraries/jquery-2.1.1.min.js" type="text/javascript"></script>
     <script src="scripts/js/libraries/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
@@ -151,7 +110,7 @@
     <script src="lib/lodash/dist/lodash.js"></script>
     <script src="lib/ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
 
-    <script src="http://localhost:8080/auth/js/keycloak.js"></script>
+    <script src="http://10.1.1.10:8080/auth/js/keycloak.js"></script>
 
     <script src="scripts/app.js"></script>
     <script src="scripts/offcanvas.js"></script>
@@ -251,7 +210,7 @@
     <script src="scripts/services/StatusSidofFactory.js"></script>
 
     <script src="scripts/services/locationParser.js"></script>
-
+    <script src="lib/AdminLTE/dist/js/app.min.js"></script>
 </body>
 
 </html>
