@@ -1,31 +1,38 @@
 <link href="styles/css/theme-sislegis/reuniao-sislegis.css" rel="stylesheet" type="text/css" />
-<div class="hidden-print">
-    <div class="container">
-        <div class="row">
-            <div class="panel panel-warning">
-                <div class="panel-body">
-                    <div class="clearfix">
-                        <div class="form-inline pull-left mr-lg" role="form">
-                            <label class="form-group text-danger">Informe a Data para a reunião:</label>
-                            <div class="form-group">
-                                <div class="input-group width-grid-2">
-                                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="reuniao.data" is-open="opened" min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Fechar" readonly/>
-                                    <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                                  </span>
-                                </div>
-
+<section class="content-header">
+    <h1>Reunião</h1>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Buscar proposições</h3>
+                </div>
+                <form class="form-horizontal">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="dataReuniao" class="col-sm-2 control-label">Data da reunião:</label>
+                            <div class="col-sm-3">
+                                <input id="dataReuniao" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="reuniao.data" is-open="opened" min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Fechar" readonly />
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" class="btn btn-default" ng-click="openCalendar($event)">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
                             </div>
                         </div>
-                        <div class="pull-left divider-left pl-lg"><a data-toggle="modal" ng-click="buscarProposicoes()" ng-disabled="!reuniao.data" class="btn btn-success"><i class="fa fa-plus"></i> Buscar/Adicionar proposições</a>
-                        </div>
-                    </div>
-                    <p class="fontsize-sm text-red mt-xs mb-0">Para montar a pauta da reunião, é preciso escolher a data em que ela ocorrerá</p>
-                </div>
-
+                    </div><!-- /.box-body -->
+                    <div class="box-footer">
+                        <a data-toggle="modal" ng-click="buscarProposicoes()" ng-disabled="!reuniao.data" class="btn btn-success"><i class="fa fa-plus"></i> Buscar</a>
+                    </div><!-- /.box-footer -->
+                </form>
             </div>
+            <!--p class="fontsize-sm text-red mt-xs mb-0">Para montar a pauta da reunião, é preciso escolher a data em que ela ocorrerá</p-->
         </div>
     </div>
+</section>
+<div class="hidden-print">
     <div class="container" ng-show="listaReuniaoProposicoes.length > 0">
         <div class="row">
             <div class="panel panel-default">
