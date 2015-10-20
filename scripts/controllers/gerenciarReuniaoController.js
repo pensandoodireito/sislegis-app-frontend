@@ -263,6 +263,7 @@ angular.module('sislegisapp').controller(
     	
     	var successCallback = function(data,responseHeaders){
 			item.listaComentario.push(comentario);
+			item.totalComentarios++;
         	toaster.pop('success', 'Comentário inserido com sucesso');
         };
         var errorCallback = function() {
