@@ -12,7 +12,6 @@ angular.module('sislegisapp').controller('TarefaController', function($scope, $r
         };
         
         TarefaResource.buscarPorUsuario({
-            idUsuario: 999 // ToDo: Mudar para o usuario corrente
         }, successCallback, errorCallback);
 
     }

@@ -132,7 +132,7 @@
                                             <div class="form-group">
                                                 <label>Responsável: </label>
                                                 <input class="form-control" type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="it as item.nome for item in getUsuarios($viewValue, item.buscaGeral) | filter:$viewValue" typeahead-min-length="3" typeahead-on-select="save(item)" />
-                                                <input type="checkbox" ng-model="item.buscaGeral"> Buscar geral
+                                                <input type="checkbox" ng-model="item.buscaGeral"> Buscar completa
                                             </div>
                                         </div>
                                         <div class="divider-top">
