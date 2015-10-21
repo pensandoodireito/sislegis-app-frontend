@@ -184,6 +184,10 @@ angular.module('sislegisapp').controller(
     		$scope.filtroPosicionamentoNaoDefido = "";
     	}
     }
+    
+    $scope.followUnfollow = function(item){
+    	console.log("asfasdfsd",item);
+    }
 
     $scope.changeFiltroOrigem = function() {
 		if(!$scope.filtroOrigem.origem){
