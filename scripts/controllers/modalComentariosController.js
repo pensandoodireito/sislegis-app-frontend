@@ -38,7 +38,7 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 		    $scope.save = function() {
 
 				var successCallback = function(data,responseHeaders){
-					$scope.proposicao.listaComentario.push($scope.comentario);
+					$scope.proposicao.listaComentario.push(data);
 					$scope.comentario = new ComentarioResource();
 					$scope.proposicao.totalComentarios++;
 					toaster.pop('success', 'Comentário inserido com sucesso');

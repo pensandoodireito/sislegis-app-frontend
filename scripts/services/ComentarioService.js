@@ -9,11 +9,18 @@ angular.module('sislegisapp').factory('ComentarioService', function($q, Comentar
 				id : idProposicao
 			};
 
+			// seta o nome do usuario logado
+			comentario.autor = {
+				nome : auth.authz.userInfo.name,
+				email : auth.authz.userInfo.email
+			}
+
 			ComentarioResource.save(comentario, function(data, responseHeaders) {
 				if (data.id == null) {
 					var loc = responseHeaders().location;
 					var idCreated = loc.substr(loc.lastIndexOf('/') + 1);
 					data.id = idCreated;
+
 				}
 				deferred.resolve(data, responseHeaders);
 			}, function(error) {
