@@ -7,7 +7,14 @@ angular.module('sislegisapp').controller(
 	var self = this;
 	$scope.listaReuniaoProposicoes = [];
 	$scope.filtro = new ProposicaoResource();
-
+	$scope.proposicoesSeguidas = [];
+	UsuarioResource.proposicoesSeguidas({}, function(data) {
+		console.log("Carregou proposicoes seguidas ", data)
+		$scope.proposicoesSeguidas = data;
+		console.log("Carregou proposicoes seguidas ", $scope.proposicoesSeguidas.length);
+	}, function(data) {
+		console.log("erro ao carregar proposicoes seguida", data)
+	});
     // faz as ações de cada proposição abrir e fechar (collapse)
     $scope.showAcoes = true;
     
@@ -184,6 +191,47 @@ angular.module('sislegisapp').controller(
     		$scope.filtroPosicionamentoNaoDefido = "";
     	}
     }
+    
+    $scope.isFollowed = function(item) {
+
+		for (var i = 0; i < $scope.proposicoesSeguidas.length; i++) {
+			var proposicao = $scope.proposicoesSeguidas[i];
+			console.log(item, proposicao)
+			if (item.id == proposicao.id) {
+				return true;
+			}
+		}
+		return false;
+	};
+	$scope.followProposicao = function(item) {
+
+		// $scope.proposicoesSeguidas
+		ProposicaoResource.followProposicao({}, {
+			id : item.id
+		}, function() {
+			$scope.proposicoesSeguidas.push({
+				id : item.id
+			});
+		});
+
+	};
+	$scope.unfollowProposicao = function(item) {
+		ProposicaoResource.unfollowProposicao({}, {
+			id : item.id
+		}, function() {
+			for (var i = 0; i < $scope.proposicoesSeguidas.length; i++) {
+				var proposicao = $scope.proposicoesSeguidas[i];
+				console.log(item, proposicao)
+				if (item.id == proposicao.id) {
+					$scope.proposicoesSeguidas.splice(i, 1);
+
+					break;
+				}
+			}
+		});
+
+	};
+
 
     $scope.changeFiltroOrigem = function() {
 		if(!$scope.filtroOrigem.origem){
