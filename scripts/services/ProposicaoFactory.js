@@ -40,7 +40,7 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource, 
 			url : BACKEND + "/proposicaos/consultar",
 			method : 'GET',
 			isArray : true
-		},		
+		},
 		'followProposicao' : {
 			url : BACKEND + "/proposicaos/follow/:ProposicaoId",
 			method : 'POST'

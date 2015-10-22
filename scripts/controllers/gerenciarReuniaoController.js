@@ -16,46 +16,7 @@ angular.module('sislegisapp').controller(
 	}, function(data) {
 		console.log("erro ao carregar proposicoes seguida", data)
 	});
-	 $scope.isFollowed = function(item) {
-
-			for (var i = 0; i < $scope.proposicoesSeguidas.length; i++) {
-				var proposicao = $scope.proposicoesSeguidas[i];
-				console.log(item, proposicao)
-				if (item.id == proposicao.id) {
-					return true;
-				}
-			}
-			return false;
-		};
-		$scope.followProposicao = function(item) {
-
-			// $scope.proposicoesSeguidas
-			ProposicaoResource.followProposicao({}, {
-				id : item.id
-			}, function() {
-				$scope.proposicoesSeguidas.push({
-					id : item.id
-				});
-			});
-
-		};
-		$scope.unfollowProposicao = function(item) {
-			ProposicaoResource.unfollowProposicao({}, {
-				id : item.id
-			}, function() {
-				for (var i = 0; i < $scope.proposicoesSeguidas.length; i++) {
-					var proposicao = $scope.proposicoesSeguidas[i];
-					console.log(item, proposicao)
-					if (item.id == proposicao.id) {
-						$scope.proposicoesSeguidas.splice(i, 1);
-
-						break;
-					}
-				}
-			});
-
-		};
-
+	
 
     // faz as ações de cada proposição abrir e fechar (collapse)
     $scope.showAcoes = true;
@@ -234,6 +195,47 @@ angular.module('sislegisapp').controller(
     	}
     }
 
+    
+    $scope.isFollowed = function(item) {
+
+		for (var i = 0; i < $scope.proposicoesSeguidas.length; i++) {
+			var proposicao = $scope.proposicoesSeguidas[i];
+			console.log(item, proposicao)
+			if (item.id == proposicao.id) {
+				return true;
+			}
+		}
+		return false;
+	};
+	$scope.followProposicao = function(item) {
+
+		// $scope.proposicoesSeguidas
+		ProposicaoResource.followProposicao({}, {
+			id : item.id
+		}, function() {
+			$scope.proposicoesSeguidas.push({
+				id : item.id
+			});
+		});
+
+	};
+	$scope.unfollowProposicao = function(item) {
+		ProposicaoResource.unfollowProposicao({}, {
+			id : item.id
+		}, function() {
+			for (var i = 0; i < $scope.proposicoesSeguidas.length; i++) {
+				var proposicao = $scope.proposicoesSeguidas[i];
+				console.log(item, proposicao)
+				if (item.id == proposicao.id) {
+					$scope.proposicoesSeguidas.splice(i, 1);
+
+					break;
+				}
+			}
+		});
+
+	};
+    
     $scope.changeFiltroOrigem = function() {
 		if(!$scope.filtroOrigem.origem){
 			$scope.filtroOrigem = null;
@@ -330,7 +332,8 @@ angular.module('sislegisapp').controller(
     	item.comentarioTmp = null;
     	
     	var successCallback = function(data,responseHeaders){
-			item.listaComentario.push(comentario);
+    		item.listaComentario.push(data);
+    		item.totalComentarios++;
         	toaster.pop('success', 'Comentário inserido com sucesso');
         };
         var errorCallback = function() {
