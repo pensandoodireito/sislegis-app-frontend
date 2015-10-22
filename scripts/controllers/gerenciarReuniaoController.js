@@ -262,7 +262,8 @@ angular.module('sislegisapp').controller(
     	item.comentarioTmp = null;
     	
     	var successCallback = function(data,responseHeaders){
-			item.listaComentario.push(comentario);
+			item.listaComentario.push(data);
+			item.totalComentarios++;
         	toaster.pop('success', 'Comentário inserido com sucesso');
         };
         var errorCallback = function() {
@@ -272,27 +273,39 @@ angular.module('sislegisapp').controller(
 		ComentarioService.save(comentario, item.id).then(successCallback, errorCallback);
     }
 
-    
-    $scope.abrirModalComentarios = function(item) {
-    	$scope.selectedProposicao = item;
-    	
-        var modalInstance = $modal.open({
-          templateUrl: 'views/modal-comentarios.html',
-          controller: 'ModalComentariosController',
-          size: 'lg',
-          resolve: {
-            proposicao: function () {
-            	return $scope.selectedProposicao;
-            }
-          }
-        });
-        
-        modalInstance.result.then(function (listaComentario) {
-        	$scope.selectedProposicao.listaComentario = listaComentario;
-          }, function () {
-            $log.info('Modal dismissed at: ' + new Date());
-          });
-    };
+
+	$scope.populaModalComentario = function(lista)
+	{
+		$scope.selectedProposicao.listaComentario=lista;
+		var modalInstance = $modal.open({
+			templateUrl: 'views/modal-comentarios.html',
+			controller: 'ModalComentariosController',
+			size: 'lg',
+			resolve: {
+				proposicao: function () {
+					return $scope.selectedProposicao;
+				}
+			}
+		});
+
+		modalInstance.result.then(function (listaComentario) {
+			$scope.selectedProposicao.listaComentario = listaComentario;
+		}, function () {
+			$log.info('Modal dismissed at: ' + new Date());
+		});
+	}
+
+	$scope.abrirModalComentarios = function (item) {
+		$scope.selectedProposicao = item;
+		if ($scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios) {
+			ComentarioResource.findByProposicao({
+				ProposicaoId: $scope.selectedProposicao.id},$scope.populaModalComentario
+			);
+		} else {
+			$scope.populaModalComentario($scope.selectedProposicao.listaComentario);
+
+		}
+	};
     
     $scope.abrirModalRemoverProposicao = function(item) {
     	$scope.selectedProposicao = item;
