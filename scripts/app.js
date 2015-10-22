@@ -16,7 +16,7 @@ var module = angular.module('sislegisapp',
         'ui.mask'
     ]);
 
-module.constant('BACKEND', 'http://localhost:8080/sislegis/rest');
+module.constant('BACKEND', 'http://localhost/sislegis/rest');
 
 var auth = {};
 
@@ -38,7 +38,7 @@ angular.element(document).ready(function ($http) {
         console.log('here b ',keycloakAuth);
         auth.loggedIn = true;
         auth.authz = keycloakAuth;
-        auth.logoutUrl = keycloakAuth.authServerUrl + "/realms/" + keycloakAuth.realm + "/tokens/logout?redirect_uri=http://sislegis.local:8080";
+        auth.logoutUrl = keycloakAuth.authServerUrl + "/realms/" + keycloakAuth.realm + "/tokens/logout?redirect_uri=http://sislegis.local";
         module.factory('Auth', function() {
             return auth;
         });
