@@ -16,7 +16,7 @@ var module = angular.module('sislegisapp',
         'ui.mask'
     ]);
 
-module.constant('BACKEND', 'http://localhost:8080/sislegis/rest');
+module.constant('BACKEND', 'http://localhost/sislegis/rest');
 
 var auth = {};
 
