@@ -17,7 +17,14 @@ angular.module('sislegisapp').factory('UsuarioResource', function($resource, BAC
 			url : BACKEND + "/usuarios/findByIdEquipe",
 			method : 'GET',
 			isArray : true
+		},
+		'proposicoesSeguidas' : {
+			url : BACKEND + "/usuarios/proposicoesSeguidas",
+			method : 'GET',
+			isArray : true
 		}
+		
+		
 	});
 	return resource;
 });
