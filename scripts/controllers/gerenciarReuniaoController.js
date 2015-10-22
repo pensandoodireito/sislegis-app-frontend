@@ -7,6 +7,55 @@ angular.module('sislegisapp').controller(
 	var self = this;
 	$scope.listaReuniaoProposicoes = [];
 	$scope.filtro = new ProposicaoResource();
+	
+	$scope.proposicoesSeguidas = [];
+	UsuarioResource.proposicoesSeguidas({}, function(data) {
+		console.log("Carregou proposicoes seguidas ", data)
+		$scope.proposicoesSeguidas = data;
+		console.log("Carregou proposicoes seguidas ", $scope.proposicoesSeguidas.length);
+	}, function(data) {
+		console.log("erro ao carregar proposicoes seguida", data)
+	});
+	 $scope.isFollowed = function(item) {
+
+			for (var i = 0; i < $scope.proposicoesSeguidas.length; i++) {
+				var proposicao = $scope.proposicoesSeguidas[i];
+				console.log(item, proposicao)
+				if (item.id == proposicao.id) {
+					return true;
+				}
+			}
+			return false;
+		};
+		$scope.followProposicao = function(item) {
+
+			// $scope.proposicoesSeguidas
+			ProposicaoResource.followProposicao({}, {
+				id : item.id
+			}, function() {
+				$scope.proposicoesSeguidas.push({
+					id : item.id
+				});
+			});
+
+		};
+		$scope.unfollowProposicao = function(item) {
+			ProposicaoResource.unfollowProposicao({}, {
+				id : item.id
+			}, function() {
+				for (var i = 0; i < $scope.proposicoesSeguidas.length; i++) {
+					var proposicao = $scope.proposicoesSeguidas[i];
+					console.log(item, proposicao)
+					if (item.id == proposicao.id) {
+						$scope.proposicoesSeguidas.splice(i, 1);
+
+						break;
+					}
+				}
+			});
+
+		};
+
 
     // faz as ações de cada proposição abrir e fechar (collapse)
     $scope.showAcoes = true;
@@ -203,20 +252,39 @@ angular.module('sislegisapp').controller(
             return (response.data.length == 0)?[]:response.data;
 	    });
 	  };
-	  $scope.abrirModalBuscaProposicaoAvulsa = function() {
-		  toaster.clear();  
-		  var modalInstance = $modal.open({
-	          templateUrl: 'views/modal-add-proposicao.html',
-	          controller: 'ModalAddProposicaoController',
-	          size: 'lg'
-	        });
-	        
-	        modalInstance.result.then(function () {	        	
-	        	
-	        }, function () {
-	            // $log.info('Modal dismissed at: ' + new Date());
-	        });
-	  };
+		$scope.populaModalComentario = function(lista)
+		{
+			$scope.selectedProposicao.listaComentario=lista;
+			var modalInstance = $modal.open({
+				templateUrl: 'views/modal-comentarios.html',
+				controller: 'ModalComentariosController',
+				size: 'lg',
+				resolve: {
+					proposicao: function () {
+						return $scope.selectedProposicao;
+					}
+				}
+			});
+
+			modalInstance.result.then(function (listaComentario) {
+				$scope.selectedProposicao.listaComentario = listaComentario;
+			}, function () {
+				$log.info('Modal dismissed at: ' + new Date());
+			});
+		}
+
+		$scope.abrirModalComentarios = function (item) {
+			$scope.selectedProposicao = item;
+			if ($scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios) {
+				ComentarioResource.findByProposicao({
+					ProposicaoId: $scope.selectedProposicao.id},$scope.populaModalComentario
+				);
+			} else {
+				$scope.populaModalComentario($scope.selectedProposicao.listaComentario);
+
+			}
+		};
+	    
     /**
      * MODALs
      */

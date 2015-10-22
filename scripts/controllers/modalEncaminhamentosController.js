@@ -75,6 +75,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 		        var successCallback = function(data,responseHeaders){
 					EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.proposicao.id},function(data) {
 						$scope.proposicao.listaEncaminhamentoProposicao = data;
+						$scope.proposicao.totalEncaminhamentos++;
 						$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
 						$scope.encaminhamento = new EncaminhamentoResource();
 				    	$rootScope.$emit('updateTarefas');
