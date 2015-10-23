@@ -114,6 +114,14 @@ angular.module('sislegisapp').controller(
     	$rootScope.inactivateSpinner = true;
         var successCallback = function(){
         	$rootScope.inactivateSpinner = false;
+        	for (var i = 0; i < $scope.listaReuniaoProposicoes.length; i++) {    			
+    			if(item.id==$scope.listaReuniaoProposicoes[i].id){
+    				$scope.listaReuniaoProposicoes[i]=item;
+    				toaster.pop('success', 'Proposição atualizada com sucesso.');
+    				return;
+    			}
+    		}
+        	console.log("Nao carregou a proposicao, recarregara a reuniao inteira");
         	$scope.tagsProposicao = TagResource.listarTodos();
     		ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()},
         	function(response) {
