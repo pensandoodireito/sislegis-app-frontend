@@ -91,7 +91,11 @@ angular.module('sislegisapp').controller(
 			$scope.filteredResults = [];
 			$scope.pageRange = [];
 			$scope.numberOfPages = function() {
-				var result = Math.ceil($scope.pageSize);
+                var total = 0;
+                if (typeof $scope.comissoes != 'undefined'){
+                    total = $scope.comissoes.length;
+                }
+				var result = Math.ceil(total / $scope.pageSize);
 				var max = (result == 0) ? 1 : result;
 				$scope.pageRange = [];
 				for (var ctr = 0; ctr < max; ctr++) {
