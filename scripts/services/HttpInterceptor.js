@@ -10,13 +10,13 @@ angular.module('sislegisapp').factory('HttpInterceptor', function($q, $rootScope
 	return {
 		'request' : function(config) {
 			if (showSpinner(config))
-		        $('#spinner').show();
+		        $('#pleaseWaitDialog').modal();
 			return config;
 		},
 
 		'requestError' : function(rejection) {
 			if (showSpinner(config))
-		        $('#spinner').show();
+                $('#pleaseWaitDialog').modal();
 			if (canRecover(rejection)) {
 				return responseOrNewPromise
 			}
@@ -24,12 +24,12 @@ angular.module('sislegisapp').factory('HttpInterceptor', function($q, $rootScope
 		},
 
 		'response' : function(response) {
-	        $('#spinner').hide();
+            $('#pleaseWaitDialog').modal('hide');
 			return response;
 		},
 
 		'responseError' : function(rejection) {
-	        $('#spinner').hide();
+            $('#pleaseWaitDialog').modal('hide');
 			if (canRecover(rejection)) {
 				return responseOrNewPromise
 			}

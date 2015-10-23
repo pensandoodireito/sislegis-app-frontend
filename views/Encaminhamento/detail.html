@@ -6,8 +6,8 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border" ng-switch on="$location.path().indexOf('/Encaminhamentos/new') > -1">
-                    <h3 class="box-title" ng-switch-when="false">Adicionar</h3>
-                    <h3 class="box-title" ng-switch-when="true">Visualizar</h3>
+                    <h3 class="box-title" ng-switch-when="true">Adicionar</h3>
+                    <h3 class="box-title" ng-switch-when="false">Visualizar</h3>
                 </div>
                 <form id="EncaminhamentoForm" name="EncaminhamentoForm" class="form-horizontal" role="form">
                     <div ng-show="displayError" class="alert alert-danger">
