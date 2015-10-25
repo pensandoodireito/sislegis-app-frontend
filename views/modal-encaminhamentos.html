@@ -14,19 +14,20 @@
 				        <strong>Error!</strong> Something broke. Retry, or cancel and start afresh.
 				    </div>
 					<div class="input-group">
-						<label for="TextoEncaminhamento">Tipo de Encaminhamento</label>
-						<select ng-model="encaminhamentoProposicao.encaminhamento" ng-options="encaminhamento.nome for encaminhamento in listaEncaminhamento track by encaminhamento.id | orderBy:'nome'" class="form-control" ng-required="true"></select>
+						<label for="tipo-encaminhamento">Tipo de Encaminhamento</label>
+						<select id="tipo-encaminhamento" ng-model="encaminhamentoProposicao.encaminhamento"
+                                ng-options="encaminhamento.nome for encaminhamento in listaEncaminhamento track by encaminhamento.id | orderBy:'nome'" class="form-control" ng-required="true"></select>
 					</div>
 					<br/>
 					<div class="input-group">
-						<label for="TextoEncaminhamento">Responsável:</label>
-	              		<input type="text" ng-model="encaminhamentoProposicao.responsavel" placeholder="Procurar usuário..." 
-	              			typeahead="item as item.nome for item in getUsuarios($viewValue)" class="form-control">
+						<label for="responsavel">Responsável:</label>
+                        <input id="responsavel" type="text" ng-model="encaminhamentoProposicao.responsavel" placeholder="Procurar usuário..."
+                               typeahead="item as item.nome for item in getUsuarios($viewValue)" class="form-control">
 					</div>
 					<br/>
-					<label for="TextoEncaminhamento">Data e Hora Limite:</label>
+					<label for="prazo">Data e Hora Limite:</label>
 					<div class="input-group">
-						<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="encaminhamentoProposicao.dataHoraLimite" is-open="opened" min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Close" readonly/>
+						<input id="prazo" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="encaminhamentoProposicao.dataHoraLimite" is-open="opened" min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Close" readonly/>
 			              <span class="input-group-btn">
 			                <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 			              </span>
@@ -36,8 +37,8 @@
 					</div>
 					<br/>
 					<div class="input-group">
-						<label for="TextoEncaminhamento">Descrição:</label>
-						<textarea class="form-control" rows="3" ng-model="encaminhamentoProposicao.comentario.descricao"></textarea>
+                    <label for="detalhes">Detalhes:</label>
+						<textarea id="detalhes" class="form-control" rows="3" ng-model="encaminhamentoProposicao.comentario.descricao"></textarea>
 					</div>
 					<br/>
 					
@@ -52,6 +53,7 @@
 				<div class="panel-body line-9 rol-vert fontsize-sm">
 					<div class="list-group" ng-repeat="item in proposicao.listaEncaminhamentoProposicao">
 						<div class="divider-bottom">
+							<p><strong>{{item.encaminhamento.nome}}</strong></p>
 							<p  ng-show="item.responsavel.nome!=null" ><strong>Responsável: </strong>{{item.responsavel.nome}}</p>
 							<p ng-show="item.responsavel.nome==null" ><strong>Sem responsável associado</strong></p>
 							<p ng-show="item.responsavel.dataHoraLimite!=null"><strong>Data e Hora Limite: </strong>{{item.dataHoraLimite | date: 'dd/MM/yyyy HH:mm'}}</p>
@@ -59,7 +61,7 @@
 							<p>{{item.comentario.descricao}}</p>
 							<div class="mt-sm">
 								<p>
-									Feito por: <strong>{{item.comentario.autor.nome}}</strong> <span class="ml-lg">Data: {{item.comentario.dataCriacao | date: 'dd/MM/yyyy'}}<span class="ml-lg"><a ng-click="openUpdate(item)"> Alterar</a>
+									Feito por: <strong >{{item.comentario.autor.nome}}</strong> <span class="ml-lg">Data: {{item.comentario.dataCriacao | date: 'dd/MM/yyyy'}}<span class="ml-lg"><a ng-click="openUpdate(item)"> Alterar</a>
 									</span>
 								</p>
 							</div>
