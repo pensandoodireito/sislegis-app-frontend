@@ -23,6 +23,8 @@ angular.module('sislegisapp').factory('UsuarioResource', function($resource, BAC
 			method : 'GET',
 			isArray : true
 		}
+		
+		
 	});
 	return resource;
 });

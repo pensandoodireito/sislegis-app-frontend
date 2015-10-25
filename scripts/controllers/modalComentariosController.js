@@ -36,17 +36,16 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 		    
 
 		    $scope.save = function() {
-		    	
-		        var successCallback = function(data,responseHeaders){
-		        	$scope.proposicao.listaComentario.push(data);
-		        	$scope.comentario = new ComentarioResource();
-		        	$scope.proposicao.totalComentarios++;
-		        	toaster.pop('success', 'Comentário inserido com sucesso');
-		        };
+                var successCallback = function(data,responseHeaders){
+					$scope.proposicao.listaComentario.push(data);
+					$scope.comentario = new ComentarioResource();
+					$scope.proposicao.totalComentarios++;
+					toaster.pop('success', 'Comentário inserido com sucesso');
+				};
+
 		        var errorCallback = function() {
 		        	toaster.pop('error', 'Falha ao realizar operação.');
 		        };
-		        
 
 	    		ComentarioService.save($scope.comentario, $scope.proposicao.id).then(successCallback, errorCallback);
 		    };

@@ -15,8 +15,6 @@ angular.module('sislegisapp').factory('ComentarioService', function($q, Comentar
 				email : auth.authz.userInfo.email
 			};
 
-			comentario.idProposicao = idProposicao;
-
 			ComentarioResource.save(comentario, function(data, responseHeaders) {
 				if (data.id == null) {
 					var loc = responseHeaders().location;
@@ -24,7 +22,6 @@ angular.module('sislegisapp').factory('ComentarioService', function($q, Comentar
 					data.id = idCreated;
 
 				}
-
 				deferred.resolve(data, responseHeaders);
 			}, function(error) {
 				deferred.reject(error);
