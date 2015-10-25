@@ -44,5 +44,8 @@
   },
   "moduleType": [
     "node"
-  ]
+  ],
+  "resolutions": {
+    "angular-animate": "1.2.8"
+  }
 }
