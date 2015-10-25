@@ -1,5 +1,3 @@
-
-
 angular.module('sislegisapp').controller('SearchPosicionamentoController', function($scope, $http, PosicionamentoResource ) {
 
     $scope.search={};
@@ -8,6 +6,11 @@ angular.module('sislegisapp').controller('SearchPosicionamentoController', funct
     $scope.searchResults = [];
     $scope.filteredResults = [];
     $scope.pageRange = [];
+
+    $scope.title = "Posicionamento";
+    $scope.newUrl = "#/Posicionamentos/new";
+    $scope.editUrl = "#/Posicionamentos/edit/";
+
     $scope.numberOfPages = function() {
         var result = Math.ceil($scope.filteredResults.length/$scope.pageSize);
         var max = (result == 0) ? 1 : result;

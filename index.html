@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <title>Ministério da Justiça - SISLEGIS</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-    <!-- Theme style sislegis -->
-    <link href="lib/AdminLTE/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- Theme style -->
-    <link rel="stylesheet" href="lib/AdminLTE/dist/css/AdminLTE.min.css" />
-    <link rel="stylesheet" href="lib/AdminLTE/dist/css/skins/skin-blue.min.css" />
-    <link rel="stylesheet" href="styles/sislegis/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="styles/sislegis/css/ionicons.min.css" />
+    <link rel="stylesheet" href="lib/admin-lte/dist/css/AdminLTE.min.css" />
+    <link rel="stylesheet" href="lib/admin-lte/dist/css/skins/skin-blue.min.css" />
+    <link rel="stylesheet" href="lib/components-font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="lib/ionicons/css/ionicons.min.css" />
     <link rel="stylesheet" href="styles/sislegis/css/sislegis.css" />
     <link href="lib/angularjs-toaster/toaster.css" rel="stylesheet" media="screen" />
     <link rel="stylesheet" href="lib/ng-tags-input/ng-tags-input.min.css" />
@@ -19,9 +19,13 @@
 
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
-    <header class="main-header"><a href="index.html" class="logo"><span class="logo-mini">
-        <img src="styles/sislegis/img/brasao-mj.png" class="img-responsive" width="45px">
-    </span><span class="logo-lg">SISLEGIS</span> </a>
+    <header class="main-header">
+        <a href="index.html" class="logo">
+            <span class="logo-mini">
+                <!-- <img src="img/brasao-mj.png" class="img-responsive" style="width: 45px;" /> -->
+            </span>
+            <span class="logo-lg">SISLEGIS</span>
+        </a>
         <nav class="navbar navbar-static-top" role="navigation">
             <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Menu</span> </a>
             <div class="navbar-custom-menu">
@@ -71,7 +75,7 @@
     </aside>
 
     <div class="content-wrapper">
-        <div class="modal" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false" style="z-index:9999;">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -93,11 +97,9 @@
     <div class="control-sidebar-bg"></div>
 </div>
 
-    <script src="scripts/js/libraries/jquery-2.1.1.min.js" type="text/javascript"></script>
-    <script src="scripts/js/libraries/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
-    <script src="scripts/js/libraries/bootstrap.min.js" type="text/javascript"></script>
-    <script src="scripts/js/theme/core.js" type="text/javascript"></script>
-
+    <script src="lib/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="lib/jquery-ui/ui/minified/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="lib/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="lib/modernizr/modernizr.js"></script>
     <script src="lib/angular/angular.min.js"></script>
     <script src="lib/angular-route/angular-route.min.js"></script>
@@ -115,6 +117,7 @@
     <script src="lib/angularjs-dropdown-multiselect/src/angularjs-dropdown-multiselect.js"></script>
     <script src="lib/lodash/dist/lodash.js"></script>
     <script src="lib/ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
+    <script src="lib/admin-lte/dist/js/app.min.js"></script>
 
     <script src="http://localhost/auth/js/keycloak.js"></script>
 
@@ -210,13 +213,9 @@
     
     <!-- AgendaSeguida -->
     <script src="scripts/controllers/SearchAgendaComissaoController.js"></script>
-
     <script src="scripts/services/ElaboracaoNormativaConsultaFactory.js"></script>
-
     <script src="scripts/services/StatusSidofFactory.js"></script>
-
     <script src="scripts/services/locationParser.js"></script>
-    <script src="lib/AdminLTE/dist/js/app.min.js"></script>
 </body>
 
 </html>

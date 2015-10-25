@@ -46,6 +46,55 @@
 .line-16 {
     height: 890px;
 }
+.rol-vert {
+    display: block;
+    overflow: auto;
+    overflow-x: hidden;
+}
+.rol-hor {
+    display: block;
+    overflow: auto;
+    overflow-y: hidden;
+}
+.rol-hor-vert {
+    display: block;
+    overflow: auto;
+}
+.group-pills {
+    margin: 0;
+    padding: 0;
+}
+.group-pills ul, .group-pills li {
+    list-style-type: none;
+}
+.group-pills .group-pills-item {
+    float: left;
+    width: auto;
+    border-radius: 4px;
+    border: 1px solid #19B232;
+    background-color: #ECFFEF;
+    margin: 3px;
+    padding: 3px;
+}
+.group-pills .group-pills-item .close {
+    margin: -3px 0 0 5px;
+}
+.group-pills .group-pills-item:hover {
+    background-color: #BEFFC9;
+}
+.group-pills:before, .group-pills:after {
+    content: " ";
+    display: table;
+}
+.group-pills:after {
+    clear: both;
+}
+.group-pills:before, .group-pills:after {
+    display: table;
+    content: " "}
+.group-pills:after {
+    clear: both;
+}
 
 /** Reunião proposição **/
 .modal .list-proposicao{}

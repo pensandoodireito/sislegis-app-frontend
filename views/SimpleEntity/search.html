@@ -1,5 +1,5 @@
 <section class="content-header">
-    <h1>Orgão</h1>
+    <h1>{{title}}</h1>
 </section>
 <section class="content">
     <div class="row">
@@ -12,7 +12,7 @@
                     <div class="dataTables_wrapper form-inline dt-bootstrap">
                         <div class="row">
                             <div class="col-sm-6">
-                                <a id="create" class="btn btn-primary" href="#/Orgaos/new"><span class="glyphicon glyphicon-plus-sign"></span> Adicionar</a>
+                                <a id="create" class="btn btn-primary" href="{{newUrl}}"><span class="glyphicon glyphicon-plus-sign"></span> Adicionar</a>
                             </div>
                             <div class="col-sm-6">
                                 <div class="dataTables_filter">
@@ -30,7 +30,7 @@
                                     </thead>
                                     <tbody>
                                     <tr ng-repeat="result in searchResults | searchFilter:searchResults | startFrom:currentPage*pageSize | limitTo:pageSize">
-                                        <td><a href="#/Orgaos/edit/{{result.id}}">{{result.nome}}</a></td>
+                                        <td><a href="{{editUrl}}{{result.id}}">{{result.nome}}</a></td>
                                     </tr>
                                     </tbody>
                                 </table>

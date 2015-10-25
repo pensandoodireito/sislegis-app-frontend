@@ -1,9 +1,9 @@
-
 angular.module('sislegisapp').controller('NewPosicionamentoController', function ($scope, $location, locationParser, PosicionamentoResource ) {
     $scope.disabled = false;
     $scope.$location = $location;
-    $scope.posicionamento = $scope.posicionamento || {};
-    
+    $scope.simpleEntity = $scope.simpleEntity || {};
+
+    $scope.title = "Posicionamento";
 
     $scope.save = function() {
         var successCallback = function(data,responseHeaders){
@@ -14,7 +14,7 @@ angular.module('sislegisapp').controller('NewPosicionamentoController', function
         var errorCallback = function() {
             $scope.displayError = true;
         };
-        PosicionamentoResource.save($scope.posicionamento, successCallback, errorCallback);
+        PosicionamentoResource.save($scope.simpleEntity, successCallback, errorCallback);
     };
     
     $scope.cancel = function() {
