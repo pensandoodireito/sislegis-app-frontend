@@ -17,9 +17,11 @@ angular.module('sislegisapp').factory('HttpInterceptor', function($q, $rootScope
 		'requestError' : function(rejection) {
 			if (showSpinner(config))
                 $('#pleaseWaitDialog').modal();
+			/*
+             @todo recovering code if possible
 			if (canRecover(rejection)) {
 				return responseOrNewPromise
-			}
+			}*/
 			return $q.reject(rejection);
 		},
 
@@ -30,9 +32,11 @@ angular.module('sislegisapp').factory('HttpInterceptor', function($q, $rootScope
 
 		'responseError' : function(rejection) {
             $('#pleaseWaitDialog').modal('hide');
+            /*
+            @todo recovering code if possible
 			if (canRecover(rejection)) {
 				return responseOrNewPromise
-			}
+			}*/
 			return $q.reject(rejection);
 		}
 	};
