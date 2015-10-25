@@ -1,5 +1,3 @@
-
-
 angular.module('sislegisapp').controller('SearchEncaminhamentoController', function($scope, $http, EncaminhamentoResource ) {
 
     $scope.search={};
@@ -8,6 +6,11 @@ angular.module('sislegisapp').controller('SearchEncaminhamentoController', funct
     $scope.searchResults = [];
     $scope.filteredResults = [];
     $scope.pageRange = [];
+
+    $scope.title = "Encaminhamento";
+    $scope.newUrl = "#/Encaminhamentos/new";
+    $scope.editUrl = "#/Encaminhamentos/edit/";
+
     $scope.numberOfPages = function() {
         var result = Math.ceil($scope.filteredResults.length/$scope.pageSize);
         var max = (result == 0) ? 1 : result;

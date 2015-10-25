@@ -1,14 +1,15 @@
-
-
 angular.module('sislegisapp').controller('EditPosicionamentoController', function($scope, $routeParams, $location, PosicionamentoResource ) {
     var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
+
+    $scope.title = "Posicionamento";
+    $scope.isNew = false;
     
     $scope.get = function() {
         var successCallback = function(data){
             self.original = data;
-            $scope.posicionamento = new PosicionamentoResource(self.original);
+            $scope.simpleEntity = new PosicionamentoResource(self.original);
         };
         var errorCallback = function() {
             $location.path("/Posicionamentos");
@@ -17,7 +18,7 @@ angular.module('sislegisapp').controller('EditPosicionamentoController', functio
     };
 
     $scope.isClean = function() {
-        return angular.equals(self.original, $scope.posicionamento);
+        return angular.equals(self.original, $scope.simpleEntity);
     };
 
     $scope.save = function() {
@@ -28,7 +29,7 @@ angular.module('sislegisapp').controller('EditPosicionamentoController', functio
         var errorCallback = function() {
             $scope.displayError=true;
         };
-        $scope.posicionamento.$update(successCallback, errorCallback);
+        $scope.simpleEntity.$update(successCallback, errorCallback);
     };
 
     $scope.cancel = function() {
@@ -43,9 +44,8 @@ angular.module('sislegisapp').controller('EditPosicionamentoController', functio
         var errorCallback = function() {
             $scope.displayError=true;
         }; 
-        $scope.posicionamento.$remove(successCallback, errorCallback);
+        $scope.simpleEntity.$remove(successCallback, errorCallback);
     };
-    
-    
+
     $scope.get();
 });

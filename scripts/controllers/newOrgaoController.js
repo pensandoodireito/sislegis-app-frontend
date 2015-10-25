@@ -1,10 +1,11 @@
-
 angular.module('sislegisapp').controller('NewOrgaoController', function ($scope, $location, locationParser, OrgaoResource ) {
+
     $scope.disabled = false;
     $scope.$location = $location;
-    $scope.orgao = $scope.orgao || {};
+    $scope.simpleEntity = $scope.simpleEntity || {};
+    $scope.title = "Orgão";
+    $scope.isNew = true;
     
-
     $scope.save = function() {
         var successCallback = function(data,responseHeaders){
             var id = locationParser(responseHeaders);
@@ -14,7 +15,7 @@ angular.module('sislegisapp').controller('NewOrgaoController', function ($scope,
         var errorCallback = function() {
             $scope.displayError = true;
         };
-        OrgaoResource.save($scope.orgao, successCallback, errorCallback);
+        OrgaoResource.save($scope.simpleEntity, successCallback, errorCallback);
     };
     
     $scope.cancel = function() {
