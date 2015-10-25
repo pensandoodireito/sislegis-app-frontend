@@ -23,7 +23,7 @@
 	                 <br/>
 	                 <strong>Comentários</strong>
 	                 <div ng-repeat="comentario in item.listaComentario | orderBy :'dataCriacao'" class="list-group-item clearfix">
-	                 	{{comentario.dataCriacao | date: 'dd/MM/yyyy'}}: {{comentario.descricao}}
+	                 	{{comentario.dataCriacao | date: 'dd/MM/yyyy'}}: <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">{{comentario.descricao}}</pre>
 	                 </div>
 	                 <strong>Resultado: </strong>{{item.resultadoASPAR}}
 	                 <br/>
