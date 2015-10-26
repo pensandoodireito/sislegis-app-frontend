@@ -48,9 +48,6 @@
                                 <p>{{tarefa.proposicao.ementa}}</p>
                             </div>
                             <div class="col-sm-4 divider-left">
-
-                                <textarea class="form-control fontsize-sm" rows="3" placeholder="Comentário para finalização" ng-model="tarefa.comentarioFinalizacao" ng-required="true"></textarea>
-
                                 <a ng-show="!tarefa.finalizada" ng-click="finalizarTarefa(tarefa)"><i class="fa fa-thumbs-o-up"></i> Marcar como finalizada</a>
                                 <div class="{{tarefa.finalizada ? '' : 'divider-top' }}">
                                     <p><a ng-click="abrirModalComentarios(tarefa.proposicao.id)"><i class="fa fa-comments"></i> Comentários</a>
