@@ -1,14 +1,15 @@
-
-
 angular.module('sislegisapp').controller('EditEncaminhamentoController', function($scope, $routeParams, $location, EncaminhamentoResource ) {
     var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
+
+    $scope.title = "Encaminhamento";
+    $scope.isNew = false;
     
     $scope.get = function() {
         var successCallback = function(data){
             self.original = data;
-            $scope.encaminhamento = new EncaminhamentoResource(self.original);
+            $scope.simpleEntity = new EncaminhamentoResource(self.original);
         };
         var errorCallback = function() {
             $location.path("/Encaminhamentos");
@@ -17,7 +18,7 @@ angular.module('sislegisapp').controller('EditEncaminhamentoController', functio
     };
 
     $scope.isClean = function() {
-        return angular.equals(self.original, $scope.encaminhamento);
+        return angular.equals(self.original, $scope.simpleEntity);
     };
 
     $scope.save = function() {
@@ -28,7 +29,7 @@ angular.module('sislegisapp').controller('EditEncaminhamentoController', functio
         var errorCallback = function() {
             $scope.displayError=true;
         };
-        $scope.encaminhamento.$update(successCallback, errorCallback);
+        $scope.simpleEntity.$update(successCallback, errorCallback);
     };
 
     $scope.cancel = function() {
@@ -43,7 +44,7 @@ angular.module('sislegisapp').controller('EditEncaminhamentoController', functio
         var errorCallback = function() {
             $scope.displayError=true;
         }; 
-        $scope.encaminhamento.$remove(successCallback, errorCallback);
+        $scope.simpleEntity.$remove(successCallback, errorCallback);
     };
     
     

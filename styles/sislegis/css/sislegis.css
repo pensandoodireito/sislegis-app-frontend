@@ -1,0 +1,146 @@
+.line-1 {
+    height: 60px;
+}
+.line-2 {
+    height: 110px;
+}
+.line-3 {
+    height: 130px;
+}
+.line-4 {
+    height: 170px;
+}
+.line-5 {
+    height: 230px;
+}
+.line-6 {
+    height: 290px;
+}
+.line-7 {
+    height: 350px;
+}
+.line-8 {
+    height: 410px;
+}
+.line-9 {
+    height: 470px;
+}
+.line-10 {
+    height: 530px;
+}
+.line-11 {
+    height: 590px;
+}
+.line-12 {
+    height: 650px;
+}
+.line-13 {
+    height: 710px;
+}
+.line-14 {
+    height: 770px;
+}
+.line-15 {
+    height: 830px;
+}
+.line-16 {
+    height: 890px;
+}
+.rol-vert {
+    display: block;
+    overflow: auto;
+    overflow-x: hidden;
+}
+.rol-hor {
+    display: block;
+    overflow: auto;
+    overflow-y: hidden;
+}
+.rol-hor-vert {
+    display: block;
+    overflow: auto;
+}
+.group-pills {
+    margin: 0;
+    padding: 0;
+}
+.group-pills ul, .group-pills li {
+    list-style-type: none;
+}
+.group-pills .group-pills-item {
+    float: left;
+    width: auto;
+    border-radius: 4px;
+    border: 1px solid #19B232;
+    background-color: #ECFFEF;
+    margin: 3px;
+    padding: 3px;
+}
+.group-pills .group-pills-item .close {
+    margin: -3px 0 0 5px;
+}
+.group-pills .group-pills-item:hover {
+    background-color: #BEFFC9;
+}
+.group-pills:before, .group-pills:after {
+    content: " ";
+    display: table;
+}
+.group-pills:after {
+    clear: both;
+}
+.group-pills:before, .group-pills:after {
+    display: table;
+    content: " "}
+.group-pills:after {
+    clear: both;
+}
+
+/** Reunião proposição **/
+.modal .list-proposicao{}
+.modal .list-proposicao .list-proposicao-item{
+    padding: 15px;
+    margin:3px;
+    border-bottom: 1px solid #ccc;
+
+}
+.modal .list-proposicao .list-proposicao-item:hover{
+    background-color: #F5F5F5;
+    cursor: pointer;
+}
+.modal .list-proposicao .list-proposicao-item:active{
+    background-color: #E4FDF2;
+    cursor: pointer;
+}
+
+.modal .list-proposicao .active{
+    background-color: #E4FDF2;
+}
+.modal .list-proposicao .list-proposicao-item p{margin:3px;}
+
+/** Tarefas **/
+/* tarefa urgente */
+.tarefas .tarefa-urgente .panel{ border-color: #8d0d0d; border-left: 5px solid #8d0d0d; }
+.tarefas .tarefa-urgente .tarefa-titulo,
+.tarefas .tarefa-urgente .tarefa-dtlimite span,
+.tarefas .tarefa-urgente .tarefa-status span { color:#8d0d0d; }
+
+/* tarefa nova */
+.tarefas .tarefa-nova .panel{ border-color: #ff6600; border-left: 5px solid #ff6600; }
+.tarefas .tarefa-nova .tarefa-titulo,
+.tarefas .tarefa-nova .tarefa-dtlimite span,
+.tarefas .tarefa-nova .tarefa-status span { color:#ff6600; }
+
+/* tarefa ok */
+.tarefas .tarefa-ok .panel{ border-color: #54960d; border-left: 5px solid #54960d; }
+.tarefas .tarefa-ok .tarefa-titulo,
+.tarefas .tarefa-ok .tarefa-dtlimite span,
+.tarefas .tarefa-ok .tarefa-status span { color:#54960d; }
+
+/* tarefa concluida */
+.tarefas .tarefa-conc .panel{ border-color: #808080; border-left: 5px solid #808080;  }
+.tarefas .tarefa-conc .panel a,
+.tarefas .tarefa-conc .panel{ color: #808080;}
+.tarefas .tarefa-conc .tarefa-titulo,
+.tarefas .tarefa-conc .tarefa-dtlimite span,
+.tarefas .tarefa-conc .tarefa-status span { color:#808080; text-decoration: line-through;}

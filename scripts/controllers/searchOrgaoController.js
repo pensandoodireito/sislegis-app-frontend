@@ -8,6 +8,11 @@ angular.module('sislegisapp').controller('SearchOrgaoController', function($scop
     $scope.searchResults = [];
     $scope.filteredResults = [];
     $scope.pageRange = [];
+
+    $scope.title = "Orgão";
+    $scope.newUrl = "#/Orgaos/new";
+    $scope.editUrl = "#/Orgaos/edit/";
+
     $scope.numberOfPages = function() {
         var result = Math.ceil($scope.filteredResults.length/$scope.pageSize);
         var max = (result == 0) ? 1 : result;

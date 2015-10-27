@@ -14,19 +14,20 @@
 				        <strong>Error!</strong> Something broke. Retry, or cancel and start afresh.
 				    </div>
 					<div class="input-group">
-						<label for="TextoEncaminhamento">Tipo de Encaminhamento</label>
-						<select ng-model="encaminhamentoProposicao.encaminhamento" ng-options="encaminhamento.nome for encaminhamento in listaEncaminhamento track by encaminhamento.id | orderBy:'nome'" class="form-control" ng-required="true"></select>
+						<label for="tipo-encaminhamento">Tipo de Encaminhamento</label>
+						<select id="tipo-encaminhamento" ng-model="encaminhamentoProposicao.encaminhamento"
+                                ng-options="encaminhamento.nome for encaminhamento in listaEncaminhamento track by encaminhamento.id | orderBy:'nome'" class="form-control" ng-required="true"></select>
 					</div>
 					<br/>
 					<div class="input-group">
-						<label for="TextoEncaminhamento">Responsável:</label>
-	              		<input type="text" ng-model="encaminhamentoProposicao.responsavel" placeholder="Procurar usuário..."
-	              			typeahead="item as item.nome for item in getUsuarios($viewValue)" class="form-control">
+						<label for="responsavel">Responsável:</label>
+                        <input id="responsavel" type="text" ng-model="encaminhamentoProposicao.responsavel" placeholder="Procurar usuário..."
+                               typeahead="item as item.nome for item in getUsuarios($viewValue)" class="form-control">
 					</div>
 					<br/>
-					<label for="TextoEncaminhamento">Data e Hora Limite:</label>
+					<label for="prazo">Data e Hora Limite:</label>
 					<div class="input-group">
-						<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="encaminhamentoProposicao.dataHoraLimite" is-open="opened" min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Close" readonly/>
+						<input id="prazo" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="encaminhamentoProposicao.dataHoraLimite" is-open="opened" min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Close" readonly/>
 			              <span class="input-group-btn">
 			                <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 			              </span>
@@ -36,8 +37,8 @@
 					</div>
 					<br/>
 					<div class="input-group">
-						<label for="TextoEncaminhamento">Detalhes:</label>
-						<textarea class="form-control" rows="3" ng-model="encaminhamentoProposicao.comentario.descricao"></textarea>
+                    <label for="detalhes">Detalhes:</label>
+						<textarea id="detalhes" class="form-control" rows="3" ng-model="encaminhamentoProposicao.comentario.descricao"></textarea>
 					</div>
 					<br/>
 					

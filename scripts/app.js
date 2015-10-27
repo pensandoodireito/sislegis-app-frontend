@@ -28,17 +28,15 @@ var logout = function(){
 };
 
 angular.element(document).ready(function ($http) {
-    console.log("*** here");
     var keycloakAuth = new Keycloak('keycloak.json');
     auth.loggedIn = false;
 
     keycloakAuth.init({ onLoad: 'login-required' }).success(function () {
-        console.log('here login ',keycloakAuth);
+        console.log('*** LOGIN',keycloakAuth);
         keycloakAuth.loadUserInfo();
-        console.log('here b ',keycloakAuth);
         auth.loggedIn = true;
         auth.authz = keycloakAuth;
-        auth.logoutUrl = keycloakAuth.authServerUrl + "/realms/" + keycloakAuth.realm + "/tokens/logout?redirect_uri=http://sislegis.local:8080";
+        auth.logoutUrl = keycloakAuth.authServerUrl + "/realms/" + keycloakAuth.realm + "/tokens/logout?redirect_uri=http://sislegis.local";
         module.factory('Auth', function() {
             return auth;
         });
@@ -46,13 +44,9 @@ angular.element(document).ready(function ($http) {
         angular.bootstrap(document, ["sislegisapp"]);
 
     }).error(function () {
-            alert("failed to login");
+            console.error("failed to login");
     });
 });
-
-module.controller('TestCtrl', ['AgendaComissaoFactory',function($scope, $http) {
-    console.log("asadfas");
-}]);
 
 module.controller('GlobalCtrl', function($scope, $http) {
     $scope.logout = logout;
@@ -60,16 +54,15 @@ module.controller('GlobalCtrl', function($scope, $http) {
 
 module.config(['$routeProvider', function($routeProvider) {
     $routeProvider
-    	.when('/Tstes',{templateUrl:'views/Reuniao/reuniaonova.html',controller:'TestCtrl'})
     	.when('/Reuniaos/reuniaonova',{templateUrl:'views/Reuniao/reuniaonova.html',controller:'GerenciarReuniaoController'})	
     	.when('/Reuniaos/gerenciar',{templateUrl:'views/Reuniao/gerenciar.html',controller:'GerenciarReuniaoController'})
 		.when('/Reuniaos/gerenciar/:ReuniaoId',{templateUrl:'views/Reuniao/gerenciar.html',controller:'GerenciarReuniaoController'})
 		
 		.when('/Proposicao/consultar',{templateUrl:'views/Proposicao/consultar-proposicao.html',controller:'GerenciarReuniaoController'})
 		
-		.when('/Posicionamentos',{templateUrl:'views/Posicionamento/search.html',controller:'SearchPosicionamentoController'})
-		.when('/Posicionamentos/new',{templateUrl:'views/Posicionamento/detail.html',controller:'NewPosicionamentoController'})
-		.when('/Posicionamentos/edit/:PosicionamentoId',{templateUrl:'views/Posicionamento/detail.html',controller:'EditPosicionamentoController'})
+		.when('/Posicionamentos',{templateUrl:'views/SimpleEntity/search.html',controller:'SearchPosicionamentoController'})
+		.when('/Posicionamentos/new',{templateUrl:'views/SimpleEntity/detail.html',controller:'NewPosicionamentoController'})
+		.when('/Posicionamentos/edit/:PosicionamentoId',{templateUrl:'views/SimpleEntity/detail.html',controller:'EditPosicionamentoController'})
 
 		.when('/StatusSidof',{templateUrl:'views/StatusSidof/search.html',controller:'SearchStatusSidofController'})
 		.when('/StatusSidof/new',{templateUrl:'views/StatusSidof/detail.html',controller:'NewStatusSidofController'})
@@ -83,13 +76,13 @@ module.config(['$routeProvider', function($routeProvider) {
 		.when('/AreaConsultadas/new',{templateUrl:'views/AreaConsultada/detail.html',controller:'NewAreaConsultadaController'})
 		.when('/AreaConsultadas/edit/:AreaConsultadaId',{templateUrl:'views/AreaConsultada/detail.html',controller:'EditAreaConsultadaController'})
 
-		.when('/Orgaos',{templateUrl:'views/Orgao/search.html',controller:'SearchOrgaoController'})
-		.when('/Orgaos/new',{templateUrl:'views/Orgao/detail.html',controller:'NewOrgaoController'})
-		.when('/Orgaos/edit/:OrgaoId',{templateUrl:'views/Orgao/detail.html',controller:'EditOrgaoController'})
+		.when('/Orgaos',{templateUrl:'views/SimpleEntity/search.html',controller:'SearchOrgaoController'})
+		.when('/Orgaos/new',{templateUrl:'views/SimpleEntity/detail.html',controller:'NewOrgaoController'})
+		.when('/Orgaos/edit/:OrgaoId',{templateUrl:'views/SimpleEntity/detail.html',controller:'EditOrgaoController'})
 		
-		.when('/Encaminhamentos',{templateUrl:'views/Encaminhamento/search.html',controller:'SearchEncaminhamentoController'})
-		.when('/Encaminhamentos/new',{templateUrl:'views/Encaminhamento/detail.html',controller:'NewEncaminhamentoController'})
-		.when('/Encaminhamentos/edit/:EncaminhamentoId',{templateUrl:'views/Encaminhamento/detail.html',controller:'EditEncaminhamentoController'})
+		.when('/Encaminhamentos',{templateUrl:'views/SimpleEntity/search.html',controller:'SearchEncaminhamentoController'})
+		.when('/Encaminhamentos/new',{templateUrl:'views/SimpleEntity/detail.html',controller:'NewEncaminhamentoController'})
+		.when('/Encaminhamentos/edit/:EncaminhamentoId',{templateUrl:'views/SimpleEntity/detail.html',controller:'EditEncaminhamentoController'})
 		
 		.when('/Usuarios',{templateUrl:'views/Usuario/search.html',controller:'SearchUsuarioController'})
 		.when('/Usuarios/new',{templateUrl:'views/Usuario/detail.html',controller:'NewUsuarioController'})
@@ -149,14 +142,14 @@ module.factory('errorInterceptor', function($q) {
                 console.log('session timeout?');
                 logout();
             } else if (response.status == 403) {
-                alert("Forbidden");
+                console.error("Forbidden");
             } else if (response.status == 404) {
-                alert("Not found");
+                console.error("Not found");
             } else if (response.status) {
                 if (response.data && response.data.errorMessage) {
-                    alert(response.data.errorMessage);
+                    console.error(response.data.errorMessage);
                 } else {
-                    alert("An unexpected server error has occurred");
+                    console.error("An unexpected server error has occurred");
                 }
             }
             return $q.reject(response);

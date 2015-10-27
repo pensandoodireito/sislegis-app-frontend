@@ -1,0 +1,192 @@
+.line-1 {
+  height: 60px;
+}
+
+.line-2 {
+  height: 110px;
+}
+
+.line-3 {
+  height: 130px;
+}
+
+.line-4 {
+  height: 170px;
+}
+
+.line-5 {
+  height: 230px;
+}
+
+.line-6 {
+  height: 290px;
+}
+
+.line-7 {
+  height: 350px;
+}
+
+.line-8 {
+  height: 410px;
+}
+
+.line-9 {
+  height: 470px;
+}
+
+.line-10 {
+  height: 530px;
+}
+
+.line-11 {
+  height: 590px;
+}
+
+.line-12 {
+  height: 650px;
+}
+
+.line-13 {
+  height: 710px;
+}
+
+.line-14 {
+  height: 770px;
+}
+
+.line-15 {
+  height: 830px;
+}
+
+.line-16 {
+  height: 890px;
+}
+
+.rol-vert {
+  display: block;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.rol-hor {
+  display: block;
+  overflow: auto;
+  overflow-y: hidden;
+}
+
+.rol-hor-vert {
+  display: block;
+  overflow: auto;
+}
+
+.group-pills {
+  margin: 0;
+  padding: 0;
+  ul, li {
+    list-style-type: none;
+  }
+  .group-pills-item {
+    float: left;
+    width: auto;
+    border-radius: 4px;
+    border: 1px solid #19B232;
+    background-color: #ECFFEF;
+    margin: 3px;
+    padding: 3px;
+    .close {
+      margin: -3px 0 0 5px;
+    }
+    &:hover {
+      background-color: #BEFFC9;
+    }
+  }
+  &:before {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    content: " ";
+    display: table;
+    clear: both;
+  }
+  &:before {
+    display: table;
+    content: " ";
+  }
+  &:after {
+    display: table;
+    content: " ";
+    clear: both;
+  }
+}
+
+/** Reunião proposição **/
+
+.modal .list-proposicao {
+  .list-proposicao-item {
+    padding: 15px;
+    margin: 3px;
+    border-bottom: 1px solid #ccc;
+    &:hover {
+      background-color: #F5F5F5;
+      cursor: pointer;
+    }
+    &:active {
+      background-color: #E4FDF2;
+      cursor: pointer;
+    }
+  }
+  .active {
+    background-color: #E4FDF2;
+  }
+  .list-proposicao-item p {
+    margin: 3px;
+  }
+}
+
+/** Tarefas **/
+/* tarefa urgente */
+
+.tarefas {
+  .tarefa-urgente {
+    .panel {
+      border-color: #8d0d0d;
+      border-left: 5px solid #8d0d0d;
+    }
+    .tarefa-titulo, .tarefa-dtlimite span, .tarefa-status span {
+      color: #8d0d0d;
+    }
+  }
+  .tarefa-nova {
+    .panel {
+      border-color: #ff6600;
+      border-left: 5px solid #ff6600;
+    }
+    .tarefa-titulo, .tarefa-dtlimite span, .tarefa-status span {
+      color: #ff6600;
+    }
+  }
+  .tarefa-ok {
+    .panel {
+      border-color: #54960d;
+      border-left: 5px solid #54960d;
+    }
+    .tarefa-titulo, .tarefa-dtlimite span, .tarefa-status span {
+      color: #54960d;
+    }
+  }
+  .tarefa-conc {
+    .panel {
+      border-color: #808080;
+      border-left: 5px solid #808080;
+      a {
+        color: #808080;
+      }
+      color: #808080;
+    }
+    .tarefa-titulo, .tarefa-dtlimite span, .tarefa-status span {
+      color: #808080;
+      text-decoration: line-through;
+    }
+  }
+}

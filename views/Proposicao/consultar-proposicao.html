@@ -68,7 +68,7 @@
 										href="{{selectedProposicao.linkProposicao}}" target="_blank">{{item.sigla}}</a>
 								</h3>
 								<p>
-									{{item.ementa}} <br /> <strong>Autor: </strong>{{item.autor}}
+										{{item.ementa}} <br /> <strong>Autor: </strong>{{item.autor}}
 									<br /> <strong>Origem: </strong>{{item.origem}} <br />
 								<span ng-show="item.origem == 'SENADO'">
 									<a
@@ -82,15 +82,9 @@
 										target="_blank"><i class="fa fa-history"></i> Histórico de
 										Tramitação</a>
 								</span>
-								
 								<span class="divider-left" >
-								
-										<a  ng-show="isFollowed(item)" 
-										 href=""  ng-click="unfollowProposicao(item);"
-										><i class="fa  fa-check-square-o"	></i> Seguindo proposição</a>
-										<a  ng-show="!isFollowed(item)" 
-										 href=""  ng-click="followProposicao(item);"
-										><i class="fa fa-square-o"	></i> Seguir proposição</a>
+                                    <a  ng-show="isFollowed(item)" href ng-click="unfollowProposicao(item);"><i class="fa  fa-check-square-o"></i> Seguindo proposição</a>
+                                    <a  ng-show="!isFollowed(item)" href ng-click="followProposicao(item);"><i class="fa fa-square-o"	></i> Seguir proposição</a>
 								</span>
 								</p>
 							</div>

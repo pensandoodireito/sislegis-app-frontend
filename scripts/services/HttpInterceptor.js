@@ -10,29 +10,33 @@ angular.module('sislegisapp').factory('HttpInterceptor', function($q, $rootScope
 	return {
 		'request' : function(config) {
 			if (showSpinner(config))
-		        $('#spinner').show();
+		        $('#pleaseWaitDialog').modal();
 			return config;
 		},
 
 		'requestError' : function(rejection) {
 			if (showSpinner(config))
-		        $('#spinner').show();
+                $('#pleaseWaitDialog').modal();
+			/*
+             @todo recovering code if possible
 			if (canRecover(rejection)) {
 				return responseOrNewPromise
-			}
+			}*/
 			return $q.reject(rejection);
 		},
 
 		'response' : function(response) {
-	        $('#spinner').hide();
+            $('#pleaseWaitDialog').modal('hide');
 			return response;
 		},
 
 		'responseError' : function(rejection) {
-	        $('#spinner').hide();
+            $('#pleaseWaitDialog').modal('hide');
+            /*
+            @todo recovering code if possible
 			if (canRecover(rejection)) {
 				return responseOrNewPromise
-			}
+			}*/
 			return $q.reject(rejection);
 		}
 	};

@@ -1,7 +1,6 @@
 <section class="content-header">
-    <h1>Área Consultada</h1>
+    <h1>{{title}}</h1>
 </section>
-
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
@@ -13,11 +12,11 @@
                     <div class="dataTables_wrapper form-inline dt-bootstrap">
                         <div class="row">
                             <div class="col-sm-6">
-                                <a class="btn btn-primary" href="#/AreaConsultadas/new"><span class="glyphicon glyphicon-plus-sign"></span> Adicionar</a>
+                                <a id="create" class="btn btn-primary" href="{{newUrl}}"><span class="glyphicon glyphicon-plus-sign"></span> Adicionar</a>
                             </div>
                             <div class="col-sm-6">
                                 <div class="dataTables_filter">
-                                    <label>Busca:&nbsp;<input type="search" class="form-control input-sm" placeholder="" ng-model="search.descricao" placeholder="Escreve o nome da área consultada"></label>
+                                    <label>Busca:&nbsp;<input id="nome" name="nome" class="form-control" type="text" ng-model="search.nome" />
                                 </div>
                             </div>
                         </div>
@@ -26,12 +25,12 @@
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th>Descrição</th>
+                                        <th>Nome</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr ng-repeat="result in searchResults | searchFilter:searchResults | startFrom:currentPage*pageSize | limitTo:pageSize">
-                                        <td><a href="#/AreaConsultadas/edit/{{result.id}}">{{result.descricao}}</a></td>
+                                        <td><a href="{{editUrl}}{{result.id}}">{{result.nome}}</a></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -52,6 +51,6 @@
                     </div>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
-        </div><!-- /.col -->
+        </div>
     </div>
 </section>

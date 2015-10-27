@@ -1,79 +1,66 @@
-<link href="styles/css/theme-sislegis/reuniao-sislegis.css"
-	rel="stylesheet" type="text/css" />
-<div class="container">
-	<h3>Seguir Atualizações de Comissões</h3>
-	<p>Selecione quais comissões você deseja receber notificações por
-		e-mail caso a pauta da semana seguinte seja atualizada.</p>
-	<div class="row">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<div class="clearfix">
-					<div class="row" role="form">
-						<div>
-							<div class="col-sm-2">
-								<form id="ComissaoSearch">
-									<label>Filtrar pela sigla:</label> <select
-										ng-change="selectOrigemComissoes()" ng-model="origem"
-										ng-options="origem.displayName for origem in origens"
-										class="form-control" required>
-										<option value="" selected>Origem da comissão</option>
-									</select>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="panel-body">
-				<div id="search-results">
-					<div class="table-responsive">
-						<table
-							class="table table-responsive table-bordered table-striped clearfix">
-							<thead>
-								<tr>
-									<th>Sigla</th>
-									<th>Ação</th>
-								</tr>
-							</thead>
-							<tbody id="search-results-body">
-								<tr
-									ng-repeat="result in comissoes | startFrom:currentPage*pageSize | limitTo:pageSize">
-									<td>{{result.sigla}}</td>
-									<td>
-										<div ng-show="isSeguida(result.sigla)">
-											<button id="unfollow" name="saveOrgao"
-												class="btn btn-primary" ng-disabled=""
-												ng-click="naoseguir(result.sigla)">
-												<span class="glyphicon glyphicon-remove-sign"></span> Deixar
-												de Seguir
-											</button>
-										</div>
-										<div ng-show="!isSeguida(result.sigla)">
-											<button id="follow" name="saveOrgao" class="btn btn-primary"
-												ng-disabled="" ng-click="seguir(result.sigla)">
-												<span class="glyphicon glyphicon-ok-sign"></span> Seguir
-											</button>
-										</div>
-
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-
-
-
-				</div>
-				<ul class="pagination pagination-centered">
-					<li ng-class="{disabled:currentPage == 0}"><a id="prev" href
-						ng-click="previous()">«</a></li>
-					<li ng-repeat="n in pageRange" ng-class="{active:currentPage == n}"
-						ng-click="setPage(n)"><a href ng-bind="n + 1">1</a></li>
-					<li ng-class="{disabled: currentPage == (numberOfPages() - 1)}">
-						<a id="next" href ng-click="next()">»</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-</div>
+<section class="content-header">
+    <h1>Seguir Atualizações de Comissões</h1>
+    <small>Selecione quais comissões você deseja receber notificações por e-mail caso a pauta da semana seguinte seja atualizada.</small>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Listagem</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="dataTables_wrapper form-inline dt-bootstrap">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="dataTables_filter">
+                                    <label>Filtrar pela sigla:
+                                    <select ng-change="selectOrigemComissoes()" ng-model="origem" ng-options="origem.displayName for origem in origens" class="form-control" required>
+                                        <option value="" selected>Origem da comissão</option>
+                                    </select>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" ng-show="comissoes.length > 0">
+                            <div class="col-sm-12">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Sigla</th>
+                                        <th>Ação</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="result in comissoes | startFrom:currentPage*pageSize | limitTo:pageSize">
+                                        <td>{{result.sigla}}</td>
+                                        <td>
+                                            <button ng-show="isSeguida(result.sigla)" id="unfollow" name="saveOrgao" class="btn btn-primary" ng-disabled="" ng-click="naoseguir(result.sigla)">
+                                                <span class="glyphicon glyphicon-remove-sign"></span> Seguindo
+                                            </button>
+                                            <button ng-show="!isSeguida(result.sigla)" id="follow" name="saveOrgao" class="btn btn-primary" ng-disabled="" ng-click="seguir(result.sigla)">
+                                                <span class="glyphicon glyphicon-ok-sign"></span> Seguir
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row" ng-show="comissoes.length > 0">
+                            <div class="col-sm-12">
+                                <div class="dataTables_paginate paging_simple_numbers">
+                                    <ul class="pagination pagination-centered">
+                                        <li ng-class="{disabled:currentPage == 0}"><a id="prev" href ng-click="previous()">«</a></li>
+                                        <li ng-repeat="n in pageRange" ng-class="{active:currentPage == n}" ng-click="setPage(n)"><a href ng-bind="n + 1">1</a></li>
+                                        <li ng-class="{disabled: currentPage == (numberOfPages() - 1)}"> <a id="next" href ng-click="next()">»</a>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+    </div>
+</section>
