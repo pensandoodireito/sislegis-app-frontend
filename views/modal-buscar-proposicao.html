@@ -45,29 +45,29 @@
                 <div class="panel-heading">
                     <div class="form-group mb-0">
                         <div class="input-group">
-                            <input ng-show="proposicoes.length" ng-model="buscaPalavraChave" placeholder="Filtrar por palavra chave" class="form-control mb-0">
+                            <input ng-show="pautaReuniao.proposicoesDaPauta.length>0" ng-model="buscaPalavraChave" placeholder="Filtrar por palavra chave" class="form-control mb-0">
                         </div>
                     </div>
                 </div>
                 <div class="panel-body line-7 rol-vert list-proposicao">
-                    <div class="list-proposicao-item" ng-model="proposicao" ng-repeat="proposicao in proposicoes | filter:buscaPalavraChave" ng-click="adicionarProposicao(proposicao)">
+                    <div class="list-proposicao-item" ng-model="proposicaoPauta" ng-repeat="proposicaoPauta in pautaReuniao.proposicoesDaPauta | filter:buscaPalavraChave" ng-click="adicionarProposicao(proposicaoPauta)">
                         <div class="clearfix">
                             <div class="pull-left width-auto">
-                                <h4 class="list-group-item-heading">{{proposicao.sigla}}</h4>
+                                <h4 class="list-group-item-heading">{{proposicaoPauta.proposicao.sigla}}</h4>
                             </div>
                             <div class="pull-right width-auto">
-                                <a href="{{proposicao.linkProposicao}}" target="_blank" ng-show="proposicao.linkProposicao != null" class="btn btn-info btn-xs" title="Link da proposição"> 
+                                <a href="{{proposicaoPauta.proposicao.linkProposicao}}" target="_blank" ng-show="proposicaoPauta.proposicao.linkProposicao != null" class="btn btn-info btn-xs" title="Link da proposição"> 
                                     <i class="fa fa-search-plus"></i>
                                 </a>
-                                <a href="{{proposicao.linkPauta}}" target="_blank" ng-show="proposicao.linkPauta != null" class="btn btn-info btn-xs" title="Link da pauta da reunião"> 
+                                <a href="{{proposicaoPauta.proposicao.linkPauta}}" target="_blank" ng-show="proposicaoPauta.proposicao.linkPauta != null" class="btn btn-info btn-xs" title="Link da pauta da reunião"> 
                                     <i class="fa fa-external-link-square"></i>
                                 </a>
                             </div>
                         </div>
-                        <p>{{proposicao.ementa}}</p>
-                        <p><strong>Origem: </strong>{{proposicao.origem}}</p>
-                        <p><strong>Comissao: </strong>{{proposicao.comissao}}</p>
-                        <p><strong>Ordem na Pauta: </strong>{{proposicao.seqOrdemPauta}}</p>
+                        <p>{{proposicaoPauta.proposicao.ementa}}</p>
+                        <p><strong>Origem: </strong>{{pautaReuniao.origem}}</p>
+                        <p><strong>Comissao: </strong>{{pautaReuniao.comissao}}</p>
+                        <p><strong>Ordem na Pauta: </strong>{{proposicaoPauta.ordemPauta}}</p>
                     </div>
                 </div>
             </div>
@@ -80,10 +80,10 @@
                 </div>
                 <div class="panel-body line-6 rol-vert">
                     <ul class="group-pills fontsize-sm">
-                        <li class="group-pills-item" ng-model="proposicaoAdd" ng-repeat="proposicaoAdd in listaProposicaoSelecao">
-                            <button type="button" class="close" ng-click="removerProposicao(proposicaoAdd)">
+                        <li class="group-pills-item" ng-model="proposicaoAdd" ng-repeat="proposicaoPautaAdd in listaProposicaoSelecao">
+                            <button type="button" class="close" ng-click="removerProposicao(proposicaoPautaAdd)">
                                 <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
-                            </button> {{proposicaoAdd.sigla}}
+                            </button> {{proposicaoPautaAdd.proposicao.sigla}}
                         </li>
                     </ul>
                 </div>
