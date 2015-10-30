@@ -138,7 +138,7 @@
                         <br/>
                         <strong>Comissao: </strong>{{item.pautaComissaoAtual.pautaReuniaoComissao.comissao}}
                         <br/>
-                        <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} ({{item.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})
+                        <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} <span ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{item.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
                         <br/>
                         <strong>Relator: </strong>{{item.pautaComissaoAtual.relator}}
                         <br/>
