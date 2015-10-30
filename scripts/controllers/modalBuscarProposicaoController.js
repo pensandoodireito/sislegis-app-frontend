@@ -7,7 +7,7 @@ angular.module('sislegisapp').controller(
 			$scope.disabled = false;
 			$scope.showDetalhamentoProposicao = false;
 			$scope.$location = $location;
-			$scope.campoData = new Date();
+			$scope.campoData = new Date(reuniao.data);
 
 			$scope.comissao = new Object();
 			$scope.reuniao = reuniao;
@@ -16,9 +16,7 @@ angular.module('sislegisapp').controller(
 
 			$scope.listaProposicaoSelecao = [];
 			$scope.listaProposicaoPesquisa = {};
-			$scope.pautaReuniao = {
-				proposicoesDaPauta : []
-			};
+			$scope.pautaReuniao = [];
 			$scope.pautaReuniaoSelecao = {};
 
 			$scope.pesquisar = function() {
@@ -39,7 +37,7 @@ angular.module('sislegisapp').controller(
 				var successCallback = function(sucess) {
 					$scope.detalheProposicao = null;
 					$scope.showDetalhamentoProposicao = false;
-					$scope.pautaReuniao = sucess[0];
+					$scope.pautaReuniao = sucess;
 					$scope.comissaoProposicao = $scope.comissao.sigla;
 				};
 				var errorCallback = function() {
@@ -80,16 +78,16 @@ angular.module('sislegisapp').controller(
 				});
 			};
 
-			$scope.adicionarProposicao = function(proposicaoPauta) {
+			$scope.adicionarProposicao = function(pauta,proposicaoPauta) {
 				// var proposicao = proposicaoPauta.proposicao;
 				// condicional para evitar itens duplicados
 				if ($scope.listaProposicaoSelecao.indexOf(proposicaoPauta) == -1) {
 
 					proposicaoPauta.pautaReuniaoComissao = {
-						codigoReuniao : $scope.pautaReuniao.codigoReuniao
+						codigoReuniao : pauta.codigoReuniao
 					};
 					proposicaoPauta.proposicao.reuniao = $scope.reuniao;
-					$scope.pautaReuniaoSelecao[$scope.pautaReuniao.codigoReuniao] = $scope.pautaReuniao;
+					$scope.pautaReuniaoSelecao[pauta.codigoReuniao] = pauta;
 					$scope.listaProposicaoSelecao.push(proposicaoPauta);
 				} else {
 					toaster.pop('info', 'Proposição já selecionada');

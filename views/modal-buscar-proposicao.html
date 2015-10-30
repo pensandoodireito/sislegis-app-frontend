@@ -1,101 +1,117 @@
 <!-- Modal buscar proposição -->
 <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" ng-click="ok()">
-        <span aria-hidden="true">&times;</span> <span class="sr-only">Fechar</span>
-    </button>
-    <h4 class="modal-title">Buscar / Adicionar proposições para reunião de <span class="text-red">{{reuniao.data | date:'dd/MM/yyyy'}}</span></h4>
+	<button type="button" class="close" data-dismiss="modal" ng-click="ok()">
+		<span aria-hidden="true">&times;</span> <span class="sr-only">Fechar</span>
+	</button>
+	<h4 class="modal-title">
+		Buscar / Adicionar proposições das pautas das comissões para reunião de <span class="text-red">{{reuniao.data | date:'dd/MM/yyyy'}}</span>
+	</h4>
 </div>
 <div class="modal-body">
-    <div class="row">
-        <div class="col-sm-12">
-            <form id="BuscarProposicaoForm" name="BuscarProposicaoForm" role="form">
-                <div class="form-inline" role="form">
-                    <p class="form-control-static mr-sm">Procurar proposições a partir do dia:</p>
-                    <div class="input-group width-grid-2">
-                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="campoData" date-type="string" is-open="opened" min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Close" readonly /> <span class="input-group-btn">
+	<div class="row">
+		<div class="col-sm-12">
+			<form id="BuscarProposicaoForm" name="BuscarProposicaoForm" role="form">
+				<div class="form-inline" role="form">
+					<p class="form-control-static mr-sm">Procurar proposições a partir do dia:</p>
+					<div class="input-group width-grid-2">
+						<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="campoData" date-type="string" is-open="opened" min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Close" readonly /> <span class="input-group-btn">
 							<button type="button" class="btn btn-default" ng-click="openCalendar($event)">
 								<i class="glyphicon glyphicon-calendar"></i>
 							</button>
 						</span>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <select ng-change="selectOrigemComissoes()" ng-model="origem" ng-options="origem.displayName for origem in origens" class="form-control" required>
-                                <option value="" selected>Origem da proposição</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <select ng-model="comissao" ng-options="comissao.sigla for comissao in comissoes | orderBy:'sigla'" class="form-control" required>
-                                <option value="" selected>Comissão</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-default" ng-click="buscarProposicao()">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="row mt-md">
-        <div class="col-sm-7">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="form-group mb-0">
-                        <div class="input-group">
-                            <input ng-show="pautaReuniao.proposicoesDaPauta.length>0" ng-model="buscaPalavraChave" placeholder="Filtrar por palavra chave" class="form-control mb-0">
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-body line-7 rol-vert list-proposicao">
-                    <div class="list-proposicao-item" ng-model="proposicaoPauta" ng-repeat="proposicaoPauta in pautaReuniao.proposicoesDaPauta | filter:buscaPalavraChave" ng-click="adicionarProposicao(proposicaoPauta)">
-                        <div class="clearfix">
-                            <div class="pull-left width-auto">
-                                <h4 class="list-group-item-heading">{{proposicaoPauta.proposicao.sigla}}</h4>
-                            </div>
-                            <div class="pull-right width-auto">
-                                <a href="{{proposicaoPauta.proposicao.linkProposicao}}" target="_blank" ng-show="proposicaoPauta.proposicao.linkProposicao != null" class="btn btn-info btn-xs" title="Link da proposição"> 
-                                    <i class="fa fa-search-plus"></i>
-                                </a>
-                                <a href="{{proposicaoPauta.proposicao.linkPauta}}" target="_blank" ng-show="proposicaoPauta.proposicao.linkPauta != null" class="btn btn-info btn-xs" title="Link da pauta da reunião"> 
-                                    <i class="fa fa-external-link-square"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <p>{{proposicaoPauta.proposicao.ementa}}</p>
-                        <p><strong>Origem: </strong>{{pautaReuniao.origem}}</p>
-                        <p><strong>Comissao: </strong>{{pautaReuniao.comissao}}</p>
-                        <p><strong>Ordem na Pauta: </strong>{{proposicaoPauta.ordemPauta}}</p>
-                    </div>
-                </div>
-            </div>
-            <!-- /item -->
-        </div>
-        <div class="col-sm-5">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    Selecionados:
-                </div>
-                <div class="panel-body line-6 rol-vert">
-                    <ul class="group-pills fontsize-sm">
-                        <li class="group-pills-item" ng-model="proposicaoAdd" ng-repeat="proposicaoPautaAdd in listaProposicaoSelecao">
-                            <button type="button" class="close" ng-click="removerProposicao(proposicaoPautaAdd)">
-                                <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
-                            </button> {{proposicaoPautaAdd.proposicao.sigla}}
-                        </li>
-                    </ul>
-                </div>
+					</div>
+					<div class="form-group">
+						<div class="input-group">
+							<select ng-change="selectOrigemComissoes()" ng-model="origem" ng-options="origem.displayName for origem in origens" class="form-control" required>
+								<option value="" selected>Origem da proposição</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="input-group">
+							<select ng-model="comissao" ng-options="comissao.sigla for comissao in comissoes | orderBy:'sigla'" class="form-control" required>
+								<option value="" selected>Comissão</option>
+							</select>
+						</div>
+					</div>
+					<button type="submit" class="btn btn-default" ng-click="buscarProposicao()">
+						<i class="fa fa-search"></i>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
 
-            </div>
-            <p>
-                <button type="button" class="btn btn-primary" title="Adicionar proposição" ng-click="salvar()">Adicionar selecionados</button>
-                <button type="button" class="btn btn-default ml-md" title="Cancelar" data-dismiss="modal" ng-click="ok()">Cancelar</button>
 
-            </p>
-        </div>
-    </div>
+	<div class="row mt-md">
+		<div class="col-sm-7">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<div class="form-group mb-0">
+						<div class="input-group">
+							<input ng-show="pautaReuniao.proposicoesDaPauta.length>0" ng-model="buscaPalavraChave" placeholder="Filtrar por palavra chave" class="form-control mb-0">
+						</div>
+					</div>
+				</div>
+				<div class="panel-body line-7 rol-vert">
+					<div ng-repeat="pauta in pautaReuniao | orderBy : 'data' " class="list-group">
+
+						<div class="list-group-item active">
+							<h4 class="list-group-item-heading">{{pauta.data| date:'dd/MM HH:mm'}} - {{pauta.titulo}}</h4>
+						</div>
+
+						<div class=" list-proposicao">
+							<div class="list-proposicao-item" ng-repeat="proposicaoPauta in pauta.proposicoesDaPauta" ng-click="adicionarProposicao(pauta,proposicaoPauta)">
+								<div class="clearfix">
+									<div class="pull-left width-auto">
+										<h4 class="list-group-item-heading">{{proposicaoPauta.proposicao.sigla}}</h4>
+									</div>
+									<div class="pull-right width-auto">
+										<a href="{{proposicaoPauta.proposicao.linkProposicao}}" target="_blank" ng-show="proposicaoPauta.proposicao.linkProposicao != null" class="btn btn-info btn-xs" title="Link da proposição"> <i class="fa fa-search-plus"></i>
+										</a> <a href="{{proposicaoPauta.proposicao.linkPauta}}" target="_blank" ng-show="proposicaoPauta.proposicao.linkPauta != null" class="btn btn-info btn-xs" title="Link da pauta da reunião"> <i class="fa fa-external-link-square"></i>
+										</a>
+									</div>
+								</div>
+								<p>{{proposicaoPauta.proposicao.ementa}}</p>
+								<p>
+									<strong>Origem: </strong>{{pauta.origem}}
+								</p>
+								<p>
+									<strong>Comissao: </strong>{{pauta.comissao}}
+								</p>
+								<p>
+									<strong>Ordem na Pauta: </strong>{{proposicaoPauta.ordemPauta}}
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+			<!-- /item -->
+		</div>
+		<div class="col-sm-5">
+			<div class="panel panel-default">
+				<div class="panel-heading">Selecionados:</div>
+				<div class="panel-body line-6 rol-vert">
+					<ul class="group-pills fontsize-sm">
+						<li class="group-pills-item" ng-model="proposicaoAdd" ng-repeat="proposicaoPautaAdd in listaProposicaoSelecao">
+							<button type="button" class="close" ng-click="removerProposicao(proposicaoPautaAdd)">
+								<span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
+							</button> {{proposicaoPautaAdd.proposicao.sigla}}
+						</li>
+					</ul>
+				</div>
+
+			</div>
+			<p>
+				<button type="button" class="btn btn-primary" title="Adicionar proposição" ng-click="salvar()">Adicionar selecionados</button>
+				<button type="button" class="btn btn-default ml-md" title="Cancelar" data-dismiss="modal" ng-click="ok()">Cancelar</button>
+
+			</p>
+		</div>
+	</div>
 
 </div>
 
