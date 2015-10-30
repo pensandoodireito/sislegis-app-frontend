@@ -49,7 +49,7 @@
 				<div class="panel-heading">
 					<div class="form-group mb-0">
 						<div class="input-group">
-							<input ng-show="pautaReuniao.proposicoesDaPauta.length>0" ng-model="buscaPalavraChave" placeholder="Filtrar por palavra chave" class="form-control mb-0">
+							<input ng-show="pautaReuniao.length>0" ng-model="buscaPalavraChave" placeholder="Filtrar por palavra chave" class="form-control mb-0">
 						</div>
 					</div>
 				</div>
@@ -61,7 +61,7 @@
 						</div>
 
 						<div class=" list-proposicao">
-							<div class="list-proposicao-item" ng-repeat="proposicaoPauta in pauta.proposicoesDaPauta" ng-click="adicionarProposicao(pauta,proposicaoPauta)">
+							<div class="list-proposicao-item" ng-repeat="proposicaoPauta in pauta.proposicoesDaPauta | filter:buscaPalavraChave" ng-click="adicionarProposicao(pauta,proposicaoPauta)">
 								<div class="clearfix">
 									<div class="pull-left width-auto">
 										<h4 class="list-group-item-heading">{{proposicaoPauta.proposicao.sigla}}</h4>
@@ -89,7 +89,6 @@
 
 
 			</div>
-			<!-- /item -->
 		</div>
 		<div class="col-sm-5">
 			<div class="panel panel-default">
