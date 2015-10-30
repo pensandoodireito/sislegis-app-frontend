@@ -78,7 +78,7 @@ angular.module('sislegisapp').controller(
 				});
 			};
 
-			$scope.adicionarProposicao = function(pauta,proposicaoPauta) {
+			$scope.adicionarProposicao = function(pauta, proposicaoPauta) {
 				// var proposicao = proposicaoPauta.proposicao;
 				// condicional para evitar itens duplicados
 				if ($scope.listaProposicaoSelecao.indexOf(proposicaoPauta) == -1) {
@@ -138,16 +138,28 @@ angular.module('sislegisapp').controller(
 				value : 'S',
 				displayName : 'Senado'
 			} ];
+			$scope.comissoesCache = {
+				'C' : null,
+				'S' : null
 
+			};
 			$scope.selectOrigemComissoes = function() {
-				var origemSelecionada = $scope.origem.value;
-				if (origemSelecionada == 'S') {
-					$http.get(BACKEND + '/comissaos/comissoesSenado').success(function(data) {
-						$scope.comissoes = data;
-					}).error(function(error) {
-					});
-				} else if (origemSelecionada == 'C') {
-					$http.get(BACKEND + '/comissaos/comissoesCamara').success(function(data) {
+
+				switch ($scope.origem.value) {
+					case 'S':
+						url = BACKEND + '/comissaos/comissoesSenado';
+						break;
+					case 'C':
+						url = BACKEND + '/comissaos/comissoesCamara';
+						break;
+					default:
+						break;
+				}
+				if ($scope.comissoesCache[$scope.origem.value]) {
+					$scope.comissoes = $scope.comissoesCache[$scope.origem.value];
+				} else {
+					$http.get(url).success(function(data) {
+						$scope.comissoesCache[$scope.origem.value] = data;
 						$scope.comissoes = data;
 					}).error(function(error) {
 					});
