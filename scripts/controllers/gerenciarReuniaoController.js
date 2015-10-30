@@ -96,6 +96,7 @@ angular.module('sislegisapp').controller(
     };
     
     $scope.setSelectedProposicao = function(item) {
+    	$scope.responsavelNull = (item.responsavel==null);
     	$scope.selectedProposicao = item;
 	}
 
@@ -112,7 +113,12 @@ angular.module('sislegisapp').controller(
     $scope.isClean = function() {
         return angular.equals(self.original, $scope.reuniao);
     };
-
+    $scope.checkRemocaoResponsavel=function(item){
+    	if(!item.responsavel && $scope.responsavelNull==false){
+    		$scope.responsavelNull=false;
+    		$scope.save(item);		
+    	}
+    } ;
     $scope.save = function(item) {
     	if(item){
     		$scope.setSelectedProposicao(item);
