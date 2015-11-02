@@ -22,7 +22,7 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 		    $scope.openUpdate = function(item) {
 		        $scope.comentario = item;
 		    };
-		    
+
 		    $scope.update = function() {
 		        var successCallback = function(){
 		        	$scope.comentario = new ComentarioResource();
@@ -50,5 +50,18 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 	    		ComentarioService.save($scope.comentario, $scope.proposicao.id).then(successCallback, errorCallback);
 		    };
 
+			$scope.ocultar = function(item) {
+				var successCallback = function(){
+					toaster.pop('success', 'Comentário oculto com sucesso');
+				};
+				var errorCallback = function(){
+					toaster.pop('error', 'Falha ao realizar operação.');
+				}
+
+				ComentarioResource.ocultar({idComentario: item.id}, successCallback, errorCallback);
+				var index = $scope.proposicao.listaComentario.indexOf(item);
+				$scope.proposicao.listaComentario.splice(index, 1);
+
+			}
 
 		});
