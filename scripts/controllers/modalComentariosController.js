@@ -61,6 +61,7 @@ angular.module('sislegisapp').controller('ModalComentariosController',
 				ComentarioResource.ocultar({idComentario: item.id}, successCallback, errorCallback);
 				var index = $scope.proposicao.listaComentario.indexOf(item);
 				$scope.proposicao.listaComentario.splice(index, 1);
+				$scope.proposicao.totalComentarios--;
 
 			}
 
