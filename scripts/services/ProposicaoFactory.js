@@ -52,6 +52,10 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource, 
 		'unfollowProposicao' : {
 			url : BACKEND + "/proposicaos/follow/:ProposicaoId",
 			method : 'DELETE'
+		},
+		'syncManually' : {
+			url : BACKEND + "/proposicaos/check4updates/:ProposicaoId",
+			method : 'POST'
 		}
 	});
 	return resource;
