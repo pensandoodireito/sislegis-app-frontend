@@ -66,8 +66,8 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 		    	if(!$scope.encaminhamentoProposicao.comentario){
 		    		$scope.encaminhamentoProposicao.comentario = new ComentarioResource();
 		    	}
-		    	
-		    	$scope.encaminhamentoProposicao.comentario.dataCriacao = new Date();
+		    	$scope.encaminhamentoProposicao.dataHoraLimite = $scope.encaminhamentoProposicao.dataHoraLimite.getTime();
+		    	$scope.encaminhamentoProposicao.comentario.dataCriacao = new Date().getTime();
 		    	
 		    	//TODO pegar usuario logado
 		    	$scope.encaminhamentoProposicao.comentario.autor = $scope.encaminhamentoProposicao.responsavel;
