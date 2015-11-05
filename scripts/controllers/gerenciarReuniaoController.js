@@ -513,31 +513,39 @@ angular.module('sislegisapp').controller(
           }
         });
     };
-    
+
+	$scope.populaModalEncaminhamentos = function(lista)
+	{
+		$scope.selectedProposicao.listaEncaminhamentoProposicao = lista;
+		var modalInstance = $modal.open({
+			templateUrl: 'views/modal-encaminhamentos.html',
+			controller: 'ModalEncaminhamentosController',
+			size: 'lg',
+			resolve: {
+				proposicao: function () {
+					return $scope.selectedProposicao;
+				}
+			}
+		});
+
+		modalInstance.result.then(function (listaEncaminhamentos){
+			$scope.selectedProposicao.listaEncaminhamentoProposicao = listaEncaminhamentos;
+		}, function(){
+			$log.info('Modal dismissed at: ' + new Date());
+		});
+	}
+
     $scope.abrirModalEncaminhamentos = function (item) {
     	$scope.selectedProposicao = item;
-    	
-        var modalInstance = $modal.open({
-          templateUrl: 'views/modal-encaminhamentos.html',
-          controller: 'ModalEncaminhamentosController',
-          size: 'lg',
-          resolve: {
-            proposicao: function () {
-            	return $scope.selectedProposicao;
-            }         
-          }
-        });
-        
-        modalInstance.result.then(function (selectedProposicao) {
-        	$scope.selectedProposicao = selectedProposicao;
-          }, function () {
-        	  //when modal is dismissed
-        	  //o certo era receber a lista como parametro, mas no dismiss nao consegui passar parametro, 
-        	  //entao carrego a lista de novo para atualizar a qtde
-          	$scope.selectedProposicao.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.selectedProposicao.id});
-            $log.info('Modal dismissed at: ' + new Date());
-          });
-    };
+
+		if ($scope.selectedProposicao.listaEncaminhamentoProposicao == null || $scope.selectedProposicao.listaEncaminhamentoProposicao.length != $scope.selectedProposicao.totalEncaminhamentos){
+			EncaminhamentoProposicaoResource.findByProposicao({
+				ProposicaoId: $scope.selectedProposicao.id}, $scope.populaModalEncaminhamentos
+			);
+		} else{
+			$scope.populaModalEncaminhamentos($scope.selectedProposicao.listaEncaminhamentoProposicao);
+		}
+	};
 	        
     
     // CALENDARIO
