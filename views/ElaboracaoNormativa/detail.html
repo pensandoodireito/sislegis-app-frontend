@@ -1,331 +1,327 @@
-<header>
-    <h3>Elaboração Normativa</h3>
-</header>
+<section class="content-header">
+    <h1>Elaboração Normativa</h1>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <ul class="nav nav-tabs">
+                    <li role="presentation" ng-click="selected = 'dadosPreliminares'"
+                        ng-class="{'active': selected == 'dadosPreliminares'}"><a>Dados preliminares</a></li>
+                    <li role="presentation" ng-click="selected = 'dadosAnalise'"
+                        ng-class="{'active': selected == 'dadosAnalise'}"><a>Dados de análise/Distribuição</a></li>
+                    <li role="presentation" ng-click="selected = 'manifestacao'"
+                        ng-class="{'active': selected == 'manifestacao'}"><a>Manifestação</a></li>
+                    <li role="presentation" ng-click="selected = 'normaGerada'"
+                        ng-class="{'active': selected == 'normaGerada'}"><a>Norma Gerada</a></li>
+                    <li role="presentation" ng-click="selected = 'procedimentoSei'"
+                        ng-class="{'active': selected == 'procedimentoSei'}" ng-show="showAbaSEI"><a>Procedimento
+                        SEI</a></li>
+                </ul>
+                <div ng-show="selected == 'dadosPreliminares'" class="box-body">
+                    <form>
+                        <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.tipo)}">
+                            <label>Tipos: </label>
 
-<div class="tabs">
-  <div ng-click="selected = 'dadosPreliminares'" ng-class="{'selected': selected == 'dadosPreliminares'}" class="tab">Dados preliminares</div>
-  <div ng-click="selected = 'dadosAnalise'" ng-class="{'selected': selected == 'dadosAnalise'}" class="tab">Dados de análise/Distribuição</div>
-  <div ng-click="selected = 'manifestacao'" ng-class="{'selected': selected == 'manifestacao'}" class="tab">Manifestação</div>
-  <div ng-click="selected = 'normaGerada'" ng-class="{'selected': selected == 'normaGerada'}" class="tab">Norma Gerada</div>
-   <div ng-click="selected = 'procedimentoSei'" ng-class="{'selected': selected == 'procedimentoSei'}" ng-show="showAbaSEI" class="tab">Procedimento SEI</div>
- </div>
- 
-  <div ng-show="selected == 'dadosPreliminares'" class="tab_content rol-vert height-full">
-      <div class="row divider-top">
-          <div class="col-md-3">
-              <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.tipo)}">
-              <label for="">Tipos: </label>
-		 		<div ng-repeat="tipo in tipos" class="form-group" >
-				  <!-- <input type="checkbox" checklist-model="elaboracaoNormativa.tipos" checklist-value="tipo.shade"> {{ tipo.name }} -->
-				  <input type="radio" ng-model="elaboracaoNormativa.tipo" ng-value="tipo.shade">  {{ tipo.name }} <br/>
-				</div> 
-              </div>
-          </div>
-          <div class="col-md-3" ng-show="mostraSubTipo()">
-              <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.subTipo)}">
-               <label for="">Subtipos Exposição de Motivos: </label>
-		 		<div ng-repeat="subTipo in subTipos" class="form-group">
-				 <!--  <input type="radio" checklist-model="elaboracaoNormativa.subTipos" checklist-value="subTipo.shade"> {{ subTipo.name }} -->
-				 <input type="radio" ng-model="elaboracaoNormativa.subTipo" ng-value="subTipo.shade">  {{ subTipo.name }} <br/>
-				</div> 
-              </div>
-          </div>          
-      </div>  
-  
-      <div class="row divider-top">
-          <div class="col-md-3">
-              <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.identificacao)}">
-                  <label for="">Objeto: </label>
-                  <select ng-model="elaboracaoNormativa.identificacao" ng-options="identificacao.shade as identificacao.name for identificacao in identificacoes" class="form-control" ng-required="true"></select>
-              		
-              </div>
-          </div>
-    	<div class="col-md-3">
-              <div class="form-group">
-                  <label for="">Número: </label>
-                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.numero">
-              </div>
-          </div>
-    	<div class="col-md-1">
-              <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.ano)}">
-                  <label for="">Ano: </label>
-                  <input type="text"  class="form-control" ui-mask="9999" ng-model="elaboracaoNormativa.ano" ng-required="true" >
-              </div>
-          </div>          
-      </div>
-
-      <div class="row divider-top">
-          <div class="col-md-3">
-              <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.origem)}">
-                  <label for="">Órgão de Origem:</label>
-                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.origem" placeholder="Pesquisar..."
-	              			typeahead="item as item.nome for item in getOrigemElaboracaoNormativas($viewValue)" ng-required="true">
-              </div>
-          </div>
-          <div class="col-md-3">
-              <div class="form-group">
-                  <label for="">Co-Autor</label>
-				  <div ng-dropdown-multiselect="" options="orgaos" selected-model="elaboracaoNormativa.listaCoAutoresSelecionadosDropdown"></div>
-              </div>
-          </div>
-      </div>
-  
-      <div class="row divider-top">
-          <div class="col-md-6">
-              <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.ementa)}">
-                  <label for="">Ementa:</label>
-                  <textarea class="form-control" ng-model="elaboracaoNormativa.ementa" ng-required="true" />
-              </div>
-          </div>
-      </div>
-      
-      
-      <div class="row divider-top">
-          <div class="col-md-3">
-              <div class="form-group">
-                  <label for="">Data de inclusão no SIDOF:</label>
-				<p class="input-group">
-						<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataInclusaoSIDOF" is-open="opened_dataInclusaoSIDOF" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
-	            				<span class="input-group-btn">
-			                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'dataInclusaoSIDOF')"><i class="glyphicon glyphicon-calendar"></i></button>
-			    		</span>		    		
-			    </p>
-			    </div>	
-       	</div>
-          <div class="col-md-3">
-              <div class="form-group">
-                  <label for="">Data de Assinatura no SIDOF:</label>
-				<p class="input-group">
-						<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataAssinaturaSIDOF" is-open="opened_dataAssinaturaSIDOF" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
-	            				<span class="input-group-btn">
-			                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'dataAssinaturaSIDOF')"><i class="glyphicon glyphicon-calendar"></i></button>
-			    		</span>		    		
-			    </p>
-			    </div>	
-       	</div>
-      </div>      
- 
-      <div class="row divider-top">
-    	<div class="col-md-3">
-              <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.nup)}">
-                  <label for="">Nº de Protocolo (NUP): </label>
-                  <input type="text" class="form-control" ui-mask="99999.999999/9999-99" ng-model="elaboracaoNormativa.nup" ng-required="true">
-              </div>
-          </div>      
-      
-          <div class="col-md-3">
-   	                 <label for="">Tags:</label>
-					 <tags-input ng-model="elaboracaoNormativa.tags">
-					 	<auto-complete source="loadTags($query)"></auto-complete>
-					 </tags-input>	        
-          </div>
-       </div>        
-   
-      <div class="row divider-top">
-          <div class="col-md-3">
-              <div class="form-group">
-                  <label for="">Situação:</label>
-              	<select ng-model="elaboracaoNormativa.elaboracaoNormativaSituacao" ng-options="elaboracaoNormativaSituacao.shade as elaboracaoNormativaSituacao.name for elaboracaoNormativaSituacao in situacoes" class="form-control">
-              		<option label="" value="" />
-              	</select>
-              </div>
-          </div>
-          <div class="col-md-3">
-              <div class="form-group">
-              	<label for="">Status no SIDOF: </label>
-              	<select ng-model="elaboracaoNormativa.statusSidof.id" ng-options="statusSidof.id as statusSidof.descricao for statusSidof in listaStatusSidof" class="form-control">
-              		<option label="" value="" />
-              	</select>
-              </div>
-          </div>
-      </div>   
-
-
-</div>
-  <div ng-show="selected == 'dadosAnalise'" class="tab_content rol-vert height-full">
-       <div class="row divider-top">
-
-             <div class="col-sm-3">
-                 <div class="form-group">
-                     <label for="">Data de Distribuição:</label>
-				<p class="input-group">
-						<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataDistribuicao" is-open="opened_dataDistribuicao" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
-			          				<span class="input-group-btn">
-			                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'dataDistribuicao')"><i class="glyphicon glyphicon-calendar"></i></button>
-			    		</span>
-			    </p>
-                 </div>
-             </div>
-             <div class="col-sm-3">
-                 <div class="form-group">
-                     <label for="">Distribuição:</label>
-                     <select ng-change="selectParecerista()" ng-model="elaboracaoNormativa.equipe.id" ng-options="equipe.id as equipe.nome for equipe in equipes" class="form-control"></select>
-                 </div>
-             </div>
-             <div class="col-sm-3">
-                 <div class="form-group">
-                     <label for="">Parecerista:</label>
-                     <select ng-model="elaboracaoNormativa.parecerista.id" ng-options="usuario.id as usuario.nome for usuario in elaboracaoNormativa.pareceristas" class="form-control"></select>
-                 	{{elaboracaoNormativa.usuario}}
-                 </div>
-             </div>                    
-                    
-
-            </div>
-            <div class="row">
-            <div class="col-sm-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-						<div class="row">
-                        	<div class="form-group">
-                            	<label for="">Comentários:</label>
-                            	<textarea ng-model="comentario.descricao" class="form-control" />
-                        	</div>
-						</div>	
-                        <div class="form-group">
-                        	<button type="button" class="btn btn-primary" ng-click="adicionarComentario(comentario)"><i class="fa fa-plus"></i> Adicionar</button>
+                            <div ng-repeat="tipo in tipos" class="form-group">
+                                <input type="radio" ng-model="elaboracaoNormativa.tipo" ng-value="tipo.shade"> {{
+                                tipo.name }} <br/>
+                            </div>
                         </div>
+
+                        <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.subTipo)}"
+                             ng-show="mostraSubTipo()">
+                            <label>Subtipos Exposição de Motivos: </label>
+
+                            <div ng-repeat="subTipo in subTipos" class="form-group">
+                                <input type="radio" ng-model="elaboracaoNormativa.subTipo" ng-value="subTipo.shade"> {{
+                                subTipo.name }}
+                                <br/>
+                            </div>
+                        </div>
+
+                        <div class="form-group"
+                             ng-class="{'has-error': validaCampos(elaboracaoNormativa.identificacao)}">
+                            <label>Objeto: </label>
+                            <select id="identificacao" name="identificacao" ng-model="elaboracaoNormativa.identificacao"
+                                    ng-options="identificacao.shade as identificacao.name for identificacao in identificacoes"
+                                    class="form-control" ng-required="true"></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="numero">Número: </label>
+                            <input id="numero" name="numero" type="text" class="form-control"
+                                   ng-model="elaboracaoNormativa.numero">
+                        </div>
+
+                        <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.ano)}">
+                            <label for="ano">Ano: </label>
+                            <input id="ano" name="ano" type="text" class="form-control" ui-mask="9999"
+                                   ng-model="elaboracaoNormativa.ano"
+                                   ng-required="true">
+                        </div>
+
+
+                        <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.origem)}">
+                            <label for="origem">Órgão de Origem:</label>
+                            <input id="origem" name="origem" type="text" class="form-control"
+                                   ng-model="elaboracaoNormativa.origem"
+                                   placeholder="Pesquisar..."
+                                   typeahead="item as item.nome for item in getOrigemElaboracaoNormativas($viewValue)"
+                                   ng-required="true">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Co-Autor</label>
+
+                            <div ng-dropdown-multiselect="" options="orgaos"
+                                 selected-model="elaboracaoNormativa.listaCoAutoresSelecionadosDropdown"></div>
+                        </div>
+
+
+                        <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.ementa)}">
+                            <label for="ementa">Ementa:</label>
+        <textarea id="ementa" name="ementa" class="form-control" ng-model="elaboracaoNormativa.ementa"
+                  ng-required="true"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sidof">Data de inclusão no SIDOF:</label>
+
+                            <p class="input-group">
+                                <input type="text" name="sidof" id="sidof" class="form-control"
+                                       datepicker-popup="dd/MM/yyyy"
+                                       ng-model="elaboracaoNormativa.dataInclusaoSIDOF"
+                                       is-open="opened_dataInclusaoSIDOF"
+                                       min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions"
+                                       close-text="Close"/>
+                        <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'dataInclusaoSIDOF')">
+                        <i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+                            </p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dataAssinatura">Data de Assinatura no SIDOF:</label>
+
+                            <p class="input-group">
+                                <input id="dataAssinatura" name="dataAssinatura" type="text" class="form-control"
+                                       datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataAssinaturaSIDOF"
+                                       is-open="opened_dataAssinaturaSIDOF" min-date="minDate" max-date="'2015-06-22'"
+                                       datepicker-options="dateOptions" close-text="Close"/>
+                        <span class="input-group-btn">
+                    <button type="button" class="btn btn-default"
+                            ng-click="openCalendar($event, 'dataAssinaturaSIDOF')"><i
+                            class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+                            </p>
+                        </div>
+
+                        <div class="form-group" ng-class="{'has-error': validaCampos(elaboracaoNormativa.nup)}">
+                            <label for="numProtocolo">Nº de Protocolo (NUP): </label>
+                            <input id="numProtocolo" name="numProtocolo" type="text" class="form-control"
+                                   ui-mask="99999.999999/9999-99"
+                                   ng-model="elaboracaoNormativa.nup" ng-required="true"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tags:</label>
+                            <tags-input ng-model="elaboracaoNormativa.tags">
+                                <auto-complete source="loadTags($query)"></auto-complete>
+                            </tags-input>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Situação:</label>
+                            <select id="situacao" name="situacao"
+                                    ng-model="elaboracaoNormativa.elaboracaoNormativaSituacao"
+                                    ng-options="elaboracaoNormativaSituacao.shade as elaboracaoNormativaSituacao.name for elaboracaoNormativaSituacao in situacoes"
+                                    class="form-control">
+                                <option label="" value=""/>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="statusSidof">Status no SIDOF: </label>
+                            <select id="statusSidof" name="statusSidof" ng-model="elaboracaoNormativa.statusSidof.id"
+                                    ng-options="statusSidof.id as statusSidof.descricao for statusSidof in listaStatusSidof"
+                                    class="form-control">
+                                <option label="" value=""/>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+
+                <div ng-show="selected == 'dadosAnalise'" class="box-body">
+
+                    <div class="form-group">
+                        <label for="dataDistribuicao">Data de Distribuição:</label>
+
+                        <p class="input-group">
+                            <input id="dataDistribuicao" name="dataDistribuica" type="text" class="form-control"
+                                   datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataDistribuicao"
+                                   is-open="opened_dataDistribuicao" min-date="minDate" max-date="'2015-06-22'"
+                                   datepicker-options="dateOptions" close-text="Close"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default"
+                                        ng-click="openCalendar($event, 'dataDistribuicao')"><i
+                                        class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
                     </div>
+
+                    <div class="form-group">
+                        <label for="distribuicao">Distribuição:</label>
+                        <select id="distribuicao" name="distribuicao" ng-change="selectParecerista()"
+                                ng-model="elaboracaoNormativa.equipe.id"
+                                ng-options="equipe.id as equipe.nome for equipe in equipes"
+                                class="form-control"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="parecerista">Parecerista:</label>
+                        <select id="parecerista" name="parecerista" ng-model="elaboracaoNormativa.parecerista.id"
+                                ng-options="usuario.id as usuario.nome for usuario in elaboracaoNormativa.pareceristas"
+                                class="form-control"></select>
+                        {{elaboracaoNormativa.usuario}}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="comentario">Comentários:</label>
+                        <textarea id="comentario" name="comentario" ng-model="comentario.descricao"
+                                  class="form-control"/>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" ng-click="adicionarComentario(comentario)"><i
+                                class="fa fa-plus"></i> Adicionar
+                        </button>
+                    </div>
+
                     <ul class="list-group" ng-repeat="itemComentario in elaboracaoNormativa.listaComentario">
                         <li class="list-group-item">
-                            <button type="button" class="close" ng-click="excluirComentario(itemComentario)"><span aria-hidden="true">&times;</span><span class="sr-only">Excluir</span>
-                            </button>                        
+                            <button type="button" class="close" ng-click="excluirComentario(itemComentario)"><span
+                                    aria-hidden="true">&times;</span><span class="sr-only">Excluir</span>
+                            </button>
                             {{itemComentario.descricao}}
                         </li>
-
                     </ul>
-              </div>
-         	</div>
-            <div class="col-sm-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="row">
-	                         <div class="col-sm-6">
-	                             <div class="form-group">
-		                                <label for="">Área consultada:</label>
-		                                <input type="text" ng-model="elaboracaoNormativaConsulta.areaConsultada" class="form-control" placeholder="Pesquisar..."
-			              					typeahead="item as item.descricao for item in getAreaConsultadas($viewValue)"
-			              					typeahead-on-select="onSelectAreaConsultadas($item)">
-		                            </div>
-	                         </div>
-				             <div class="col-sm-6">
-				                 <div class="form-group">
-				                     <label for="">Prazo de resposta:</label>
-								<p class="input-group">
-										<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativaConsulta.prazoResposta" is-open="opened_prazoResposta" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
-							          				<span class="input-group-btn">
-							                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'prazoResposta')"><i class="glyphicon glyphicon-calendar"></i></button>
-							    		</span>
-							    </p>
-				                 </div>
-				             </div>	                         
 
-                        </div>
+                    <div class="form-group">
+                        <label for="areaConsultada">Área consultada:</label>
+                        <input id="areaConsultada" name="areaConsultada" type="text"
+                               ng-model="elaboracaoNormativaConsulta.areaConsultada" class="form-control"
+                               placeholder="Pesquisar..."
+                               typeahead="item as item.descricao for item in getAreaConsultadas($viewValue)"
+                               typeahead-on-select="onSelectAreaConsultadas($item)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prazoResposta">Prazo de resposta:</label>
+
+                        <p class="input-group">
+                            <input id="prazoResposta" name="prazoResposta" type="text" class="form-control"
+                                   datepicker-popup="dd/MM/yyyy"
+                                   ng-model="elaboracaoNormativaConsulta.prazoResposta" is-open="opened_prazoResposta"
+                                   min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions"
+                                   close-text="Close"/>
+							          				<span class="input-group-btn">
+							                <button type="button" class="btn btn-default"
+                                                    ng-click="openCalendar($event, 'prazoResposta')"><i
+                                                    class="glyphicon glyphicon-calendar"></i></button>
+							    		</span>
+                        </p>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" ng-click="adicionarElaboracaoNormativaConsulta()">
+                            <i class="fa fa-plus"></i> Adicionar
+                        </button>
+                    </div>
+                    <ul class="list-group"
+                        ng-repeat="elaboracaoNormativaConsulta in elaboracaoNormativa.listaElaboracaoNormativaConsulta">
+                        <li class="list-group-item">
+                            <button type="button" class="close"
+                                    ng-click="excluirElaboracaoNormativa(elaboracaoNormativaConsulta)"><span
+                                    aria-hidden="true">&times;</span><span class="sr-only">Excluir</span>
+                            </button>
+                            <div class="form-group">
+                                <label>Área consultada:</label>
+                                {{elaboracaoNormativaConsulta.areaConsultada.descricao}}
+                            </div>
+                            <div class="form-group">
+                                <label>Prazo:</label>
+                                {{elaboracaoNormativaConsulta.prazoResposta | date:'dd/MM/yyyy'}}
+                            </div>
+                            <div class="form-group">
+                                <label for="resumoResposta">Resumo da resposta:</label>
+                                <textarea name="resumoResposta" id="resumoResposta"
+                                          ng-model="elaboracaoNormativaConsulta.comentario" class="form-control"/>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div ng-show="selected == 'manifestacao'" class="box-body">
+
+                    <div class="col-md-4">
                         <div class="form-group">
-                        	<button type="button" class="btn btn-primary" ng-click="adicionarElaboracaoNormativaConsulta()"><i class="fa fa-plus"></i> Adicionar</button>
+                            <label for="ementaManifestacao">Ementa:</label>
+                            <textarea id="ementaManifestacao" name="ementaManifestacao" class="form-control"
+                                      ng-model="elaboracaoNormativa.ementaManifestacao"/>
                         </div>
                     </div>
-                    <ul class="list-group" ng-repeat="elaboracaoNormativaConsulta in elaboracaoNormativa.listaElaboracaoNormativaConsulta">
-                        <li class="list-group-item">
-                            <button type="button" class="close" ng-click="excluirElaboracaoNormativa(elaboracaoNormativaConsulta)"><span aria-hidden="true">&times;</span><span class="sr-only">Excluir</span>
-                            </button>
-	                      		<div class="form-group">
-					            	<label for="">Área consultada:</label>
-					            	{{elaboracaoNormativaConsulta.areaConsultada.descricao}}
-					            </div>	
-	                      		<div class="form-group">
-					            	<label for="">Prazo:</label>
-					            	{{elaboracaoNormativaConsulta.prazoResposta | date:'dd/MM/yyyy'}}
-					            </div>
-		                        <div class="form-group">
-	                            	<label for="">Resumo da resposta:</label>
-	                            	<textarea ng-model="elaboracaoNormativaConsulta.comentario" class="form-control" />
-	                        	</div>				            	                            
-                        </li>
-
-                    </ul>
-              </div>
-            </div>
-     </div>   
-</div>
- <div ng-show="selected == 'manifestacao'" class="tab_content rol-vert height-full">
-    <div class="row divider-top">
-         <div class="col-md-4">
-             <div class="form-group">
-                 <label for="">Ementa:</label>
-                 <textarea class="form-control" ng-model="elaboracaoNormativa.ementaManifestacao" />
-             </div>
-         </div>    
-        <div class="col-md-4">
-            <div class="form-group">
-            <label for="">Data Nota SAL:</label>
-				<p class="input-group">
-						<input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataManifestacao" is-open="opened_dataManifestacao" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" close-text="Close"/>
+                    <div class="form-group">
+                        <label for="dataNota">Data Nota SAL:</label>
+                        <p class="input-group">
+                            <input id="dataNota" name="dataNota" type="text" class="form-control"
+                                   datepicker-popup="dd/MM/yyyy" ng-model="elaboracaoNormativa.dataManifestacao"
+                                   is-open="opened_dataManifestacao" min-date="minDate" max-date="'2015-06-22'"
+                                   datepicker-options="dateOptions" close-text="Close"/>
              				<span class="input-group-btn">
-			                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'dataManifestacao')"><i class="glyphicon glyphicon-calendar"></i></button>
+			                <button type="button" class="btn btn-default"
+                                    ng-click="openCalendar($event, 'dataManifestacao')"><i
+                                    class="glyphicon glyphicon-calendar"></i></button>
 			    		</span>
-			    </p>
+                        </p>
+                    </div>
+
+                </div>
+
+                <div ng-show="selected == 'normaGerada'" class="box-body">
+                    <div class="form-group">
+                        <label for="">Tipo norma:</label>
+                        <select class="form-control" ng-model="elaboracaoNormativa.elaboracaoNormativaNorma"
+                                ng-options="norma.shade as norma.name for norma in normas">
+                            <option value="" label=""></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="normaGerada">Link: </label>
+                        <input id="normaGerada" name="normaGerada" type="text" size="4" class="form-control" ng-model="elaboracaoNormativa.normaGeradaLink">
+                    </div>
+                    <div class="form-group"
+                         ng-class="{'has-error': validaCamposNormaGerada(elaboracaoNormativa.elaboracaoNormativaNorma, elaboracaoNormativa.normaGeradaNumero)}">
+                        <label for="numeroNorma">Número: </label>
+                        <input id="numeroNorma" name="numeroNorma" type="text" class="form-control" ng-model="elaboracaoNormativa.normaGeradaNumero">
+                    </div>
+                    <div class="form-group"
+                         ng-class="{'has-error': validaCamposNormaGerada(elaboracaoNormativa.elaboracaoNormativaNorma, elaboracaoNormativa.normaGeradaAno)}">
+                        <label for="anoNorma">Ano: </label>
+                        <input type="text" name="anoNorma" id="anoNorma" class="form-control" ui-mask="9999" ng-model="elaboracaoNormativa.normaGeradaAno">
+                    </div>
+                </div>
+
+                <div ng-show="selected == 'procedimentoSei'" class="box-body">
+                    <iframe width="1200" height="500" ng-src="{{linkSei()}}"></iframe>
+                </div>
+
+                <div class="box-footer">
+                    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="validaForm()">Salvar</button>
+                </div>
+
             </div>
         </div>
-
-      </div>
-     
- </div>
- 
-  <div ng-show="selected == 'normaGerada'" class="tab_content rol-vert height-full">
-       
-     <div class="row divider-top">
-        <div class="col-md-4">
-            <div class="form-group">
-                <label for="">Tipo norma:</label>
-                <select class="form-control" ng-model="elaboracaoNormativa.elaboracaoNormativaNorma" 
-                		ng-options="norma.shade as norma.name for norma in normas">
-                <option value="" label=""></option>
-                </select>
-            </div>
-        </div>
-
-     </div>   
-
-      <div class="row divider-top">
-          <div class="col-md-4">
-              <div class="form-group">
-                  <label for="">Link: </label>
-                  <input type="text" size="4" class="form-control" ng-model="elaboracaoNormativa.normaGeradaLink">
-              </div>
-          </div>        
-    	  <div class="col-md-2">
-              <div class="form-group" 
-              		ng-class="{'has-error': validaCamposNormaGerada(elaboracaoNormativa.elaboracaoNormativaNorma, elaboracaoNormativa.normaGeradaNumero)}">
-                  <label for="">Número: </label>
-                  <input type="text" class="form-control" ng-model="elaboracaoNormativa.normaGeradaNumero">
-              </div>
-          </div>
-    	<div class="col-md-1">
-              <div class="form-group" 
-              	ng-class="{'has-error': validaCamposNormaGerada(elaboracaoNormativa.elaboracaoNormativaNorma, elaboracaoNormativa.normaGeradaAno)}">
-                  <label for="">Ano: </label>
-                  <input type="text" class="form-control" ui-mask="9999" ng-model="elaboracaoNormativa.normaGeradaAno">
-              </div>
-          </div>  
-      </div>       
-             
-     
- </div>
- 
-   <div ng-show="selected == 'procedimentoSei'" class="tab_content rol-vert height-full" >
- 		<iframe width="1200" height="500" ng-src="{{linkSei()}}"></iframe>
-   </div>
- 
- 	 <div>
-	    <button type="button" class="btn btn-primary" ng-click="salvar()" ng-disabled="validaForm()">Salvar</button>
-	</div> 
-
-  
-
-
-
-
-
-
- 
+    </div>
+</section>
