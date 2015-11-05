@@ -21,7 +21,7 @@
 					<br/>
 					<div class="input-group">
 						<label for="responsavel">Responsável:</label>
-                        <input id="responsavel" type="text" ng-model="encaminhamentoProposicao.responsavel" placeholder="Procurar usuário..."
+                        <input id="responsavel" autocomplete="off" type="text" ng-model="encaminhamentoProposicao.responsavel" placeholder="Procurar usuário..."
                                typeahead="item as item.nome for item in getUsuarios($viewValue)" class="form-control">
 					</div>
 					<br/>
@@ -56,8 +56,8 @@
 							<p><strong>{{item.encaminhamento.nome}}</strong></p>
 							<p  ng-show="item.responsavel.nome!=null" ><strong>Responsável: </strong>{{item.responsavel.nome}}</p>
 							<p ng-show="item.responsavel.nome==null" ><strong>Sem responsável associado</strong></p>
-							<p ng-show="item.responsavel.dataHoraLimite!=null"><strong>Data e Hora Limite: </strong>{{item.dataHoraLimite | date: 'dd/MM/yyyy HH:mm'}}</p>
-							<p ng-show="item.responsavel.dataHoraLimite==null" ><strong>Sem data limite associada</strong></p>
+							<p ng-show="item.dataHoraLimite!=null"><strong>Data e Hora Limite: </strong>{{item.dataHoraLimite | date: 'dd/MM/yyyy HH:mm'}}</p>
+							<p ng-show="item.dataHoraLimite==null" ><strong>Sem data limite associada</strong></p>
 							<p>{{item.comentario.descricao}}</p>
 							<div class="mt-sm">
 								<p>
