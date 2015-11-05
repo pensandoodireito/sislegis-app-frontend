@@ -117,7 +117,7 @@
             <h4 class="list-group-item-heading">{{comissao}}</h4>
         </div>
 
-        <div ng-repeat="item in value | orderBy : 'seqOrdemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
+        <div ng-repeat="item in value | orderBy : 'pautaComissaoAtual.ordemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
             <div class="clearfix">
                 <button type="button" class="close" ng-click="abrirModalRemoverProposicao(item); $event.stopPropagation()">
                     <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
@@ -136,9 +136,11 @@
                         <br/>
                         <strong>Origem: </strong>{{item.origem}}
                         <br/>
-                        <strong>Comissao: </strong>{{item.comissao}}
+                        <strong>Comissao: </strong>{{item.pautaComissaoAtual.pautaReuniaoComissao.comissao}}
                         <br/>
-                        <strong>Ordem na Pauta: </strong>{{item.seqOrdemPauta}}
+                        <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} <span ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{item.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
+                        <br/>
+                        <strong>Relator: </strong>{{item.pautaComissaoAtual.relator}}
                         <br/>
                     <div>
                         <a ng-show="item.origem == 'SENADO'" href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
