@@ -96,6 +96,7 @@ angular.module('sislegisapp').controller(
     };
     
     $scope.setSelectedProposicao = function(item) {
+    	$scope.responsavelNull = (item.responsavel==null);
     	$scope.selectedProposicao = item;
 	}
 
@@ -112,7 +113,24 @@ angular.module('sislegisapp').controller(
     $scope.isClean = function() {
         return angular.equals(self.original, $scope.reuniao);
     };
-
+    $scope.checkRemocaoResponsavel=function(item){
+    	if(!item.responsavel && $scope.responsavelNull==false){
+    		$scope.responsavelNull=false;
+    		$scope.save(item);		
+    	}
+    } ;
+    $scope.updateSingleProposicao = function(item,toastMsg){
+    	for (var i = 0; i < $scope.listaReuniaoProposicoes.length; i++) {    			
+			if(item.id==$scope.listaReuniaoProposicoes[i].id){
+				$scope.listaReuniaoProposicoes[i]=item;
+				if(toastMsg){
+					toaster.pop('success', toastMsg);
+				}
+				return true;
+			}
+		}
+    	return false;
+    }
     $scope.save = function(item) {
     	if(item){
     		$scope.setSelectedProposicao(item);
@@ -123,13 +141,9 @@ angular.module('sislegisapp').controller(
     	$rootScope.inactivateSpinner = true;
         var successCallback = function(){
         	$rootScope.inactivateSpinner = false;
-        	for (var i = 0; i < $scope.listaReuniaoProposicoes.length; i++) {    			
-    			if(item.id==$scope.listaReuniaoProposicoes[i].id){
-    				$scope.listaReuniaoProposicoes[i]=item;
-    				toaster.pop('success', 'Proposição atualizada com sucesso.');
-    				return;
-    			}
-    		}
+        	 if($scope.updateSingleProposicao(item,'Proposição atualizada com sucesso.')){
+        		 return;
+        	 }
         	console.log("Nao carregou a proposicao, recarregara a reuniao inteira");
         	$scope.tagsProposicao = TagResource.listarTodos();
     		ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()},
@@ -206,7 +220,6 @@ angular.module('sislegisapp').controller(
 
 		for (var i = 0; i < $scope.proposicoesSeguidas.length; i++) {
 			var proposicao = $scope.proposicoesSeguidas[i];
-			console.log(item, proposicao)
 			if (item.id == proposicao.id) {
 				return true;
 			}
@@ -214,8 +227,8 @@ angular.module('sislegisapp').controller(
 		return false;
 	};
 	$scope.followProposicao = function(item) {
+		
 
-		// $scope.proposicoesSeguidas
 		ProposicaoResource.followProposicao({}, {
 			id : item.id
 		}, function() {
@@ -242,47 +255,23 @@ angular.module('sislegisapp').controller(
 
 	};
 
-
-    
-    $scope.isFollowed = function(item) {
-
-		for (var i = 0; i < $scope.proposicoesSeguidas.length; i++) {
-			var proposicao = $scope.proposicoesSeguidas[i];
-			console.log(item, proposicao)
-			if (item.id == proposicao.id) {
-				return true;
-			}
-		}
-		return false;
-	};
-	$scope.followProposicao = function(item) {
-
-		// $scope.proposicoesSeguidas
-		ProposicaoResource.followProposicao({}, {
+	$scope.checkUpdates = function(item){
+		ProposicaoResource.syncManually({}, {
 			id : item.id
-		}, function() {
-			$scope.proposicoesSeguidas.push({
-				id : item.id
-			});
-		});
-
-	};
-	$scope.unfollowProposicao = function(item) {
-		ProposicaoResource.unfollowProposicao({}, {
-			id : item.id
-		}, function() {
-			for (var i = 0; i < $scope.proposicoesSeguidas.length; i++) {
-				var proposicao = $scope.proposicoesSeguidas[i];
-				console.log(item, proposicao)
-				if (item.id == proposicao.id) {
-					$scope.proposicoesSeguidas.splice(i, 1);
-
-					break;
-				}
+		}, function(data,b) {
+			console.log("data",data,b);
+			 if($scope.updateSingleProposicao(data,'Proposicao atualizada')){
+        		 return;
+        	}			
+			
+		}, function(data) {
+			console.log("data",data);
+			if(data.status==304){
+				toaster.pop('info', 'Nenhuma atualização detectada');				
 			}
 		});
+	}
 
-	};
     
     $scope.changeFiltroOrigem = function() {
 		if(!$scope.filtroOrigem.origem){

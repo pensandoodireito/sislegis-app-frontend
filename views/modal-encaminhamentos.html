@@ -21,7 +21,7 @@
 					<br/>
 					<div class="input-group">
 						<label for="responsavel">Responsável:</label>
-                        <input id="responsavel" type="text" ng-model="encaminhamentoProposicao.responsavel" placeholder="Procurar usuário..."
+                        <input id="responsavel" autocomplete="off" type="text" ng-model="encaminhamentoProposicao.responsavel" placeholder="Procurar usuário..."
                                typeahead="item as item.nome for item in getUsuarios($viewValue)" class="form-control">
 					</div>
 					<br/>
