@@ -17,6 +17,11 @@ angular.module('sislegisapp').factory('ComentarioResource', function($resource, 
 			url : BACKEND + "/comentarios/proposicao/:ProposicaoId",
 			method : 'GET',
 			isArray : true
+		},
+		'ocultar' : {
+			url : BACKEND + "/comentarios/ocultar/:idComentario",
+			method : 'GET',
+			isArray : true
 		}
 	});
 	return resource;
