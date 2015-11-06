@@ -1,10 +1,10 @@
 
-angular.module('sislegisapp').controller('NewEncaminhamentoController', function ($scope, $location, locationParser, EncaminhamentoResource ) {
+angular.module('sislegisapp').controller('NewEncaminhamentoController', function ($scope, $location, locationParser, TipoEncaminhamentoResource ) {
     $scope.disabled = false;
     $scope.$location = $location;
     $scope.simpleEntity = $scope.simpleEntity || {};
 
-    $scope.title = "Encaminhamento";
+    $scope.title = "Tipo Encaminhamento";
     $scope.isNew = true;
 
     $scope.save = function() {
@@ -16,7 +16,7 @@ angular.module('sislegisapp').controller('NewEncaminhamentoController', function
         var errorCallback = function() {
             $scope.displayError = true;
         };
-        EncaminhamentoResource.save($scope.simpleEntity, successCallback, errorCallback);
+        TipoEncaminhamentoResource.save($scope.simpleEntity, successCallback, errorCallback);
     };
     
     $scope.cancel = function() {

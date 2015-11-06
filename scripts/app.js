@@ -80,9 +80,9 @@ module.config(['$routeProvider', function($routeProvider) {
 		.when('/Orgaos/new',{templateUrl:'views/SimpleEntity/detail.html',controller:'NewOrgaoController'})
 		.when('/Orgaos/edit/:OrgaoId',{templateUrl:'views/SimpleEntity/detail.html',controller:'EditOrgaoController'})
 		
-		.when('/Encaminhamentos',{templateUrl:'views/SimpleEntity/search.html',controller:'SearchEncaminhamentoController'})
-		.when('/Encaminhamentos/new',{templateUrl:'views/SimpleEntity/detail.html',controller:'NewEncaminhamentoController'})
-		.when('/Encaminhamentos/edit/:EncaminhamentoId',{templateUrl:'views/SimpleEntity/detail.html',controller:'EditEncaminhamentoController'})
+		.when('/TipoEncaminhamentos',{templateUrl:'views/SimpleEntity/search.html',controller:'SearchTipoEncaminhamentoController'})
+		.when('/TipoEncaminhamentos/new',{templateUrl:'views/SimpleEntity/detail.html',controller:'NewTipoEncaminhamentoController'})
+		.when('/TipoEncaminhamentos/edit/:TipoEncaminhamentoId',{templateUrl:'views/SimpleEntity/detail.html',controller:'EditTipoEncaminhamentoController'})
 		
 		.when('/Usuarios',{templateUrl:'views/Usuario/search.html',controller:'SearchUsuarioController'})
 		.when('/Usuarios/new',{templateUrl:'views/Usuario/detail.html',controller:'NewUsuarioController'})

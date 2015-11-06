@@ -1,20 +1,20 @@
-angular.module('sislegisapp').controller('EditEncaminhamentoController', function($scope, $routeParams, $location, EncaminhamentoResource ) {
+angular.module('sislegisapp').controller('EditEncaminhamentoController', function($scope, $routeParams, $location, TipoEncaminhamentoResource ) {
     var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
 
-    $scope.title = "Encaminhamento";
+    $scope.title = "Tipo Encaminhamento";
     $scope.isNew = false;
     
     $scope.get = function() {
         var successCallback = function(data){
             self.original = data;
-            $scope.simpleEntity = new EncaminhamentoResource(self.original);
+            $scope.simpleEntity = new TipoEncaminhamentoResource(self.original);
         };
         var errorCallback = function() {
             $location.path("/Encaminhamentos");
         };
-        EncaminhamentoResource.get({EncaminhamentoId:$routeParams.EncaminhamentoId}, successCallback, errorCallback);
+        TipoEncaminhamentoResource.get({TipoEncaminhamentoId:$routeParams.TipoEncaminhamentoId}, successCallback, errorCallback);
     };
 
     $scope.isClean = function() {

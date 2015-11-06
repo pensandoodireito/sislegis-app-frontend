@@ -13,7 +13,7 @@
 				<div class="panel-body line-9 rol-vert fontsize-sm">
 					<div class="list-group" ng-repeat="item in encaminhamentos">
 						<div class="divider-bottom">
-							<p><strong>{{item.encaminhamento.nome}}</strong></p>
+							<p><strong>{{item.tipoencaminhamento.nome}}</strong></p>
 							<p><strong>Responsável: </strong>{{item.responsavel.nome}}</p>
 							<p><strong>Data e Hora Limite: </strong>{{item.dataHoraLimite | date: 'dd/MM/yyyy HH:mm'}}</p>
 							<p>{{item.comentario.descricao}}</p>
