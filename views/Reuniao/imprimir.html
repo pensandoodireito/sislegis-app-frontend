@@ -1,12 +1,18 @@
  <!-- Tudo que for para o usuario imprimir deve ficar nesse HTML -->
  <div class="list-group" ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | filter:{favorita:filtroFavorita} | selectedTags:filtroTags |  groupBy :'comissao' |  orderBy : 'comissao' ">
-     <div class="list-group-item active" >
-         <h4 class="list-group-item-heading">{{comissao}}</h4>
+     <div class="list-group-item active" ng-show="comissao && comissao != 'null' && comissao != ''">
+         <h4 class="list-group-item-heading">
+             {{comissao}}
+         </h4>
      </div>
      <div ng-repeat="item in value | orderBy : 'seqOrdemPauta'" class="list-group-item clearfix">
 	     <div class="row">
 	         <div class="col-sm-12">
-	             <h3 class="list-group-item-heading">{{item.sigla}}</h3>
+	             <h3 class="list-group-item-heading">
+                     <i class="fa fa-star-o" ng-show="!item.favorita" ng-click="item.favorita=true;save(item)"></i>
+                     <i class="fa fa-star" style="color:orange" ng-show="item.favorita" ng-click="item.favorita=false; save(item)"></i>
+                     {{item.sigla}}
+                 </h3>
 	             <p>{{item.ementa}}
 	                 <br/>
 	                 <strong>Autor: </strong>{{item.autor}}
@@ -32,3 +38,4 @@
 	     </div>
      </div>
  </div>
+ 

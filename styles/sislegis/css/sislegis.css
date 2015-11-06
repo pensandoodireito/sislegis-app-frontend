@@ -147,3 +147,12 @@ a{
 .tarefas .tarefa-conc .tarefa-titulo,
 .tarefas .tarefa-conc .tarefa-dtlimite span,
 .tarefas .tarefa-conc .tarefa-status span { color:#808080; text-decoration: line-through;}
+
+@media print {
+    section, section *, header, header *, aside, aside *{
+        display: none !important;
+    }
+    .printable{
+        margin-left:-40%;
+    }
+}
