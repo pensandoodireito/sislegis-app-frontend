@@ -1,9 +1,9 @@
 angular.module('sislegisapp').factory(
-		'EncaminhamentoResource',
+		'TipoEncaminhamentoResource',
 		function($resource, BACKEND) {
-			var resource = $resource(BACKEND + '/encaminhamentos/:EncaminhamentoId',
+			var resource = $resource(BACKEND + '/tiposencaminhamentos/:TipoEncaminhamentoId',
 					{
-						EncaminhamentoId : '@id'
+                        TipoEncaminhamentoId : '@id'
 					}, {
 						'queryAll' : {
 							method : 'GET',

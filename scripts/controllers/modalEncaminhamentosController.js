@@ -1,5 +1,5 @@
 angular.module('sislegisapp').controller('ModalEncaminhamentosController',
-		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modalInstance, toaster, proposicao, EncaminhamentoResource, 
+		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modalInstance, toaster, proposicao, TipoEncaminhamentoResource,
 				ProposicaoResource, EncaminhamentoProposicaoResource, UsuarioResource, ComentarioResource, BACKEND) {
 
 			var self = this;
@@ -7,9 +7,9 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 			$scope.$location = $location;
 
 			$scope.proposicao = proposicao || new ProposicaoResource();
-		    $scope.encaminhamento = new EncaminhamentoResource();
+		    $scope.tipoEncaminhamento = new TipoEncaminhamentoResource();
 		    $scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
-			$scope.listaEncaminhamento = EncaminhamentoResource.queryAll() || [];
+			$scope.listaEncaminhamento = TipoEncaminhamentoResource.queryAll() || [];
 			
 			$scope.getUsuarios = function(val) {
 			    return $http.get(BACKEND + '/usuarios/find', {
@@ -47,7 +47,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 		        	EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.proposicao.id},function(data) {
 						$scope.proposicao.listaEncaminhamentoProposicao = data;
 						$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
-						$scope.encaminhamento = new EncaminhamentoResource();
+						$scope.tipoEncaminhamento = new TipoEncaminhamentoResource();
 						toaster.pop('success', 'Encaminhamento atualizado com sucesso');
 					});
 		        };
@@ -63,21 +63,14 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 		    	
 		    	$scope.encaminhamentoProposicao.proposicao = new ProposicaoResource();
 		    	$scope.encaminhamentoProposicao.proposicao.id = $scope.proposicao.id;
-		    	if(!$scope.encaminhamentoProposicao.comentario){
-		    		$scope.encaminhamentoProposicao.comentario = new ComentarioResource();
-		    	}
 		    	$scope.encaminhamentoProposicao.dataHoraLimite = $scope.encaminhamentoProposicao.dataHoraLimite.getTime();
-		    	$scope.encaminhamentoProposicao.comentario.dataCriacao = new Date().getTime();
-		    	
-		    	//TODO pegar usuario logado
-		    	$scope.encaminhamentoProposicao.comentario.autor = $scope.encaminhamentoProposicao.responsavel;
-		    	
+
 		        var successCallback = function(data,responseHeaders){
 					EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.proposicao.id},function(data) {
 						$scope.proposicao.listaEncaminhamentoProposicao = data;
 						$scope.proposicao.totalEncaminhamentos++;
 						$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
-						$scope.encaminhamento = new EncaminhamentoResource();
+						$scope.tipoEncaminhamento = new TipoEncaminhamentoResource();
 				    	$rootScope.$emit('updateTarefas');
 						toaster.pop('success', 'Encaminhamento inserido com sucesso');
 					});
