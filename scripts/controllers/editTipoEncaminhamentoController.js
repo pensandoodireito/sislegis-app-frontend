@@ -1,4 +1,4 @@
-angular.module('sislegisapp').controller('EditEncaminhamentoController', function($scope, $routeParams, $location, TipoEncaminhamentoResource ) {
+angular.module('sislegisapp').controller('EditTipoEncaminhamentoController', function($scope, $routeParams, $location, TipoEncaminhamentoResource ) {
     var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
@@ -12,7 +12,7 @@ angular.module('sislegisapp').controller('EditEncaminhamentoController', functio
             $scope.simpleEntity = new TipoEncaminhamentoResource(self.original);
         };
         var errorCallback = function() {
-            $location.path("/Encaminhamentos");
+            $location.path("/TipoEncaminhamentos");
         };
         TipoEncaminhamentoResource.get({TipoEncaminhamentoId:$routeParams.TipoEncaminhamentoId}, successCallback, errorCallback);
     };
@@ -33,12 +33,12 @@ angular.module('sislegisapp').controller('EditEncaminhamentoController', functio
     };
 
     $scope.cancel = function() {
-        $location.path("/Encaminhamentos");
+        $location.path("/TipoEncaminhamentos");
     };
 
     $scope.remove = function() {
         var successCallback = function() {
-            $location.path("/Encaminhamentos");
+            $location.path("/TipoEncaminhamentos");
             $scope.displayError = false;
         };
         var errorCallback = function() {

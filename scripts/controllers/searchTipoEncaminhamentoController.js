@@ -1,4 +1,4 @@
-angular.module('sislegisapp').controller('SearchEncaminhamentoController', function($scope, $http, TipoEncaminhamentoResource ) {
+angular.module('sislegisapp').controller('SearchTipoEncaminhamentoController', function($scope, $http, TipoEncaminhamentoResource ) {
 
     $scope.search={};
     $scope.currentPage = 0;
@@ -7,9 +7,9 @@ angular.module('sislegisapp').controller('SearchEncaminhamentoController', funct
     $scope.filteredResults = [];
     $scope.pageRange = [];
 
-    $scope.title = "Encaminhamento";
-    $scope.newUrl = "#/Encaminhamentos/new";
-    $scope.editUrl = "#/Encaminhamentos/edit/";
+    $scope.title = "Tipo Encaminhamento";
+    $scope.newUrl = "#/TipoEncaminhamentos/new";
+    $scope.editUrl = "#/TipoEncaminhamentos/edit/";
 
     $scope.numberOfPages = function() {
         var result = Math.ceil($scope.filteredResults.length/$scope.pageSize);
