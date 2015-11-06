@@ -37,7 +37,7 @@
                             <li>
                                 <ul class="menu">
                                     <li ng-repeat="tarefa in listaTarefas | filter: {finalizada:false} | orderBy : 'encaminhamentoProposicao.dataHoraLimite' | limitTo: 5">
-                                        <a href="#/Tarefas/edit/{{tarefa.id}}">{{tarefa.encaminhamentoProposicao.tipoencaminhamento.nome}} - {{tarefa.encaminhamentoProposicao.dataHoraLimite | date: 'dd/MM/yyyy'}}</a>
+                                        <a href="#/Tarefas/edit/{{tarefa.id}}">{{tarefa.encaminhamentoProposicao.tipoEncaminhamento.nome}} - {{tarefa.encaminhamentoProposicao.dataHoraLimite | date: 'dd/MM/yyyy'}}</a>
                                     </li>
                                 </ul>
                             </li>

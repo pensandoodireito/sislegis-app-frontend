@@ -7,7 +7,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 			$scope.$location = $location;
 
 			$scope.proposicao = proposicao || new ProposicaoResource();
-		    $scope.tipoencaminhamento = new TipoEncaminhamentoResource();
+		    $scope.tipoEncaminhamento = new TipoEncaminhamentoResource();
 		    $scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
 			$scope.listaEncaminhamento = TipoEncaminhamentoResource.queryAll() || [];
 			
@@ -47,7 +47,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 		        	EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: $scope.proposicao.id},function(data) {
 						$scope.proposicao.listaEncaminhamentoProposicao = data;
 						$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
-						$scope.tipoencaminhamento = new TipoEncaminhamentoResource();
+						$scope.tipoEncaminhamento = new TipoEncaminhamentoResource();
 						toaster.pop('success', 'Encaminhamento atualizado com sucesso');
 					});
 		        };
@@ -70,7 +70,7 @@ angular.module('sislegisapp').controller('ModalEncaminhamentosController',
 						$scope.proposicao.listaEncaminhamentoProposicao = data;
 						$scope.proposicao.totalEncaminhamentos++;
 						$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
-						$scope.tipoencaminhamento = new TipoEncaminhamentoResource();
+						$scope.tipoEncaminhamento = new TipoEncaminhamentoResource();
 				    	$rootScope.$emit('updateTarefas');
 						toaster.pop('success', 'Encaminhamento inserido com sucesso');
 					});

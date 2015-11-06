@@ -15,8 +15,8 @@
 				    </div>
 					<div class="input-group">
 						<label for="tipo-encaminhamento">Tipo de Encaminhamento</label>
-						<select id="tipo-encaminhamento" ng-model="encaminhamentoProposicao.tipoencaminhamento"
-                                ng-options="tipoencaminhamento.nome for tipoencaminhamento in listaEncaminhamento track by tipoencaminhamento.id | orderBy:'nome'" class="form-control" ng-required="true"></select>
+						<select id="tipo-encaminhamento" ng-model="encaminhamentoProposicao.tipoEncaminhamento"
+                                ng-options="tipoEncaminhamento.nome for tipoEncaminhamento in listaEncaminhamento track by tipoEncaminhamento.id | orderBy:'nome'" class="form-control" ng-required="true"></select>
 					</div>
 					<br/>
 					<div class="input-group">
@@ -53,7 +53,7 @@
 				<div class="panel-body line-9 rol-vert fontsize-sm">
 					<div class="list-group" ng-repeat="item in proposicao.listaEncaminhamentoProposicao">
 						<div class="divider-bottom">
-							<p><strong>{{item.tipoencaminhamento.nome}}</strong></p>
+							<p><strong>{{item.tipoEncaminhamento.nome}}</strong></p>
 							<p  ng-show="item.responsavel.nome!=null" ><strong>Responsável: </strong>{{item.responsavel.nome}}</p>
 							<p ng-show="item.responsavel.nome==null" ><strong>Sem responsável associado</strong></p>
 							<p ng-show="item.dataHoraLimite!=null"><strong>Data e Hora Limite: </strong>{{item.dataHoraLimite | date: 'dd/MM/yyyy HH:mm'}}</p>
