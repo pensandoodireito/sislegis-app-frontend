@@ -6,9 +6,9 @@ angular.module('sislegisapp').factory('NotificacaoResource', function($resource,
 			method : 'GET',
 			isArray: true
 		},			
-		'setViewed' : {
+		'markvisualizadas' : {
 			method : 'POST',
-			url : BACKEND + "/notificacao/usuario"
+			url : BACKEND + "/notificacao/marcarVisualizadas"
 		}
 	});
 	return resource;
