@@ -97,6 +97,7 @@ angular.module('sislegisapp').controller(
     
     $scope.setSelectedProposicao = function(item) {
     	$scope.responsavelNull = (item.responsavel==null);
+		$scope.posicionamentoNull = (item.posicionamento==null);
     	$scope.selectedProposicao = item;
 	}
 
@@ -118,7 +119,15 @@ angular.module('sislegisapp').controller(
     		$scope.responsavelNull=false;
     		$scope.save(item);		
     	}
-    } ;
+    };
+
+	$scope.checkRemocaoPosicionamento=function(item){
+		if(!item.posicionamento && $scope.posicionamentoNull==false){
+			$scope.posicionamentoNull=false;
+			$scope.alterarPosicionamento(item);
+		}
+	};
+
     $scope.updateSingleProposicao = function(item,toastMsg){
     	for (var i = 0; i < $scope.listaReuniaoProposicoes.length; i++) {    			
 			if(item.id==$scope.listaReuniaoProposicoes[i].id){
@@ -160,6 +169,24 @@ angular.module('sislegisapp').controller(
         };
         ProposicaoResource.update($scope.selectedProposicao, successCallback, errorCallback);
     };
+
+	$scope.alterarPosicionamento = function(item) {
+		if(item){
+			$scope.setSelectedProposicao(item);
+		}
+
+		clear();
+
+		var successCallback = function(){
+			toaster.pop('success', 'Posicionamento atualizado com sucesso.');
+		};
+		var errorCallback = function() {
+			toaster.pop('error', 'Falha ao atualizar posicionamento.');
+		};
+		var idPosicionamento = $scope.selectedProposicao.posicionamento ? $scope.selectedProposicao.posicionamento.id : null;
+		ProposicaoResource.alterarPosicionamento({id: $scope.selectedProposicao.id, idPosicionamento: idPosicionamento}, successCallback, errorCallback);
+
+	}
     
     var clear = function() {
     	delete $scope.selectedProposicao.comentarioTmp;

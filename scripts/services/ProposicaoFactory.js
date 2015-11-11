@@ -56,6 +56,10 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource, 
 		'syncManually' : {
 			url : BACKEND + "/proposicaos/check4updates/:ProposicaoId",
 			method : 'POST'
+		},
+		'alterarPosicionamento' : {
+			url : BACKEND + "/proposicaos/alterarPosicionamento",
+			method : 'POST'
 		}
 	});
 	return resource;
