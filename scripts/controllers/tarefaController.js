@@ -19,6 +19,7 @@ angular.module('sislegisapp').controller('TarefaController', function($scope, $r
     $scope.finalizarTarefa = function(tarefa) {
         var successCallback = function() {
             toaster.pop('success', 'Tarefa finalizada com sucesso');
+            $rootScope.$emit('updateTarefas');
         };
         var errorCallback = function() {
         	toaster.pop('error', 'Falha ao finalizar tarefa');
