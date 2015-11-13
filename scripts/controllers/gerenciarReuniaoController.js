@@ -171,7 +171,7 @@ angular.module('sislegisapp').controller(
         return formattedDate;
     };
     
-    $scope.$watch("reuniao.data", function() {
+        $scope.$watch("reuniao.data", function() {
     	if(!angular.isUndefined($scope.reuniao.data)){
     		
     		var successCallback = function(){
@@ -478,19 +478,17 @@ angular.module('sislegisapp').controller(
         });
     }
 
-    $scope.carregarComentarios = function(lista){
-        item.listaComentario = [];
+    $scope.loadComentarios = function(lista){
         if (typeof lista != 'undefined' && lista.length > 0){
             lista.forEach(function(item){
                 item.listaComentario = ComentarioResource.findByProposicao({ProposicaoId: item.id});
             });
         }
-        return lista;
     }
     
     $scope.abrirModalRelatorio = function() {
 
-        $scope.carregarComentarios($scope.listaReuniaoProposicoes);
+        $scope.loadComentarios($scope.listaReuniaoProposicoes);
 
         $scope.printPath = 'views/Reuniao/imprimir.html';
         var modalInstance = $modal.open({

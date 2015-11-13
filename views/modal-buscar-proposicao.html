@@ -82,6 +82,9 @@
 								<p>
 									<strong>Ordem na Pauta: </strong>{{proposicaoPauta.ordemPauta}}
 								</p>
+                                <p ng-show="proposicaoPauta.ultimoComentario">
+                                    <strong>Último comentário: </strong> {{proposicaoPauta.ultimoComentario.descricao}}
+                                </p>
 							</div>
 						</div>
 					</div>
