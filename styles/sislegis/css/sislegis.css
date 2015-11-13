@@ -156,3 +156,8 @@ a{
         margin-left:-40%;
     }
 }
+@media screen {
+    .printable{
+        display: none;
+    }
+}

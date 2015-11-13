@@ -477,8 +477,21 @@ angular.module('sislegisapp').controller(
             }
         });
     }
+
+    $scope.carregarComentarios = function(lista){
+        item.listaComentario = [];
+        if (typeof lista != 'undefined' && lista.length > 0){
+            lista.forEach(function(item){
+                item.listaComentario = ComentarioResource.findByProposicao({ProposicaoId: item.id});
+            });
+        }
+        return lista;
+    }
     
     $scope.abrirModalRelatorio = function() {
+
+        $scope.carregarComentarios($scope.listaReuniaoProposicoes);
+
         $scope.printPath = 'views/Reuniao/imprimir.html';
         var modalInstance = $modal.open({
           templateUrl: 'views/Reuniao/modal-relatorio.html',
