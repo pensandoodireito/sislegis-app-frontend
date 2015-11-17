@@ -165,13 +165,13 @@
                                                     <a ng-click="abrirModalComentarios(item)"><i class="fa fa-comment"></i><strong> {{item.totalComentarios}}  comentários</strong></a>
                                                 </div>
                                                 <div class="col-md-6 text-right">
-                                                    <strong><a ng-click="abrirModalEncaminhamentos(item)"><strong> {{item.totalEncaminhamentos}} encaminhamentos</strong></a>
+                                                    <strong><a ng-click="abrirModalEncaminhamentos(item)"> {{item.totalEncaminhamentos}} encaminhamentos</a></strong>
                                                 </div>
                                             </div>
                                             <div class="divider-top form-inline">
                                                 <div class="form-group">
                                                     <label>Posicionamento:</label>
-                                                    <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-on-select="save(item)" class="form-control">
+                                                    <input type="text" ng-model="item.posicionamento" placeholder="Procurar" ng-required="true" ng-blur="checkRemocaoPosicionamento(item)" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-on-select="alterarPosicionamento(item); item.posicionamentoNaoDefinido = false" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="divider-top form-inline">
