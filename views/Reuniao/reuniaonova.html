@@ -138,6 +138,10 @@
                                         <br/>
                                         <strong>Relator: </strong>{{item.pautaComissaoAtual.relator}}
                                         <br/>
+                                        <span ng-show="item.pautaComissaoAtual.resultado != ''">
+                                            <strong>Resultado: </strong>{{item.pautaComissaoAtual.resultado}}
+                                        <br/>
+                                        </span>
                                     <div>
                                         <a ng-show="item.origem == 'SENADO'" href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
                                         <a ng-show="item.origem == 'CAMARA'" href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{item.idProposicao}}#tramitacoes" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>

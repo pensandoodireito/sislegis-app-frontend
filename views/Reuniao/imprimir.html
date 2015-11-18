@@ -23,9 +23,11 @@
 	                 <br/>
 	                 <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} <span ng-show="!item.pautaComissaoAtual.ordemPauta">Ordem não cadastrada.</span>
 	                 <br/>
-	                 <strong>Responsável: </strong>{{item.responsavel.nome}} <span ng-show="!item.responsavel">Nenhum responsável por essa proposição.</span>
+	                 <strong>Responsável: </strong>{{item.responsavel.nome}} <span ng-show="!item.responsavel">Sem responsável definido.</span>
 	                 <br/>
-	                 <strong>Posicionamento: </strong>{{item.posicionamento.nome}} <span ng-show="!item.posicionamento">Nenhum posicionamento definido.</span>
+	                 <strong>Posicionamento: </strong>{{item.posicionamento.nome}} <span ng-show="!item.posicionamento">Sem posicionamento definido.</span>
+                     <br/>
+                     <strong>Relator: </strong>{{item.pautaComissaoAtual.relator}}
 	                 <br/>
                      <div ng-show="item.listaComentario.length > 0">
 	                 <strong>Comentários</strong>
@@ -35,7 +37,7 @@
                          </li>
                      </ul>
                     </div>
-	                 <strong>Resultado: </strong>{{item.resultadoASPAR}}
+	                 <strong>Resultado: </strong>{{item.pautaComissaoAtual.resultado}} <span ng-show="!item.pautaComissaoAtual.resultado">Sem resultado definido.</span>
 	                 <br/>
 	             </p>
 	         </div>
