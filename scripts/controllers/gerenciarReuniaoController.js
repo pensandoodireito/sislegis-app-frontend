@@ -511,6 +511,8 @@ angular.module('sislegisapp').controller(
 						);
 					}
 
+					// TODO Popular as pautas da proposicao para mostrar o historico de resultados
+
 					return $scope.selectedProposicao;
                 },
                 printPath: function(){
