@@ -17,7 +17,17 @@ angular.module('sislegisapp').factory('TarefaResource', function($resource, BACK
 		},			
 		'update' : {
 			method : 'PUT'
-		}
+		},
+        'finalizar': {
+            method: 'POST',
+            url: BACKEND + "/tarefas/finalizar",
+            transformRequest: function(data, headersGetter){
+                console.log(data);
+                var headers = headersGetter();
+                headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
+                return 'idTarefa='+data.id+'&descricaoComentario='+encodeURIComponent(data.comentarioFinalizacao);
+            }
+        }
 	});
 	return resource;
 });

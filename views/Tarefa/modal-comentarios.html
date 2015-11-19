@@ -11,7 +11,7 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Comentários</div>
 				<div class="panel-body line-9 rol-vert fontsize-sm">
-					<div class="list-group" ng-repeat="item in comentarios | orderBy:'dataCriacao':true">
+					<div class="list-group" ng-repeat="item in comentarios | orderBy:'dataCriacao':true" ng-show="!tarefa">
 						<div class="divider-bottom">
 							<p>{{item.descricao}}</p>
 							<div class="mt-sm">
@@ -21,6 +21,16 @@
 							</div>
 						</div>
 					</div>
+                    <div class="finalizar-tarefa" ng-show="tarefa && !tarefa.finalizada">
+                        <div class="form-group">
+                            <label>Comentário:</label>
+                            <textarea ng-model="tarefa.comentarioFinalizacao" class="form-control" rows="3" placeholder="Adicionar o comentário de finalização de tarefa ..."></textarea>
+                        </div>
+                        <div class="box-footer">
+                            <button type="button" class="btn btn-info" ng-click="finalizar(tarefa);">Finalizar tarefa</button>
+                        </div>
+                    </div>
+
 				</div>
 			</div>
 
