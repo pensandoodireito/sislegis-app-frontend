@@ -7,6 +7,10 @@ angular.module('sislegisapp').factory('ReuniaoProposicaoResource', function($res
 			method : 'GET',
 			isArray : true
 		},
+		'remove' : {
+			method : 'DELETE',
+			url:BACKEND + '/reuniaoProposicao/:ProposicaoId?data=:ReuniaoId'
+		},
 		'query' : {
 			method : 'GET',
 			isArray : false
