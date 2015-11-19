@@ -15,13 +15,12 @@
 						<div class="divider-bottom">
 							<p><strong>{{item.tipoEncaminhamento.nome}}</strong></p>
 							<p><strong>Responsável: </strong>{{item.responsavel.nome}}</p>
-							<p><strong>Data e Hora Limite: </strong>{{item.dataHoraLimite | date: 'dd/MM/yyyy HH:mm'}}</p>
-							<p>{{item.comentario.descricao}}</p>
-							<div class="mt-sm">
-								<p>
-									Feito por: <strong>{{item.comentario.autor.nome}}</strong> <span class="ml-lg">Data: {{item.comentario.dataCriacao | date: 'dd/MM/yyyy'}}<span class="ml-lg">
-									</span>
-								</p>
+							<p ng-show="item.dataHoraLimite"><strong>Prazo: </strong>{{item.dataHoraLimite | date: 'dd/MM/yyyy HH:mm'}}</p>
+							<p ng-show="item.descricao">{{item.descricao}}</p>
+							<div class="mt-sm" ng-show="item.comentarioFinalizacao">
+								<p>Feito por: <strong>{{item.comentarioFinalizacao.autor.nome}}</strong></p>
+                                <p>Data: {{item.comentarioFinalizacao.dataCriacao | date: 'dd/MM/yyyy'}}</p>
+                                <p ng-show="item.comentarioFinalizacao.descricao">Comentário: {{item.comentarioFinalizacao.descricao}}</p>
 							</div>
 						</div>
 					</div>
