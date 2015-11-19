@@ -19,49 +19,36 @@
                 <br/>
                 <strong>Posicionamento: </strong>{{proposicao.posicionamento.nome}} <span ng-show="!proposicao.posicionamento">Nenhum posicionamento definido.</span>
                 <br/>
-                <strong>Comentários</strong>
-
-                <div ng-repeat="comentario in proposicao.listaComentario | orderBy :'dataCriacao'"
-                     class="list-group-item clearfix">
-                    {{comentario.dataCriacao | date: 'dd/MM/yyyy'}}:
-                    <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">{{comentario.descricao}}</pre>
-                </div>
+                <strong ng-show="proposicao.listaComentario.length > 0">Comentários</strong>
+                <ul ng-show="proposicao.listaComentario.length > 0">
+                    <li ng-repeat="comentario in proposicao.listaComentario | orderBy :'dataCriacao'">
+                        {{comentario.dataCriacao | date: 'dd/MM/yyyy'}} - {{comentario.descricao}}
+                    </li>
+                </ul>
                 <br/>
-                <strong>Encaminhamentos</strong>
-
-                <div ng-repeat="encaminhamento in proposicao.listaEncaminhamentoProposicao"
-                     class="list-group-item clearfix">
-                        Prazo: {{encaminhamento.dataHoraLimite | date: 'dd/MM/yyyy'}}:
-						 <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">
-						 	Detalhes: <br/>{{encaminhamento.detalhes}}
-						 </pre>
-                </div>
+                <strong ng-show="proposicao.listaEncaminhamentoProposicao.length > 0">Encaminhamentos</strong>
+                <ul ng-show="proposicao.listaEncaminhamentoProposicao.length > 0">
+                    <li ng-repeat="encaminhamento in proposicao.listaEncaminhamentoProposicao">
+                        <p ng-show="encaminhamento.dataHoraLimite"><strong>Prazo: </strong>{{encaminhamento.dataHoraLimite | date: 'dd/MM/yyyy'}}</p>
+                        <p><strong>{{encaminhamento.tipoEncaminhamento.nome}}</strong></p>
+                        <p ng-show="encaminhamento.responsavel"><strong>Responsável: </strong>{{encaminhamento.responsavel.nome}}</p>
+                        <p ng-show="encaminhamento.detalhes">{{encaminhamento.detalhes}}</p>
+                        <div ng-show="encaminhamento.comentarioFinalizacao && !encaminhamento.comentarioFinalizacao.oculto">
+                            <p><strong>Efetuado por: </strong> {{encaminhamento.comentarioFinalizacao.autor.nome}}</p>
+                            <p ng-show="encaminhamento.comentarioFinalizacao.descricao">{{encaminhamento.comentarioFinalizacao.descricao}}</p>
+                        </div>
+                    </li>
+                </ul>
                 <br/>
-                <strong>Tags</strong>
-
-                <div ng-repeat="tag in proposicao.tags" class="list-group-item clearfix">
-						 <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">
-							 <br/>{{tag.tag}}
-						 </pre>
-                </div>
-
-                <br/>
-                <strong>Proposições filhas</strong>
-
-                <div ng-repeat="proposicaoFilha in proposicao.proposicoesFilha" class="list-group-item clearfix">
-						 <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">
-							 <br/>{{proposicaoFilha.sigla}}
-						 </pre>
-                </div>
+                <p ng-show="proposicao.tags.length > 0">
+                    <strong>Tags</strong>
+                    <span ng-repeat="tag in proposicao.tags">{{tag.tag}} </span>
+                </p>
 
                 <br/>
-                <strong>Proposições pais</strong>
-
-                <div ng-repeat="proposicaoPai in proposicao.proposicoesPai" class="list-group-item clearfix">
-						 <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">
-							 <br/>{{proposicaoPai.sigla}}
-						 </pre>
-                </div>
+                <strong ng-show="proposicao.proposicoesFilha.length > 0 || proposicao.proposicoesPai.length > 0">Proposições relacionadas:</strong>
+                <span ng-repeat="proposicaoFilha in proposicao.proposicoesFilha">{{proposicaoFilha.sigla}} </span>
+                <span ng-repeat="proposicaoPai in proposicao.proposicoesPai">{{proposicaoPai.sigla}}</span>
 
                 <br/>
                 <strong>Resultado da pauta da comissão atual: </strong>{{proposicao.pautaComissaoAtual.resultado}}
