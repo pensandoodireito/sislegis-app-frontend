@@ -1,33 +1,72 @@
- <!-- Tudo que for para o usuario imprimir deve ficar nesse HTML -->
- <div class="list-group">
-     <div class="list-group-item clearfix">
-	     <div class="row">
-	         <div class="col-sm-12">
-	             <h3 class="list-group-item-heading">{{proposicao.sigla}}</h3>
-	             <p>{{proposicao.ementa}}
-                 <br/>
-                 <strong>Autor: </strong>{{proposicao.autor}}
-                 <br/>
-                 <strong>Origem: </strong>{{proposicao.origem}}
-                 <br/>
-                 <strong>Comissao: </strong>{{proposicao.comissao}}
-                 <br/>
-                 <strong>Ordem na Pauta: </strong>{{proposicao.pautaComissaoAtual.ordemPauta}} <span ng-show="!proposicao.pautaComissaoAtual.ordemPauta">Ordem não cadastrada.</span>
-                 <br/>
-                 <strong>Responsável: </strong>{{proposicao.responsavel.nome}} <span ng-show="!proposicao.responsavel">Nenhum responsável por essa proposição.</span>
-                 <br/>
-                 <strong>Posicionamento: </strong>{{proposicao.posicionamento.nome}} <span ng-show="!proposicao.posicionamento">Nenhum posicionamento definido.</span>
-                 <br/>
-                 <strong>Comentários</strong>
-                 <ul>
-                     <li ng-repeat="comentario in comentarios | orderBy :'dataCriacao'">
-                        {{comentario.dataCriacao | date: 'dd/MM/yyyy'}}: <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">{{comentario.descricao}}</pre>
-                     </li>
-                </ul>
-                <strong>Resultado: </strong>{{selectedProposicao.resultadoASPAR}}
+<!-- Tudo que for para o usuario imprimir deve ficar nesse HTML -->
+<div class="list-group">
+    <div class="list-group-item clearfix">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="list-group-item-heading">{{proposicao.sigla}}</h3>
+
+                {{proposicao.ementa}}
                 <br/>
-	             </p>
-	         </div>
-	     </div>
-     </div>
- </div>
+                <strong>Autor: </strong>{{proposicao.autor}}
+                <br/>
+                <strong>Origem: </strong>{{proposicao.origem}}
+                <br/>
+                <strong>Comissao: </strong>{{proposicao.comissao}}
+                <br/>
+                <strong>Ordem na Pauta: </strong>{{proposicao.pautaComissaoAtual.ordemPauta}} <span ng-show="!proposicao.pautaComissaoAtual.ordemPauta">Ordem não cadastrada.</span>
+                <br/>
+                <strong>Responsável: </strong>{{proposicao.responsavel.nome}} <span ng-show="!proposicao.responsavel">Nenhum responsável por essa proposição.</span>
+                <br/>
+                <strong>Posicionamento: </strong>{{proposicao.posicionamento.nome}} <span ng-show="!proposicao.posicionamento">Nenhum posicionamento definido.</span>
+                <br/>
+                <strong>Comentários</strong>
+
+                <div ng-repeat="comentario in proposicao.listaComentario | orderBy :'dataCriacao'"
+                     class="list-group-item clearfix">
+                    {{comentario.dataCriacao | date: 'dd/MM/yyyy'}}:
+                    <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">{{comentario.descricao}}</pre>
+                </div>
+                <br/>
+                <strong>Encaminhamentos</strong>
+
+                <div ng-repeat="encaminhamento in proposicao.listaEncaminhamentoProposicao"
+                     class="list-group-item clearfix">
+                        Prazo: {{encaminhamento.dataHoraLimite | date: 'dd/MM/yyyy'}}:
+						 <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">
+						 	Detalhes: <br/>{{encaminhamento.detalhes}}
+						 </pre>
+                </div>
+                <br/>
+                <strong>Tags</strong>
+
+                <div ng-repeat="tag in proposicao.tags" class="list-group-item clearfix">
+						 <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">
+							 <br/>{{tag.tag}}
+						 </pre>
+                </div>
+
+                <br/>
+                <strong>Proposições filhas</strong>
+
+                <div ng-repeat="proposicaoFilha in proposicao.proposicoesFilha" class="list-group-item clearfix">
+						 <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">
+							 <br/>{{proposicaoFilha.sigla}}
+						 </pre>
+                </div>
+
+                <br/>
+                <strong>Proposições pais</strong>
+
+                <div ng-repeat="proposicaoPai in proposicao.proposicoesPai" class="list-group-item clearfix">
+						 <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">
+							 <br/>{{proposicaoPai.sigla}}
+						 </pre>
+                </div>
+
+                <br/>
+                <strong>Resultado da pauta da comissão atual: </strong>{{proposicao.pautaComissaoAtual.resultado}}
+                <br/>
+            </div>
+        </div>
+    </div>
+</div>

@@ -496,7 +496,24 @@ angular.module('sislegisapp').controller(
             size: 'lg',
             resolve: {
                 proposicao: function(){
-                    return $scope.selectedProposicao;
+
+					// Popula comentarios
+					if ($scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios) {
+						$scope.selectedProposicao.listaComentario = ComentarioResource.findByProposicao({
+								ProposicaoId: $scope.selectedProposicao.id}
+						);
+					}
+
+					// Popula encaminhamentos
+					if ($scope.selectedProposicao.listaEncaminhamentoProposicao == null || $scope.selectedProposicao.listaEncaminhamentoProposicao.length != $scope.selectedProposicao.totalEncaminhamentos){
+						$scope.selectedProposicao.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({
+								ProposicaoId: $scope.selectedProposicao.id}
+						);
+					}
+
+					// TODO Popular as pautas da proposicao para mostrar o historico de resultados
+
+					return $scope.selectedProposicao;
                 },
                 printPath: function(){
                     return $scope.printPath;
