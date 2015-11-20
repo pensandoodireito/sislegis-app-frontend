@@ -116,6 +116,15 @@ a{
     cursor: pointer;
 }
 
+.unread{
+	font-weight: bold;
+}
+
+.read{
+	font-weight: normal;
+}
+
+
 .modal .list-proposicao .active{
     background-color: #E4FDF2;
 }
