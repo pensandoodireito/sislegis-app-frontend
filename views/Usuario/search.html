@@ -11,17 +11,26 @@
                 <div class="box-body">
                     <div class="dataTables_wrapper form-inline dt-bootstrap">
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-3">
                                 <a id="create" class="btn btn-primary" href="#/Usuarios/new"><span class="glyphicon glyphicon-plus-sign"></span> Adicionar</a>
                             </div>
                             <div class="col-sm-3">
                                 <div class="dataTables_filter">
-                                    <label>Nome:&nbsp;<input id="nome" name="nome" class="form-control" type="text" ng-model="search.nome" placeholder="Buscar pelo nome" />
+                                    <label>Nome:&nbsp;<input id="nome" name="nome" class="form-control" type="text" ng-model="search.nome" placeholder="Buscar pelo nome" /></label>
                                 </div>
                             </div>
                             <div class="col-sm-3">
                                 <div class="dataTables_filter">
-                                    <label>E-mail:&nbsp;<input id="email" name="email" class="form-control" type="text" ng-model="search.email" placeholder="Buscar pelo e-mail" />
+                                    <label>E-mail:&nbsp;<input id="email" name="email" class="form-control" type="text" ng-model="search.email" placeholder="Buscar pelo e-mail" /></label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="dataTables_filter">
+                                    <label>Equipe:&nbsp;
+                                        <select ng-model="equipeSelecionada" ng-options="item.id as item.nome for item in listaEquipe" class="form-control" ng-change="buscarPorEquipe()">
+                                            <option value=""></option>
+                                        </select>
+                                    </label>
                                 </div>
                             </div>
                         </div>
