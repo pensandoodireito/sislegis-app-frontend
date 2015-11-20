@@ -85,11 +85,8 @@
 								</span>
 								<span class="divider-left" >
                                     <a  href ng-click="checkUpdates(item);"><i class="fa  fa-refresh"></i> Atualizar dados da {{item.origem}}</a>
-                                    
+
 								</span>
-                                <span class="divider-left" >
-                                    <a ng-click="setSelectedProposicao(item);abrirModalProposicao();"><i class="fa fa-print"></i> Imprimir</a>
-                                </span>
 								</p>
 							</div>
 							<div class="col-sm-5">
@@ -134,7 +131,7 @@
                                         <div class="divider-top form-inline">
                                             <div class="form-group">
                                                 <label>Responsável: </label>
-                                                <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)" typeahead-on-select="save(item); item.responsavelNaoDefinido = false" class="form-control">                                                
+                                                <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)" typeahead-on-select="save(item); item.responsavelNaoDefinido = false" class="form-control">
                                                 <input type="checkbox" ng-model="item.buscaGeral"> Buscar completa
                                             </div>
                                         </div>
