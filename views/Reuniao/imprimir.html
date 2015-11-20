@@ -1,5 +1,10 @@
  <!-- Tudo que for para o usuario imprimir deve ficar nesse HTML -->
- <div class="list-group" ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao | filter:{favorita:filtroFavorita} | selectedTags:filtroTags |  groupBy :'comissao' |  orderBy : 'comissao' ">
+ <div class="list-group" ng-repeat="(comissao, value) in listaReuniaoProposicoes
+  | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao
+   | filter:{favorita:filtroFavorita} | selectedTags:filtroTags
+   | filter:filtroResponsavel | filter:filtroPosicionamento
+   | filter:{responsavelNaoDefinido:filtroResponsavelNaoDefinido} | filter:{posicionamentoNaoDefinido:filtroPosicionamentoNaoDefido}
+   |  groupBy :'comissao' |  orderBy : 'comissao' ">
      <div class="list-group-item active" ng-show="comissao && comissao != 'null' && comissao != ''">
          <h4 class="list-group-item-heading">
              {{comissao}}
@@ -21,17 +26,23 @@
 	                 <br/>
 	                 <strong>Comissao: </strong>{{item.comissao}}
 	                 <br/>
-	                 <strong>Ordem na Pauta: </strong>{{item.seqOrdemPauta}}
+	                 <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} <span ng-show="!item.pautaComissaoAtual.ordemPauta">Ordem não cadastrada.</span>
 	                 <br/>
-	                 <strong>Responsável: </strong>{{item.responsavel.nome}}
+	                 <strong>Responsável: </strong>{{item.responsavel.nome}} <span ng-show="!item.responsavel">Sem responsável definido.</span>
 	                 <br/>
-	                 <strong>Posicionamento: </strong>{{item.posicionamento.nome}}
+	                 <strong>Posicionamento: </strong>{{item.posicionamento.nome}} <span ng-show="!item.posicionamento">Sem posicionamento definido.</span>
+                     <br/>
+                     <strong>Relator: </strong>{{item.pautaComissaoAtual.relator}}
 	                 <br/>
+                     <div ng-show="item.listaComentario.length > 0">
 	                 <strong>Comentários</strong>
-	                 <div ng-repeat="comentario in item.listaComentario | orderBy :'dataCriacao'" class="list-group-item clearfix">
-	                 	{{comentario.dataCriacao | date: 'dd/MM/yyyy'}}: <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">{{comentario.descricao}}</pre>
-	                 </div>
-	                 <strong>Resultado: </strong>{{item.resultadoASPAR}}
+                     <ul>
+                         <li ng-repeat="comentario in item.listaComentario | orderBy :'dataCriacao'">
+                            <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">{{comentario.dataCriacao | date: 'dd/MM/yyyy'}} - {{comentario.descricao}}</pre>
+                         </li>
+                     </ul>
+                    </div>
+	                 <strong>Resultado: </strong>{{item.pautaComissaoAtual.resultado}} <span ng-show="!item.pautaComissaoAtual.resultado">Sem resultado definido.</span>
 	                 <br/>
 	             </p>
 	         </div>

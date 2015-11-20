@@ -121,13 +121,6 @@ a{
 }
 .modal .list-proposicao .list-proposicao-item p{margin:3px;}
 
-.unread{
-	font-weight: bold;
-}
-
-.read{
-	font-weight: normal;
-}
 /** Tarefas **/
 /* tarefa urgente */
 .tarefas .tarefa-urgente .panel{ border-color: #8d0d0d; border-left: 5px solid #8d0d0d; }
@@ -156,10 +149,15 @@ a{
 .tarefas .tarefa-conc .tarefa-status span { color:#808080; text-decoration: line-through;}
 
 @media print {
-    section, section *, header, header *, aside, aside *{
+    section, section *, header, header *, aside, aside *, toaster-container{
         display: none !important;
     }
     .printable{
-        margin-left:-40%;
+        margin-left:-50%;
+    }
+}
+@media screen {
+    .printable{
+        display: none;
     }
 }
