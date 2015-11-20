@@ -3,27 +3,29 @@
      <div class="list-group-item clearfix">
 	     <div class="row">
 	         <div class="col-sm-12">
-	             <h3 class="list-group-item-heading">{{selectedProposicao.sigla}}</h3>
-	             <p>{{selectedProposicao.ementa}}
-	                 <br/>
-	                 <strong>Autor: </strong>{{selectedProposicao.autor}}
-	                 <br/>
-	                 <strong>Origem: </strong>{{selectedProposicao.origem}}
-	                 <br/>
-	                 <strong>Comissao: </strong>{{selectedProposicao.comissao}}
-	                 <br/>
-	                 <strong>Ordem na Pauta: </strong>{{selectedProposicao.seqOrdemPauta}}
-	                 <br/>
-	                 <strong>Responsável: </strong>{{selectedProposicao.responsavel.nome}}
-	                 <br/>
-	                 <strong>Posicionamento: </strong>{{selectedProposicao.posicionamento.nome}}
-	                 <br/>
-	                 <strong>Comentários</strong>
-	                 <div ng-repeat="comentario in selectedProposicao.listaComentario | orderBy :'dataCriacao'" class="list-group-item clearfix">
-	                 	{{comentario.dataCriacao | date: 'dd/MM/yyyy'}}: <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">{{comentario.descricao}}</pre>
-	                 </div>
-	                 <strong>Resultado: </strong>{{selectedProposicao.resultadoASPAR}}
-	                 <br/>
+	             <h3 class="list-group-item-heading">{{proposicao.sigla}}</h3>
+	             <p>{{proposicao.ementa}}
+                 <br/>
+                 <strong>Autor: </strong>{{proposicao.autor}}
+                 <br/>
+                 <strong>Origem: </strong>{{proposicao.origem}}
+                 <br/>
+                 <strong>Comissao: </strong>{{proposicao.comissao}}
+                 <br/>
+                 <strong>Ordem na Pauta: </strong>{{proposicao.pautaComissaoAtual.ordemPauta}} <span ng-show="!proposicao.pautaComissaoAtual.ordemPauta">Ordem não cadastrada.</span>
+                 <br/>
+                 <strong>Responsável: </strong>{{proposicao.responsavel.nome}} <span ng-show="!proposicao.responsavel">Nenhum responsável por essa proposição.</span>
+                 <br/>
+                 <strong>Posicionamento: </strong>{{proposicao.posicionamento.nome}} <span ng-show="!proposicao.posicionamento">Nenhum posicionamento definido.</span>
+                 <br/>
+                 <strong>Comentários</strong>
+                 <ul>
+                     <li ng-repeat="comentario in comentarios | orderBy :'dataCriacao'">
+                        {{comentario.dataCriacao | date: 'dd/MM/yyyy'}}: <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">{{comentario.descricao}}</pre>
+                     </li>
+                </ul>
+                <strong>Resultado: </strong>{{selectedProposicao.resultadoASPAR}}
+                <br/>
 	             </p>
 	         </div>
 	     </div>
