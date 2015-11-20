@@ -563,6 +563,15 @@ angular.module('sislegisapp').controller(
             filtroResponsavel: function() {
                 return $scope.filtroResponsavel;
             },
+            filtroPosicionamento: function(){
+                return $scope.filtroPosicionamento;
+            },
+            filtroResponsavelNaoDefinido: function(){
+                return $scope.filtroResponsavelNaoDefinido;
+            },
+            filtroPosicionamentoNaoDefido: function(){
+                return $scope.filtroPosicionamentoNaoDefido;
+            },
             printPath: function(){
                 return $scope.printPath;
             }

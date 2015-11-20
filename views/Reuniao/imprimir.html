@@ -2,7 +2,8 @@
  <div class="list-group" ng-repeat="(comissao, value) in listaReuniaoProposicoes
   | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao
    | filter:{favorita:filtroFavorita} | selectedTags:filtroTags
-   | filter:filtroResponsavel
+   | filter:filtroResponsavel | filter:filtroPosicionamento
+   | filter:{responsavelNaoDefinido:filtroResponsavelNaoDefinido} | filter:{posicionamentoNaoDefinido:filtroPosicionamentoNaoDefido}
    |  groupBy :'comissao' |  orderBy : 'comissao' ">
      <div class="list-group-item active" ng-show="comissao && comissao != 'null' && comissao != ''">
          <h4 class="list-group-item-heading">
