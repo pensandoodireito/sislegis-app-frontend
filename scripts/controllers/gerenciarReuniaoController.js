@@ -466,6 +466,9 @@ angular.module('sislegisapp').controller(
     		controller: 'ModalRemoverProposicaoController',
     		size: 'sm',
     		resolve: {
+    			data:function(){
+    				return  $scope.dataFormatada();
+    			},
                 proposicao: function () {
                 	return $scope.selectedProposicao;
                 }
@@ -637,11 +640,12 @@ angular.module('sislegisapp').controller(
 
 
 angular.module('sislegisapp').controller('ModalRemoverProposicaoController',
-		function($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, ProposicaoResource, ReuniaoProposicaoResource, ComentarioResource, ComentarioService) {
+		function($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, data, ProposicaoResource, ReuniaoProposicaoResource, ComentarioResource, ComentarioService) {
 	
 	var self = this;
 	
 	$scope.proposicao = proposicao;
+	$scope.data = data;
 	$scope.comentario = $scope.comentario || new ComentarioResource();
 
 	$scope.ok = function() {
@@ -661,6 +665,6 @@ angular.module('sislegisapp').controller('ModalRemoverProposicaoController',
         };
 
         ComentarioService.save($scope.comentario, $scope.proposicao.id);
-        ReuniaoProposicaoResource.remove({ReuniaoId:$scope.proposicao.idReuniao, ProposicaoId: $scope.proposicao.id}, successCallback, errorCallback);
+        ReuniaoProposicaoResource.remove({ReuniaoId:data, ProposicaoId: $scope.proposicao.id}, successCallback, errorCallback);
     };
 });
