@@ -130,7 +130,7 @@
                                         <div class="divider-top form-inline">
                                             <div class="form-group">
                                                 <label>Posicionamento:</label>
-                                                <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="it as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-min-length="3" typeahead-on-select="save(item)" />
+                                                <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-min-length="3" typeahead-on-select="save(item)" />
                                             </div>
                                         </div>
                                         <div class="divider-top form-inline">
