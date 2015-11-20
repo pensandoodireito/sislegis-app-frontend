@@ -187,7 +187,13 @@
                                             </div>
                                             <div class="divider-top">
                                                 <label>Tags: </label>
-                                                <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1" placeholder="Adicione uma tag">
+                                                <tags-input ng-model="item.tags"
+                                                            ng-class="form-group"
+                                                            on-tag-added="save(item)"
+                                                            on-tag-removed="save(item)"
+                                                            min-length="1"
+                                                            placeholder="Adicione uma tag"
+                                                            display-property="tag">
                                                     <auto-complete source="loadTags($query)" ></auto-complete>
                                                 </tags-input>
                                             </div>
