@@ -60,7 +60,12 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource, 
 		'alterarPosicionamento' : {
 			url : BACKEND + "/proposicaos/alterarPosicionamento",
 			method : 'POST'
-		}
+		},
+        'buscarPautas': {
+            url: BACKEND + "/proposicaos/:ProposicaoId/pautas",
+            method: 'GET',
+            isArray : true
+        }
 	});
 	return resource;
 });

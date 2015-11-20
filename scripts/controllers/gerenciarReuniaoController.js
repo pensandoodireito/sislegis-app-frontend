@@ -511,7 +511,9 @@ angular.module('sislegisapp').controller(
 						);
 					}
 
-					// TODO Popular as pautas da proposicao para mostrar o historico de resultados
+                    if(!$scope.selectedProposicao.listaPautas){
+                        $scope.selectedProposicao.listaPautas = ProposicaoResource.buscarPautas({ProposicaoId: $scope.selectedProposicao.id})
+                    }
 
 					return $scope.selectedProposicao;
                 },
@@ -552,15 +554,15 @@ angular.module('sislegisapp').controller(
         	filtroComissao: function() {
         		return $scope.filtroComissao;
         	},
-        	filtroResponsavel: function() {
-        		return $scope.filtroResponsavel;
-        	},
         	filtroFavorita: function() {
         		return $scope.filtroFavorita;
         	},
         	filtroTags: function() {
         		return $scope.filtroTags;
         	},
+            filtroResponsavel: function() {
+                return $scope.filtroResponsavel;
+            },
             printPath: function(){
                 return $scope.printPath;
             }

@@ -41,7 +41,7 @@
                 </ul>
                 <br/>
                 <p ng-show="proposicao.tags.length > 0">
-                    <strong>Tags</strong>
+                    <strong>Tags: </strong>
                     <span ng-repeat="tag in proposicao.tags">{{tag.tag}} </span>
                 </p>
 
@@ -51,7 +51,13 @@
                 <span ng-repeat="proposicaoPai in proposicao.proposicoesPai">{{proposicaoPai.sigla}}</span>
 
                 <br/>
-                <strong>Resultado da pauta da comissão atual: </strong>{{proposicao.pautaComissaoAtual.resultado}}
+                <strong ng-show="proposicao.listaPautas.length > 0">Resultados de pauta: </strong>
+                <ul ng-show="proposicao.listaPautas.length > 0">
+                    <li ng-repeat="pauta in proposicao.listaPautas">
+                        <p><strong>Data: </strong>{{pauta.pautaReuniaoComissao.data | date: 'dd/MM/yyyy'}}</p>
+                        <p><strong>Resultado: </strong>{{pauta.resultado}} <span ng-show="pauta.resultado==''">Resultado não definido</span></p>
+                    </li>
+                </ul>
                 <br/>
             </div>
         </div>
