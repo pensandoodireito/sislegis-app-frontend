@@ -183,7 +183,8 @@ angular.module('sislegisapp').controller(
 		var errorCallback = function() {
 			toaster.pop('error', 'Falha ao atualizar posicionamento.');
 		};
-        var isPreliminar = $scope.selectedProposicao.posicionamento.nome.indexOf('Preliminar ') !== false;
+
+        var isPreliminar = $scope.selectedProposicao.posicionamento.nome.indexOf('Previamente ') != -1;
 		var idPosicionamento = $scope.selectedProposicao.posicionamento ? $scope.selectedProposicao.posicionamento.id : null;
 		ProposicaoResource.alterarPosicionamento({id: $scope.selectedProposicao.id, idPosicionamento: idPosicionamento, preliminar: isPreliminar}, successCallback, errorCallback);
 
