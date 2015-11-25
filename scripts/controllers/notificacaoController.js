@@ -79,7 +79,10 @@ angular.module('sislegisapp').controller('NotificacaoController',
 				}, successCallback, errorCallback);
 
 			}
-
+			
+			$rootScope.$on('updateEncaminhamentos', function(event) {
+				$scope.getListaNotificacaoTarefas();
+			});
 			$rootScope.$on('updateTarefas', function(event) {
 				$scope.getListaNotificacaoTarefas();
 			});

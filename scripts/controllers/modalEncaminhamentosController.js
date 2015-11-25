@@ -115,7 +115,7 @@ angular.module('sislegisapp').controller(
 						$scope.proposicao.totalEncaminhamentos++;
 						$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
 						$scope.tipoEncaminhamento = new TipoEncaminhamentoResource();
-						$rootScope.$emit('updateTarefas');
+						$rootScope.$emit('updateEncaminhamentos');
 						toaster.pop('success', 'Encaminhamento inserido com sucesso');
 					});
 				};
