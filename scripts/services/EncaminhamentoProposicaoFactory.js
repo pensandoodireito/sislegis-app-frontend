@@ -28,7 +28,7 @@ angular.module('sislegisapp').factory('EncaminhamentoProposicaoHttp', function($
             return $http({
                 method: 'POST',
                 url: BACKEND + "/encaminhamentoProposicao/finalizar",
-                data: $.param({'idEncaminhamentoProposicao': encaminhamento.proposicao.id, 'descricaoComentario': encaminhamento.descricaoComentario}),
+                data: $.param({'idEncaminhamentoProposicao': encaminhamento.id, 'descricaoComentario': encaminhamento.descricaoComentario}),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'}
             });
         }
