@@ -62,9 +62,14 @@
                             <div class="mt-sm" ng-show="item.comentarioFinalizacao">
                                 <p>Feito por: <strong>{{item.comentarioFinalizacao.autor.nome}}</strong></p>
                                 <p>Data: {{item.comentarioFinalizacao.dataCriacao | date: 'dd/MM/yyyy'}}</p>
-                                <p ng-show="item.comentarioFinalizacao.descricao">Comentário: {{item.comentarioFinalizacao.descricao}}</p>
+								<p ng-show="item.comentarioFinalizacao.descricao">Comentário: {{item.comentarioFinalizacao.descricao}}</p>
                             </div>
-                            <p ng-show="!item.finalizado"><textarea class="form-control" ng-model="item.descricaoComentario"></textarea> <button class="btn btn-default" ng-click="finalizar(item)">Finalizar</button></p>
+                            <p ng-show="!item.finalizado">
+								<span class="ml-lg"><a ng-click="openUpdate(item)"> Alterar</a></span>
+								<br/><br/>
+								<textarea class="form-control" ng-model="item.descricaoComentario"></textarea>
+								<button class="btn btn-default" ng-click="finalizar(item)">Finalizar</button>
+							</p>
 						</div>
 					</div>
 				</div>
