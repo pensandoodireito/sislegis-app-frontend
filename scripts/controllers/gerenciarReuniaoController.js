@@ -2,7 +2,7 @@ angular.module('sislegisapp').controller(
 		'GerenciarReuniaoController',
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
-				ReuniaoProposicaoResource, TagResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource, ElaboracaoNormativaResource, BACKEND) {
+				ReuniaoProposicaoResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource, ElaboracaoNormativaResource, BACKEND) {
     
 	var self = this;
 	$scope.listaReuniaoProposicoes = [];
@@ -31,7 +31,6 @@ angular.module('sislegisapp').controller(
     $scope.allProposicoes = [];
     
     $scope.filtroTags = [];
-    $scope.tagsProposicao = TagResource.listarTodos();
 
 	$scope.infiniteScroll = {
 			busy: false,
@@ -82,10 +81,6 @@ angular.module('sislegisapp').controller(
 	    $scope.infiniteScroll.offset = 0;
 		$scope.consultarProposicoes();
 	}
-
-    $scope.loadTags = function(query) {
-    	return TagResource.buscarPorSufixo({sufixo: query}).$promise;
-    };
     
     $scope.loadProposicoes = function(query) {
     	return ProposicaoResource.buscarPorSufixo({sufixo: query}).$promise;
@@ -154,7 +149,6 @@ angular.module('sislegisapp').controller(
         		 return;
         	 }
         	console.log("Nao carregou a proposicao, recarregara a reuniao inteira");
-        	$scope.tagsProposicao = TagResource.listarTodos();
     		ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()},
         	function(response) {
         		$scope.listaReuniaoProposicoes = response;
