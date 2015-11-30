@@ -233,7 +233,7 @@ angular.module('sislegisapp').controller(
             	toaster.pop('error', 'Falha ao buscar Reunião.');
             };
     		
-    		$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada(),comissao:"CAE"}, successCallback, errorCallback);
+    		$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()}, successCallback, errorCallback);
     	}
 
     });
