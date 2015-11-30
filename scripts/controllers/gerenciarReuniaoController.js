@@ -116,12 +116,7 @@ angular.module('sislegisapp').controller(
     	}
     };
 
-	$scope.checkRemocaoPosicionamento=function(item){
-		if(!item.posicionamento && $scope.posicionamentoNull==false){
-			$scope.posicionamentoNull=false;
-			$scope.alterarPosicionamento(item);
-		}
-	};
+	
 
     $scope.updateSingleProposicao = function(item,toastMsg){
     	for (var i = 0; i < $scope.listaReuniaoProposicoes.length; i++) {    			
@@ -163,11 +158,34 @@ angular.module('sislegisapp').controller(
         };
         ProposicaoResource.update($scope.selectedProposicao, successCallback, errorCallback);
     };
-
-	$scope.alterarPosicionamento = function(item) {
-		if(item){
-			$scope.setSelectedProposicao(item);
+    
+    $scope.checkRemocaoPosicionamento=function(item){
+		if(item.posicionamentoAtual && item.posicionamentoAtual.posicionamento==null){			
+			$scope.alterarPosicionamento(item,null);
 		}
+	};
+    $scope.previousPosicionamento=function(proposicao){
+    	console.log("entrou com ",proposicao.posicionamentoAtual)
+    	if(proposicao.posicionamentoAtual && proposicao.posicionamentoAtual.posicionamento){    		
+    		proposicao.previousPosicionamentoId = proposicao.posicionamentoAtual.posicionamento.id;
+    	}
+    }
+	$scope.alterarPosicionamento = function(proposicao, posicionamentoSelecionado, $label) {
+		console.log(proposicao, posicionamentoSelecionado, $label)
+		if(proposicao){
+			$scope.setSelectedProposicao(proposicao);
+		}
+		if(posicionamentoSelecionado!=null){
+			if(proposicao.previousPosicionamentoId && proposicao.previousPosicionamentoId==posicionamentoSelecionado.id){
+				console.log("não alterou o posicionamento")
+				return;
+			}	
+		}else if (proposicao.previousPosicionamentoId==null){
+			console.log("não alterou o posicionamento")
+			return;
+		}
+		
+				
 
 		clear();
 
@@ -178,8 +196,11 @@ angular.module('sislegisapp').controller(
 			toaster.pop('error', 'Falha ao atualizar posicionamento.');
 		};
 
-        var isPreliminar = $scope.selectedProposicao.posicionamento.nome.indexOf('Previamente ') != -1;
-		var idPosicionamento = $scope.selectedProposicao.posicionamento ? $scope.selectedProposicao.posicionamento.id : null;
+        var isPreliminar =  posicionamentoSelecionado && posicionamentoSelecionado.nome.indexOf('Previamente ') != -1;
+		var idPosicionamento = null;
+		if(posicionamentoSelecionado){
+			idPosicionamento=posicionamentoSelecionado.id;
+		}
 		ProposicaoResource.alterarPosicionamento({id: $scope.selectedProposicao.id, idPosicionamento: idPosicionamento, preliminar: isPreliminar}, successCallback, errorCallback);
 
 	}
