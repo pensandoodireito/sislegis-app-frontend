@@ -149,10 +149,15 @@ a{
 .tarefas .tarefa-conc .tarefa-status span { color:#808080; text-decoration: line-through;}
 
 @media print {
-    section, section *, header, header *, aside, aside *{
+    section, section *, header, header *, aside, aside *, toaster-container{
         display: none !important;
     }
     .printable{
-        margin-left:-40%;
+        margin-left:-50%;
+    }
+}
+@media screen {
+    .printable {
+        display : none;
     }
 }

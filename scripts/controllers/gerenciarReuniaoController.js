@@ -443,6 +443,14 @@ angular
 						ComentarioService.save(comentario, item.id).then(successCallback, errorCallback);
 					}
 
+                    $scope.loadComentarios = function(lista){
+                        if (typeof lista != 'undefined' && lista.length > 0){
+                            lista.forEach(function(item){
+                                item.listaComentario = ComentarioResource.findByProposicao({ProposicaoId: item.id});
+                            });
+                        }
+                    }
+
 					$scope.populaModalComentario = function(lista) {
 						$scope.selectedProposicao.listaComentario = lista;
 						var modalInstance = $modal.open({
@@ -522,6 +530,25 @@ angular
 							size : 'lg',
 							resolve : {
 								proposicao : function() {
+                                    // Popula comentarios
+                                    if ($scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios) {
+                                            $scope.selectedProposicao.listaComentario = ComentarioResource.findByProposicao({
+                                                ProposicaoId: $scope.selectedProposicao.id}
+                                            );
+                                    }
+                                
+                                    // Popula encaminhamentos
+                                    if ($scope.selectedProposicao.listaEncaminhamentoProposicao == null || $scope.selectedProposicao.listaEncaminhamentoProposicao.length != $scope.selectedProposicao.totalEncaminhamentos){
+                                            $scope.selectedProposicao.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({
+                                                ProposicaoId: $scope.selectedProposicao.id}
+                                            );
+                                    }
+                    
+                                    if(!$scope.selectedProposicao.listaPautas){
+                                        $scope.selectedProposicao.listaPautas = ProposicaoResource.buscarPautas({ProposicaoId: $scope.selectedProposicao.id})
+                                    }
+                    
+                                    
 									return $scope.selectedProposicao;
 								},
 								printPath : function() {
@@ -532,6 +559,9 @@ angular
 					}
 
 					$scope.abrirModalRelatorio = function() {
+
+                        $scope.loadComentarios($scope.listaReuniaoProposicoes);
+                        
 						$scope.printPath = 'views/Reuniao/imprimir.html';
 						var modalInstance = $modal.open({
 							templateUrl : 'views/Reuniao/modal-relatorio.html',
@@ -559,6 +589,18 @@ angular
 								filtroTags : function() {
 									return $scope.filtroTags;
 								},
+                                filtroResponsavel: function() {
+                                    return $scope.filtroResponsavel;
+                                },
+                                filtroPosicionamento: function(){
+                                    return $scope.filtroPosicionamento;
+                                },
+                                filtroResponsavelNaoDefinido: function(){
+                                    return $scope.filtroResponsavelNaoDefinido;
+                                },
+                                filtroPosicionamentoNaoDefido: function(){
+                                    return $scope.filtroPosicionamentoNaoDefido;
+                                },
 								printPath : function() {
 									return $scope.printPath;
 								}
