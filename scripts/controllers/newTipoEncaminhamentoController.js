@@ -1,25 +1,25 @@
 
-angular.module('sislegisapp').controller('NewEncaminhamentoController', function ($scope, $location, locationParser, EncaminhamentoResource ) {
+angular.module('sislegisapp').controller('NewTipoEncaminhamentoController', function ($scope, $location, locationParser, TipoEncaminhamentoResource ) {
     $scope.disabled = false;
     $scope.$location = $location;
     $scope.simpleEntity = $scope.simpleEntity || {};
 
-    $scope.title = "Encaminhamento";
+    $scope.title = "Tipo Encaminhamento";
     $scope.isNew = true;
 
     $scope.save = function() {
         var successCallback = function(data,responseHeaders){
             var id = locationParser(responseHeaders);
-            $location.path('/Encaminhamentos/edit/' + id);
+            $location.path('/TipoEncaminhamentos/edit/' + id);
             $scope.displayError = false;
         };
         var errorCallback = function() {
             $scope.displayError = true;
         };
-        EncaminhamentoResource.save($scope.simpleEntity, successCallback, errorCallback);
+        TipoEncaminhamentoResource.save($scope.simpleEntity, successCallback, errorCallback);
     };
     
     $scope.cancel = function() {
-        $location.path("/Encaminhamentos");
+        $location.path("/TipoEncaminhamentos");
     };
 });

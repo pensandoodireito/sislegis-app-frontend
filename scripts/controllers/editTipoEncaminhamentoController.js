@@ -1,20 +1,20 @@
-angular.module('sislegisapp').controller('EditEncaminhamentoController', function($scope, $routeParams, $location, EncaminhamentoResource ) {
+angular.module('sislegisapp').controller('EditTipoEncaminhamentoController', function($scope, $routeParams, $location, TipoEncaminhamentoResource ) {
     var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
 
-    $scope.title = "Encaminhamento";
+    $scope.title = "Tipo Encaminhamento";
     $scope.isNew = false;
     
     $scope.get = function() {
         var successCallback = function(data){
             self.original = data;
-            $scope.simpleEntity = new EncaminhamentoResource(self.original);
+            $scope.simpleEntity = new TipoEncaminhamentoResource(self.original);
         };
         var errorCallback = function() {
-            $location.path("/Encaminhamentos");
+            $location.path("/TipoEncaminhamentos");
         };
-        EncaminhamentoResource.get({EncaminhamentoId:$routeParams.EncaminhamentoId}, successCallback, errorCallback);
+        TipoEncaminhamentoResource.get({TipoEncaminhamentoId:$routeParams.TipoEncaminhamentoId}, successCallback, errorCallback);
     };
 
     $scope.isClean = function() {
@@ -33,12 +33,12 @@ angular.module('sislegisapp').controller('EditEncaminhamentoController', functio
     };
 
     $scope.cancel = function() {
-        $location.path("/Encaminhamentos");
+        $location.path("/TipoEncaminhamentos");
     };
 
     $scope.remove = function() {
         var successCallback = function() {
-            $location.path("/Encaminhamentos");
+            $location.path("/TipoEncaminhamentos");
             $scope.displayError = false;
         };
         var errorCallback = function() {

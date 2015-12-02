@@ -28,7 +28,7 @@
                 <div class="panel-body">
                     <div class="clearfix">
                         <div class="col-sm-6">
-                            <h4 class="mt-0 tarefa-titulo"><i class="fa fa-exclamation-circle"></i> {{tarefa.tipoTarefa}} - {{tarefa.encaminhamentoProposicao.encaminhamento.nome}}</h4>
+                            <h4 class="mt-0 tarefa-titulo"><i class="fa fa-exclamation-circle"></i> {{tarefa.tipoTarefa}} - {{tarefa.encaminhamentoProposicao.tipoEncaminhamento.nome}}</h4>
                         </div>
                         <div class="col-sm-3 tarefa-dtlimite">
                             <p>Data limite: <span>{{tarefa.encaminhamentoProposicao.dataHoraLimite | date:'dd/MM/yyyy'}}</span>
@@ -49,9 +49,9 @@
                             <div class="col-sm-4 divider-left">
                                 <a ng-show="!tarefa.finalizada" ng-click="finalizarTarefa(tarefa)"><i class="fa fa-thumbs-o-up"></i> Marcar como finalizada</a>
                                 <div class="{{tarefa.finalizada ? '' : 'divider-top' }}">
-                                    <p><a ng-click="abrirModalComentarios(tarefa.proposicao.id)"><i class="fa fa-comments"></i> Comentários</a>
+                                    <p><a ng-click="abrirModalComentarios(tarefa.encaminhamentoProposicao.proposicao.id)"><i class="fa fa-comments"></i> Comentários</a>
                                     </p>
-                                    <p><a class="mt-sm" ng-click="abrirModalEncaminhamentos(tarefa.proposicao.id)"><i class="fa fa-share-square-o"></i> Outros encaminhamentos desta proposição</a>
+                                    <p><a class="mt-sm" ng-click="abrirModalEncaminhamentos(tarefa.encaminhamentoProposicao.proposicao.id)"><i class="fa fa-share-square-o"></i> Outros encaminhamentos desta proposição</a>
                                     </p>
                                 </div>
                             </div>

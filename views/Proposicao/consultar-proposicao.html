@@ -1,9 +1,6 @@
-<link href="styles/css/theme-sislegis/reuniao-sislegis.css"
-	rel="stylesheet" type="text/css" />
 <div class="container">
 	<div class="pull-right">
-		<button type="button" class="btn btn-primary btn-sm"
-			ng-click="abrirModalBuscaProposicaoAvulsa()">Buscar nova proposição</button>
+		<button type="button" class="btn btn-primary btn-sm" ng-click="abrirModalBuscaProposicaoAvulsa()">Buscar nova proposição</button>
 	</div>
 	<h3>Consultar Proposições</h3>
 	<div class="row">
@@ -86,6 +83,10 @@
                                     <a  ng-show="isFollowed(item)" href ng-click="unfollowProposicao(item);"><i class="fa  fa-check-square-o"></i> Seguindo proposição</a>
                                     <a  ng-show="!isFollowed(item)" href ng-click="followProposicao(item);"><i class="fa fa-square-o"	></i> Seguir proposição</a>
 								</span>
+								<span class="divider-left" >
+                                    <a  href ng-click="checkUpdates(item);"><i class="fa  fa-refresh"></i> Atualizar dados da {{item.origem}}</a>
+                                    
+								</span>
 								</p>
 							</div>
 							<div class="col-sm-5">
@@ -124,7 +125,7 @@
                                         <div class="divider-top form-inline">
                                             <div class="form-group">
                                                 <label>Posicionamento:</label>
-                                                <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="it as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-min-length="3" typeahead-on-select="save(item)" />
+                                                <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-min-length="3" typeahead-on-select="save(item)" />
                                             </div>
                                         </div>
                                         <div class="divider-top form-inline">
