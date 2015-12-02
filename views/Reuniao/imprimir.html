@@ -1,8 +1,8 @@
  <!-- Tudo que for para o usuario imprimir deve ficar nesse HTML -->
  <div class="list-group" ng-repeat="(comissao, value) in listaReuniaoProposicoes
   | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao
-   | filter:{favorita:filtroFavorita} | selectedTags:filtroTags
-   | filter:filtroResponsavel | filter:filtroPosicionamento
+   | filter:{favorita:filtroFavorita}
+   | filter:filtroResponsavel | filter:filtroPosicionamento : true
    | filter:{responsavelNaoDefinido:filtroResponsavelNaoDefinido} | filter:{posicionamentoNaoDefinido:filtroPosicionamentoNaoDefido}
    |  groupBy :'comissao' |  orderBy : 'comissao' ">
      <div class="list-group-item active" ng-show="comissao && comissao != 'null' && comissao != ''">
