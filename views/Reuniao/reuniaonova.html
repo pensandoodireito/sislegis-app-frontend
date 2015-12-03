@@ -62,12 +62,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Tags</label>
-                            <div class="col-sm-4">
-                                <div ng-dropdown-multiselect options="tagsProposicao" selected-model="filtroTags" extra-settings="{displayProp: 'text', idProp: 'text'}"></div>
-                            </div>
-                        </div>
+
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-4">
                                 <div class="checkbox">
@@ -107,7 +102,7 @@
                     <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem
                      | filter:filtroComissao | filter:{favorita:filtroFavorita} | filter:filtroResponsavel | filter:filtroPosicionamento
                      | filter:{responsavelNaoDefinido:filtroResponsavelNaoDefinido} | filter:{posicionamentoNaoDefinido:filtroPosicionamentoNaoDefido}
-                     | selectedTags:filtroTags |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
+                     |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
 
                         <div class="list-group-item active" ng-show="comissao && comissao != 'null' && comissao != ''">
                             <h4 class="list-group-item-heading">{{comissao}}</h4>
@@ -184,18 +179,6 @@
                                                     <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" ng-blur="checkRemocaoResponsavel(item)" typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)" typeahead-on-select="save(item); item.responsavelNaoDefinido = false" class="form-control">
                                                     <input type="checkbox" ng-model="buscaGeral" /> Buscar completa
                                                 </div>
-                                            </div>
-                                            <div class="divider-top">
-                                                <label>Tags: </label>
-                                                <tags-input ng-model="item.tags"
-                                                            ng-class="form-group"
-                                                            on-tag-added="save(item)"
-                                                            on-tag-removed="save(item)"
-                                                            min-length="1"
-                                                            placeholder="Adicione uma tag"
-                                                            display-property="tag">
-                                                    <auto-complete source="loadTags($query)" ></auto-complete>
-                                                </tags-input>
                                             </div>
                                             <div class="divider-top">
                                                 <label>Proposições associadas: </label>
