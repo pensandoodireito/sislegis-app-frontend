@@ -29,72 +29,26 @@
             </div>
             <div class="box box-info" ng-show="listaReuniaoProposicoes.length > 0">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Filtrar</h3>
+                    <h3 class="box-title">Filtros</h3>
                 </div><!-- /.box-header -->
                 <!-- form start -->
                 <form class="form-horizontal">
                     <div class="box-body">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Proposições</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" ng-model="filtroGlobal.$" placeholder="Filtrar as proposições">
-                            </div>
                             <label class="col-sm-2 control-label">Casa legislativa</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-2">
                                 <select ng-model="filtroOrigem.origem" ng-options="item.origem as item.origem for item in listaRPOrigem | unique:'origem'" class="form-control" ng-change="changeFiltroOrigem()">
                                     <option value=""></option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="form-group">
                             <label class="col-sm-2 control-label">Comissão</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-2">
                                 <select ng-model="filtroComissao.comissao" ng-options="item.comissao as item.comissao for item in listaRPComissao | filter:filtroOrigem | unique:'comissao'" ng-change="changeFiltroComissao()" class="form-control">
                                     <option value=""></option>
                                 </select>
                             </div>
-                            <label class="col-sm-2 control-label">Favoritas</label>
-                            <div class="col-sm-4">
-                                <select ng-model="filtroFavorita" class="form-control">
-                                    <option value=""></option>
-                                    <option value="true">Favoritas</option>
-                                    <option value="false">Não-favoritas</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Tags</label>
-                            <div class="col-sm-4">
-                                <div ng-dropdown-multiselect options="tagsProposicao" selected-model="filtroTags" extra-settings="{displayProp: 'text', idProp: 'text'}"></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" ng-model="filtroResponsavelNaoDefinido" ng-true-value="true" ng-change="checkResponsavelNaoDefinido()" /> Responsável não definido?
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-sm-offset-2 col-sm-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" ng-model="filtroPosicionamentoNaoDefido" ng-true-value="true" ng-change="checkPosicionamentoNaoDefido()" /> Posicionamento não definido?
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" ng-hide="filtroResponsavelNaoDefinido">Responsável</label>
-                            <div class="col-sm-4" ng-hide="filtroResponsavelNaoDefinido">
-                                <input type="text" ng-model="filtroResponsavel.responsavel" ng-required="true" typeahead="item.nome as item.nome for item in getUsuarios($viewValue)" class="form-control">
-                            </div>
-                            <label class="col-sm-2 control-label" ng-hide="filtroPosicionamentoNaoDefido" ng-class="filtroResponsavelNaoDefinido ? 'col-sm-offset-6': ''">Posicionamento</label>
-                            <div class="col-sm-4" ng-hide="filtroPosicionamentoNaoDefido">
-                                <input class="form-control" type="text" ng-model="filtroPosicionamento.posicionamento" ng-required="true" typeahead="item.nome as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" class="form-control">
-                            </div>
-
+                            <div class="col-sm-2"><a ng-click="filtroFavorita=!filtroFavorita"><i class="fa" ng-class="{'fa-star-o': !filtroFavorita, 'fa-star': filtroFavorita}"></i> Favoritas</a></div>
+                            <a data-toggle="control-sidebar">Mais filtros <i class="fa fa-caret-square-o-right"></i></a>
                         </div>
                     </div><!-- /.box-body -->
                     <div class="box-footer">
