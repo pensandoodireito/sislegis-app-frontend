@@ -1,4 +1,9 @@
 <button type="button" class="btn btn-default" ng-show="reuniao.data" ng-show="listaReuniaoProposicoes.length > 0" ng-click="abrirModalRelatorio()">Imprimir</button>
+<hr />
+<div>
+    <label class="control-label">Proposições</label>
+    <input type="text" class="form-control" ng-model="filtroGlobal.$" placeholder="Filtrar as proposições" />
+</div>
 
 <label><input type="checkbox" ng-model="filtroPosicionamentoNaoDefido" ng-true-value="true" ng-change="checkPosicionamentoNaoDefido()" /> Posicionamento não definido?</label>
 <div ng-hide="filtroPosicionamentoNaoDefido">
