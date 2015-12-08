@@ -8,6 +8,8 @@ angular.module('sislegisapp').controller(
 	$scope.listaReuniaoProposicoes = [];
 	$scope.filtro = new ProposicaoResource();
 
+    $scope.sidebarPath = "views/Reuniao/sidebar-search.html";
+
 	$scope.proposicoesSeguidas = [];
 	UsuarioResource.proposicoesSeguidas({}, function(data) {
 		console.log("Carregou proposicoes seguidas ", data);
@@ -38,6 +40,17 @@ angular.module('sislegisapp').controller(
 			limit: 5,
 			offset: 0
 	}
+
+    $scope.maisFiltros = function(){
+        var selector = $($.AdminLTE.options.controlSidebarOptions.selector);
+        $scope.isSidebarOpen = !$scope.isSidebarOpen;
+        console.log($scope.isSidebarOpen);
+        if($scope.isSidebarOpen){
+            $.AdminLTE.controlSidebar.open(selector, false);
+        }else{
+            $.AdminLTE.controlSidebar.close(selector, false);
+        }
+    },
 	
 	$scope.consultarProposicoes = function() {
 		if ($scope.infiniteScroll.busy) return;
