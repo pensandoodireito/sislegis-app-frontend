@@ -120,76 +120,98 @@
                                 </button>
                             </div>
                             <div class="row">
-                                <div class="col-sm-12">
+                                <div class="col-sm-4">
                                     <h3 class="list-group-item-heading">
+                                        <i class="fa" ng-class="{'fa-caret-right':!item.opened, 'fa-caret-down':item.opened}"></i>
                                         <i class="fa fa-star-o" ng-show="!item.favorita" ng-click="item.favorita=true;save(item)"></i>
                                         <i class="fa fa-star" style="color:orange" ng-show="item.favorita" ng-click="item.favorita=false; save(item)"></i>
-                                        <a href="{{selectedProposicao.linkProposicao}}" target="_blank">{{item.sigla}}</a>
+                                        <a data-toggle="collapse" href="#proposicao-{{item.id}}" ng-click="item.opened=!item.opened">{{item.sigla}}</a>
                                     </h3>
-                                    <p>{{item.ementa}}</p>
+                                </div>
+                                <div class="col-sm-8" ng-show="!item.opened">
+                                    <a ng-click="abrirModalComentarios(item)"><i class="fa fa-comment"></i> comentários ({{item.totalComentarios}})</a>
+                                    <a ng-click="abrirModalEncaminhamentos(item)"><i class="fa fa-share"></i> encaminhamentos ({{item.totalEncaminhamentos}})</a>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <strong>Autor: </strong>{{item.autor}}
-                                    <br/>
-                                    <strong>Origem: </strong>{{item.origem}}
-                                    <br/>
-                                    <strong>Comissao: </strong>{{item.pautaComissaoAtual.pautaReuniaoComissao.comissao}}
-                                    <br/>
-                                    <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} <span ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{item.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
-                                    <br/>
-                                    <strong>Relator: </strong>{{item.pautaComissaoAtual.relator}}
-                                    <br/>
-                                    <span ng-show="item.pautaComissaoAtual.resultado != ''">
-                                        <strong>Resultado: </strong>{{item.pautaComissaoAtual.resultado}}
-                                    </span>
-                                    <div>
-                                        <a ng-show="item.origem == 'SENADO'" href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
-                                        <a ng-show="item.origem == 'CAMARA'" href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{item.idProposicao}}#tramitacoes" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
-                                        <a ng-click="setSelectedProposicao(item);abrirModalProposicao();"><i class="fa fa-print"></i> Imprimir</a>
+                            <div class="collapse" id="proposicao-{{item.id}}">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <p>{{item.ementa}}</p>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="divider-top">
-                                        <div class="form-group">
-                                            <label>Posicionamento:</label>
-                                            <input type="text" ng-model="item.posicionamento" placeholder="Procurar" ng-required="true" ng-blur="checkRemocaoPosicionamento(item)" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-on-select="alterarPosicionamento(item); item.posicionamentoNaoDefinido = false" class="form-control">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <strong>Autor: </strong>{{item.autor}}
+                                        <br/>
+                                        <strong>Origem: </strong>{{item.origem}}
+                                        <br/>
+                                        <strong>Comissao: </strong>{{item.pautaComissaoAtual.pautaReuniaoComissao.comissao}}
+                                        <br/>
+                                        <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} <span ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{item.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
+                                        <br/>
+                                        <strong>Relator: </strong>{{item.pautaComissaoAtual.relator}}
+                                        <br/>
+                                        <span ng-show="item.pautaComissaoAtual.resultado != ''">
+                                            <strong>Resultado: </strong>{{item.pautaComissaoAtual.resultado}}
+                                        </span>
+                                        <div>
+                                            <a ng-show="item.origem == 'SENADO'" href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
+                                            <a ng-show="item.origem == 'CAMARA'" href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{item.idProposicao}}#tramitacoes" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
+                                            <a ng-click="setSelectedProposicao(item);abrirModalProposicao();"><i class="fa fa-print"></i> Imprimir</a>
                                         </div>
                                     </div>
-                                    <div class="divider-top">
-                                        <div class="form-group">
-                                            <label>Responsável: </label>
-                                            <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" ng-blur="checkRemocaoResponsavel(item)" typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)" typeahead-on-select="save(item); item.responsavelNaoDefinido = false" class="form-control">
-                                            <input type="checkbox" ng-model="buscaGeral" /> Buscar completa
+                                    <div class="col-sm-6">
+                                        <div class="divider-top">
+                                            <div class="form-group">
+                                                <label>Posicionamento:</label>
+                                                <input type="text" ng-model="item.posicionamento" placeholder="Procurar" ng-required="true" ng-blur="checkRemocaoPosicionamento(item)" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-on-select="alterarPosicionamento(item); item.posicionamentoNaoDefinido = false" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="divider-top">
+                                            <div class="form-group">
+                                                <label>Responsável: </label>
+                                                <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" ng-blur="checkRemocaoResponsavel(item)" typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)" typeahead-on-select="save(item); item.responsavelNaoDefinido = false" class="form-control">
+                                                <input type="checkbox" ng-model="buscaGeral" /> Buscar completa
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div ng-show="item.listaComentario.length > 0">
-                                        <strong>Comentários:</strong>
-                                        <p>{{item.listaComentario[item.listaComentario.length-1].dataCriacao | date: 'dd/MM/yyyy'}} - {{item.listaComentario[item.listaComentario.length-1].descricao}}</p>
-                                        <a ng-click="abrirModalComentarios(item)"><strong>Outros +({{item.totalComentarios}})</strong></a>
+                                <div class="row">
+                                    <hr />
+                                    <div class="col-sm-6">
+                                        <div ng-show="item.listaComentario.length > 0">
+                                            <strong>Comentários:</strong>
+                                            <p>{{item.listaComentario[item.listaComentario.length-1].dataCriacao | date: 'dd/MM/yyyy'}} - {{item.listaComentario[item.listaComentario.length-1].descricao}}</p>
+                                            <a ng-click="abrirModalComentarios(item)"><strong>Outros +({{item.totalComentarios}})</strong></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="col-sm-10"><textarea class="form-control fontsize-sm" rows="5" maxlength="8000" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea></div>
+                                        <div class="col-sm-2"><button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i></button></div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="col-sm-10"><textarea class="form-control fontsize-sm" rows="5" maxlength="8000" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea></div>
-                                    <div class="col-sm-2"><button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i></button></div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <strong>Encaminhamentos</strong>
-                                    <div ng-repeat="encaminhamento in item.listaEncaminhamentoProposicao">
-                                        <p ng-class="{'text-red':!encaminhamento.finalizado}">{{encaminhamento.detalhes}}</p>
+                                <div class="row">
+                                    <hr />
+                                    <div class="col-sm-6">
+                                        <div ng-show="item.listaEncaminhamentoProposicao > 0">
+                                            <strong>Encaminhamentos</strong>
+                                            <div ng-repeat="encaminhamento in item.listaEncaminhamentoProposicao">
+                                                <p ng-class="{'text-red':!encaminhamento.finalizado}">{{encaminhamento.detalhes}}</p>
+                                            </div>
+                                            <a ng-click="abrirModalEncaminhamentos(item)"><strong>Outros +({{item.totalEncaminhamentos}})</strong></a>
+                                        </div>
                                     </div>
-                                    </p>
-                                    <a ng-click="abrirModalEncaminhamentos(item)"><strong>Outros +{{item.totalEncaminhamentos}}</strong></a>
-                                </div>
-                                <div class="col-sm-6">
-
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <label for="tipo-encaminhamento">Tipo de Encaminhamento</label>
+                                            <select id="tipo-encaminhamento" ng-model="encaminhamentoProposicao.tipoEncaminhamento"
+                                                    ng-options="tipoEncaminhamento.nome for tipoEncaminhamento in listaEncaminhamento track by tipoEncaminhamento.id | orderBy:'nome'" class="form-control" ng-required="true"></select>
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="detalhes">Detalhes:</label>
+                                            <textarea id="detalhes" class="form-control" rows="3" ng-model="encaminhamentoProposicao.detalhes"></textarea>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
