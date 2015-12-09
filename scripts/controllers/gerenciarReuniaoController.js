@@ -539,7 +539,7 @@ angular.module('sislegisapp').controller(
     
     $scope.abrirModalRelatorio = function() {
 
-        $scope.loadComentarios($scope.listaReuniaoProposicoes);
+        
 
         $scope.printPath = 'views/Reuniao/imprimir.html';
         var modalInstance = $modal.open({
@@ -548,7 +548,8 @@ angular.module('sislegisapp').controller(
           size: 'lg',
           resolve: {
         	listaReuniaoProposicoes: function () {
-            	return $scope.listaReuniaoProposicoes;
+        		return ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada(),fetchAll : true});
+            	
             },
             filtroGlobal: function() {
         		return $scope.filtroGlobal;
