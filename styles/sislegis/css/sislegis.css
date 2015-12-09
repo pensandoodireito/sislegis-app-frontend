@@ -171,6 +171,11 @@ a{
     }
 }
 
+.text-red{
+    color: #993300;
+    font-weight: bold;
+}
+
 /** Preloading start **/
 .pace {
     -webkit-pointer-events: none;

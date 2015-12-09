@@ -227,13 +227,16 @@ angular.module('sislegisapp').controller(
         	'MM/dd/yyyy');
         return formattedDate;
     };
-    
+
         $scope.$watch("reuniao.data", function() {
     	if(!angular.isUndefined($scope.reuniao.data)){
     		
     		var successCallback = function(){
                 if ($scope.listaReuniaoProposicoes.length == 0) {
                 	toaster.pop('info', 'Não existem proposições para esta data. Você pode adicionar novas proposições.');
+                }else{
+                    $scope.loadComentarios($scope.listaReuniaoProposicoes);
+                    $scope.loadEncaminhamentos($scope.listaReuniaoProposicoes);
                 }
             };
             var errorCallback = function() {
@@ -244,8 +247,8 @@ angular.module('sislegisapp').controller(
     	}
 
     });
-    
-    $scope.$watch('listaReuniaoProposicoes', function() {
+
+    $scope.$watch('listaReuniaoProposicoes', function(newValue) {
         $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
         $scope.listaRPComissao = $scope.listaReuniaoProposicoes;
         $scope.listaRPResponsavel = $scope.listaReuniaoProposicoes;
@@ -561,6 +564,14 @@ angular.module('sislegisapp').controller(
         if (typeof lista != 'undefined' && lista.length > 0){
             lista.forEach(function(item){
                 item.listaComentario = ComentarioResource.findByProposicao({ProposicaoId: item.id});
+            });
+        }
+    }
+
+    $scope.loadEncaminhamentos = function(lista){
+        if (typeof lista != 'undefined' && lista.length > 0){
+            lista.forEach(function(item){
+                item.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ProposicaoId: item.id});
             });
         }
     }
