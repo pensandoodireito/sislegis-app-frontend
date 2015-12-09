@@ -1,5 +1,5 @@
 angular.module('sislegisapp').controller('ModalRelatorioReuniaoController',
-	function($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, listaReuniaoProposicoes, filtroGlobal, filtroOrigem, filtroComissao, filtroFavorita, filtroTags, filtroResponsavel, filtroPosicionamento, filtroResponsavelNaoDefinido, filtroPosicionamentoNaoDefido, printPath) {
+    function($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, listaReuniaoProposicoes, filtroGlobal, filtroOrigem, filtroComissao, filtroFavorita, filtroTags, filtroResponsavel, filtroPosicionamento, filtroResponsavelNaoDefinido, filtroPosicionamentoNaoDefido, printPath) {
 		var self = this;
 		$scope.disabled = false;
 		$scope.showDetalhamentoComentario = false;
