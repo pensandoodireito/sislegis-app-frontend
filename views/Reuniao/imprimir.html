@@ -43,18 +43,6 @@
                      </ul>
                     </div>
 	                 <strong>Resultado: </strong>{{item.pautaComissaoAtual.resultado}} <span ng-show="!item.pautaComissaoAtual.resultado">Sem resultado definido.</span>
-
-	                 <br/>
-                     <strong>Relator: </strong>{{item.pautaComissaoAtual.relator}}
-                     <div ng-show="item.listaComentario.length > 0">
-                         <strong>Comentários</strong>
-                            <ul>
-                                <li ng-repeat="comentario in item.listaComentario | orderBy :'dataCriacao'">
-                                    <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">{{comentario.dataCriacao | date: 'dd/MM/yyyy'}} - {{comentario.descricao}}</pre>
-                                </li>
-                            </ul>
-                     </div>
-                    <strong>Resultado: </strong>{{item.pautaComissaoAtual.resultado}} <span ng-show="!item.pautaComissaoAtual.resultado">Sem resultado definido.</span>
                  <br/>
 	             </p>
 	         </div>
