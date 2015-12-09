@@ -1,6 +1,6 @@
 
 
-angular.module('sislegisapp').controller('SearchUsuarioController', function($scope, $http, UsuarioResource ) {
+angular.module('sislegisapp').controller('SearchUsuarioController', function($scope, $http, UsuarioResource, EquipeResource ) {
 
     $scope.search={};
     $scope.currentPage = 0;
@@ -17,6 +17,25 @@ angular.module('sislegisapp').controller('SearchUsuarioController', function($sc
         }
         return max;
     };
+
+    $scope.listaEquipe = EquipeResource.queryAll();
+
+    $scope.buscarPorEquipe = function(){
+        if($scope.equipeSelecionada){
+            angular.forEach($scope.listaEquipe,function(equipe){
+                if(equipe.id == $scope.equipeSelecionada){
+                    var listaUsuarios = [];
+                    angular.forEach(equipe.listaEquipeUsuario, function(value){
+                        listaUsuarios.push(value.usuario);
+                    });
+                    $scope.searchResults = listaUsuarios;
+                    $scope.numberOfPages();
+                }
+            });
+        }else{
+            $scope.performSearch();
+        }
+    }
 
     $scope.performSearch = function() {
         $scope.searchResults = UsuarioResource.queryAll(function(){

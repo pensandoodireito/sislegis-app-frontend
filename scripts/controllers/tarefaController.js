@@ -1,5 +1,5 @@
 angular.module('sislegisapp').controller('TarefaController', function($scope, $routeParams, $location,
-    $rootScope, $timeout, $modal, toaster, locationParser, TarefaResource, ProposicaoResource, ComentarioResource, EncaminhamentoProposicaoResource) {
+    $rootScope, $timeout, $modal, toaster, locationParser, TarefaResource, ProposicaoResource, ComentarioResource, EncaminhamentoProposicaoResource, $http) {
 
 	$scope.tarefa = new TarefaResource();
 	
@@ -16,20 +16,8 @@ angular.module('sislegisapp').controller('TarefaController', function($scope, $r
 
     }
     
-    $scope.finalizarTarefa = function(tarefa) {
-        var successCallback = function() {
-            toaster.pop('success', 'Tarefa finalizada com sucesso');
-        };
-        var errorCallback = function() {
-        	toaster.pop('error', 'Falha ao finalizar tarefa');
-        };
-
+    $scope.abrirModalComentarios = function(idProposicao, tarefa) {
         $scope.tarefa = tarefa;
-        $scope.tarefa.finalizada = true
-        $scope.tarefa.$update(successCallback, errorCallback);
-    };
-    
-    $scope.abrirModalComentarios = function(idProposicao) {
         var modalInstance = $modal.open({
           templateUrl: 'views/Tarefa/modal-comentarios.html',
           controller: 'ModalComentariosCtrl',
@@ -39,7 +27,10 @@ angular.module('sislegisapp').controller('TarefaController', function($scope, $r
             	return  ComentarioResource.findByProposicao({
                     ProposicaoId: idProposicao
                 });
-            }
+            },
+              tarefa: function(){
+                  return $scope.tarefa;
+              }
           }
         });
     };
@@ -74,8 +65,9 @@ angular.module('sislegisapp').controller('TarefaController', function($scope, $r
 });
 
 
-angular.module('sislegisapp').controller('ModalComentariosCtrl', function ($scope, $modalInstance, comentarios) {
+angular.module('sislegisapp').controller('ModalComentariosCtrl', function ($scope, $modalInstance, $rootScope, $confirm, toaster, comentarios, tarefa) {
 	  $scope.comentarios = comentarios;
+    $scope.tarefa = tarefa;
 	
 	  $scope.ok = function () {
 	    $modalInstance.close();
@@ -84,6 +76,29 @@ angular.module('sislegisapp').controller('ModalComentariosCtrl', function ($scop
 	  $scope.cancel = function () {
 	    $modalInstance.dismiss('cancel');
 	  };
+
+    $scope.finalizar = function(){
+        var successCallback = function() {
+            toaster.pop('success', 'Tarefa finalizada com sucesso.');
+            $rootScope.$emit('updateTarefas');
+            $modalInstance.close();
+        };
+        var errorCallback = function() {
+            toaster.pop('error', 'Falha ao finalizar tarefa.');
+        };
+
+        var finalizarTarefa = function() {
+            $scope.tarefa.$finalizar(successCallback, errorCallback);
+        };
+
+        if(!$scope.tarefa.comentarioFinalizacao){
+            $confirm({text: 'Deseja fechar tarefa sem comentário?', title: 'Finalização de tarefa', ok: 'Sim', cancel: 'Não'})
+                .then(finalizarTarefa);
+        }else{
+            finalizarTarefa();
+        }
+
+    };
 });
 
 angular.module('sislegisapp').controller('ModalEncaminhamentosCtrl', function ($scope, $modalInstance, encaminhamentos) {

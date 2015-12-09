@@ -1,8 +1,8 @@
 angular.module('sislegisapp').controller(
 		'ModalEncaminhamentosController',
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modalInstance, toaster, proposicao,
-				TipoEncaminhamentoResource, ProposicaoResource, EncaminhamentoProposicaoResource, UsuarioResource,
-				ComentarioResource, BACKEND) {
+				TipoEncaminhamentoResource, ProposicaoResource, EncaminhamentoProposicaoResource, EncaminhamentoProposicaoHttp, UsuarioResource,
+				ComentarioResource, BACKEND, $confirm) {
 
 			var self = this;
 			$scope.disabled = false;
@@ -40,6 +40,40 @@ angular.module('sislegisapp').controller(
 			$scope.openUpdate = function(item) {
 				$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource(item);
 			};
+
+            $rootScope.$on('updateEncaminhamentos', function(event) {
+                    EncaminhamentoProposicaoResource.findByProposicao({
+                        ProposicaoId : $scope.proposicao.id
+                    }, function(data) {
+                        $scope.proposicao.listaEncaminhamentoProposicao = data;
+                        $scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
+                        $scope.tipoEncaminhamento = new TipoEncaminhamentoResource();
+                    });
+
+            });
+
+            $scope.finalizar = function( encaminhamento ){
+                var successCallback = function() {
+                    toaster.pop('success', 'Encaminhamento finalizado com sucesso.');
+                    $rootScope.$emit('updateEncaminhamentos');
+                };
+                var errorCallback = function() {
+                    toaster.pop('error', 'Falha ao finalizar o encaminhamento.');
+                    $rootScope.$emit('updateEncaminhamentos');
+                };
+
+                var finalizarTarefa = function() {
+                    EncaminhamentoProposicaoHttp.finalizar(encaminhamento).then(successCallback, errorCallback);
+                };
+
+                if(!encaminhamento.descricaoComentario){
+                    $confirm({text: 'Deseja fechar o encaminhamento sem comentário?', title: 'Finalização de encaminhamento', ok: 'Sim', cancel: 'Não'})
+                        .then(finalizarTarefa);
+                }else{
+                    finalizarTarefa();
+                }
+
+            };
 
 			$scope.update = function() {
 				$scope.encaminhamentoProposicao.proposicao = new ProposicaoResource();
@@ -81,7 +115,7 @@ angular.module('sislegisapp').controller(
 						$scope.proposicao.totalEncaminhamentos++;
 						$scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
 						$scope.tipoEncaminhamento = new TipoEncaminhamentoResource();
-						$rootScope.$emit('updateTarefas');
+						$rootScope.$emit('updateEncaminhamentos');
 						toaster.pop('success', 'Encaminhamento inserido com sucesso');
 					});
 				};

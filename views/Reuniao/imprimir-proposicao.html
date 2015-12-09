@@ -1,31 +1,65 @@
- <!-- Tudo que for para o usuario imprimir deve ficar nesse HTML -->
- <div class="list-group">
-     <div class="list-group-item clearfix">
-	     <div class="row">
-	         <div class="col-sm-12">
-	             <h3 class="list-group-item-heading">{{selectedProposicao.sigla}}</h3>
-	             <p>{{selectedProposicao.ementa}}
-	                 <br/>
-	                 <strong>Autor: </strong>{{selectedProposicao.autor}}
-	                 <br/>
-	                 <strong>Origem: </strong>{{selectedProposicao.origem}}
-	                 <br/>
-	                 <strong>Comissao: </strong>{{selectedProposicao.comissao}}
-	                 <br/>
-	                 <strong>Ordem na Pauta: </strong>{{selectedProposicao.seqOrdemPauta}}
-	                 <br/>
-	                 <strong>Responsável: </strong>{{selectedProposicao.responsavel.nome}}
-	                 <br/>
-	                 <strong>Posicionamento: </strong>{{selectedProposicao.posicionamento.nome}}
-	                 <br/>
-	                 <strong>Comentários</strong>
-	                 <div ng-repeat="comentario in selectedProposicao.listaComentario | orderBy :'dataCriacao'" class="list-group-item clearfix">
-	                 	{{comentario.dataCriacao | date: 'dd/MM/yyyy'}}: <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">{{comentario.descricao}}</pre>
-	                 </div>
-	                 <strong>Resultado: </strong>{{selectedProposicao.resultadoASPAR}}
-	                 <br/>
-	             </p>
-	         </div>
-	     </div>
-     </div>
- </div>
+<!-- Tudo que for para o usuario imprimir deve ficar nesse HTML -->
+<div class="list-group">
+    <div class="list-group-item clearfix">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="list-group-item-heading">{{proposicao.sigla}}</h3>
+
+                {{proposicao.ementa}}
+                <br/>
+                <strong>Autor: </strong>{{proposicao.autor}}
+                <br/>
+                <strong>Origem: </strong>{{proposicao.origem}}
+                <br/>
+                <strong>Comissao: </strong>{{proposicao.comissao}}
+                <br/>
+                <strong>Ordem na Pauta: </strong>{{proposicao.pautaComissaoAtual.ordemPauta}} <span ng-show="!proposicao.pautaComissaoAtual.ordemPauta">Ordem não cadastrada.</span>
+                <br/>
+                <strong>Responsável: </strong>{{proposicao.responsavel.nome}} <span ng-show="!proposicao.responsavel">Nenhum responsável por essa proposição.</span>
+                <br/>
+                <strong>Posicionamento: </strong>{{proposicao.posicionamento.nome}} <span ng-show="!proposicao.posicionamento">Nenhum posicionamento definido.</span>
+                <br/>
+                <strong ng-show="proposicao.listaComentario.length > 0">Comentários</strong>
+                <ul ng-show="proposicao.listaComentario.length > 0">
+                    <li ng-repeat="comentario in proposicao.listaComentario | orderBy :'dataCriacao'">
+                        {{comentario.dataCriacao | date: 'dd/MM/yyyy'}} - {{comentario.descricao}}
+                    </li>
+                </ul>
+                <br/>
+                <strong ng-show="proposicao.listaEncaminhamentoProposicao.length > 0">Encaminhamentos</strong>
+                <ul ng-show="proposicao.listaEncaminhamentoProposicao.length > 0">
+                    <li ng-repeat="encaminhamento in proposicao.listaEncaminhamentoProposicao">
+                        <p ng-show="encaminhamento.dataHoraLimite"><strong>Prazo: </strong>{{encaminhamento.dataHoraLimite | date: 'dd/MM/yyyy'}}</p>
+                        <p><strong>{{encaminhamento.tipoEncaminhamento.nome}}</strong></p>
+                        <p ng-show="encaminhamento.responsavel"><strong>Responsável: </strong>{{encaminhamento.responsavel.nome}}</p>
+                        <p ng-show="encaminhamento.detalhes">{{encaminhamento.detalhes}}</p>
+                        <div ng-show="encaminhamento.comentarioFinalizacao && !encaminhamento.comentarioFinalizacao.oculto">
+                            <p><strong>Efetuado por: </strong> {{encaminhamento.comentarioFinalizacao.autor.nome}}</p>
+                            <p ng-show="encaminhamento.comentarioFinalizacao.descricao">{{encaminhamento.comentarioFinalizacao.descricao}}</p>
+                        </div>
+                    </li>
+                </ul>
+                <br/>
+                <p ng-show="proposicao.tags.length > 0">
+                    <strong>Tags: </strong>
+                    <span ng-repeat="tag in proposicao.tags">{{tag.tag}} </span>
+                </p>
+
+                <br/>
+                <strong ng-show="proposicao.proposicoesFilha.length > 0 || proposicao.proposicoesPai.length > 0">Proposições relacionadas:</strong>
+                <span ng-repeat="proposicaoFilha in proposicao.proposicoesFilha">{{proposicaoFilha.sigla}} </span>
+                <span ng-repeat="proposicaoPai in proposicao.proposicoesPai">{{proposicaoPai.sigla}}</span>
+
+                <br/>
+                <strong ng-show="proposicao.listaPautas.length > 0">Resultados de pauta: </strong>
+                <ul ng-show="proposicao.listaPautas.length > 0">
+                    <li ng-repeat="pauta in proposicao.listaPautas">
+                        <p><strong>Data: </strong>{{pauta.pautaReuniaoComissao.data | date: 'dd/MM/yyyy'}}</p>
+                        <p><strong>Resultado: </strong>{{pauta.resultado}} <span ng-show="pauta.resultado==''">Resultado não definido</span></p>
+                    </li>
+                </ul>
+                <br/>
+            </div>
+        </div>
+    </div>
+</div>

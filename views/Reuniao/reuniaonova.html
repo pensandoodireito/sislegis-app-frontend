@@ -138,14 +138,15 @@
                                         <br/>
                                         <strong>Relator: </strong>{{item.pautaComissaoAtual.relator}}
                                         <br/>
+                                        <span ng-show="item.pautaComissaoAtual.resultado != ''">
+                                            <strong>Resultado: </strong>{{item.pautaComissaoAtual.resultado}}
+                                        <br/>
+                                        </span>
                                     <div>
                                         <a ng-show="item.origem == 'SENADO'" href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
                                         <a ng-show="item.origem == 'CAMARA'" href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{item.idProposicao}}#tramitacoes" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
                                         <!--<a ng-click="setSelectedProposicao(item);abrirModalProposicao();"><i class="fa fa-print"></i> Imprimir</a>-->
                                     </div>
-                                    </p>
-                                    <p ng-show="item.listaComentario.length > 0">
-                                        <i class="fa fa-comments"></i>  {{item.listaComentario[item.listaComentario.length-1].descricao}}
                                     </p>
                                 </div>
                                 <div class="col-sm-5">
@@ -168,13 +169,13 @@
                                                     <a ng-click="abrirModalComentarios(item)"><i class="fa fa-comment"></i><strong> {{item.totalComentarios}}  comentários</strong></a>
                                                 </div>
                                                 <div class="col-md-6 text-right">
-                                                    <strong><a ng-click="abrirModalEncaminhamentos(item)"><strong> {{item.totalEncaminhamentos}} encaminhamentos</strong></a>
+                                                    <strong><a ng-click="abrirModalEncaminhamentos(item)"> {{item.totalEncaminhamentos}} encaminhamentos</a></strong>
                                                 </div>
                                             </div>
                                             <div class="divider-top form-inline">
                                                 <div class="form-group">
                                                     <label>Posicionamento:</label>
-                                                    <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-on-select="save(item)" class="form-control">
+                                                    <input type="text" ng-model="item.posicionamento" placeholder="Procurar" ng-required="true" ng-blur="checkRemocaoPosicionamento(item)" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-on-select="alterarPosicionamento(item); item.posicionamentoNaoDefinido = false" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="divider-top form-inline">
@@ -186,7 +187,13 @@
                                             </div>
                                             <div class="divider-top">
                                                 <label>Tags: </label>
-                                                <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1" placeholder="Adicione uma tag">
+                                                <tags-input ng-model="item.tags"
+                                                            ng-class="form-group"
+                                                            on-tag-added="save(item)"
+                                                            on-tag-removed="save(item)"
+                                                            min-length="1"
+                                                            placeholder="Adicione uma tag"
+                                                            display-property="tag">
                                                     <auto-complete source="loadTags($query)" ></auto-complete>
                                                 </tags-input>
                                             </div>
