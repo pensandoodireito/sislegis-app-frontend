@@ -2,10 +2,12 @@
 angular.module('sislegisapp').factory('HttpInterceptor', function($q, $rootScope) {
 	
 	var showSpinner = function(config){
-		return !$rootScope.inactivateSpinner &&
+		return config.url.search('/findByData') > 0 || 
+			(!$rootScope.inactivateSpinner &&
 			config && config.url && config.url.search('rest') >= 0 && 
-			config.url.search('/tags') < 0 && config.url.search('/find') < 0 
-			&& config.url.search('/notificacao/marcarVisualizadas')<0;
+			config.url.search('/tags') < 0 
+			&& config.url.search('/find') < 0   
+			&& config.url.search('/notificacao/marcarVisualizadas')<0);
 	}
 	
 	return {
