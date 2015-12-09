@@ -170,3 +170,8 @@ a{
         display: none;
     }
 }
+
+.text-red{
+    color: #993300;
+    font-weight: bold;
+}

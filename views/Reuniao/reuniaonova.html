@@ -168,72 +168,27 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <a ng-click="abrirModalComentarios(item)"><strong>Outros +({{item.totalComentarios}})</strong></a>
+                                    <div ng-show="item.listaComentario.length > 0">
+                                        <strong>Comentários:</strong>
+                                        <p>{{item.listaComentario[item.listaComentario.length-1].dataCriacao | date: 'dd/MM/yyyy'}} - {{item.listaComentario[item.listaComentario.length-1].descricao}}</p>
+                                        <a ng-click="abrirModalComentarios(item)"><strong>Outros +({{item.totalComentarios}})</strong></a>
+                                    </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="clearfix">
-                                        <div class="col-md-10">
-                                            <textarea class="form-control fontsize-sm" rows="5" maxlength="8000" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i>
-                                            </button>
-                                        </div>
+                                    <div class="col-sm-10"><textarea class="form-control fontsize-sm" rows="5" maxlength="8000" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea></div>
+                                    <div class="col-sm-2"><button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i></button></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <strong>Encaminhamentos</strong>
+                                    <div ng-repeat="encaminhamento in item.listaEncaminhamentoProposicao">
+                                        <p ng-class="{'text-red':!encaminhamento.finalizado}">{{encaminhamento.detalhes}}</p>
                                     </div>
-                                    <div class="divider-top clearfix">
-                                        <div class="col-md-6">
-
-                                        </div>
-                                        <div class="col-md-6 text-right">
-                                            <strong><a ng-click="abrirModalEncaminhamentos(item)"> {{item.totalEncaminhamentos}} encaminhamentos</a></strong>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="divider-top">
-                                        <label>Tags: </label>
-                                        <tags-input ng-model="item.tags"
-                                                    ng-class="form-group"
-                                                    on-tag-added="save(item)"
-                                                    on-tag-removed="save(item)"
-                                                    min-length="1"
-                                                    placeholder="Adicione uma tag"
-                                                    display-property="tag">
-                                            <auto-complete source="loadTags($query)" ></auto-complete>
-                                        </tags-input>
-                                    </div>
-                                    <div class="divider-top">
-                                        <label>Proposições associadas: </label>
-
-                                        <tags-input ng-model="item.proposicoesFilha" display-property="sigla" ng-class="form-group"
-                                                    on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1"
-                                                    add-from-autocomplete-only="true" placeholder="Adicione uma proposição"
-                                                    replaceSpacesWithDashes="false">
-                                            <auto-complete source="loadProposicoes($query)" ></auto-complete>
-                                        </tags-input>
-                                    </div>
-                                    <div class="divider-top">
-                                        <label>Elaborações Normativas associadas: </label>
-
-                                        <tags-input ng-model="item.elaboracoesNormativas" display-property="nup" ng-class="form-group"
-                                                    on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1"
-                                                    add-from-autocomplete-only="true" placeholder="Procure pelo NUP"
-                                                    replaceSpacesWithDashes="false">
-                                            <auto-complete source="loadElaboracoesNormativas($query)" ></auto-complete>
-                                        </tags-input>
-                                    </div>
-                                    <div class="divider-top">
-                                        <label>Resultado: </label>
-                                        <div class="form-group">
-                                            <div class="col-md-10">
-                                                <textarea class="form-control fontsize-sm" rows="3" placeholder="Adicione um resultado" ng-model="item.resultadoASPAR"></textarea>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <button type="button" class="btn btn-success btn-sm" ng-click="save(item)"><i class="fa fa-check"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </p>
+                                    <a ng-click="abrirModalEncaminhamentos(item)"><strong>Outros +{{item.totalEncaminhamentos}}</strong></a>
+                                </div>
+                                <div class="col-sm-6">
 
                                 </div>
                             </div>
