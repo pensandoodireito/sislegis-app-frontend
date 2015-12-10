@@ -61,15 +61,18 @@
 						</div>
 
 						<div class=" list-proposicao">
+						
 							<div class="list-proposicao-item" ng-repeat="proposicaoPauta in pauta.proposicoesDaPauta | filter:buscaPalavraChave" ng-click="adicionarProposicao(pauta,proposicaoPauta)">
 								<div class="clearfix">
 									<div class="pull-left width-auto">
 										<h4 class="list-group-item-heading">{{proposicaoPauta.proposicao.sigla}}</h4>
 									</div>
+									
 									<div class="pull-right width-auto">
+									
 										<a href="{{proposicaoPauta.proposicao.linkProposicao}}" target="_blank" ng-show="proposicaoPauta.proposicao.linkProposicao != null" class="btn btn-info btn-xs" title="Link da proposição"> <i class="fa fa-search-plus"></i>
-										</a> <a href="{{proposicaoPauta.proposicao.linkPauta}}" target="_blank" ng-show="proposicaoPauta.proposicao.linkPauta != null" class="btn btn-info btn-xs" title="Link da pauta da reunião"> <i class="fa fa-external-link-square"></i>
-										</a>
+										</a> 
+										<a href="{{pauta.linkPauta}}" target="_blank" ng-show="pauta.linkPauta != null" class="btn btn-info btn-xs" title="Link da pauta da reunião"> <i class="fa fa-external-link-square"></i> </a>
 									</div>
 								</div>
 								<p>{{proposicaoPauta.proposicao.ementa}}</p>
@@ -84,6 +87,8 @@
 								</p>
                                 <p ng-show="proposicaoPauta.proposicao.ultimoComentario">
                                     <strong>Último comentário: </strong> {{proposicaoPauta.proposicao.ultimoComentario.descricao}}
+                               <p ng-show="proposicaoPauta.ultimoComentario">
+                                    <strong>Último comentário: </strong> {{proposicaoPauta.ultimoComentario.descricao}}
                                 </p>
 							</div>
 						</div>

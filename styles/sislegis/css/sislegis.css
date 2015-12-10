@@ -166,8 +166,8 @@ a{
     }
 }
 @media screen {
-    .printable{
-        display: none;
+    .printable {
+        display : none;
     }
 }
 
