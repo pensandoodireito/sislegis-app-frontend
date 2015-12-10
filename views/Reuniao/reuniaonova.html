@@ -4,53 +4,75 @@
 <section class="content">
     <div class="row">
         <div class="col-md-12">
-            <div class="box box-success">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Buscar proposições</h3>
-                </div>
-                <form class="form-horizontal">
-                    <div class="box-body">
+            <div class="box box-info">
+                <div class="box-body">
+                    <form class="form-inline">
                         <div class="form-group">
-                            <label for="dataReuniao" class="col-sm-2 control-label">Data da reunião:</label>
-                            <div class="col-sm-3">
-                                <input id="dataReuniao" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="reuniao.data" is-open="opened" min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Fechar" readonly />
-                            </div>
-                            <div class="col-sm-2">
-                                <button type="button" class="btn btn-default" ng-click="openCalendar($event)">
-                                    <i class="glyphicon glyphicon-calendar"></i>
-                                </button>
+                            <label for="dataReuniao" class="control-label">Data da reunião:</label>
+                        </div>
+                        <div class="form-group" ng-click="openCalendar($event)">
+                            <div class="input-group cursor-pointer">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input id="dataReuniao" type="text" class="form-control cursor-pointer"
+                                       datepicker-popup="{{format}}" ng-model="reuniao.data" is-open="opened"
+                                       min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions"
+                                       close-text="Fechar"
+                                       placeholder="Selecione a data"/>
                             </div>
                         </div>
-                    </div><!-- /.box-body -->
-                    <div class="box-footer">
-                        <a data-toggle="modal" ng-click="buscarProposicoes()" ng-disabled="!reuniao.data" class="btn btn-success"><i class="fa fa-plus"></i> Buscar</a>
-                    </div><!-- /.box-footer -->
-                </form>
+                        <div class="form-group">
+                            <p class="text-info mt-sm"><i class="fa fa-chevron-left"></i> Escolha uma data para
+                                visualizar uma reunião</p>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="box box-info" ng-show="listaReuniaoProposicoes.length > 0">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Filtros</h3>
-                </div><!-- /.box-header -->
+            <div class="box box-info fixontop" ng-show="listaReuniaoProposicoes.length > 0">
+
+                <!-- /.box-header -->
                 <div class="box-body">
-                    <div class="col-sm-4">
-                        <select ng-model="filtroOrigem.origem" ng-options="item.origem as item.origem for item in listaRPOrigem | unique:'origem'" class="form-control" ng-change="changeFiltroOrigem()">
-                            <option value="" selected="selected">Casa legislativa</option>
-                        </select>
+                    <div class="row">
+                        <div class="col-md-1 text-right">
+                            <strong class="mt-xs"><p>Filtros:</p></strong>
+                        </div>
+                        <div class="col-md-3">
+                            <select ng-model="filtroOrigem.origem"
+                                    ng-options="item.origem as item.origem for item in listaRPOrigem | unique:'origem'"
+                                    class="form-control" ng-change="changeFiltroOrigem()">
+                                <option value="" selected="selected">Casa legislativa</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select ng-model="filtroComissao.comissao"
+                                    ng-options="item.comissao as item.comissao for item in listaRPComissao | filter:filtroOrigem | unique:'comissao'"
+                                    ng-change="changeFiltroComissao()" class="form-control col-sm-2">
+                                <option value="" selected="selected">Comissão</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <p class="mt-xs">
+                                <a ng-click="filtroFavorita=!filtroFavorita" class="mt-sm"><i class="fa"
+                                                                                              ng-class="{'fa-star-o': !filtroFavorita, 'fa-star': filtroFavorita}"></i>
+                                    Prioritárias</a>
+                            </p>
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mt-xs">
+                                <strong><a ng-click="maisFiltros()">Mais filtros <i class="fa"
+                                                                                    ng-class="{'fa-caret-square-o-right': !isSidebarOpen, 'fa-caret-square-o-left':isSidebarOpen}"></i></a></strong>
+                            </p>
+                        </div>
                     </div>
-                    <div class="col-sm-4">
-                        <select ng-model="filtroComissao.comissao" ng-options="item.comissao as item.comissao for item in listaRPComissao | filter:filtroOrigem | unique:'comissao'" ng-change="changeFiltroComissao()" class="form-control col-sm-2">
-                            <option value="" selected="selected">Comissão</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-2">
-                        <a ng-click="filtroFavorita=!filtroFavorita"><i class="fa" ng-class="{'fa-star-o': !filtroFavorita, 'fa-star': filtroFavorita}"></i> Favoritas</a>
-                    </div>
-                    <div class="col-sm-2">
-                        <a ng-click="maisFiltros()">Mais filtros <i class="fa" ng-class="{'fa-caret-square-o-right': !isSidebarOpen, 'fa-caret-square-o-left':isSidebarOpen}"></i></a>
-                    </div>
-                </div><!-- /.box-body -->
+                </div>
+                <!-- /.box-body -->
             </div>
             <div class="box" ng-show="listaReuniaoProposicoes.length > 0">
+                <div class="box-header with-border">
+                    <div class="text-rigth">
+                        <a data-toggle="modal" ng-click="buscarProposicoes()" ng-disabled="!reuniao.data"
+                           class="btn btn-success"><i class="fa fa-plus"></i> Buscar/Adicionar proposições</a>
+                    </div>
+                </div>
                 <div class="box-body">
                     <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem
                      | filter:filtroComissao | filter:{favorita:filtroFavorita} | filter:filtroResponsavel | filter:filtroPosicionamento : true
@@ -61,24 +83,32 @@
                             <h4 class="list-group-item-heading">{{comissao}}</h4>
                         </div>
 
-                        <div ng-repeat="item in value | orderBy : 'pautaComissaoAtual.ordemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
+                        <div ng-repeat="item in value | orderBy : 'pautaComissaoAtual.ordemPauta'"
+                             class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
                             <div class="clearfix">
-                                <button type="button" class="close" ng-click="abrirModalRemoverProposicao(item); $event.stopPropagation()">
+                                <button type="button" class="close"
+                                        ng-click="abrirModalRemoverProposicao(item); $event.stopPropagation()">
                                     <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
                                 </button>
                             </div>
                             <div class="row">
                                 <div class="col-sm-4">
                                     <h3 class="list-group-item-heading">
-                                        <i class="fa" ng-class="{'fa-caret-right':!item.opened, 'fa-caret-down':item.opened}"></i>
-                                        <i class="fa fa-star-o" ng-show="!item.favorita" ng-click="item.favorita=true;save(item)"></i>
-                                        <i class="fa fa-star" style="color:orange" ng-show="item.favorita" ng-click="item.favorita=false; save(item)"></i>
-                                        <a data-toggle="collapse" href="#proposicao-{{item.id}}" ng-click="item.opened=!item.opened">{{item.sigla}}</a>
+                                        <i class="fa"
+                                           ng-class="{'fa-caret-right':!item.opened, 'fa-caret-down':item.opened}"></i>
+                                        <i class="fa fa-star-o" ng-show="!item.favorita"
+                                           ng-click="item.favorita=true;save(item)"></i>
+                                        <i class="fa fa-star" style="color:orange" ng-show="item.favorita"
+                                           ng-click="item.favorita=false; save(item)"></i>
+                                        <a data-toggle="collapse" href="#proposicao-{{item.id}}"
+                                           ng-click="item.opened=!item.opened">{{item.sigla}}</a>
                                     </h3>
                                 </div>
                                 <div class="col-sm-8" ng-show="!item.opened">
-                                    <a ng-click="abrirModalComentarios(item)"><i class="fa fa-comment"></i> comentários ({{item.totalComentarios}})</a>
-                                    <a ng-click="abrirModalEncaminhamentos(item)"><i class="fa fa-share"></i> encaminhamentos ({{item.totalEncaminhamentos}})</a>
+                                    <a ng-click="abrirModalComentarios(item)"><i class="fa fa-comment"></i> comentários
+                                        ({{item.totalComentarios}})</a>
+                                    <a ng-click="abrirModalEncaminhamentos(item)"><i class="fa fa-share"></i>
+                                        encaminhamentos ({{item.totalEncaminhamentos}})</a>
                                 </div>
                             </div>
                             <div class="collapse" id="proposicao-{{item.id}}">
@@ -95,69 +125,102 @@
                                         <br/>
                                         <strong>Comissao: </strong>{{item.pautaComissaoAtual.pautaReuniaoComissao.comissao}}
                                         <br/>
-                                        <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} <span ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{item.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
+                                        <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} <span
+                                            ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{item.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
                                         <br/>
                                         <strong>Relator: </strong>{{item.pautaComissaoAtual.relator}}
                                         <br/>
                                         <span ng-show="item.pautaComissaoAtual.resultado != ''">
                                             <strong>Resultado: </strong>{{item.pautaComissaoAtual.resultado}}
                                         </span>
+
                                         <div>
-                                            <a ng-show="item.origem == 'SENADO'" href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
-                                            <a ng-show="item.origem == 'CAMARA'" href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{item.idProposicao}}#tramitacoes" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
-                                            <a ng-click="setSelectedProposicao(item);abrirModalProposicao();"><i class="fa fa-print"></i> Imprimir</a>
+                                            <a ng-show="item.origem == 'SENADO'"
+                                               href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO"
+                                               target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
+                                            <a ng-show="item.origem == 'CAMARA'"
+                                               href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{item.idProposicao}}#tramitacoes"
+                                               target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
+                                            <a ng-click="setSelectedProposicao(item);abrirModalProposicao();"><i
+                                                    class="fa fa-print"></i> Imprimir</a>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="divider-top">
                                             <div class="form-group">
                                                 <label>Posicionamento:</label>
-                                                <input type="text" ng-model="item.posicionamento" placeholder="Procurar" ng-required="true" ng-blur="checkRemocaoPosicionamento(item)" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-on-select="alterarPosicionamento(item); item.posicionamentoNaoDefinido = false" class="form-control">
+                                                <input type="text" ng-model="item.posicionamento" placeholder="Procurar"
+                                                       ng-required="true" ng-blur="checkRemocaoPosicionamento(item)"
+                                                       typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue"
+                                                       typeahead-on-select="alterarPosicionamento(item); item.posicionamentoNaoDefinido = false"
+                                                       class="form-control">
                                             </div>
                                         </div>
                                         <div class="divider-top">
                                             <div class="form-group">
                                                 <label>Responsável: </label>
-                                                <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" ng-blur="checkRemocaoResponsavel(item)" typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)" typeahead-on-select="save(item); item.responsavelNaoDefinido = false" class="form-control">
-                                                <input type="checkbox" ng-model="buscaGeral" /> Buscar completa
+                                                <input type="text" ng-model="item.responsavel"
+                                                       placeholder="Procurar usuário" ng-required="true"
+                                                       ng-blur="checkRemocaoResponsavel(item)"
+                                                       typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)"
+                                                       typeahead-on-select="save(item); item.responsavelNaoDefinido = false"
+                                                       class="form-control">
+                                                <input type="checkbox" ng-model="buscaGeral"/> Buscar completa
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <hr />
+                                    <hr/>
                                     <div class="col-sm-6">
                                         <div ng-show="item.listaComentario.length > 0">
                                             <strong>Comentários:</strong>
-                                            <p>{{item.listaComentario[item.listaComentario.length-1].dataCriacao | date: 'dd/MM/yyyy'}} - {{item.listaComentario[item.listaComentario.length-1].descricao}}</p>
-                                            <a ng-click="abrirModalComentarios(item)"><strong>Outros +({{item.totalComentarios}})</strong></a>
+
+                                            <p>{{item.listaComentario[item.listaComentario.length-1].dataCriacao | date:
+                                                'dd/MM/yyyy'}} -
+                                                {{item.listaComentario[item.listaComentario.length-1].descricao}}</p>
+                                            <a ng-click="abrirModalComentarios(item)"><strong>Outros
+                                                +({{item.totalComentarios}})</strong></a>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
-                                        <div class="col-sm-10"><textarea class="form-control fontsize-sm" rows="5" maxlength="8000" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea></div>
-                                        <div class="col-sm-2"><button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i></button></div>
+                                        <div class="col-sm-10"><textarea class="form-control fontsize-sm" rows="5"
+                                                                         maxlength="8000"
+                                                                         placeholder="Adicione um comentário"
+                                                                         ng-model="item.comentarioTmp"></textarea></div>
+                                        <div class="col-sm-2">
+                                            <button type="button" class="btn btn-success btn-sm"
+                                                    ng-click="incluirComentario(item)"><i class="fa fa-check"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <hr />
+                                    <hr/>
                                     <div class="col-sm-6">
                                         <div ng-show="item.listaEncaminhamentoProposicao > 0">
                                             <strong>Encaminhamentos</strong>
+
                                             <div ng-repeat="encaminhamento in item.listaEncaminhamentoProposicao">
-                                                <p ng-class="{'text-red':!encaminhamento.finalizado}">{{encaminhamento.detalhes}}</p>
+                                                <p ng-class="{'text-red':!encaminhamento.finalizado}">
+                                                    {{encaminhamento.detalhes}}</p>
                                             </div>
-                                            <a ng-click="abrirModalEncaminhamentos(item)"><strong>Outros +({{item.totalEncaminhamentos}})</strong></a>
+                                            <a ng-click="abrirModalEncaminhamentos(item)"><strong>Outros
+                                                +({{item.totalEncaminhamentos}})</strong></a>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="input-group">
                                             <label for="tipo-encaminhamento">Tipo de Encaminhamento</label>
-                                            <select id="tipo-encaminhamento" ng-model="encaminhamentoProposicao.tipoEncaminhamento"
-                                                    ng-options="tipoEncaminhamento.nome for tipoEncaminhamento in listaEncaminhamento track by tipoEncaminhamento.id | orderBy:'nome'" class="form-control" ng-required="true"></select>
+                                            <select id="tipo-encaminhamento"
+                                                    ng-model="encaminhamentoProposicao.tipoEncaminhamento"
+                                                    ng-options="tipoEncaminhamento.nome for tipoEncaminhamento in listaEncaminhamento track by tipoEncaminhamento.id | orderBy:'nome'"
+                                                    class="form-control" ng-required="true"></select>
                                         </div>
                                         <div class="input-group">
                                             <label for="detalhes">Detalhes:</label>
-                                            <textarea id="detalhes" class="form-control" rows="3" ng-model="encaminhamentoProposicao.detalhes"></textarea>
+                                            <textarea id="detalhes" class="form-control" rows="3"
+                                                      ng-model="encaminhamentoProposicao.detalhes"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -183,3 +246,26 @@
 <div class="control-sidebar-bg"></div>
 <!-- Porção que vai ser renderizada quando o usuário clicar em 'imprimir' -->
 <div class="printable" ng-include="getPrintPath()"></div>
+<script type="text/javascript">
+    $('.fixontop').addClass('original-fix').clone().insertAfter('.fixontop').addClass('fixontop-cloned').removeClass('original-fix').hide();
+    scrollIntervalID = setInterval(stickIt, 10);
+    function stickIt() {
+        var orgElementPos = $('.original-fix').offset();
+        orgElementTop = orgElementPos.top;
+
+        if ($(window).scrollTop() >= (orgElementTop)) {
+            // scrolled past the original position; now only show the cloned, sticky element.
+            // Cloned element should always have same left position and width as original element.
+            orgElement = $('.original-fix');
+            coordsOrgElement = orgElement.offset();
+            leftOrgElement = coordsOrgElement.left;
+            widthOrgElement = orgElement.css('width');
+            $('.fixontop-cloned').css('left', leftOrgElement + 'px').css('top', 0).css('width', widthOrgElement).show();
+            $('.original-fix').css('visibility', 'hidden');
+        } else {
+            // not scrolled past the menu; only show the original menu.
+            $('.fixontop-cloned').hide();
+            $('.original-fix').css('visibility', 'visible');
+        }
+    }
+</script>
