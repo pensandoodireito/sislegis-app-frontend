@@ -2,7 +2,8 @@ angular.module('sislegisapp').controller(
 		'GerenciarReuniaoController',
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
-				ReuniaoProposicaoResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource, ElaboracaoNormativaResource, BACKEND) {
+				ReuniaoProposicaoResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
+                TipoEncaminhamentoResource, ElaboracaoNormativaResource, BACKEND) {
     
 	var self = this;
 	$scope.listaReuniaoProposicoes = [];
@@ -24,6 +25,9 @@ angular.module('sislegisapp').controller(
     
     $scope.reuniao = new ReuniaoResource();
     $scope.reuniaoProposicao = new ReuniaoProposicaoResource();
+    $scope.tipoEncaminhamento = new TipoEncaminhamentoResource();
+    $scope.listaTipoEncaminhamento = TipoEncaminhamentoResource.queryAll() || [];
+    $scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
     $scope.posicionamentos = PosicionamentoResource.queryAll();
     
     $scope.listaRPOrigem = $scope.listaReuniaoProposicoes;
@@ -43,7 +47,6 @@ angular.module('sislegisapp').controller(
     $scope.maisFiltros = function(){
         var selector = $($.AdminLTE.options.controlSidebarOptions.selector);
         $scope.isSidebarOpen = !$scope.isSidebarOpen;
-        console.log($scope.isSidebarOpen);
         if($scope.isSidebarOpen){
             $.AdminLTE.controlSidebar.open(selector, false);
         }else{
@@ -228,16 +231,33 @@ angular.module('sislegisapp').controller(
         return formattedDate;
     };
 
-        $scope.$watch("reuniao.data", function() {
+    $scope.expandProposicao = function(proposicao){
+
+        $scope.setSelectedProposicao(proposicao);
+
+        // Popula comentarios
+        if ($scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios) {
+            $scope.selectedProposicao.listaComentario = ComentarioResource.findByProposicao({
+                    ProposicaoId: $scope.selectedProposicao.id}
+            );
+        }
+
+        // Popula encaminhamentos
+        if ($scope.selectedProposicao.listaEncaminhamentoProposicao == null || $scope.selectedProposicao.listaEncaminhamentoProposicao.length != $scope.selectedProposicao.totalEncaminhamentos){
+            $scope.selectedProposicao.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({
+                    ProposicaoId: $scope.selectedProposicao.id}
+            );
+        }
+    };
+
+    $scope.$watch("reuniao.data", function() {
     	if(!angular.isUndefined($scope.reuniao.data)){
     		
     		var successCallback = function(){
                 if ($scope.listaReuniaoProposicoes.length == 0) {
                 	toaster.pop('info', 'Não existem proposições para esta data. Você pode adicionar novas proposições.');
-                }else{
-                    $scope.loadComentarios($scope.listaReuniaoProposicoes);
-                    $scope.loadEncaminhamentos($scope.listaReuniaoProposicoes);
                 }
+                $scope.clearFilters();
             };
             var errorCallback = function() {
             	toaster.pop('error', 'Falha ao buscar Reunião.');
@@ -269,6 +289,7 @@ angular.module('sislegisapp').controller(
     }
     
     $scope.checkPosicionamentoNaoDefido = function(){
+        console.log("checkPosicionamentoNaoDefinido");
     	if($scope.filtroPosicionamentoNaoDefido){
     		$scope.filtroPosicionamento = null;
     	}else{
@@ -533,19 +554,7 @@ angular.module('sislegisapp').controller(
             resolve: {
                 proposicao: function(){
 
-					// Popula comentarios
-					if ($scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios) {
-						$scope.selectedProposicao.listaComentario = ComentarioResource.findByProposicao({
-								ProposicaoId: $scope.selectedProposicao.id}
-						);
-					}
-
-					// Popula encaminhamentos
-					if ($scope.selectedProposicao.listaEncaminhamentoProposicao == null || $scope.selectedProposicao.listaEncaminhamentoProposicao.length != $scope.selectedProposicao.totalEncaminhamentos){
-						$scope.selectedProposicao.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({
-								ProposicaoId: $scope.selectedProposicao.id}
-						);
-					}
+					$scope.expandProposicao($scope.proposicao);
 
                     if(!$scope.selectedProposicao.listaPautas){
                         $scope.selectedProposicao.listaPautas = ProposicaoResource.buscarPautas({ProposicaoId: $scope.selectedProposicao.id})
@@ -675,7 +684,50 @@ angular.module('sislegisapp').controller(
     }
     
     $scope.setCalendar();
-    
+
+    $scope.clearFilters = function(){
+        delete $scope.filtroGlobal;
+        delete $scope.filtroOrigem;
+        delete $scope.filtroComissao;
+        delete $scope.filtroFavorita;
+        delete $scope.filtroResponsavel;
+        delete $scope.filtroPosicionamento;
+        delete $scope.filtroResponsavelNaoDefinido;
+        delete $scope.filtroPosicionamentoNaoDefido;
+        
+    };
+
+    $scope.getComissaoCamara = function(){
+        return ComissaoResource.getComissaoCamara().$promise;
+    };
+
+    $scope.addEncaminhamento = function(){
+
+        $scope.encaminhamentoProposicao.proposicao = new ProposicaoResource();
+        $scope.encaminhamentoProposicao.proposicao.id = $scope.selectedProposicao.id;
+        if ($scope.encaminhamentoProposicao.dataHoraLimite != null) {
+            $scope.encaminhamentoProposicao.dataHoraLimite = $scope.encaminhamentoProposicao.dataHoraLimite
+                .getTime();
+        }
+
+        var successCallback = function(data, responseHeaders) {
+            EncaminhamentoProposicaoResource.findByProposicao({
+                ProposicaoId : $scope.selectedProposicao.id
+            }, function(data) {
+                $scope.selectedProposicao.listaEncaminhamentoProposicao = data;
+                $scope.selectedProposicao.totalEncaminhamentos++;
+                $scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
+                $scope.tipoEncaminhamento = new TipoEncaminhamentoResource();
+                $rootScope.$emit('updateEncaminhamentos');
+                toaster.pop('success', 'Encaminhamento inserido com sucesso');
+            });
+        };
+        var errorCallback = function() {
+            toaster.pop('error', 'Falha ao realizar operação.');
+        };
+        EncaminhamentoProposicaoResource.save($scope.encaminhamentoProposicao, successCallback, errorCallback);
+    };
+
 });
 
 

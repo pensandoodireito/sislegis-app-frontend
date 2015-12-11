@@ -101,7 +101,7 @@
                                         <i class="fa fa-star" style="color:orange" ng-show="item.favorita"
                                            ng-click="item.favorita=false; save(item)"></i>
                                         <a data-toggle="collapse" href="#proposicao-{{item.id}}"
-                                           ng-click="item.opened=!item.opened">{{item.sigla}}</a>
+                                           ng-click="item.opened=!item.opened;expandProposicao(item);">{{item.sigla}}</a>
                                     </h3>
                                 </div>
                                 <div class="col-sm-8" ng-show="!item.opened">
@@ -109,6 +109,7 @@
                                         ({{item.totalComentarios}})</a>
                                     <a ng-click="abrirModalEncaminhamentos(item)"><i class="fa fa-share"></i>
                                         encaminhamentos ({{item.totalEncaminhamentos}})</a>
+                                    <strong class="gray" ng-show="item.posicionamentoAtual.posicionamento">{{item.posicionamentoAtual.posicionamento.nome}}</strong>
                                 </div>
                             </div>
                             <div class="collapse" id="proposicao-{{item.id}}">
@@ -149,10 +150,12 @@
                                         <div class="divider-top">
                                             <div class="form-group">
                                                 <label>Posicionamento:</label>
-                                                <input type="text" ng-model="item.posicionamento" placeholder="Procurar"
-                                                       ng-required="true" ng-blur="checkRemocaoPosicionamento(item)"
-                                                       typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue"
-                                                       typeahead-on-select="alterarPosicionamento(item); item.posicionamentoNaoDefinido = false"
+                                                <input type="text" ng-model="item.posicionamentoAtual.posicionamento"
+                                                       placeholder="Procurar" ng-required="true"
+                                                       ng-focus="previousPosicionamento(item)"
+                                                       ng-blur="checkRemocaoPosicionamento(item)"
+                                                       typeahead="posicao as posicao.nome for posicao in getPosicionamentos($viewValue) | filter:$viewValue"
+                                                       typeahead-on-select="alterarPosicionamento(item, $model, $label); item.posicionamentoNaoDefinido = false"
                                                        class="form-control">
                                             </div>
                                         </div>
@@ -198,30 +201,56 @@
                                 <div class="row">
                                     <hr/>
                                     <div class="col-sm-6">
-                                        <div ng-show="item.listaEncaminhamentoProposicao > 0">
+                                        <div ng-show="item.listaEncaminhamentoProposicao.length > 0">
                                             <strong>Encaminhamentos</strong>
 
                                             <div ng-repeat="encaminhamento in item.listaEncaminhamentoProposicao">
                                                 <p ng-class="{'text-red':!encaminhamento.finalizado}">
-                                                    {{encaminhamento.detalhes}}</p>
+                                                    {{encaminhamento.tipoEncaminhamento.nome}} {{encaminhamento.detalhes}}
+                                                    <span ng-show="!encaminhamento.finalizado">(Em aberto)</span>
+                                                </p>
                                             </div>
                                             <a ng-click="abrirModalEncaminhamentos(item)"><strong>Outros
                                                 +({{item.totalEncaminhamentos}})</strong></a>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
-                                        <div class="input-group">
-                                            <label for="tipo-encaminhamento">Tipo de Encaminhamento</label>
-                                            <select id="tipo-encaminhamento"
-                                                    ng-model="encaminhamentoProposicao.tipoEncaminhamento"
-                                                    ng-options="tipoEncaminhamento.nome for tipoEncaminhamento in listaEncaminhamento track by tipoEncaminhamento.id | orderBy:'nome'"
-                                                    class="form-control" ng-required="true"></select>
-                                        </div>
-                                        <div class="input-group">
-                                            <label for="detalhes">Detalhes:</label>
-                                            <textarea id="detalhes" class="form-control" rows="3"
-                                                      ng-model="encaminhamentoProposicao.detalhes"></textarea>
-                                        </div>
+                                        <form name="EncaminhamentoProposicaoForm" id="EncaminhamentoProposicaoForm">
+                                            <div class="input-group">
+                                                <label for="tipo-encaminhamento">Tipo de Encaminhamento</label>
+                                                <select id="tipo-encaminhamento"
+                                                        ng-model="encaminhamentoProposicao.tipoEncaminhamento"
+                                                        ng-options="tipoEncaminhamento.nome for tipoEncaminhamento in listaTipoEncaminhamento track by tipoEncaminhamento.id | orderBy:'nome'"
+                                                        class="form-control" ng-required="true"></select>
+                                            </div>
+                                            <div class="input-group">
+                                                <label for="detalhes">Detalhes:</label>
+                                                <textarea id="detalhes" class="form-control" rows="3"
+                                                          ng-model="encaminhamentoProposicao.detalhes"></textarea>
+                                            </div>
+                                            <a ng-click="item.isEncaminhamentoOpen=!item.isEncaminhamentoOpen"><i class="fa fa-caret-right"></i> Mais</a>
+                                            <span ng-show="item.isEncaminhamentoOpen">
+                                                <div class="input-group">
+                                                    <label>Responsável:
+                                                    <input autocomplete="off" type="text" ng-model="encaminhamentoProposicao.responsavel" placeholder="Procurar usuário..."
+                                                           typeahead="item as item.nome for item in getUsuarios($viewValue)" class="form-control">
+                                                    </label>
+                                                </div>
+                                                <label>Prazo:</label>
+                                                <div class="input-group col-sm-2">
+                                                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="encaminhamentoProposicao.dataHoraLimite" is-open="opened" min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Close" readonly/>
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                        </span>
+                                                </div>
+                                                <div class="input-group">
+                                                    <timepicker ng-model="encaminhamentoProposicao.dataHoraLimite" show-meridian="false"></timepicker>
+                                                </div>
+                                            </span>
+                                            <div class="input-group">
+                                                <button type="button" class="btn btn-success" ng-disabled="ModalEncaminhamentosController.isClean() || EncaminhamentoProposicaoForm.$invalid" ng-show="!encaminhamentoProposicao.id" ng-click="addEncaminhamento()"><i class="fa fa-check"></i></button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -238,7 +267,26 @@
 <!-- Control Sidebar -->
 <aside class="control-sidebar control-sidebar-dark">
     <!-- Tab panes -->
-    <div class="tab-content" ng-include="sidebarPath"></div>
+    <div class="tab-content">
+        <button type="button" class="btn btn-default" ng-show="reuniao.data" ng-show="listaReuniaoProposicoes.length > 0" ng-click="abrirModalRelatorio()">Imprimir</button>
+        <hr />
+        <div>
+            <label class="control-label">Proposições</label>
+            <input type="text" class="form-control" ng-model="filtroGlobal.$" placeholder="Filtrar as proposições" />
+        </div>
+
+        <label><input type="checkbox" ng-model="filtroPosicionamentoNaoDefido" ng-true-value="true" ng-change="checkPosicionamentoNaoDefido()" /> Posicionamento não definido?</label>
+        <div ng-hide="filtroPosicionamentoNaoDefido">
+            <label class="control-label">Posicionamento</label>
+            <input class="form-control" type="text" ng-model="filtroPosicionamento.posicionamento" ng-required="true" typeahead="item.nome as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" class="form-control">
+        </div>
+
+        <label><input type="checkbox" ng-model="filtroResponsavelNaoDefinido" ng-true-value="true" ng-change="checkResponsavelNaoDefinido()" /> Responsável não definido?</label>
+        <div ng-hide="filtroResponsavelNaoDefinido">
+            <label class="control-label">Responsável</label>
+            <input type="text" ng-model="filtroResponsavel.responsavel" ng-required="true" typeahead="item.nome as item.nome for item in getUsuarios($viewValue)" class="form-control">
+        </div>
+    </div>
 </aside>
 <!-- /.control-sidebar -->
 <!-- Add the sidebar's background. This div must be placed

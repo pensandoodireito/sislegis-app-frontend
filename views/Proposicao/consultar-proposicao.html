@@ -125,7 +125,13 @@
                                         <div class="divider-top form-inline">
                                             <div class="form-group">
                                                 <label>Posicionamento:</label>
-                                                <input type="text" ng-model="item.posicionamentoAtual.posicionamento" placeholder="Procurar" ng-required="true" ng-focus="previousPosicionamento(item)" ng-blur="checkRemocaoPosicionamento(item)" typeahead="posicao as posicao.nome for posicao in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-on-select="alterarPosicionamento(item, $model, $label); item.posicionamentoNaoDefinido = false" class="form-control">
+                                                <input type="text" ng-model="item.posicionamentoAtual.posicionamento"
+                                                       placeholder="Procurar" ng-required="true"
+                                                       ng-focus="previousPosicionamento(item)"
+                                                       ng-blur="checkRemocaoPosicionamento(item)"
+                                                       typeahead="posicao as posicao.nome for posicao in getPosicionamentos($viewValue) | filter:$viewValue"
+                                                       typeahead-on-select="alterarPosicionamento(item, $model, $label); item.posicionamentoNaoDefinido = false"
+                                                       class="form-control">
                                             </div>
                                         </div>
                                         <div class="divider-top form-inline">

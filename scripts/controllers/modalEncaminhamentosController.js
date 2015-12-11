@@ -26,6 +26,8 @@ angular.module('sislegisapp').controller(
 			};
 
 			$scope.ok = function() {
+                console.log($modalInstance.close);
+                console.log($modalInstance);
 				$modalInstance.close($scope.proposicao);
 			};
 
