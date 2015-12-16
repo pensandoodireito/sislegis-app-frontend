@@ -1,16 +1,16 @@
  <!-- Tudo que for para o usuario imprimir deve ficar nesse HTML -->
  <div class="list-group" ng-repeat="(comissao, value) in listaReuniaoProposicoes
-  | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao
+   | filter:filtroGlobal | filter:filtroOrigem | filter:filtroComissao
    | filter:{favorita:filtroFavorita} | selectedTags:filtroTags
    | filter:filtroResponsavel | filter:filtroPosicionamento
    | filter:{responsavelNaoDefinido:filtroResponsavelNaoDefinido} | filter:{posicionamentoNaoDefinido:filtroPosicionamentoNaoDefido}
    |  groupBy :'comissao' |  orderBy : 'comissao' ">
-     <div class="list-group-item active" ng-show="comissao && comissao != 'null' && comissao != ''">
+    <div class="list-group-item active" ng-show="comissao && comissao != 'null' && comissao != ''">
          <h4 class="list-group-item-heading">
              {{comissao}}
          </h4>
      </div>
-     <div ng-repeat="item in value | orderBy : 'seqOrdemPauta'" class="list-group-item clearfix">
+     <div ng-repeat="item in value | orderBy : 'pautaComissaoAtual.ordemPauta'" class="list-group-item clearfix">
 	     <div class="row">
 	         <div class="col-sm-12">
 	             <h3 class="list-group-item-heading">
@@ -43,7 +43,7 @@
                      </ul>
                     </div>
 	                 <strong>Resultado: </strong>{{item.pautaComissaoAtual.resultado}} <span ng-show="!item.pautaComissaoAtual.resultado">Sem resultado definido.</span>
-	                 <br/>
+                 <br/>
 	             </p>
 	         </div>
 	     </div>
