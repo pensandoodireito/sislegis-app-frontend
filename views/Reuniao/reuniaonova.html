@@ -105,7 +105,7 @@
             <div class="box" ng-show="listaReuniaoProposicoes.length > 0">
                 <div class="box-body">
                     <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem
-                     | filter:filtroComissao | filter:{favorita:filtroFavorita} | filter:filtroResponsavel | filter:filtroPosicionamento
+                     | filter:filtroComissao | filter:{favorita:filtroFavorita} | filter:filtroResponsavel | filter:filtroPosicionamento : true
                      | filter:{responsavelNaoDefinido:filtroResponsavelNaoDefinido} | filter:{posicionamentoNaoDefinido:filtroPosicionamentoNaoDefido}
                      | selectedTags:filtroTags |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
 
