@@ -538,8 +538,9 @@ angular.module('sislegisapp').controller(
     }
     
     $scope.abrirModalRelatorio = function() {
-        
-        $scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada(),fetchAll : true}); 
+
+        $scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada(),fetchAll : true});
+
         $scope.printPath = 'views/Reuniao/imprimir.html';
         var modalInstance = $modal.open({
           templateUrl: 'views/Reuniao/modal-relatorio.html',
