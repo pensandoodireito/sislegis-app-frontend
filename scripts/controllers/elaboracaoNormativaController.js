@@ -1,6 +1,6 @@
 angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 		function($scope, $http, $routeParams, $sce, $location, $locale, $parse, toaster, locationParser, ElaboracaoNormativaResource, 
-				EquipeResource, FileUploader, TagResource, ComentarioResource, AreaConsultadaResource, 
+				EquipeResource, FileUploader, ComentarioResource, AreaConsultadaResource,
 				OrigemElaboracaoNormativaResource, UsuarioResource, ElaboracaoNormativaConsultaResource, 
 				StatusSidofResource, OrgaoResource, BACKEND) {
 	
@@ -16,10 +16,6 @@ angular.module('sislegisapp').controller('ElaboracaoNormativaController',
 			$scope.onlyNumbers = /^\d+$/;
 			
 			$scope.elaboracaoNormativaConsulta = new ElaboracaoNormativaConsultaResource();
-			
-		    $scope.loadTags = function(query) {
-		    	return TagResource.buscarPorSufixo({sufixo: query}).$promise;
-		    }; 
 			
 			$scope.elaboracaoNormativa.listaElaboracaoNormativaConsulta = [];
 			

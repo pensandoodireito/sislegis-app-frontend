@@ -58,8 +58,14 @@
 							<p ng-show="item.responsavel.nome==null" ><strong>Sem responsável associado</strong></p>
 							<p ng-show="item.dataHoraLimite!=null"><strong>Data e Hora Limite: </strong>{{item.dataHoraLimite | date: 'dd/MM/yyyy HH:mm'}}</p>
 							<p ng-show="item.dataHoraLimite==null" ><strong>Sem data limite associada</strong></p>
-							<p>{{item.comentario.descricao}}</p>
-                            <div class="mt-sm" ng-show="item.comentarioFinalizacao">
+
+							<div ng-show="item.detalhes" >
+								<strong>Detalhes: </strong>
+								<pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">{{item.detalhes}}</pre>
+								<br/>
+							</div>
+
+							<div class="mt-sm" ng-show="item.comentarioFinalizacao">
                                 <p>Feito por: <strong>{{item.comentarioFinalizacao.autor.nome}}</strong></p>
                                 <p>Data: {{item.comentarioFinalizacao.dataCriacao | date: 'dd/MM/yyyy'}}</p>
 								<p ng-show="item.comentarioFinalizacao.descricao">Comentário: {{item.comentarioFinalizacao.descricao}}</p>
