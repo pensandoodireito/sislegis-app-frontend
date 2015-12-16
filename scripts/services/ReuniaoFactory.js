@@ -14,7 +14,16 @@ angular.module('sislegisapp').factory('ReuniaoResource',
 				'buscarReuniaoPorData' : {
 					url : BACKEND + "/reuniaos/findByData",
 					method : 'GET',
-					isArray : true
+					isArray : true,
+                    transformResponse: function(data){
+                        var jsonParse = JSON.parse(data);
+                        jsonParse.forEach(function(item, index){
+                            if(item.posicionamentoPreliminar){
+                                jsonParse[index].posicionamento.nome = 'Previamente ' + item.posicionamento.nome;
+                            }
+                        });
+                        return jsonParse;
+                    }
 				},				
 				'update' : {
 					method : 'PUT'

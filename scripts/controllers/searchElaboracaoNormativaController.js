@@ -1,7 +1,7 @@
 
 
 angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', function($scope, $window, $rootScope, $http, $location, toaster, ElaboracaoNormativaResource,
-		OrigemElaboracaoNormativaResource, OrgaoResource, StatusSidofResource, EquipeResource, UsuarioResource, TagResource, BACKEND) {
+		OrigemElaboracaoNormativaResource, OrgaoResource, StatusSidofResource, EquipeResource, UsuarioResource, BACKEND) {
 
     $scope.search={};
     $scope.currentPage = 0;
@@ -30,9 +30,7 @@ angular.module('sislegisapp').controller('SearchElaboracaoNormativaController', 
     $scope.listaStatusSidof = StatusSidofResource.queryAll();
     
     $scope.normas = ElaboracaoNormativaResource.normas();
-    
-    $scope.tags = TagResource.tagsDropdownSelect();
-    
+
     $scope.equipes = EquipeResource.queryAll();
     
     $scope.subTipos = ElaboracaoNormativaResource.subTipos();

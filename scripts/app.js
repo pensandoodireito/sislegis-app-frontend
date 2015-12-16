@@ -159,7 +159,6 @@ module.factory('errorInterceptor', function($q) {
 });
 
 module.config(function($httpProvider) {
-    $httpProvider.interceptors.push('HttpInterceptor');
     $httpProvider.responseInterceptors.push('errorInterceptor');
     $httpProvider.interceptors.push('authInterceptor');
 });
