@@ -60,6 +60,7 @@ module.config(['$routeProvider', function($routeProvider) {
 		.when('/Reuniaos/gerenciar/:ReuniaoId',{templateUrl:'views/Reuniao/gerenciar.html',controller:'GerenciarReuniaoController'})
 		
 		.when('/Proposicao/consultar',{templateUrl:'views/Proposicao/consultar-proposicao.html',controller:'GerenciarReuniaoController'})
+        .when('/Proposicao/id/:ProposicaoId',{templateUrl:'views/Proposicao/single-proposicao.html',controller:'ProposicaoController'})
 		
 		.when('/Posicionamentos',{templateUrl:'views/SimpleEntity/search.html',controller:'SearchPosicionamentoController'})
 		.when('/Posicionamentos/new',{templateUrl:'views/SimpleEntity/detail.html',controller:'NewPosicionamentoController'})

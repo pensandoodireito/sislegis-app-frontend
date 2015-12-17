@@ -1,0 +1,66 @@
+<section class="content-header">
+    <h1>{{proposicao.sigla}}</h1>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-body">
+                    <div class="list-group">
+                        <div class="list-group-item clearfix">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <p>{{proposicao.ementa}}</p>
+                                    <strong>Autor: </strong>{{proposicao.autor}}
+                                    <br/>
+                                    <strong>Origem: </strong>{{proposicao.origem}}
+                                    <br/>
+                                    <strong>Comissao: </strong>{{proposicao.comissao}}
+                                    <br/>
+                                    <strong>Ordem na Pauta: </strong>{{proposicao.pautaComissaoAtual.ordemPauta}} <span
+                                        ng-show="proposicao.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{proposicao.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
+                                    <br/>
+                                    <strong>Relator: </strong>{{proposicao.pautaComissaoAtual.relator}}
+                                    <br/>
+                                        <span ng-show="proposicao.pautaComissaoAtual.resultado != ''">
+                                            <strong>Resultado: </strong>{{proposicao.pautaComissaoAtual.resultado}}
+                                        </span>
+                                    <br />
+                                    <a ng-show="proposicao.origem == 'SENADO'"
+                                           href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{proposicao.idProposicao}}#DIV_TRAMITACAO"
+                                           target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
+                                    <a ng-show="proposicao.origem == 'CAMARA'"
+                                           href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{proposicao.idProposicao}}#tramitacoes"
+                                           target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
+                                    <h4 ng-show="proposicao.historicoPosicionamentos.length > 0">Posicionamentos</h4>
+                                    <ul>
+                                        <li ng-repeat="item in proposicao.historicoPosicionamentos">
+                                            {{item.dataCriacao | date:'dd/MM/yyyy'}} - {{item.posicionamento.nome}}
+                                        </li>
+                                    </ul>
+                                    <h4 ng-show="proposicao.encaminhamentos.length > 0">Encaminhamentos</h4>
+                                    <ul>
+                                        <li ng-repeat="item in proposicao.encaminhamentos">
+                                            {{item.tipoEncaminhamento.nome}}
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-4">
+                                    <h4>Comentários</h4>
+                                    <ul>
+                                        <li ng-repeat="comentario in proposicao.comentarios">
+                                            <span ng-show="!comentario.oculto">{{comentario.dataCriacao | date: 'dd/MM/yyyy'}} - {{comentario.descricao}}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /item -->
+                    </div>
+                </div>
+            </div>
+            <!--p class="fontsize-sm text-red mt-xs mb-0">Para montar a pauta da reunião, é preciso escolher a data em que ela ocorrerá</p-->
+        </div>
+    </div>
+</section>
