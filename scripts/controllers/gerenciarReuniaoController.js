@@ -256,6 +256,7 @@ angular.module('sislegisapp').controller(
     		var successCallback = function(){
                 if ($scope.listaReuniaoProposicoes.length == 0) {
                 	toaster.pop('info', 'Não existem proposições para esta data. Você pode adicionar novas proposições.');
+                    $scope.notFound = true;
                 }
                 $scope.clearFilters();
             };
