@@ -262,6 +262,8 @@ angular.module('sislegisapp').controller(
             var errorCallback = function() {
             	toaster.pop('error', 'Falha ao buscar Reunião.');
             };
+
+            $scope.exibirAdicionar = true;
     		
     		$scope.listaReuniaoProposicoes = ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()}, successCallback, errorCallback);
     	}
