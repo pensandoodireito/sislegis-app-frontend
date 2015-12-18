@@ -77,22 +77,6 @@
         </section>
     </aside>
     <div class="content-wrapper">
-        <div class="modal" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false" style="z-index:9999;">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Carregando ...</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                <span class="sr-only">100%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
         <toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-center'}"></toaster-container>
         <div id="main" ng-view></div>
     </div>
@@ -101,9 +85,8 @@
     </footer>
 </div>
 
+<script src="scripts/all.js"></script>
 <script src="http://localhost/auth/js/keycloak.js"></script>
-<script src="scripts/app.js"></script>
-
 <script type="text/javascript">
     var _urq = _urq || [];
     _urq.push(['initSite', '56b221a2-156a-42c0-92d8-5b0299ce19e2']);

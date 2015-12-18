@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var watch = require('gulp-watch');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var ngAnnotate = require('gulp-ng-annotate');
@@ -7,6 +8,7 @@ var libs = [
     'lib/jquery/dist/jquery.min.js',
     'lib/jquery-ui/ui/minified/jquery-ui.min.js',
     'lib/bootstrap/dist/js/bootstrap.min.js',
+    'lib/off-bower/pace.min.js',
     'lib/angular/angular.min.js',
     'lib/angular-route/angular-route.min.js',
     'lib/angular-resource/angular-resource.min.js',
@@ -94,12 +96,19 @@ var libs = [
 
 ];
 
-gulp.task('compress', function() {
+var compilacao = function() {
+    console.info("Compilação executada");
     return gulp.src(libs)
         .pipe(ngAnnotate())
         .pipe(uglify())
         .pipe(concat('all.js'))
         .pipe(gulp.dest('./scripts'));
+}
+
+gulp.task('compress', compilacao);
+
+gulp.task('watch', function() {
+    watch('scripts/**/*.js',compilacao);
 });
 
 gulp.task('default', ['compress'], function() {
