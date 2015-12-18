@@ -47,7 +47,6 @@
                             <li class="footer"><a href="#/Tarefas">ver todas</a></li>
                         </ul>
                     </li>
-                    <li><a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a></li>
                 </ul>
             </div>
         </nav>
@@ -77,7 +76,6 @@
             </ul>
         </section>
     </aside>
-
     <div class="content-wrapper">
         <div class="modal" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false" style="z-index:9999;">
             <div class="modal-dialog">
@@ -98,21 +96,23 @@
         <toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-center'}"></toaster-container>
         <div id="main" ng-view></div>
     </div>
-    <div class="control-sidebar-bg"></div>
+    <footer class="main-footer">
+        <strong>Copyleft 2015 <a href="http://sislegis.mj.gov.br">SISLegis</a>.</strong>
+    </footer>
 </div>
 
-   <script src="http://localhost/auth/js/keycloak.js"></script>
-    <script src="scripts/all.js"></script>
+<script src="http://localhost/auth/js/keycloak.js"></script>
+<script src="scripts/app.js"></script>
 
-    <script type="text/javascript">
-        var _urq = _urq || [];
-        _urq.push(['initSite', '56b221a2-156a-42c0-92d8-5b0299ce19e2']);
-        (function() {
-            var ur = document.createElement('script'); ur.type = 'text/javascript'; ur.async = true;
-            ur.src = ('https:' == document.location.protocol ? 'https://cdn.userreport.com/userreport.js' : 'http://cdn.userreport.com/userreport.js');
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ur, s);
-        })();
-    </script>
+<script type="text/javascript">
+    var _urq = _urq || [];
+    _urq.push(['initSite', '56b221a2-156a-42c0-92d8-5b0299ce19e2']);
+    (function() {
+        var ur = document.createElement('script'); ur.type = 'text/javascript'; ur.async = true;
+        ur.src = ('https:' == document.location.protocol ? 'https://cdn.userreport.com/userreport.js' : 'http://cdn.userreport.com/userreport.js');
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ur, s);
+    })();
+</script>
 
 </body>
 

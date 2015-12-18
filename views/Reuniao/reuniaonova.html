@@ -4,234 +4,252 @@
 <section class="content">
     <div class="row">
         <div class="col-md-12">
-            <div class="box box-success">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Buscar proposições</h3>
+            <div class="box box-info">
+                <div class="box-body">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label for="dataReuniao" class="control-label">Data da reunião:</label>
+                        </div>
+                        <div class="form-group" ng-click="openCalendar($event)">
+                            <div class="input-group cursor-pointer">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input id="dataReuniao" type="text" class="form-control cursor-pointer"
+                                       datepicker-popup="{{format}}" ng-model="reuniao.data" is-open="opened"
+                                       min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions"
+                                       close-text="Fechar"
+                                       placeholder="Selecione a data"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <p class="text-info mt-sm"><i class="fa fa-chevron-left"></i> Escolha uma data para
+                                visualizar uma reunião</p>
+                        </div>
+                        <div class="text-right pull-right">
+                            <a data-toggle="modal" ng-click="buscarProposicoes()" ng-disabled="!reuniao.data"
+                               class="btn btn-success" ng-show="exibirAdicionar"><i class="fa fa-plus"></i> Buscar/Adicionar proposições</a>
+                        </div>
+                    </form>
                 </div>
-                <form class="form-horizontal">
-                    <div class="box-body">
-                        <div class="form-group">
-                            <label for="dataReuniao" class="col-sm-2 control-label">Data da reunião:</label>
-                            <div class="col-sm-3">
-                                <input id="dataReuniao" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="reuniao.data" is-open="opened" min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Fechar" readonly />
-                            </div>
-                            <div class="col-sm-2">
-                                <button type="button" class="btn btn-default" ng-click="openCalendar($event)">
-                                    <i class="glyphicon glyphicon-calendar"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div><!-- /.box-body -->
-                    <div class="box-footer">
-                        <a data-toggle="modal" ng-click="buscarProposicoes()" ng-disabled="!reuniao.data" class="btn btn-success"><i class="fa fa-plus"></i> Buscar</a>
-                    </div><!-- /.box-footer -->
-                </form>
             </div>
-            <div class="box box-info" ng-show="listaReuniaoProposicoes.length > 0">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Filtrar</h3>
-                </div><!-- /.box-header -->
-                <!-- form start -->
-                <form class="form-horizontal">
-                    <div class="box-body">
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Proposições</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" ng-model="filtroGlobal.$" placeholder="Filtrar as proposições">
-                            </div>
-                            <label class="col-sm-2 control-label">Casa legislativa</label>
-                            <div class="col-sm-4">
-                                <select ng-model="filtroOrigem.origem" ng-options="item.origem as item.origem for item in listaRPOrigem | unique:'origem'" class="form-control" ng-change="changeFiltroOrigem()">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Comissão</label>
-                            <div class="col-sm-4">
-                                <select ng-model="filtroComissao.comissao" ng-options="item.comissao as item.comissao for item in listaRPComissao | filter:filtroOrigem | unique:'comissao'" ng-change="changeFiltroComissao()" class="form-control">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                            <label class="col-sm-2 control-label">Favoritas</label>
-                            <div class="col-sm-4">
-                                <select ng-model="filtroFavorita" class="form-control">
-                                    <option value=""></option>
-                                    <option value="true">Favoritas</option>
-                                    <option value="false">Não-favoritas</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Tags</label>
-                            <div class="col-sm-4">
-                                <div ng-dropdown-multiselect options="tagsProposicao" selected-model="filtroTags" extra-settings="{displayProp: 'text', idProp: 'text'}"></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" ng-model="filtroResponsavelNaoDefinido" ng-true-value="true" ng-change="checkResponsavelNaoDefinido()" /> Responsável não definido?
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-sm-offset-2 col-sm-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" ng-model="filtroPosicionamentoNaoDefido" ng-true-value="true" ng-change="checkPosicionamentoNaoDefido()" /> Posicionamento não definido?
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+            <div class="box box-info fixontop" ng-show="listaReuniaoProposicoes.length > 0">
 
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" ng-hide="filtroResponsavelNaoDefinido">Responsável</label>
-                            <div class="col-sm-4" ng-hide="filtroResponsavelNaoDefinido">
-                                <input type="text" ng-model="filtroResponsavel.responsavel" ng-required="true" typeahead="item.nome as item.nome for item in getUsuarios($viewValue)" class="form-control">
-                            </div>
-                            <label class="col-sm-2 control-label" ng-hide="filtroPosicionamentoNaoDefido" ng-class="filtroResponsavelNaoDefinido ? 'col-sm-offset-6': ''">Posicionamento</label>
-                            <div class="col-sm-4" ng-hide="filtroPosicionamentoNaoDefido">
-                                <input class="form-control" type="text" ng-model="filtroPosicionamento.posicionamento" ng-required="true" typeahead="item.nome as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" class="form-control">
-                            </div>
-
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-1 text-right">
+                            <strong class="mt-xs"><p>Filtros:</p></strong>
                         </div>
-                    </div><!-- /.box-body -->
-                    <div class="box-footer">
-                        <button type="button" class="btn btn-default" ng-show="reuniao.data" ng-show="listaReuniaoProposicoes.length > 0" ng-click="abrirModalRelatorio()">Imprimir</button>
-                    </div><!-- /.box-footer -->
-                </form>
+                        <div class="col-md-3">
+                            <select ng-model="filtroOrigem.origem"
+                                    ng-options="item.origem as item.origem for item in listaRPOrigem | unique:'origem'"
+                                    class="form-control" ng-change="changeFiltroOrigem()">
+                                <option value="" selected="selected">Casa legislativa</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select ng-model="filtroComissao.comissao"
+                                    ng-options="item.comissao as item.comissao for item in listaRPComissao | filter:filtroOrigem | unique:'comissao'"
+                                    ng-change="changeFiltroComissao()" class="form-control col-sm-2">
+                                <option value="" selected="selected">Comissão</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <p class="mt-xs">
+                                <a ng-click="filtroFavorita=!filtroFavorita" class="mt-sm"><i class="fa"
+                                                                                              ng-class="{'fa-star-o': !filtroFavorita, 'fa-star': filtroFavorita}"></i>
+                                    Prioritárias</a>
+                            </p>
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mt-xs">
+                                <strong><a ng-click="maisFiltros()">Mais filtros <i class="fa"
+                                                                                    ng-class="{'fa-caret-square-o-right': !isSidebarOpen, 'fa-caret-square-o-left':isSidebarOpen}"></i></a></strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
             </div>
             <div class="box" ng-show="listaReuniaoProposicoes.length > 0">
                 <div class="box-body">
                     <div ng-repeat="(comissao, value) in listaReuniaoProposicoes | filter:filtroGlobal | filter:filtroOrigem
-                     | filter:filtroComissao | filter:{favorita:filtroFavorita} | filter:filtroResponsavel | filter:filtroPosicionamento
+                     | filter:filtroComissao | filter:{favorita:filtroFavorita} | filter:filtroResponsavel | filter:filtroPosicionamento : true
                      | filter:{responsavelNaoDefinido:filtroResponsavelNaoDefinido} | filter:{posicionamentoNaoDefinido:filtroPosicionamentoNaoDefido}
-                     | selectedTags:filtroTags |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
+                     |  groupBy :'comissao' |  orderBy : 'comissao' " class="list-group">
 
                         <div class="list-group-item active" ng-show="comissao && comissao != 'null' && comissao != ''">
                             <h4 class="list-group-item-heading">{{comissao}}</h4>
                         </div>
 
-                        <div ng-repeat="item in value | orderBy : 'pautaComissaoAtual.ordemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
+                        <div ng-repeat="item in value | orderBy : 'pautaComissaoAtual.ordemPauta'"
+                             class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
                             <div class="clearfix">
-                                <button type="button" class="close" ng-click="abrirModalRemoverProposicao(item); $event.stopPropagation()">
+                                <button type="button" class="close"
+                                        ng-click="abrirModalRemoverProposicao(item); $event.stopPropagation()">
                                     <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
                                 </button>
                             </div>
                             <div class="row">
-                                <div class="col-sm-7">
+                                <div class="col-sm-4">
                                     <h3 class="list-group-item-heading">
-                                        <i class="fa fa-star-o" ng-show="!item.favorita" ng-click="item.favorita=true;save(item)"></i>
-                                        <i class="fa fa-star" style="color:orange" ng-show="item.favorita" ng-click="item.favorita=false; save(item)"></i>
-                                        <a href="{{selectedProposicao.linkProposicao}}" target="_blank">{{item.sigla}}</a>
+                                        <i class="fa"
+                                           ng-class="{'fa-caret-right':!item.opened, 'fa-caret-down':item.opened}"></i>
+                                        <i class="fa fa-star-o" ng-show="!item.favorita"
+                                           ng-click="item.favorita=true;save(item)"></i>
+                                        <i class="fa fa-star" style="color:orange" ng-show="item.favorita"
+                                           ng-click="item.favorita=false; save(item)"></i>
+                                        <a data-toggle="collapse" href="#proposicao-{{item.id}}"
+                                           ng-click="item.opened=!item.opened;expandProposicao(item);">{{item.sigla}}</a>
                                     </h3>
-                                    <p>{{item.ementa}}
-                                        <br/>
+                                </div>
+                                <div class="col-sm-8" ng-show="!item.opened">
+                                    <a ng-click="abrirModalComentarios(item)"><i class="fa fa-comment"></i> comentários
+                                        ({{item.totalComentarios}})</a>
+                                    <a ng-click="abrirModalEncaminhamentos(item)"><i class="fa fa-share"></i>
+                                        encaminhamentos ({{item.totalEncaminhamentos}})</a>
+                                    <strong class="gray" ng-show="item.posicionamentoAtual.posicionamento">{{item.posicionamentoAtual.posicionamento.nome}}</strong>
+                                </div>
+                            </div>
+                            <div class="collapse" id="proposicao-{{item.id}}">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <p>{{item.ementa}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
                                         <strong>Autor: </strong>{{item.autor}}
                                         <br/>
                                         <strong>Origem: </strong>{{item.origem}}
                                         <br/>
                                         <strong>Comissao: </strong>{{item.pautaComissaoAtual.pautaReuniaoComissao.comissao}}
                                         <br/>
-                                        <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} <span ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{item.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
+                                        <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} <span
+                                            ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{item.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
                                         <br/>
                                         <strong>Relator: </strong>{{item.pautaComissaoAtual.relator}}
                                         <br/>
                                         <span ng-show="item.pautaComissaoAtual.resultado != ''">
                                             <strong>Resultado: </strong>{{item.pautaComissaoAtual.resultado}}
-                                        <br/>
                                         </span>
-                                    <div>
-                                        <a ng-show="item.origem == 'SENADO'" href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
-                                        <a ng-show="item.origem == 'CAMARA'" href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{item.idProposicao}}#tramitacoes" target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
-                                        <a ng-click="setSelectedProposicao(item);abrirModalProposicao();"><i class="fa fa-print"></i> Imprimir</a>
+
+                                        <div>
+                                            <a ng-show="item.origem == 'SENADO'"
+                                               href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO"
+                                               target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
+                                            <a ng-show="item.origem == 'CAMARA'"
+                                               href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{item.idProposicao}}#tramitacoes"
+                                               target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
+                                            <a ng-click="setSelectedProposicao(item);abrirModalProposicao();"><i
+                                                    class="fa fa-print"></i> Imprimir</a>
+                                        </div>
                                     </div>
-                                    </p>
+                                    <div class="col-sm-6">
+                                        <div class="divider-top">
+                                            <div class="form-group">
+                                                <label>Posicionamento:</label>
+                                                <input type="text" ng-model="item.posicionamentoAtual.posicionamento"
+                                                       placeholder="Procurar" ng-required="true"
+                                                       ng-focus="previousPosicionamento(item)"
+                                                       ng-blur="checkRemocaoPosicionamento(item)"
+                                                       typeahead="posicao as posicao.nome for posicao in getPosicionamentos($viewValue) | filter:$viewValue"
+                                                       typeahead-on-select="alterarPosicionamento(item, $model, $label); item.posicionamentoNaoDefinido = false"
+                                                       class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="divider-top">
+                                            <div class="form-group">
+                                                <label>Responsável: </label>
+                                                <input type="text" ng-model="item.responsavel"
+                                                       placeholder="Procurar usuário" ng-required="true"
+                                                       ng-blur="checkRemocaoResponsavel(item)"
+                                                       typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)"
+                                                       typeahead-on-select="save(item); item.responsavelNaoDefinido = false"
+                                                       class="form-control">
+                                                <input type="checkbox" ng-model="buscaGeral"/> Buscar completa
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-sm-5">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading cursor-pointer" ng-click="showAcoes = !showAcoes">
-                                            Ações <i class="fa fa-sort"></i>
-                                        </div>
-                                        <div class="panel-body" collapse="showAcoes">
-                                            <div class="clearfix">
-                                                <div class="col-md-10">
-                                                    <textarea class="form-control fontsize-sm" rows="5" maxlength="8000" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)"><i class="fa fa-check"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="divider-top clearfix">
-                                                <div class="col-md-6">
-                                                    <a ng-click="abrirModalComentarios(item)"><i class="fa fa-comment"></i><strong> {{item.totalComentarios}}  comentários</strong></a>
-                                                </div>
-                                                <div class="col-md-6 text-right">
-                                                    <strong><a ng-click="abrirModalEncaminhamentos(item)"> {{item.totalEncaminhamentos}} encaminhamentos</a></strong>
-                                                </div>
-                                            </div>
-                                            <div class="divider-top form-inline">
-                                                <div class="form-group">
-                                                    <label>Posicionamento:</label>
-                                                    <input type="text" ng-model="item.posicionamento" placeholder="Procurar" ng-required="true" ng-blur="checkRemocaoPosicionamento(item)" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-on-select="alterarPosicionamento(item); item.posicionamentoNaoDefinido = false" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="divider-top form-inline">
-                                                <div class="form-group">
-                                                    <label>Responsável: </label>
-                                                    <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" ng-blur="checkRemocaoResponsavel(item)" typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)" typeahead-on-select="save(item); item.responsavelNaoDefinido = false" class="form-control">
-                                                    <input type="checkbox" ng-model="buscaGeral" /> Buscar completa
-                                                </div>
-                                            </div>
-                                            <div class="divider-top">
-                                                <label>Tags: </label>
-                                                <tags-input ng-model="item.tags"
-                                                            ng-class="form-group"
-                                                            on-tag-added="save(item)"
-                                                            on-tag-removed="save(item)"
-                                                            min-length="1"
-                                                            placeholder="Adicione uma tag"
-                                                            display-property="tag">
-                                                    <auto-complete source="loadTags($query)" ></auto-complete>
-                                                </tags-input>
-                                            </div>
-                                            <div class="divider-top">
-                                                <label>Proposições associadas: </label>
+                                <div class="row">
+                                    <hr/>
+                                    <div class="col-sm-6">
+                                        <div ng-show="item.listaComentario.length > 0">
+                                            <strong>Comentários:</strong>
 
-                                                <tags-input ng-model="item.proposicoesFilha" display-property="sigla" ng-class="form-group"
-                                                            on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1"
-                                                            add-from-autocomplete-only="true" placeholder="Adicione uma proposição"
-                                                            replaceSpacesWithDashes="false">
-                                                    <auto-complete source="loadProposicoes($query)" ></auto-complete>
-                                                </tags-input>
-                                            </div>
-                                            <div class="divider-top">
-                                                <label>Elaborações Normativas associadas: </label>
-
-                                                <tags-input ng-model="item.elaboracoesNormativas" display-property="nup" ng-class="form-group"
-                                                            on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1"
-                                                            add-from-autocomplete-only="true" placeholder="Procure pelo NUP"
-                                                            replaceSpacesWithDashes="false">
-                                                    <auto-complete source="loadElaboracoesNormativas($query)" ></auto-complete>
-                                                </tags-input>
-                                            </div>
-                                            <div class="divider-top">
-                                                <label>Resultado: </label>
-                                                <div class="form-group">
-                                                    <div class="col-md-10">
-                                                        <textarea class="form-control fontsize-sm" rows="3" placeholder="Adicione um resultado" ng-model="item.resultadoASPAR"></textarea>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <button type="button" class="btn btn-success btn-sm" ng-click="save(item)"><i class="fa fa-check"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <p>{{item.listaComentario[item.listaComentario.length-1].dataCriacao | date:
+                                                'dd/MM/yyyy'}} -
+                                                {{item.listaComentario[item.listaComentario.length-1].descricao}}</p>
+                                            <a ng-click="abrirModalComentarios(item)"><strong>Outros
+                                                +({{item.totalComentarios}})</strong></a>
                                         </div>
                                     </div>
+                                    <div class="col-sm-6">
+                                        <div class="col-sm-10"><textarea class="form-control fontsize-sm" rows="5"
+                                                                         maxlength="8000"
+                                                                         placeholder="Adicione um comentário"
+                                                                         ng-model="item.comentarioTmp"></textarea></div>
+                                        <div class="col-sm-2">
+                                            <button type="button" class="btn btn-success btn-sm"
+                                                    ng-click="incluirComentario(item)"><i class="fa fa-check"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <hr/>
+                                    <div class="col-sm-6">
+                                        <div ng-show="item.listaEncaminhamentoProposicao.length > 0">
+                                            <strong>Encaminhamentos</strong>
 
+                                            <div ng-repeat="encaminhamento in item.listaEncaminhamentoProposicao">
+                                                <p ng-class="{'text-red':!encaminhamento.finalizado}">
+                                                    {{encaminhamento.tipoEncaminhamento.nome}} {{encaminhamento.detalhes}}
+                                                    <span ng-show="!encaminhamento.finalizado">(Em aberto)</span>
+                                                </p>
+                                            </div>
+                                            <a ng-click="abrirModalEncaminhamentos(item)"><strong>Outros
+                                                +({{item.totalEncaminhamentos}})</strong></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <form name="EncaminhamentoProposicaoForm" id="EncaminhamentoProposicaoForm">
+                                            <div class="input-group">
+                                                <label for="tipo-encaminhamento">Tipo de Encaminhamento</label>
+                                                <select id="tipo-encaminhamento"
+                                                        ng-model="encaminhamentoProposicao.tipoEncaminhamento"
+                                                        ng-options="tipoEncaminhamento.nome for tipoEncaminhamento in listaTipoEncaminhamento track by tipoEncaminhamento.id | orderBy:'nome'"
+                                                        class="form-control" ng-required="true"></select>
+                                            </div>
+                                            <div class="input-group">
+                                                <label for="detalhes">Detalhes:</label>
+                                                <textarea id="detalhes" class="form-control" rows="3"
+                                                          ng-model="encaminhamentoProposicao.detalhes"></textarea>
+                                            </div>
+                                            <a ng-click="item.isEncaminhamentoOpen=!item.isEncaminhamentoOpen"><i class="fa fa-caret-right"></i> Mais</a>
+                                            <span ng-show="item.isEncaminhamentoOpen">
+                                                <div class="input-group">
+                                                    <label>Responsável:
+                                                    <input autocomplete="off" type="text" ng-model="encaminhamentoProposicao.responsavel" placeholder="Procurar usuário..."
+                                                           typeahead="item as item.nome for item in getUsuarios($viewValue)" class="form-control">
+                                                    </label>
+                                                </div>
+                                                <label>Prazo:</label>
+                                                <div class="input-group col-sm-2">
+                                                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="encaminhamentoProposicao.dataHoraLimite" is-open="opened" min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Close" readonly/>
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                        </span>
+                                                </div>
+                                                <div class="input-group">
+                                                    <timepicker ng-model="encaminhamentoProposicao.dataHoraLimite" show-meridian="false"></timepicker>
+                                                </div>
+                                            </span>
+                                            <div class="input-group">
+                                                <button type="button" class="btn btn-success" ng-disabled="ModalEncaminhamentosController.isClean() || EncaminhamentoProposicaoForm.$invalid" ng-show="!encaminhamentoProposicao.id" ng-click="addEncaminhamento()"><i class="fa fa-check"></i></button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -244,6 +262,56 @@
         </div>
     </div>
 </section>
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <button type="button" class="btn btn-default" ng-show="reuniao.data" ng-show="listaReuniaoProposicoes.length > 0" ng-click="abrirModalRelatorio()">Imprimir</button>
+        <hr />
+        <div>
+            <label class="control-label">Proposições</label>
+            <input type="text" class="form-control" ng-model="filtroGlobal.$" placeholder="Filtrar as proposições" />
+        </div>
 
+        <label><input type="checkbox" ng-model="filtroPosicionamentoNaoDefido" ng-true-value="true" ng-change="checkPosicionamentoNaoDefido()" /> Posicionamento não definido?</label>
+        <div ng-hide="filtroPosicionamentoNaoDefido">
+            <label class="control-label">Posicionamento</label>
+            <input class="form-control" type="text" ng-model="filtroPosicionamento.posicionamento" ng-required="true" typeahead="item.nome as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" class="form-control">
+        </div>
+
+        <label><input type="checkbox" ng-model="filtroResponsavelNaoDefinido" ng-true-value="true" ng-change="checkResponsavelNaoDefinido()" /> Responsável não definido?</label>
+        <div ng-hide="filtroResponsavelNaoDefinido">
+            <label class="control-label">Responsável</label>
+            <input type="text" ng-model="filtroResponsavel.responsavel" ng-required="true" typeahead="item.nome as item.nome for item in getUsuarios($viewValue)" class="form-control">
+        </div>
+    </div>
+</aside>
+<!-- /.control-sidebar -->
+<!-- Add the sidebar's background. This div must be placed
+     immediately after the control sidebar -->
+<div class="control-sidebar-bg"></div>
 <!-- Porção que vai ser renderizada quando o usuário clicar em 'imprimir' -->
 <div class="printable" ng-include="getPrintPath()"></div>
+<script type="text/javascript">
+    $('.fixontop').addClass('original-fix').clone().insertAfter('.fixontop').addClass('fixontop-cloned').removeClass('original-fix').hide();
+    scrollIntervalID = setInterval(stickIt, 10);
+    function stickIt() {
+        var orgElementPos = $('.original-fix').offset();
+        orgElementTop = orgElementPos.top;
+
+        if ($(window).scrollTop() >= (orgElementTop)) {
+            // scrolled past the original position; now only show the cloned, sticky element.
+            // Cloned element should always have same left position and width as original element.
+            orgElement = $('.original-fix');
+            coordsOrgElement = orgElement.offset();
+            leftOrgElement = coordsOrgElement.left;
+            widthOrgElement = orgElement.css('width');
+            $('.fixontop-cloned').css('left', leftOrgElement + 'px').css('top', 0).css('width', widthOrgElement).show();
+            $('.original-fix').css('visibility', 'hidden');
+        } else {
+            // not scrolled past the menu; only show the original menu.
+            $('.fixontop-cloned').hide();
+            $('.original-fix').css('visibility', 'visible');
+        }
+    }
+</script>

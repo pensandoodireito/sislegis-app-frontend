@@ -87,12 +87,6 @@
 							<input type="text" ng-model="selectedProposicao.responsavel" placeholder="Procurar usuário..." ng-required="true"
 	              			typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)" class="form-control">
                             <input type="checkbox" ng-model="buscaGeral" /> Busca completa
-						</p> 
-						<p class="fontsize-sm">
-							<strong>Tags:  </strong>
-							 <tags-input ng-model="selectedProposicao.tags">
-							 	<auto-complete source="loadTags($query)"></auto-complete>
-							 </tags-input>
 						</p>
 						
 						<button type="button" class="btn btn-primary btn-sm" ng-click="save()">Salvar</button>
