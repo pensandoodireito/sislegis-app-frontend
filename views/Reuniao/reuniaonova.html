@@ -99,7 +99,7 @@
                                         <i class="fa fa-star" style="color:orange" ng-show="item.favorita"
                                            ng-click="item.favorita=false; save(item)"></i>
                                         <a data-toggle="collapse" href="#proposicao-{{item.id}}"
-                                           ng-click="item.opened=!item.opened;expandProposicao(item);">{{item.sigla}}</a>
+                                           ng-click="item.opened=!item.opened;expandProposicao(item);">{{item.sigla}}</a><i class="fa fa-spin fa-spinner" ng-show="item.loading==true"></i>
                                     </h3>
                                 </div>
                                 <div class="col-sm-8" ng-show="!item.opened">
