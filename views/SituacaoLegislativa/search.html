@@ -7,14 +7,14 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Listagem</h3>
+                    <h3 class="box-title">Listagem de situações existentes na Câmara e no Senado</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="dataTables_wrapper form-inline dt-bootstrap">
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="dataTables_filter">
-                                    <label>Filtrar pela origems:
+                                    <label>Filtrar pela origem:
                                     <select ng-change="selectOrigemComissoes()" ng-model="origem" ng-options="origem.displayName for origem in origens" class="form-control" required>
                                         <option value="" selected>Origem da situação</option>
                                     </select>
@@ -27,25 +27,28 @@
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th>Sigla</th>
-                                        <th>Ação</th>
+                                        <th>Descrição</th>
+                                        <th>Terminativa</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr ng-repeat="result in situacoes | startFrom:currentPage*pageSize | limitTo:pageSize">
-                                        <td>{{result.sigla}}</td>
-                                        <td>
-                                            {{result}}
-                                            <button  id="follow" name="saveOrgao" class="btn btn-primary" ng-disabled="" ng-click="seguir(result.sigla)">
-                                                <span class="glyphicon glyphicon-ok-sign"></span> Seguir
+                                        <td>{{result.descricao}}</td>
+                                        <td>                                            
+                                            <button  ng-show="result.terminativa" id="terminativa" name="Troca para não terminativa" class="btn btn-primary" ng-disabled="" ng-click="toggleTerminativa(result)">
+                                                <span class="glyphicon glyphicon-ok-sign"></span>
                                             </button>
+                                            <button  ng-hide="result.terminativa" id="notterminativa" name="Troca para terminativa" class="btn btn-primary" ng-disabled="" ng-click="toggleTerminativa(result)">
+                                                <span class="glyphicon glyphicon-remove-sign"></span>
+                                            </button>
+                                          
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <div class="row" ng-show="comissoes.length > 0">
+                        <div class="row" ng-show="situacoes.length > 0">
                             <div class="col-sm-12">
                                 <div class="dataTables_paginate paging_simple_numbers">
                                     <ul class="pagination pagination-centered">

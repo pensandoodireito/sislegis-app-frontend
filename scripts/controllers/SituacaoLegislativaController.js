@@ -1,7 +1,6 @@
 angular.module('sislegisapp').controller('SituacaoLegislativaController',
 		function($scope, $http, SituacaoLegislativaFactory, ComissaoResource, BACKEND) {
-			
-		
+
 			$scope.origens = [ {
 				value : 'C',
 				displayName : 'Câmara'
@@ -10,13 +9,21 @@ angular.module('sislegisapp').controller('SituacaoLegislativaController',
 				displayName : 'Senado'
 			} ];
 
+			$scope.toggleTerminativa = function(result) {
+				result.terminativa = !result.terminativa;
+				SituacaoLegislativaFactory.update({id:result.id},result);
+			}
 			$scope.selectOrigemComissoes = function() {
 				var origemSelecionada = $scope.origem.value;
 				if (origemSelecionada == 'S') {
-					$scope.situacoes=SituacaoLegislativaFactory.query({casa:"SENADO"});
-					
+					$scope.situacoes = SituacaoLegislativaFactory.query({
+						casa : "SENADO"
+					});
+
 				} else if (origemSelecionada == 'C') {
-					$scope.situacoes=SituacaoLegislativaFactory.query({casa:"CAMARA"});
+					$scope.situacoes = SituacaoLegislativaFactory.query({
+						casa : "CAMARA"
+					});
 				}
 
 			};
@@ -28,8 +35,8 @@ angular.module('sislegisapp').controller('SituacaoLegislativaController',
 			$scope.pageRange = [];
 			$scope.numberOfPages = function() {
 				var total = 0;
-				if (typeof $scope.comissoes != 'undefined') {
-					total = $scope.comissoes.length;
+				if (typeof $scope.situacoes != 'undefined') {
+					total = $scope.situacoes.length;
 				}
 				var result = Math.ceil(total / $scope.pageSize);
 				var max = (result == 0) ? 1 : result;
