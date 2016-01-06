@@ -81,8 +81,7 @@
                             <h4 class="list-group-item-heading">{{comissao}}</h4>
                         </div>
 
-                        <div ng-repeat="item in value | orderBy : 'pautaComissaoAtual.ordemPauta'"
-                             class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
+                        <div ng-repeat="item in value | orderBy : ['pautaComissaoAtual.pautaReuniaoComissao.data','pautaComissaoAtual.ordemPauta']" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
                             <div class="clearfix">
                                 <button type="button" class="close"
                                         ng-click="abrirModalRemoverProposicao(item); $event.stopPropagation()">
