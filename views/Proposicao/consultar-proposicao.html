@@ -112,13 +112,12 @@
 										<div class="divider-top clearfix">
 											<div class="col-md-6">
 												<strong> <a ng-click="abrirModalComentarios(item)"><i
-														class="fa fa-comment"></i> {{item.listaComentario.length
-														|| 0}} comentários</a></strong>
+														class="fa fa-comment"></i> {{item.totalComentarios}} comentários</a></strong>
 											</div>
 											<div class="col-md-6 text-right">
 												<strong><a
 													ng-click="abrirModalEncaminhamentos(item)">
-														{{item.listaEncaminhamentoProposicao.length || 0}}
+														{{item.listaEncaminhamentoProposicao.length || item.totalEncaminhamentos}}
 														encaminhamentos</a></strong>
 											</div>
 										</div>
