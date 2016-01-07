@@ -17,7 +17,7 @@ var module = angular.module('sislegisapp',
         'ui.mask'
     ]);
 
-module.constant('BACKEND', 'http://localhost/sislegis/rest');
+module.constant('BACKEND', 'http://172.17.6.80/sislegis/rest');
 
 var auth = {};
 
@@ -159,7 +159,6 @@ module.factory('errorInterceptor', function($q) {
 });
 
 module.config(function($httpProvider) {
-    $httpProvider.interceptors.push('HttpInterceptor');
     $httpProvider.responseInterceptors.push('errorInterceptor');
     $httpProvider.interceptors.push('authInterceptor');
 });

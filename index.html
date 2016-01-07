@@ -47,7 +47,6 @@
                             <li class="footer"><a href="#/Tarefas">ver todas</a></li>
                         </ul>
                     </li>
-                    <li><a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a></li>
                 </ul>
             </div>
         </nav>
@@ -77,7 +76,6 @@
             </ul>
         </section>
     </aside>
-
     <div class="content-wrapper">
         <div class="modal" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false" style="z-index:9999;">
             <div class="modal-dialog">
@@ -98,7 +96,9 @@
         <toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-center'}"></toaster-container>
         <div id="main" ng-view></div>
     </div>
-    <div class="control-sidebar-bg"></div>
+    <footer class="main-footer">
+        <strong>Copyleft 2015 <a href="http://sislegis.mj.gov.br">SISLegis</a>.</strong>
+    </footer>
 </div>
 
     <script src="lib/jquery/dist/jquery.min.js" type="text/javascript"></script>
@@ -123,8 +123,8 @@
     <script src="lib/ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
     <script src="lib/angular-confirm-modal/angular-confirm.min.js"></script>
     <script src="lib/admin-lte/dist/js/app.min.js"></script>
-
-    <script src="http://localhost/auth/js/keycloak.js"></script>
+    <script src="lib/off-bower/pace.min.js"></script>
+    <script src="http://172.17.6.80/auth/js/keycloak.js"></script>
 
     <script src="scripts/app.js"></script>
     <script src="scripts/offcanvas.js"></script>
@@ -133,7 +133,6 @@
     <script src="scripts/directives/datetimepicker.js"></script>
     <script src="scripts/filters/startFromFilter.js"></script>
     <script src="scripts/filters/genericSearchFilter.js"></script>
-    <script src="scripts/filters/tagsFilter.js"></script>
 
     <script src="lib/ng-tags-input/ng-tags-input.min.js"></script>
  	<script src="scripts/services/AgendaComissaoFactory.js"></script>
@@ -153,8 +152,6 @@
     <script src="scripts/services/ElaboracaoNormativaFactory.js"></script>
     <script src="scripts/services/TarefaFactory.js"></script>
     <script src="scripts/services/NotificacaoFactory.js"></script>
-   
-    <script src="scripts/services/HttpInterceptor.js"></script>
 
     <!-- Posicionamento -->
     <script src="scripts/controllers/newPosicionamentoController.js"></script>
@@ -181,9 +178,6 @@
 
     <!-- Reuniao Proposição -->
     <script src="scripts/services/ReuniaoProposicaoFactory.js"></script>
-
-    <!-- Tag -->
-    <script src="scripts/services/TagFactory.js"></script>
 
     <!-- Elaboração Normativa -->
     <script src="scripts/controllers/searchElaboracaoNormativaController.js"></script>
