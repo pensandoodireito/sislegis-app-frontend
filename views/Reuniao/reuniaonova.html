@@ -180,8 +180,7 @@
                                             <p>{{item.listaComentario[item.listaComentario.length-1].dataCriacao | date:
                                                 'dd/MM/yyyy'}} -
                                                 {{item.listaComentario[item.listaComentario.length-1].descricao}}</p>
-                                            <a ng-click="abrirModalComentarios(item)"><strong>Outros
-                                                +({{item.totalComentarios}})</strong></a>
+                                            <a ng-click="abrirModalComentarios(item)"><strong>Ver todos ({{item.totalComentarios}})</strong></a>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -208,8 +207,7 @@
                                                     <span ng-show="!encaminhamento.finalizado">(Em aberto)</span>
                                                 </p>
                                             </div>
-                                            <a ng-click="abrirModalEncaminhamentos(item)"><strong>Outros
-                                                +({{item.totalEncaminhamentos}})</strong></a>
+                                            <a ng-click="abrirModalEncaminhamentos(item)"><strong>Ver todos ({{item.totalEncaminhamentos}})</strong></a>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
