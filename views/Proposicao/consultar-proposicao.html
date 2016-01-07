@@ -112,20 +112,25 @@
 										<div class="divider-top clearfix">
 											<div class="col-md-6">
 												<strong> <a ng-click="abrirModalComentarios(item)"><i
-														class="fa fa-comment"></i> {{item.listaComentario.length
-														|| 0}} comentários</a></strong>
+														class="fa fa-comment"></i> {{item.totalComentarios}} comentários</a></strong>
 											</div>
 											<div class="col-md-6 text-right">
 												<strong><a
 													ng-click="abrirModalEncaminhamentos(item)">
-														{{item.listaEncaminhamentoProposicao.length || 0}}
+														{{item.listaEncaminhamentoProposicao.length || item.totalEncaminhamentos}}
 														encaminhamentos</a></strong>
 											</div>
 										</div>
                                         <div class="divider-top form-inline">
                                             <div class="form-group">
                                                 <label>Posicionamento:</label>
-                                                <input class="form-control" type="text" ng-model="item.posicionamento" placeholder="Procurar" typeahead="item as item.nome for item in getPosicionamentos($viewValue) | filter:$viewValue" typeahead-min-length="3" typeahead-on-select="alterarPosicionamento(item); item.posicionamentoNaoDefinido = false;" />
+                                                <input type="text" ng-model="item.posicionamentoAtual.posicionamento"
+                                                       placeholder="Procurar" ng-required="true"
+                                                       ng-focus="previousPosicionamento(item)"
+                                                       ng-blur="checkRemocaoPosicionamento(item)"
+                                                       typeahead="posicao as posicao.nome for posicao in getPosicionamentos($viewValue) | filter:$viewValue"
+                                                       typeahead-on-select="alterarPosicionamento(item, $model, $label); item.posicionamentoNaoDefinido = false"
+                                                       class="form-control">
                                             </div>
                                         </div>
                                         <div class="divider-top form-inline">
@@ -134,12 +139,6 @@
                                                 <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)" typeahead-on-select="save(item); item.responsavelNaoDefinido = false" class="form-control">
                                                 <input type="checkbox" ng-model="item.buscaGeral"> Buscar completa
                                             </div>
-                                        </div>
-                                        <div class="divider-top">
-                                            <label>Tags: </label>
-                                            <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1">
-                                                <auto-complete source="loadTags($query)"></auto-complete>
-                                            </tags-input>
                                         </div>
 							<div class="divider-top">
 								<label>Resultado: </label>

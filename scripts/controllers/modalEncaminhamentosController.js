@@ -26,7 +26,7 @@ angular.module('sislegisapp').controller(
 			};
 
 			$scope.ok = function() {
-                $modalInstance.close($scope.proposicao.listaEncaminhamentoProposicao);
+				$modalInstance.close($scope.proposicao.listaEncaminhamentoProposicao);
 			};
 
 			$scope.cancel = function() {
