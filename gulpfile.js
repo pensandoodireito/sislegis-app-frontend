@@ -44,7 +44,6 @@ var libs = [
     'scripts/controllers/modalEncaminhamentosController.js',
     'scripts/controllers/modalRelatorioReuniaoController.js',
     'scripts/controllers/modalRelatorioProposicaoController.js',
-    'scripts/controllers/proposicaoController.js',
     'scripts/services/ComentarioFactory.js',
     'scripts/services/ComentarioService.js',
     'scripts/services/EncaminhamentoProposicaoFactory.js',
@@ -93,6 +92,8 @@ var libs = [
     'scripts/controllers/SearchAgendaComissaoController.js',
     'scripts/services/ElaboracaoNormativaConsultaFactory.js',
     'scripts/services/StatusSidofFactory.js',
+    'scripts/services/SituacaoLegislativaFactory.js',
+    'scripts/controllers/SituacaoLegislativaController.js',
     'scripts/services/locationParser.js'
 
 ];
