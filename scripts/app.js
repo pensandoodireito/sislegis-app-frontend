@@ -104,6 +104,8 @@ module.config(['$routeProvider', function($routeProvider) {
 	    
 	    .when('/GerenciarComissaoSeguida',{templateUrl:'views/AgendaComissao/search.html',controller:'SearchAgendaComissaoController'})
 	    
+	    .when('/GerenciarSituacoes',{templateUrl:'views/SituacaoLegislativa/search.html',controller:'SituacaoLegislativaController'})
+	    
 	    .otherwise({
 	    	redirectTo: '/Reuniaos/reuniaonova'
 	    });

@@ -230,24 +230,32 @@ angular.module('sislegisapp').controller(
         	'MM/dd/yyyy');
         return formattedDate;
     };
-
+    
     $scope.expandProposicao = function(proposicao){
-
+    	
         $scope.setSelectedProposicao(proposicao);
-
-        // Popula comentarios
-        if ($scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios) {
-            $scope.selectedProposicao.listaComentario = ComentarioResource.findByProposicao({
-                    ProposicaoId: $scope.selectedProposicao.id}
-            );
+        if(!$scope.selectedProposicao.fullyLoaded){
+	        proposicao.loading=true;
+	        $scope.selectedProposicao = ProposicaoResource.get({ProposicaoId:proposicao.id,fetchAll:true},function(){
+	        	proposicao.loading=false;
+	        	$scope.selectedProposicao.fullyLoaded=true;
+	        });
         }
+        
 
-        // Popula encaminhamentos
-        if ($scope.selectedProposicao.listaEncaminhamentoProposicao == null || $scope.selectedProposicao.listaEncaminhamentoProposicao.length != $scope.selectedProposicao.totalEncaminhamentos){
-            $scope.selectedProposicao.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({
-                    ProposicaoId: $scope.selectedProposicao.id}
-            );
-        }
+//        // Popula comentarios
+//        if ($scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios) {
+//            $scope.selectedProposicao.listaComentario = ComentarioResource.findByProposicao({
+//                    ProposicaoId: $scope.selectedProposicao.id}
+//            );
+//        }
+//
+//        // Popula encaminhamentos
+//        if ($scope.selectedProposicao.listaEncaminhamentoProposicao == null || $scope.selectedProposicao.listaEncaminhamentoProposicao.length != $scope.selectedProposicao.totalEncaminhamentos){
+//            $scope.selectedProposicao.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({
+//                    ProposicaoId: $scope.selectedProposicao.id}
+//            );
+//        }
     };
 
     $scope.$watch("reuniao.data", function() {

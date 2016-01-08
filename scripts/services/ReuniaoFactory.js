@@ -18,8 +18,8 @@ angular.module('sislegisapp').factory('ReuniaoResource',
                     transformResponse: function(data){
                         var jsonParse = JSON.parse(data);
                         jsonParse.forEach(function(item, index){
-                            if(item.posicionamentoPreliminar){
-                                jsonParse[index].posicionamento.nome = 'Previamente ' + item.posicionamento.nome;
+                            if(item.posicionamentoPreliminar==true){
+                                jsonParse[index].posicionamentoAtual.nome = 'Previamente ' + item.posicionamentoAtual.posicionamento.nome;
                             }
                         });
                         return jsonParse;
