@@ -3,7 +3,7 @@ angular.module('sislegisapp').factory(
 		function($resource, BACKEND) {
 			var resource = $resource(BACKEND + '/posicionamentos/:PosicionamentoId',
 					{
-						PosicionamentoId : '@id'
+						PosicionamentoId : '@id',
 					}, {
 						'queryAll' : {
 							method : 'GET',
@@ -24,7 +24,21 @@ angular.module('sislegisapp').factory(
 						},
 						'update' : {
 							method : 'PUT'
-						}
+						},
+                        'historicoPosicionamentos' : {
+                            url : BACKEND + "/proposicaos/historicoPosicionamentos/:ProposicaoId",
+                            method : 'GET',
+                            isArray: true,
+                            transformResponse : function(data){
+                                var json = JSON.parse(data);
+                                angular.forEach(json, function(value, key){
+                                    var newValue = angular.copy(value);
+                                    newValue.nome = 'Previamente '+newValue.nome;
+                                    json.push(newValue);
+                                });
+                                return json;
+                            }
+                        }
 					});
 			return resource;
 		});
