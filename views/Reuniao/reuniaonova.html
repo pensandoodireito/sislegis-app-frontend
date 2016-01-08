@@ -81,8 +81,7 @@
                             <h4 class="list-group-item-heading">{{comissao}}</h4>
                         </div>
 
-                        <div ng-repeat="item in value | orderBy : 'pautaComissaoAtual.ordemPauta'"
-                             class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
+                        <div ng-repeat="item in value | orderBy : ['pautaComissaoAtual.pautaReuniaoComissao.data','pautaComissaoAtual.ordemPauta']" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
                             <div class="clearfix">
                                 <button type="button" class="close"
                                         ng-click="abrirModalRemoverProposicao(item); $event.stopPropagation()">
@@ -98,8 +97,7 @@
                                            ng-click="item.favorita=true;save(item)"></i>
                                         <i class="fa fa-star" style="color:orange" ng-show="item.favorita"
                                            ng-click="item.favorita=false; save(item)"></i>
-                                        <a data-toggle="collapse" href="#proposicao-{{item.id}}"
-                                           ng-click="item.opened=!item.opened;expandProposicao(item);">{{item.sigla}}</a>
+                                        <a data-toggle="collapse" href="#proposicao-{{item.id}}" ng-click="item.opened=!item.opened;expandProposicao(item);">{{item.sigla}}</a> <a href="#/Proposicao/id/{{item.id}}">+</a>
                                     </h3>
                                 </div>
                                 <div class="col-sm-8" ng-show="!item.opened">
