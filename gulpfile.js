@@ -110,23 +110,24 @@ var compilacao = function() {
         .pipe(gulp.dest('./scripts'));
 }
 var generateHTMLs = function(){
-	 console.info("Atualizando entradas do keycloak para apontar para: "+process.env.KEYCLOAKSERVER);
-	 if(!process.env.KEYCLOAKSERVER){
+	 console.info("Atualizando entradas do keycloak para apontar para: "+process.env.KEYCLOAK_SERVER);
+	 if(!process.env.KEYCLOAK_SERVER){
 		throw "Variável de ambiente KEYCLOAKSERVER não foi encontrada. Sete o valor de KEYCLOAKSERVER e tente novamente";
 	 }
+    console.info("Gerando index-dev.html");
 	 var generateIndexDEVHtml = gulp.src(['template/index-source.html'])
-	    .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAKSERVER))
+	    .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
 	    .pipe(rename("index-dev.html"))
 	    .pipe(gulp.dest('./'));	 
-     
+     console.info("Gerando index.html");
      var generateIndexHTML = gulp.src('template/index-source.html')
-	   .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAKSERVER))
+	   .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
        .pipe(htmlreplace({
          		'js': 'js/all.js'
         	}))
        .pipe(rename("index.html"))
        .pipe(gulp.dest('./'));
-       
+      console.info("Gerando keycloak.json"); 
 	 var generateFinalKeycloak = gulp.src(['template/keycloak.json'])
 	    .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAKSERVER))
 	    .pipe(gulp.dest('./'));	 
