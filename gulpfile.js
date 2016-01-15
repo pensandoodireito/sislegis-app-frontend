@@ -145,6 +145,6 @@ gulp.task('watch', function() {
 });
 
 
-gulp.task('default', ['updatekeycloak', 'compress'], function() {
+gulp.task('default', ['generateHTMLs', 'compress'], function() {
   // place code for your default task here
 });
