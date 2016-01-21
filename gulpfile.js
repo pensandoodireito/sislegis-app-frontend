@@ -123,7 +123,7 @@ var generateHTMLs = function(){
      var generateIndexHTML = gulp.src('template/index-source.html')
 	   .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
        .pipe(htmlreplace({
-         		'js': 'js/all.js'
+         		'js': 'scripts/all.js'
         	}))
        .pipe(rename("index.html"))
        .pipe(gulp.dest('./'));
