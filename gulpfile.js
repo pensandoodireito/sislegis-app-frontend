@@ -131,8 +131,12 @@ var generateHTMLs = function(){
 	 var generateFinalKeycloak = gulp.src(['template/keycloak.json'])
 	    .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
 	    .pipe(gulp.dest('./'));	 
-	    
-	  
+      console.info("Gerando scripts/app.js");
+
+var generateFinalappjs = gulp.src(['template/app.js'])
+        .pipe(replace('BACKEND_SERVER', process.env.KEYCLOAK_SERVER))
+        .pipe(gulp.dest('./scripts/'));	    
+	 
 };
 gulp.task('generateHTMLs',generateHTMLs);
 
