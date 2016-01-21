@@ -129,7 +129,7 @@ var generateHTMLs = function(){
        .pipe(gulp.dest('./'));
       console.info("Gerando keycloak.json"); 
 	 var generateFinalKeycloak = gulp.src(['template/keycloak.json'])
-	    .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAKSERVER))
+	    .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
 	    .pipe(gulp.dest('./'));	 
 	    
 	  
