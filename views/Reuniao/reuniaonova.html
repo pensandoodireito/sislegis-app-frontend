@@ -178,8 +178,7 @@
                                             <p>{{item.listaComentario[item.listaComentario.length-1].dataCriacao | date:
                                                 'dd/MM/yyyy'}} -
                                                 {{item.listaComentario[item.listaComentario.length-1].descricao}}</p>
-                                            <a ng-click="abrirModalComentarios(item)"><strong>Outros
-                                                +({{item.totalComentarios}})</strong></a>
+                                            <a ng-click="abrirModalComentarios(item)"><strong>Ver todos ({{item.totalComentarios}})</strong></a>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -206,8 +205,7 @@
                                                     <span ng-show="!encaminhamento.finalizado">(Em aberto)</span>
                                                 </p>
                                             </div>
-                                            <a ng-click="abrirModalEncaminhamentos(item)"><strong>Outros
-                                                +({{item.totalEncaminhamentos}})</strong></a>
+                                            <a ng-click="abrirModalEncaminhamentos(item)"><strong>Ver todos ({{item.totalEncaminhamentos}})</strong></a>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -292,9 +290,14 @@
 <div class="printable" ng-include="getPrintPath()"></div>
 <script type="text/javascript">
     $('.fixontop').addClass('original-fix').clone().insertAfter('.fixontop').addClass('fixontop-cloned').removeClass('original-fix').hide();
-    scrollIntervalID = setInterval(stickIt, 10);
+    scrollIntervalID = setInterval(stickIt, 100);
     function stickIt() {
         var orgElementPos = $('.original-fix').offset();
+        if(!orgElementPos){
+        	console.log("fix to original-fix");	
+        	clearInterval(scrollIntervalID);
+        	return;
+        }
         orgElementTop = orgElementPos.top;
 
         if ($(window).scrollTop() >= (orgElementTop)) {

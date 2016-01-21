@@ -3,7 +3,9 @@ var watch = require('gulp-watch');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var ngAnnotate = require('gulp-ng-annotate');
-
+var replace = require('gulp-replace');
+var htmlreplace = require('gulp-html-replace');
+var rename = require("gulp-rename");
 var libs = [
     'lib/jquery/dist/jquery.min.js',
     'lib/jquery-ui/ui/minified/jquery-ui.min.js',
@@ -108,13 +110,46 @@ var compilacao = function() {
         .pipe(concat('all.js'))
         .pipe(gulp.dest('./scripts'));
 }
+var generateHTMLs = function(){
+	 console.info("Atualizando entradas do keycloak para apontar para: "+process.env.KEYCLOAK_SERVER);
+	 if(!process.env.KEYCLOAK_SERVER){
+		throw "Variável de ambiente KEYCLOAKSERVER não foi encontrada. Sete o valor de KEYCLOAKSERVER e tente novamente";
+	 }
+    console.info("Gerando index-dev.html");
+	 var generateIndexDEVHtml = gulp.src(['template/index-source.html'])
+	    .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
+	    .pipe(rename("index-dev.html"))
+	    .pipe(gulp.dest('./'));	 
+     console.info("Gerando index.html");
+     var generateIndexHTML = gulp.src('template/index-source.html')
+	   .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
+       .pipe(htmlreplace({
+         		'js': 'scripts/all.js'
+        	}))
+       .pipe(rename("index.html"))
+       .pipe(gulp.dest('./'));
+      console.info("Gerando keycloak.json"); 
+	 var generateFinalKeycloak = gulp.src(['template/keycloak.json'])
+	    .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
+	    .pipe(gulp.dest('./'));	 
+      console.info("Gerando scripts/app.js");
+
+var generateFinalappjs = gulp.src(['template/app.js'])
+        .pipe(replace('BACKEND_SERVER', process.env.KEYCLOAK_SERVER))
+        .pipe(gulp.dest('./scripts/'));	    
+	 
+};
+gulp.task('generateHTMLs',generateHTMLs);
+
 
 gulp.task('compress', compilacao);
 
 gulp.task('watch', function() {
     watch('scripts/**/*.js',compilacao);
+    watch('template/*.*', generateHTMLs);
 });
 
-gulp.task('default', ['compress'], function() {
+
+gulp.task('default', ['generateHTMLs', 'compress'], function() {
   // place code for your default task here
 });
