@@ -5,3 +5,4 @@ scripts/all.js
 index.html
 index-dev.html
 keycloak.json
+scripts/app.js
