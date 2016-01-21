@@ -95,7 +95,8 @@ var libs = [
     'scripts/services/StatusSidofFactory.js',
     'scripts/services/SituacaoLegislativaFactory.js',
     'scripts/controllers/SituacaoLegislativaController.js',
-    'scripts/services/locationParser.js'
+    'scripts/services/locationParser.js',
+    'scripts/services/VotacaoFactory.js'
 
 ];
 
