@@ -183,7 +183,7 @@ angular.module('sislegisapp').controller(
     $scope.previousPosicionamento=function(proposicao){
     	console.log("entrou com ",proposicao.posicionamentoAtual)
     	if(proposicao.posicionamentoAtual && proposicao.posicionamentoAtual.posicionamento){    		
-    		proposicao.previousPosicionamentoId = proposicao.posicionamentoAtual.posicionamento.id;
+    		proposicao.previousPosicionamentoNome = proposicao.posicionamentoAtual.posicionamento.nome;
     	}
     }
 	$scope.alterarPosicionamento = function(proposicao, posicionamentoSelecionado, $label) {
@@ -191,12 +191,14 @@ angular.module('sislegisapp').controller(
 		if(proposicao){
 			$scope.setSelectedProposicao(proposicao);
 		}
-		if(posicionamentoSelecionado!=null){
-			if(proposicao.previousPosicionamentoId && proposicao.previousPosicionamentoId==posicionamentoSelecionado.id){
+
+
+        if(posicionamentoSelecionado!=null){
+			if(proposicao.previousPosicionamentoNome && proposicao.previousPosicionamentoNome==posicionamentoSelecionado.nome){
 				console.log("não alterou o posicionamento")
 				return;
 			}	
-		}else if (proposicao.previousPosicionamentoId==null){
+		}else if (proposicao.previousPosicionamentoNome==null){
 			console.log("não alterou o posicionamento")
 			return;
 		}
