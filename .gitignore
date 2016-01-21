@@ -2,3 +2,6 @@
 lib/*
 node_modules
 scripts/all.js
+index.html
+index-dev.html
+keycloak.json
