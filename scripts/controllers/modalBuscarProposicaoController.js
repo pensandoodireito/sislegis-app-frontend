@@ -31,17 +31,78 @@ angular.module('sislegisapp').controller(
 				$modalInstance.dismiss('cancel');
 			};
 
+            $scope.buscarProposicaoAvulsa = function(){
+                var origem = ($scope.origem.value == 'C') ? "CAMARA" : "SENADO";;
+                var sigla = $scope.tipo.sigla.trim();
+                var numero = $scope.numero;
+                var ano = $scope.ano;
+                var params = {"origem": origem, "sigla": sigla, "ano": ano};
+                if(undefined !== numero && numero != ''){
+                    params.numero = ano;
+                }
+                ProposicaoResource.buscarAvulsas(params, function(proposicoesAvulsas){
+                    $scope.pautaReuniao = [];
+                    $scope.pautaReuniao = proposicoesAvulsas;
+
+                });
+            };
+
+            $scope.mostrarAvulsa = function(){
+                $scope.selectOrigem();
+                $scope.habilitaAvulsa = true;
+            };
+
+            $scope.esconderAvulsa = function(){
+                $scope.habilitaAvulsa = false;
+            };
+
+            $scope.mostrarNaoEncontrado = function(){
+                $scope.naoEncontrado = true;
+            };
+
+            $scope.esconderNaoEncontrado = function(){
+                $scope.naoEncontrado = false;
+            };
+
+            $scope.selectOrigem = function() {
+                var origemSelecionada = $scope.origem.value;
+                if (origemSelecionada == 'S') {
+                    if ($scope.origens[1].tipos == null) {
+                        $http.get(BACKEND + '/proposicaos/listTipos/SENADO').success(function(data) {
+                            $scope.origens[1].tipos = data;
+                            $scope.tipos = $scope.origens[1].tipos;
+                        }).error(function(error) {
+                        });
+                    } else {
+                        $scope.tipos = $scope.origens[1].tipos;
+                    }
+                } else if (origemSelecionada == 'C') {
+                    if ($scope.origens[0].tipos == null) {
+                        $http.get(BACKEND + '/proposicaos/listTipos/CAMARA').success(function(data) {
+                            $scope.origens[0].tipos = data;
+                            $scope.tipos = $scope.origens[0].tipos;
+                        }).error(function(error) {
+                        });
+                    } else {
+                        $scope.tipos = $scope.origens[0].tipos;
+                    }
+                }
+
+            };
+
 			$scope.buscarProposicao = function() {
+
 				var formattedDate = $filter('date')(new Date($scope.campoData), 'MM/dd/yyyy');
 
 				var successCallback = function(sucess) {
-					$scope.detalheProposicao = null;
+                    $scope.detalheProposicao = null;
 					$scope.showDetalhamentoProposicao = false;
 					$scope.pautaReuniao = sucess;
+                    $scope.naoEncontrado = sucess.length == 0;
 					$scope.comissaoProposicao = $scope.comissao.sigla;
 				};
-				var errorCallback = function() {
-				};
+
+				var errorCallback = function(err) {};
 
 				if ($scope.origem.value == 'C') {
 					ProposicaoResource.buscarCamara({

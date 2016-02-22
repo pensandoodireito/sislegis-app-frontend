@@ -1,6 +1,11 @@
 angular.module('sislegisapp').factory('ProposicaoResource', function($resource, BACKEND) {
 	var resource = $resource(BACKEND + '/proposicaos/:ProposicaoId', {
-		ProposicaoId : '@id'
+		ProposicaoId : '@id',
+        origem : '@origem',
+        sigla : '@sigla',
+        ano : '@ano',
+        numero: '@numero'
+
 	}, {
 		'queryAll' : {
 			method : 'GET',
@@ -65,7 +70,63 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource, 
             url: BACKEND + "/proposicaos/:ProposicaoId/pautas",
             method: 'GET',
             isArray : true
+        },
+        'buscarAvulsas': {
+            url: BACKEND + "/proposicaos/buscaIndependente/:origem/:sigla/:ano",
+            method: 'GET',
+            isArray: true,
+            transformResponse: function(data){
+
+                var jsonRes = JSON.parse(data);
+                var dataAtual = new Date().getTime();
+                var itens = [];
+
+                jsonRes.forEach(function( item ) {
+
+                    var newItem = {};
+
+                    newItem.codigoReuniao = null;
+                    newItem.comissao = "AVULSA";
+                    newItem.data = dataAtual;
+                    newItem.id = null;
+                    newItem.linkPauta = null;
+                    newItem.manual = true;
+                    newItem.origem = item.origem;
+                    newItem.situacao = null;
+                    newItem.tipo = null;
+                    newItem.titulo = "Proposições avulsas";
+
+                    var proposicao = {};
+
+                    proposicao.ano = item.ano;
+                    proposicao.comissao = null;
+                    proposicao.ementa = item.ementa;
+                    proposicao.idProposicao = item.idProposicao;
+                    proposicao.linkProposicao = item.linkProposicao;
+                    proposicao.numero = item.numero;
+                    proposicao.origem = item.origem;
+                    proposicao.sigla = item.sigla;
+                    proposicao.tipo = item.tipo;
+
+                    var pauta = {};
+                    pauta.ordemPauta = 1;
+                    pauta.pautaReuniaoComissao = null;
+                    pauta.pautaReuniaoComissaoId = null;
+                    pauta.proposicao = proposicao;
+                    pauta.proposicaoId = null;
+                    pauta.relator = null;
+                    pauta.resultado = null;
+
+                    newItem.proposicoesDaPauta = [pauta];
+
+                    itens.push(newItem);
+
+                });
+
+                return itens;
+            }
         }
-	});
+
+});
 	return resource;
 });
