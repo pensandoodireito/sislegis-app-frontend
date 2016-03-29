@@ -38,10 +38,15 @@ angular.module('sislegisapp').controller(
                 var ano = $scope.ano;
                 var params = {"origem": origem, "sigla": sigla, "ano": ano};
                 if(undefined !== numero && numero != ''){
-                    params.numero = ano;
+                    params.numero = numero;
                 }
+
                 ProposicaoResource.buscarAvulsas(params, function(proposicoesAvulsas){
                     $scope.pautaReuniao = [];
+                    console.log(proposicoesAvulsas);
+                    proposicoesAvulsas.forEach(function(prop){
+                        prop.comissao = $scope.comissao.sigla.trim();
+                    });
                     $scope.pautaReuniao = proposicoesAvulsas;
 
                 });
