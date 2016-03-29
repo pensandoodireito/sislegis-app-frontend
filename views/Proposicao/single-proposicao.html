@@ -54,6 +54,36 @@
                                     </ul>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12" ng-show="votacoesSenado.length > 0">
+                                    <h4>Senado</h4>
+                                    <div ng-repeat="secao in votacoesSenado" >
+                                        <p><strong>Data: </strong> {{secao.dataHora | date: 'dd/MM/yyyy'}}</p>
+                                        <p><strong>Descrição: </strong> {{secao.descricao}}</p>
+                                        <p><strong>Resultado: </strong> {{secao.resultado}}</p>
+                                        <div class="col-md-4" ng-repeat="voto in secao.votos">
+                                            <p><strong>Parlamentar: </strong> {{voto.nomeParlamentar}}</p>
+                                            <p><strong>Partido: </strong> {{voto.partidoParlamentar}}</p>
+                                            <p><strong>UF: </strong> {{voto.ufParlamentar}}</p>
+                                            <p><strong>Voto: </strong> {{voto.descricaoVoto}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12" ng-show="votacoesCamara.length > 0">
+                                    <h4>Câmara dos Deputados</h4>
+                                    <div ng-repeat="secao in votacoesCamara" >
+                                        <p><strong>Data: </strong> {{secao.dataHora | date: 'dd/MM/yyyy'}}</p>
+                                        <p><strong>Descrição: </strong> {{secao.descricao}}</p>
+                                        <p><strong>Resultado: </strong> {{secao.resultado}}</p>
+                                        <div class="col-md-4" ng-repeat="voto in secao.votos">
+                                            <p><strong>Parlamentar: </strong> {{voto.nomeParlamentar}}</p>
+                                            <p><strong>Partido: </strong> {{voto.partidoParlamentar}}</p>
+                                            <p><strong>UF: </strong> {{voto.ufParlamentar}}</p>
+                                            <p><strong>Voto: </strong> {{voto.descricaoVoto}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- /item -->

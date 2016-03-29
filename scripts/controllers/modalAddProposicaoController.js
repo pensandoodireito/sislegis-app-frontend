@@ -79,6 +79,7 @@ angular.module('sislegisapp')
 						numero : null,
 						ano : null
 					};
+
 					$scope.selectOrigem = function() {
 						var origemSelecionada = $scope.origem.value;
 						if (origemSelecionada == 'S') {
@@ -104,7 +105,9 @@ angular.module('sislegisapp')
 						}
 
 					};
+
 					$scope.adicionarProposicao = function(proposicao) {
+                        console.log(proposicao, "proposicao adicionada");
 						var successCallback = function(result, arg2) {
 							console.log(result, arg2)
 							toaster.pop('info', 'Proposição adicionada');
