@@ -1,4 +1,4 @@
-<div class="container">
+<div class="content">
 	<div class="pull-right">
 		<button type="button" class="btn btn-primary btn-sm" ng-click="abrirModalBuscaProposicaoAvulsa()">Buscar nova proposição</button>
 	</div>
@@ -61,8 +61,7 @@
 										ng-click="item.favorita=true;save(item)"></i> <i
 										class="fa fa-star" style="color: orange"
 										ng-show="item.favorita"
-										ng-click="item.favorita=false;save(item)"></i> <a
-										href="{{selectedProposicao.linkProposicao}}" target="_blank">{{item.sigla}}</a>
+										ng-click="item.favorita=false;save(item)"></i> <a href="#/Proposicao/id/{{item.id}}" target="_blank">{{item.sigla}}</a>
 								</h3>
 								<p>
 										{{item.ementa}} <br /> <strong>Autor: </strong>{{item.autor}}
