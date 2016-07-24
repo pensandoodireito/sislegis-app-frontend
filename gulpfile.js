@@ -106,8 +106,9 @@ var compilacao = function() {
     console.info("Compilação executada");
     return gulp.src(libs)
         .pipe(ngAnnotate())
-        .pipe(uglify())
+     //   .pipe(uglify())
         .pipe(concat('all.js'))
+        .pipe(uglify())
         .pipe(gulp.dest('./scripts'));
 }
 var generateHTMLs = function(){
