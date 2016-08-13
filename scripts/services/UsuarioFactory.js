@@ -10,6 +10,11 @@ angular.module('sislegisapp').factory('UsuarioResource', function($resource, BAC
 			method : 'GET',
 			isArray : false
 		},
+        'me' : {
+			method : 'GET',
+			isArray : false,
+            url : BACKEND + "/usuarios/me",
+		},
 		'update' : {
 			method : 'PUT'
 		},
