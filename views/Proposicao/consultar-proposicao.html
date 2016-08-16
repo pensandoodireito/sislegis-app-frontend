@@ -90,7 +90,14 @@
                                         Ações <i class="fa fa-sort"></i>
                                     </div>
                                     <div class="panel-body" collapse="showAcoes">
-                                        <div class="clearfix">
+                                        <div class="clearfix" ng-if="auth.isASPAR()">                                        
+                                            <div class="col-md-12">
+                                                <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="divider-top clearfix">
                                             <div class="col-md-10">
                                                 <textarea class="form-control fontsize-sm" rows="3" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
                                             </div>
