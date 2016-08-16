@@ -440,8 +440,9 @@ angular.module('sislegisapp').controller(
     	toaster.clear();
     	
     	if($scope.reuniao.data == null){
-    		toaster.pop('info', 'Selecione a data da reunião.');
-    		return;
+            $scope.reuniao.data=new Date();
+    		// toaster.pop('info', 'Selecione a data da reunião.');
+    		// return;
     	}
     	
         var modalInstance = $modal.open({

@@ -66,14 +66,14 @@
 
                     <li ng-class="{'active':!itemMenu || itemMenu=='dashboard'}"> <a href="#/Tarefas"><i class="fa fa-dashboard"></i> <span>Painel de controle</span></a></li>
                     <li ng-if="auth.isSecretario()" ng-class="{'active':itemMenu=='despachos'}"> <a href=""><i class="fa fa-send"></i> <span>Despachos</span></a></li>
+                    <li ng-class="{'active':itemMenu=='proposicao'}"><a href="#/Proposicao/consultar" ng-click="itemMenu='proposicao'"><i class="fa fa-files-o"></i><span>Proposições</span></a></li>
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-plus"></i> <span>Mais ferramentas</span> <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
 
-                            <li ng-class="{'active':itemMenu=='reuniao'}"><a href="#/Reuniaos/reuniaonova" ng-click="itemMenu='reuniao'"><i class="fa fa-calendar"></i><span>Reuniões</span></a></li>
-                            <li ng-class="{'active':itemMenu=='proposicao'}"><a href="#/Proposicao/consultar" ng-click="itemMenu='proposicao'"><i class="fa fa-files-o"></i><span>Proposições</span></a></li>
+                            <li ng-class="{'active':itemMenu=='reuniao'}"><a href="#/Reuniaos/reuniaonova" ng-click="itemMenu='reuniao'"><i class="fa fa-calendar"></i><span>Reuniões</span></a></li>                            
                             <li ng-class="{'active':itemMenu=='posicionamento'}"><a href="#/Posicionamentos" ng-click="itemMenu='posicionamento'"><i class="fa fa-file"></i><span>Posicionamentos</span></a></li>
                             <li ng-class="{'active':itemMenu=='tipoEncaminhamento'}"><a href="#/TipoEncaminhamentos" ng-click="itemMenu='tipoEncaminhamento'"><i class="fa fa-reply"></i><span>Tipo de Encaminhamentos</span></a></li>
                             <li ng-class="{'active':itemMenu=='areaConsultada'}"><a href="#/AreaConsultadas" ng-click="itemMenu='areaConsultada'"><i class="fa fa-search"></i><span>Áreas Consultadas</span></a></li>
