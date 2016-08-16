@@ -1,7 +1,7 @@
 
 
-angular.module('sislegisapp').controller('SearchUsuarioController', function ($scope, $http, UsuarioResource, EquipeResource,Auth) {
-    $scope.auth=Auth;
+angular.module('sislegisapp').controller('SearchUsuarioController', function ($scope, $http, UsuarioResource, EquipeResource, Auth) {
+    $scope.auth = Auth;
 
     $scope.search = {};
     $scope.currentPage = 0;
@@ -31,9 +31,21 @@ angular.module('sislegisapp').controller('SearchUsuarioController', function ($s
         return false;
     }
     $scope.setRole = function (user, role) {
-        user.papeis.push(role);
+        var removing = false;
+        for (var index = 0; index < user.papeis.length; index++) {
+            var element = user.papeis[index];
+            if (element == role) {
+
+                user.papeis.splice(index, 1);
+                removing = true;
+                break;
+            }
+        }
+        if (removing == false) {
+            user.papeis.push(role);
+        }
         UsuarioResource.update(user, function (ok) {
-            
+
         }, function (error) {
             console.log("error", error);
         })

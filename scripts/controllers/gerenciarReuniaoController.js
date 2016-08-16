@@ -3,9 +3,10 @@ angular.module('sislegisapp').controller(
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
 				ReuniaoProposicaoResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
-                TipoEncaminhamentoResource, ElaboracaoNormativaResource, BACKEND) {
+                TipoEncaminhamentoResource, ElaboracaoNormativaResource, Auth, BACKEND) {
     
 	var self = this;
+    $scope.Auth=Auth;
 	$scope.listaReuniaoProposicoes = [];
 	$scope.filtro = new ProposicaoResource();
 

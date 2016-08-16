@@ -45,6 +45,8 @@ var auth = {
                     return true;
                 }
             }
+        }else{
+            console.warn("Sem informação do usuário atual.")
         }
         return false;
     }
@@ -78,8 +80,7 @@ angular.element(document).ready(function ($http) {
     });
 });
 
-module.controller('GlobalCtrl', function ($scope, $http, UsuarioResource, Auth) {
-    console.log("Aaa", UsuarioResource, Auth)
+module.controller('GlobalCtrl', function ($scope, $http, UsuarioResource, Auth) {    
     Auth.me = UsuarioResource.me();
     $scope.logout = logout;
 });
