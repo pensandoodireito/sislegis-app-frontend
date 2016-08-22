@@ -70,11 +70,12 @@
                                 ng-click="showTextArea=true;temaTxt=true;" ng-hide="showTextArea || item.explicacao==null"
                                 style="margin-bottom=0">{{item.explicacao}}</pre>
                                 <textarea class="form-control fontsize-sm " rows="3" ng-show="showTextArea || item.explicacao==null" placeholder="Sem tema SAL. Digite o tema da proposição..."
-                                ngTrim="true" ng-model="item.explicacao" ng-change="setUpdated('explicacao',item)" ng-blur="checkUpdateExplicacao(item);showTextArea=false"
+                                ngTrim="true" ng-model="item.explicacao" ng-change="setUpdated('explicacao',item)" ng-blur="checkUpdatedField('explicacao',item);showTextArea=false"
                                 focus-me="temaTxt" style="margin-bottom:5px;"></textarea>
+
                                 <a style="font-size:14px;font-weight:bold;" data-toggle="collapse" data-target="#ementaProposicao{{item.idProposicao}}" aria-expanded="false"
                                 aria-controls="ementaProposicao{{item.idProposicao}}">
-                                    Ementa  
+                                    Ver ementa  
                                 </a>
                                 <div class="collapse" id="ementaProposicao{{item.idProposicao}}">
                                     {{item.ementa}}
@@ -90,6 +91,10 @@
 										href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO"
 										target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
 								</span>
+                                <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} <span ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{item.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
+                                <br/>
+                                <strong>Relator: </strong>{{item.pautaComissaoAtual.relator}}
+                                <br/>
                                 <span ng-show="item.origem == 'CAMARA'">
 									<a
 										href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{item.idProposicao}}#tramitacoes"
@@ -105,6 +110,7 @@
 								</span>
 
                                 <div class="divider-top clearfix">
+
                                     <div>
                                         <label>Posicionamento SAL: </label> <span ng-click="editPosicaoSAL=true;posicaoSALInput=true;"
                                         ng-hide="editPosicaoSAL"><span ng-if="item.posicionamentoAtual==null">Sem posicionamento</span>{{item.posicionamentoAtual.posicionamento.nome}}</span>
@@ -116,6 +122,17 @@
                                             class="form-control">
                                         </div>
                                     </div>
+                                    <div>
+                                        <strong>Parecer SAL: </strong>
+                                        <pre style="border:none;border-radius:0px;border-top: 1px solid #ddd; border-bottom: 1px solid #eee;    padding: 15px;background-color:white;font-family:inherit;"
+                                        ng-click="showParecerTextArea=true;parecerTXT=true;" ng-hide="showParecerTextArea"
+                                        style="margin-bottom=0"><span ng-if="item.parecerSAL==null">Sem parecer</span>{{item.parecerSAL}}</pre>
+                                        <textarea class="form-control fontsize-sm " rows="3" ng-show="showParecerTextArea " placeholder="Descreva o parecer da SAL..."
+                                        ngTrim="true" ng-model="item.parecerSAL" ng-change="setUpdated('parecerSAL',item)"
+                                        ng-blur="checkUpdatedField('parecerSAL',item);showParecerTextArea=false" focus-me="parecerTXT"
+                                        style="margin-bottom:5px;"></textarea>
+                                    </div>
+
 
                                     <div>
                                         <label>Responsável: </label> <span ng-click="editResponsavel=true;responsavelInput=true;"
@@ -136,11 +153,12 @@
                                             <strong>Posicionamento Área Específica: </strong> Sem posicionamento
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                             <div class="col-sm-5">
                                 <div class="panel panel-default">
-                                    <div class="panel-heading cursor-pointer" ng-click="showAcoes = !showAcoes">
+                                    <div class="panel-heading cursor-pointer" ng-click="showAcoes = !showAcoes;populaProposicao(item);">
                                         Ações <i class="fa fa-sort"></i>
                                     </div>
                                     <div class="panel-body" collapse="showAcoes">
@@ -167,8 +185,17 @@
                                         </div>
                                         <div class=" clearfix">
 
+                                            <div class="col-md-12">
+                                                <div ng-show="item.listaComentario.length > 0">
+                                                    <strong>Últimos comentários:</strong>
+
+                                                    <p>{{item.listaComentario[item.listaComentario.length-1].dataCriacao | date:
+                                                        'dd/MM/yyyy'}} - {{item.listaComentario[item.listaComentario.length-1].descricao}}
+                                                    </p>
+                                                </div>
+                                            </div>
                                             <div class="col-md-10">
-                                                <textarea class="form-control fontsize-sm" rows="3" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
+                                                <textarea class="form-control fontsize-sm" rows="1" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
                                             </div>
                                             <div class="col-md-2">
                                                 <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)">
