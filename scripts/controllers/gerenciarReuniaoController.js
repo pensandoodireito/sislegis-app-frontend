@@ -1,4 +1,19 @@
-angular.module('sislegisapp').controller(
+angular.module('sislegisapp')
+.directive('focusMe', function($timeout) {
+  return {
+    link: function(scope, element, attrs) {
+      scope.$watch(attrs.focusMe, function(value) {
+        if(value === true) { 
+          console.log('value=',value);
+          //$timeout(function() {
+            element[0].focus();
+            scope[attrs.focusMe] = false;
+          //});
+        }
+      });
+    }
+  };
+}).controller(
 		'GerenciarReuniaoController',
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
@@ -109,6 +124,9 @@ angular.module('sislegisapp').controller(
     
     $scope.setSelectedProposicao = function(item) {
     	$scope.responsavelNull = (item.responsavel==null);
+        $scope.initial = {
+            explicacao:item.explicacao
+        };
 		$scope.posicionamentoNull = (item.posicionamento==null);
     	$scope.selectedProposicao = item;
 	}
@@ -132,8 +150,25 @@ angular.module('sislegisapp').controller(
     		$scope.save(item);		
     	}
     };
+    $scope.updates = {};
+    $scope.setUpdated=function(field,item){
+        $scope.updates[field]=item;
+    }
 
-	
+	 $scope.checkUpdateExplicacao=function(item){
+          var updated = $scope.updates['explicacao'];
+          console.log(updated);
+          if(updated==item){
+              console.log("aee")
+          }
+    	if(item.explicacao !=  $scope.initial.explicacao){    		
+    		$scope.save(item);
+    	}
+    };
+    $scope.setaEstado = function(item,estado){
+        item.estado=estado;
+        $scope.save(item);
+    }
 
     $scope.updateSingleProposicao = function(item,toastMsg){
     	for (var i = 0; i < $scope.listaReuniaoProposicoes.length; i++) {    			
@@ -491,6 +526,7 @@ angular.module('sislegisapp').controller(
 		ComentarioService.save(comentario, item.id).then(successCallback, errorCallback);
     }
 
+    
 
 	$scope.populaModalComentario = function(lista)
 	{

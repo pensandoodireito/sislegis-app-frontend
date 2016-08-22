@@ -20,22 +20,24 @@ var module = angular.module('sislegisapp',
 module.constant('BACKEND', 'http://BACKEND_SERVER/sislegis/rest');
 
 var auth = {
-    me: null,
+   me: null,
     loggedIn: false,
     isAdmin: function () {
         return this.hasRole('ADMIN');
     },
-    isSecretario: function () {
-        return this.hasRole('SECRETARIO');
+    isSecretario: function (ascendente) {
+        return this.hasRole('SECRETARIO') || (ascendente && this.isAdmin(true));
     },
-    isDiretor: function () {
-        return this.hasRole('DIRETOR');
+    isDiretor: function (ascendente) {
+        return this.hasRole('DIRETOR') || (ascendente && this.isSecretario(true));
     },
-    isEquipe: function () {
-        return this.hasRole('EQUIPE');
+    isEquipe: function (ascendente) {
+
+        return this.hasRole('EQUIPE') || (ascendente && this.isDiretor(true));
     },
-    isAspar: function () {
-        return this.hasRole('ASPAR');
+    isAspar: function (ascendente) {
+        return this.hasRole('ASPAR') || (ascendente && this.isEquipe(true));
+
     },
     hasRole: function (role) {
         if (this.me != null) {
@@ -45,8 +47,6 @@ var auth = {
                     return true;
                 }
             }
-        }else{
-            console.warn("Sem informação do usuário atual.")
         }
         return false;
     }

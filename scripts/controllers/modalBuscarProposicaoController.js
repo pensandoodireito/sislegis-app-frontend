@@ -50,7 +50,9 @@ angular.module('sislegisapp').controller(
                     toaster.pop('info', 'Nenhuma proposição encontrada');
                 }
                 proposicoesAvulsas.forEach(function (prop) {
-                    prop.comissao = $scope.comissao.sigla.trim();
+                    if ($scope.comissao != null && $scope.comissao.sigla) {
+                        prop.comissao = $scope.comissao.sigla.trim();
+                    }
                 });
                 $scope.pautaReuniao = proposicoesAvulsas;
 
