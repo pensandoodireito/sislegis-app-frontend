@@ -71,6 +71,17 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource, 
             method: 'GET',
             isArray : true
         },
+        'listNotaTecnicas': {
+            url: BACKEND + "/proposicaos/:ProposicaoId/notatecnica",
+            method: 'GET',
+            isArray : true
+        },
+        'salvaNota': {
+            url: BACKEND + "/proposicaos/:ProposicaoId/notatecnica",
+            method: 'POST',
+            isArray : false
+        },
+        
         'buscarAvulsas': {
             url: BACKEND + "/proposicaos/buscaIndependente/:origem/:sigla/:ano",
             method: 'GET',

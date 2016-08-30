@@ -509,7 +509,43 @@ angular.module('sislegisapp')
         }
             );
     }
+    
+     $scope.populaNotas = function (prop, callbackFct) {
+        ProposicaoResource.listNotaTecnicas({ ProposicaoId: prop.id }, function (lista) {
+            prop.listaNotas = lista;
+            if (callbackFct != null) {
+                callbackFct();
+            }
+        }
+            );
+    }
 		
+    $scope.abrirModalNotaTecnica = function (item) {
+       $scope.selectedProposicao= item;
+        if ($scope.selectedProposicao.listaNotas == null || $scope.selectedProposicao.listaNotas.length != $scope.selectedProposicao.totalNotasTecnicas) {
+            $scope.populaNotas(item, function () { $scope.abrirModalNotaTecnica(item) });
+        } else {
+
+
+            var modalInstance = $modal.open({
+                templateUrl: 'views/modal-notatecnicas.html',
+                controller: 'ModalNotaTecnicaController',
+                size: 'lg',
+                resolve: {
+                    proposicao: function () {
+                        return $scope.selectedProposicao;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (listaNotas) {
+                $scope.selectedProposicao.listaNotas = listaNotas;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        }
+    }
+
     $scope.abrirModalComentarios = function (item) {
         if ($scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios) {
             $scope.populaComentario(item, function () { $scope.abrirModalComentarios(item) });

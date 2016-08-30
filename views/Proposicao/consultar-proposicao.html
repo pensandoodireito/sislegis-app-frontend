@@ -11,36 +11,38 @@
             <div class="panel-heading">
                 <div class="clearfix">
                     <div class="row" role="form">
-                        <div>
-                            <div class="col-sm-2">
-                                <label>Filtrar pela sigla:</label>
-                                <input type="text" class="form-control" ng-model="filtro.sigla" placeholder="Filtrar pela sigla" ng-change="filtrarConsulta()">
-                            </div>
-                            <div class="col-sm-3">
-                                <label>Filtrar pela ementa:</label>
-                                <input type="text" class="form-control" ng-model="filtro.ementa" placeholder="Filtrar pela ementa" ng-change="filtrarConsulta()">
-                            </div>
-                            <div class="col-sm-3">
-                                <label>Filtrar por autor:</label>
-                                <input type="text" class="form-control" ng-model="filtro.autor" placeholder="Filtrar por autor" ng-change="filtrarConsulta()">
-                            </div>
-                            <div class="col-sm-2">
-                                <label>Filtrar por casa legislativa:</label>
-                                <select ng-model="filtro.origem" class="form-control" ng-change="filtrarConsulta()">
-                                    <option value=""></option>
-                                    <option value="CAMARA">CAMARA</option>
-                                    <option value="SENADO">SENADO</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-2">
-                                <label>Filtrar por favoritas:</label>
-                                <select ng-model="filtro.isFavorita" class="form-control" ng-change='filtrarConsulta()'>
-                                    <option value=""></option>
-                                    <option value="true">Favoritas</option>
-                                    <option value="false">Não-favoritas</option>
-                                </select>
-                            </div>
+
+                        <div class="col-sm-2">
+                            <label>Pela sigla:</label>
+                            <input type="text" class="form-control" ng-model="filtro.sigla" placeholder="Filtrar pela sigla" ng-change="filtrarConsulta()">
                         </div>
+                        <div class="col-sm-3">
+                            <label>Pela ementa:</label>
+                            <input type="text" class="form-control" ng-model="filtro.ementa" placeholder="Filtrar pela ementa" ng-change="filtrarConsulta()">
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Por autor:</label>
+                            <input type="text" class="form-control" ng-model="filtro.autor" placeholder="Filtrar por autor" ng-change="filtrarConsulta()">
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Por casa legislativa:</label>
+                            <select ng-model="filtro.origem" class="form-control" ng-change="filtrarConsulta()">
+                                <option value=""></option>
+                                <option value="CAMARA">CAMARA</option>
+                                <option value="SENADO">SENADO</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Por favoritas:</label>
+                            <select ng-model="filtro.isFavorita" class="form-control" ng-change='filtrarConsulta()'>
+                                <option value=""></option>
+                                <option value="true">Favoritas</option>
+                                <option value="false">Não-favoritas</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="row" role="form">
                     </div>
                 </div>
             </div>
@@ -86,15 +88,17 @@
                                 <strong>Autor: </strong>{{item.autor}}
                                 <br /> <strong>Origem: </strong>{{item.origem}}
                                 <br />
+                                <strong>Comissao: </strong>{{item.pautaComissaoAtual.pautaReuniaoComissao.comissao}}
+                                <br/>
+                                <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} <span ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{item.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
+                                <br/>
+                                <strong>Relator: </strong><span ng-if="item.pautaComissaoAtual.relator==null">Não identificado</span>{{item.pautaComissaoAtual.relator}}
+                                <br/>
                                 <span ng-show="item.origem == 'SENADO'">
 									<a
 										href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO"
 										target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
 								</span>
-                                <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} <span ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{item.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
-                                <br/>
-                                <strong>Relator: </strong>{{item.pautaComissaoAtual.relator}}
-                                <br/>
                                 <span ng-show="item.origem == 'CAMARA'">
 									<a
 										href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{item.idProposicao}}#tramitacoes"
@@ -136,13 +140,20 @@
 
                                     <div>
                                         <label>Responsável: </label> <span ng-click="editResponsavel=true;responsavelInput=true;"
-                                        ng-hide="editResponsavel">{{item.responsavel.nome}}</span>
+                                        ng-hide="editResponsavel"><span ng-if="item.responsavel==null">Sem responsável</span>{{item.responsavel.nome}}</span>
                                         <div ng-show="editResponsavel">
                                             <input focus-me="responsavelInput" type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true"
                                             typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)"
                                             typeahead-on-select="save(item); item.responsavelNaoDefinido = false;editResponsavel=false;"
                                             class="form-control">
                                             <input type="checkbox" ng-model="item.buscaGeral"> Buscar completa
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        
+                                        <div class="col-md-6">
+                                            <strong> <a ng-click="abrirModalNotaTecnica(item)"><i
+														class="fa fa-comment"></i> {{item.totalNotasTecnicas}} notas técnicas</a></strong>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -165,6 +176,7 @@
                                         <div class="row text-center divider-bottom">
                                             <button ng-if="Auth.isAspar(true) && item.estado=='FORADEPAUTA'" type="button" class="btn btn-success btn-sm" title="Marcar análise SAL"
                                             ng-click="setaEstado(item,'EMANALISE')">
+
                                                 <i class="fa fa-mail-forward"></i> Marcar para análise da SAL</button>
                                             <button ng-if="Auth.isEquipe(true) && item.estado=='EMANALISE'" type="button" class="btn btn-success btn-sm" title="Análise Completa"
                                             ng-click="setaEstado(item,'ANALISADA')">
@@ -179,9 +191,6 @@
                                             <button ng-if="Auth.isDiretor(true) && (item.estado=='ANALISADA' || item.estado=='ADESPACHAR')" type="button" class="btn btn-warning btn-sm"
                                             title="Análise Completa" ng-click="setaEstado(item,'EMANALISE')">
                                                 <i class="fa fa-retweet"></i> Re-Analisar</button>
-
-
-
                                         </div>
                                         <div class=" clearfix">
 
@@ -232,8 +241,8 @@
                                                 <input type="checkbox" ng-model="item.buscaGeral"> Buscar completa
                                             </div>
                                         </div>
-                                        <div class="divider-top">
-                                            <label>Resultado: </label>
+                                        <div class="divider-top row">
+                                            <label>Situação: </label>
                                             <div class="form-group">
                                                 <div class="col-md-10">
                                                     <textarea class="form-control fontsize-sm" rows="3" placeholder="Adicione um resultado" ng-model="item.resultadoASPAR"></textarea>
@@ -242,6 +251,15 @@
                                                     <button type="button" class="btn btn-success btn-sm" ng-click="save(item)"><i class="fa fa-check"></i>
                                                     </button>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="divider-top row">
+                                            <label>Macrotema: </label>
+                                            <div class="form-group">
+                                                <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1"
+                                                placeholder="Adicione uma palavra chave" display-property="tag">
+                                                    <auto-complete source="loadTags($query)"></auto-complete>
+                                                </tags-input>
                                             </div>
                                         </div>
                                     </div>
