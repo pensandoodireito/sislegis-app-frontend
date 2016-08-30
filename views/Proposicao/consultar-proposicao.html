@@ -7,7 +7,7 @@
     </div>
     <h3>Consultar Proposições</h3>
     <div class="row">
-        <div class="panel panel-default">
+        <div class="panel panel-default" style="background-color:transparent;">
             <div class="panel-heading">
                 <div class="clearfix">
                     <div class="row" role="form">
@@ -42,15 +42,30 @@
                         </div>
 
                     </div>
-                    <div class="row" role="form">
-                    </div>
+                    
                 </div>
             </div>
+
             <div class="panel-body">
                 <div infinite-scroll='consultarProposicoes()' infinite-scroll-disabled='infiniteScroll.busy'>
-                    <div ng-repeat="item in listaReuniaoProposicoes | orderBy : 'seqOrdemPauta'" class="list-group-item clearfix" ng-click="setSelectedProposicao(item)">
-                        <div class="row">
-                            <div class="pull-right">
+                    <div class="box box-info" ng-repeat="item in listaReuniaoProposicoes | orderBy : 'seqOrdemPauta'">
+                        <div class="box-header ">
+                            <i class="fa fa-star-o" ng-show="!item.favorita" ng-click="item.favorita=true;save(item)"></i>
+                            <i class="fa fa-star" style="color: orange" ng-show="item.favorita" ng-click="item.favorita=false;save(item)"></i>
+
+                            <h3 class="box-title"><a href="#/Proposicao/id/{{item.id}}" target="_blank">{{item.sigla}}</a> 
+                                        </h3>
+                            <span ng-if="item.posicionamentoAtual==null">Sem posicionamento</span>{{item.posicionamentoAtual.posicionamento.nome}}</span>
+                            <div class=" label">
+                                <span class="label bg-gray" ng-if="item.estado=='FORADEPAUTA'" style="color:white" title="Proposição não é de interesse da SAL">Fora de pauta</span>
+                                <span class="label label-warning" ng-if="item.estado=='EMANALISE'" title="Proposição está sendo analisada pela equipe da SAL">Em análise</span>
+                                <span class="label label-info" ng-if="item.estado=='ANALISADA'" title="Análise aguarda aprovação do diretor da equipe da SAL">Em revisão</span>
+                                <span class="label label-primary" ng-if="item.estado=='ADESPACHAR'" title="Análise aguarda despacho do secretário">Aguardando despacho</span>
+                                <span class="label label-success" ng-if="item.estado=='DESPACHADA'" title="Proposição com posicionamento despachado pelo secretário">Despachada</span>
+                            </div>
+                            <!-- tools box -->
+
+                            <div class="box-tools pull-right">
                                 <button ng-if="Auth.isAspar(true) && item.estado=='FORADEPAUTA'" type="button" class="btn btn-default btn-sm" title="Marcar análise SAL"
                                 ng-click="setaEstado(item,'EMANALISE')">
                                     <button ng-if="Auth.isAspar(true) && item.estado=='DESPACHADA'" type="button" class="btn btn-default btn-sm" title="Marcar <Re-></Re->análise SAL"
@@ -70,27 +85,13 @@
                                     <button ng-if="Auth.isDiretor(true) && (item.estado=='ANALISADA' || item.estado=='ADESPACHAR')" type="button" class="btn btn-default btn-sm"
                                     title="Análise Completa" ng-click="setaEstado(item,'EMANALISE')">
                                         <i class="fa fa-retweet"></i> Re-Analisar</button>
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                    </button>
                             </div>
-                            <h3 class="list-group-item-heading">
-									<i class="fa fa-star-o" ng-show="!item.favorita"
-										ng-click="item.favorita=true;save(item)"></i> <i
-										class="fa fa-star" style="color: orange"
-										ng-show="item.favorita"
-										ng-click="item.favorita=false;save(item)"></i> <a href="#/Proposicao/id/{{item.id}}" target="_blank">{{item.sigla}}</a> 
-                                        <span ng-if="item.posicionamentoAtual==null">Sem posicionamento</span>{{item.posicionamentoAtual.posicionamento.nome}}</span>
-                                        <div class=" label">                                            
-                                            <span class="label bg-gray" ng-if="item.estado=='FORADEPAUTA'" style="color:white" title="Proposição não é de interesse da SAL">Fora de pauta</span>
-                                            <span class="label label-warning" ng-if="item.estado=='EMANALISE'" title="Proposição está sendo analisada pela equipe da SAL">Em análise</span>
-                                            <span class="label label-info" ng-if="item.estado=='ANALISADA'" title="Análise aguarda aprovação do diretor da equipe da SAL">Em revisão</span>
-                                            <span class="label label-primary" ng-if="item.estado=='ADESPACHAR'"  title="Análise aguarda despacho do secretário">Aguardando despacho</span>                                            
-                                            <span class="label label-success" ng-if="item.estado=='DESPACHADA'" title="Proposição com posicionamento despachado pelo secretário">Despachada</span>
-                                        </div>
-                                        
-								</h3>
-
+                            <!-- /. tools -->
                         </div>
+                        <div class="box-body">
 
-                        <div class="row divider-top">
                             <div class="col-sm-7">
                                 <div style="border:none;border-radius:0px;border-top: 1px solid #ddd; border-bottom: 1px solid #eee;    padding: 15px;background-color:white;font-family:inherit;"
                                 ng-click="showTextArea=true;temaTxt=true;" ng-hide="showTextArea || item.explicacao==null || item.explicacao==''"
@@ -308,7 +309,11 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="box-footer clearfix"></div>
                     </div>
+
+
+
                 </div>
             </div>
         </div>
