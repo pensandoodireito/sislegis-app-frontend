@@ -495,11 +495,11 @@ angular.module('sislegisapp')
 		ComentarioService.save(comentario, item.id).then(successCallback, errorCallback);
     }
 
-    $scope.populaProposicao=function(item){
-        if (item.listaComentario == null || item.listaComentario.length != item.totalComentarios) {
-            $scope.populaComentario(item);    
-        }
-    }
+    // $scope.populaProposicao=function(item){
+    //     if (item.listaComentario == null || item.listaComentario.length != item.totalComentarios) {
+    //         $scope.populaComentario(item);    
+    //     }
+    // }
     $scope.populaComentario = function (prop, callbackFct) {
         ComentarioResource.findByProposicao({ ProposicaoId: prop.id }, function (lista) {
             prop.listaComentario = lista;

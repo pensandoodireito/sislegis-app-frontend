@@ -43,6 +43,7 @@ var libs = [
     'scripts/controllers/modalBuscarProposicaoController.js',
     'scripts/controllers/modalAddProposicaoController.js',
     'scripts/controllers/modalComentariosController.js',
+    'scripts/controllers/modalNotaTecnicaController.js',
     'scripts/controllers/modalEncaminhamentosController.js',
     'scripts/controllers/modalRelatorioReuniaoController.js',
     'scripts/controllers/modalRelatorioProposicaoController.js',
