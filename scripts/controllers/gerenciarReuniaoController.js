@@ -18,7 +18,7 @@ angular.module('sislegisapp')
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
 				ReuniaoProposicaoResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
-                TipoEncaminhamentoResource, ElaboracaoNormativaResource, Auth, BACKEND) {
+                TipoEncaminhamentoResource, ElaboracaoNormativaResource, Auth,TagResource, BACKEND) {
     
 	var self = this;
     $scope.Auth=Auth;
@@ -102,6 +102,7 @@ angular.module('sislegisapp')
 					autor: $scope.filtro.autor,
 					origem: $scope.filtro.origem,
 					isFavorita: $scope.filtro.isFavorita,
+                    estado: $scope.filtro.estado,
 					limit: $scope.infiniteScroll.limit, 
 					offset: $scope.infiniteScroll.offset
 				},successCallback, errorCallback);
@@ -113,7 +114,9 @@ angular.module('sislegisapp')
 	    $scope.infiniteScroll.offset = 0;
 		$scope.consultarProposicoes();
 	}
-    
+    $scope.loadTags = function(query) {
+    	return TagResource.buscarPorSufixo({sufixo: query}).$promise;
+    };
     $scope.loadProposicoes = function(query) {
     	return ProposicaoResource.buscarPorSufixo({sufixo: query}).$promise;
     };
@@ -500,15 +503,7 @@ angular.module('sislegisapp')
     //         $scope.populaComentario(item);    
     //     }
     // }
-    $scope.populaComentario = function (prop, callbackFct) {
-        ComentarioResource.findByProposicao({ ProposicaoId: prop.id }, function (lista) {
-            prop.listaComentario = lista;
-            if (callbackFct != null) {
-                callbackFct();
-            }
-        }
-            );
-    }
+   
     
      $scope.populaNotas = function (prop, callbackFct) {
         ProposicaoResource.listNotaTecnicas({ ProposicaoId: prop.id }, function (lista) {
@@ -545,10 +540,23 @@ angular.module('sislegisapp')
             });
         }
     }
-
-    $scope.abrirModalComentarios = function (item) {
-        if ($scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios) {
-            $scope.populaComentario(item, function () { $scope.abrirModalComentarios(item) });
+    $scope.populaComentario = function (prop, callbackFct) {
+        ComentarioResource.findByProposicao({ ProposicaoId: prop.id },
+            function (lista) {
+                prop.listaComentario = lista;
+                if (callbackFct != null) {
+                    callbackFct(prop);
+                }
+            }
+            );
+    };
+    $scope.abrirModalComentarios = function (item,cb) {
+        $scope.selectedProposicao = item;
+        if (cb!=true && ( $scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios)) {
+            $scope.populaComentario(item, function (prop) { 
+                $scope.abrirModalComentarios(prop,true); 
+              }
+             );
         } else {
 
 
