@@ -26,7 +26,6 @@ angular.module('sislegisapp').controller('SearchUsuarioController', function ($s
             if (element == role) {
                 return true;
             }
-
         }
         return false;
     }

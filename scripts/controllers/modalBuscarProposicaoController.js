@@ -22,6 +22,33 @@ angular.module('sislegisapp').controller(
             value: ''
         }
 
+        $scope.tiposPadraoCamara = [
+            { sigla: "MPV ", nome: "MPV - Medida Provisória" },
+            { sigla: "PEC ", nome: "PEC - Proposta de Emenda à Constituição" },
+            { sigla: "PL ", nome: "PL - Projeto de Lei" },
+            { sigla: "PLC ", nome: "PLC - Projeto de Lei da Câmara" },
+            { sigla: "PLS ", nome: "PLS - Projeto de Lei do Senado Federal" },
+            { sigla: "", nome: "-- Carregar Todos os Tipos -- ", virtual: true }
+        ];
+        $scope.tiposPadraoSenado = [
+            { sigla: "MPV ", nome: "MPV - Medida Provisória" },
+            { sigla: "PEC ", nome: "PEC - Proposta de Emenda à Constituição" },
+            { sigla: "PL ", nome: "PL - Projeto de Lei" },
+            { sigla: "PLC ", nome: "PLC - Projeto de Lei da Câmara" },
+            { sigla: "PLS ", nome: "PLS - Projeto de Lei do Senado Federal" },
+            { sigla: "", nome: "-- Carregar Todos os Tipos -- ", virtual: true }
+        ];
+
+        $scope.origens = [{
+            value: 'C',
+            displayName: 'Câmara',
+            tipos: $scope.tiposPadraoCamara
+        }, {
+                value: 'S',
+                displayName: 'Senado',
+                tipos: $scope.tiposPadraoSenado
+            }];
+
         $scope.pesquisar = function () {
             $modalInstance.close($scope.listaProposicaoSelecao);
         };
@@ -33,7 +60,7 @@ angular.module('sislegisapp').controller(
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
-
+        $scope.proposicoesAvulsas = [];
         $scope.buscarProposicaoAvulsa = function () {
             var origem = ($scope.origem.value == 'C') ? "CAMARA" : "SENADO";;
             var sigla = $scope.tipo.sigla.trim();
@@ -49,12 +76,7 @@ angular.module('sislegisapp').controller(
                 if (proposicoesAvulsas.length == 0) {
                     toaster.pop('info', 'Nenhuma proposição encontrada');
                 }
-                proposicoesAvulsas.forEach(function (prop) {
-                    if ($scope.comissao != null && $scope.comissao.sigla) {
-                        prop.comissao = $scope.comissao.sigla.trim();
-                    }
-                });
-                $scope.pautaReuniao = proposicoesAvulsas;
+                $scope.proposicoesAvulsas = proposicoesAvulsas;
 
             });
         };
@@ -66,31 +88,47 @@ angular.module('sislegisapp').controller(
 
         $scope.esconderAvulsa = function () {
             $scope.habilitaAvulsa = false;
+            $scope.selectOrigemComissoes();
         };
 
+
+        $scope.selectTipo = function () {
+            console.log($scope.tipo);
+
+            if ($scope.tipo.virtual == true) {
+                var origemSelecionada = $scope.origem.value;
+                if (origemSelecionada == 'S') {
+                    $http.get(BACKEND + '/proposicaos/listTipos/SENADO').success(function (data) {
+                        $scope.tiposPadraoSenado.splice($scope.tiposPadraoSenado.length - 1);
+                        $scope.origens[1].tipos = $scope.tiposPadraoSenado.slice();;
+                        $scope.origens[1].tipos = $scope.origens[1].tipos.concat(data);
+                        $scope.tipos = $scope.origens[1].tipos;
+                    }).error(function (error) {
+                    });
+                } else if (origemSelecionada == 'C') {
+                    $http.get(BACKEND + '/proposicaos/listTipos/CAMARA').success(function (data) {
+                        $scope.tiposPadraoCamara.splice($scope.tiposPadraoCamara.length - 1);
+                        $scope.origens[0].tipos = $scope.tiposPadraoCamara.slice();
+
+                        $scope.origens[0].tipos = $scope.origens[0].tipos.concat(data);
+
+                        $scope.tipos = $scope.origens[0].tipos;
+                    }).error(function (error) {
+                    });
+                }
+            }
+        }
 
         $scope.selectOrigem = function () {
             var origemSelecionada = $scope.origem.value;
             if (origemSelecionada == 'S') {
-                if ($scope.origens[1].tipos == null) {
-                    $http.get(BACKEND + '/proposicaos/listTipos/SENADO').success(function (data) {
-                        $scope.origens[1].tipos = data;
-                        $scope.tipos = $scope.origens[1].tipos;
-                    }).error(function (error) {
-                    });
-                } else {
-                    $scope.tipos = $scope.origens[1].tipos;
-                }
+
+                $scope.tipos = $scope.origens[1].tipos;
+
             } else if (origemSelecionada == 'C') {
-                if ($scope.origens[0].tipos == null) {
-                    $http.get(BACKEND + '/proposicaos/listTipos/CAMARA').success(function (data) {
-                        $scope.origens[0].tipos = data;
-                        $scope.tipos = $scope.origens[0].tipos;
-                    }).error(function (error) {
-                    });
-                } else {
-                    $scope.tipos = $scope.origens[0].tipos;
-                }
+
+                $scope.tipos = $scope.origens[0].tipos;
+
             }
 
         };
@@ -146,8 +184,14 @@ angular.module('sislegisapp').controller(
                 }).error(function (error) {
                 });
         };
-
+        $scope.listaProposicaoAvulsaSelecao = [];
+        $scope.adicionarProposicaoAvulsa = function (prop) {
+            if ($scope.listaProposicaoAvulsaSelecao.indexOf(prop) == -1) {
+                $scope.listaProposicaoAvulsaSelecao.push(prop);
+            }
+        }
         $scope.adicionarProposicao = function (pauta, proposicaoPauta) {
+            
             // var proposicao = proposicaoPauta.proposicao;
             // condicional para evitar itens duplicados
             if ($scope.listaProposicaoSelecao.indexOf(proposicaoPauta) == -1) {
@@ -161,11 +205,17 @@ angular.module('sislegisapp').controller(
             } else {
                 toaster.pop('info', 'Proposição já selecionada');
             }
+
         };
 
-        $scope.removerProposicao = function (proposicaoPauta) {
-            var index = $scope.listaProposicaoSelecao.indexOf(proposicaoPauta)
-            $scope.listaProposicaoSelecao.splice(index, 1);
+        $scope.removerProposicao = function (proposicao, pauta) {
+            if (pauta != null) {
+                var index = $scope.listaProposicaoSelecao.indexOf(pauta);
+                $scope.listaProposicaoSelecao.splice(index, 1);
+            } else {
+                var index2 = $scope.listaProposicaoAvulsaSelecao.indexOf(proposicao);
+                $scope.listaProposicaoAvulsaSelecao.splice(index2, 1);
+            }
         };
 
         $scope.salvar = function () {
@@ -193,6 +243,9 @@ angular.module('sislegisapp').controller(
                     listaDePautaReunioesSelecionadas.push(pauta);
                 }
             }
+            if ($scope.listaProposicaoAvulsaSelecao.length > 0) {
+                ProposicaoResource.salvarProposicoesExtras($scope.listaProposicaoAvulsaSelecao);
+            }
             ProposicaoResource.salvarProposicoesDePauta({
                 pautaReunioes: listaDePautaReunioesSelecionadas,
                 reuniaoDate: new Date($scope.reuniao.data).getTime()
@@ -200,38 +253,35 @@ angular.module('sislegisapp').controller(
             }, successCallback, errorCallback);
         };
 
-        $scope.origens = [{
-            value: 'C',
-            displayName: 'Câmara'
-        }, {
-                value: 'S',
-                displayName: 'Senado'
-            }];
+
         $scope.comissoesCache = {
             'C': null,
             'S': null
 
         };
         $scope.selectOrigemComissoes = function () {
-
-            switch ($scope.origem.value) {
-                case 'S':
-                    url = BACKEND + '/comissaos/comissoesSenado';
-                    break;
-                case 'C':
-                    url = BACKEND + '/comissaos/comissoesCamara';
-                    break;
-                default:
-                    break;
-            }
-            if ($scope.comissoesCache[$scope.origem.value]) {
-                $scope.comissoes = $scope.comissoesCache[$scope.origem.value];
-            } else {
-                $http.get(url).success(function (data) {
-                    $scope.comissoesCache[$scope.origem.value] = data;
-                    $scope.comissoes = data;
-                }).error(function (error) {
-                });
+            var origemSelecionada = $scope.origem.value;
+            if (origemSelecionada != null) {
+                var url = '';
+                switch (origemSelecionada) {
+                    case 'S':
+                        url = BACKEND + '/comissaos/comissoesSenado';
+                        break;
+                    case 'C':
+                        url = BACKEND + '/comissaos/comissoesCamara';
+                        break;
+                    default:
+                        break;
+                }
+                if ($scope.comissoesCache[$scope.origem.value]) {
+                    $scope.comissoes = $scope.comissoesCache[$scope.origem.value];
+                } else {
+                    $http.get(url).success(function (data) {
+                        $scope.comissoesCache[$scope.origem.value] = data;
+                        $scope.comissoes = data;
+                    }).error(function (error) {
+                    });
+                }
             }
 
         };

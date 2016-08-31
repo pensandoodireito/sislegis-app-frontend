@@ -30,6 +30,11 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource, 
 			url : BACKEND + "/proposicaos/salvarProposicaoExtra",
 			method : 'POST'
 		},
+        'salvarProposicoesExtras' : {
+			url : BACKEND + "/proposicaos/salvarProposicoesExtras",
+			method : 'POST'
+		},
+        
 		'buscarCamara' : {
 			url : BACKEND + "/proposicaos/proposicoesPautaCamara",
 			method : 'GET',
@@ -86,7 +91,7 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource, 
             url: BACKEND + "/proposicaos/buscaIndependente/:origem/:sigla/:ano",
             method: 'GET',
             isArray: true,
-            transformResponse: function(data){
+            __transformResponse: function(data){
 
                 var jsonRes = JSON.parse(data);
                 var dataAtual = new Date().getTime();

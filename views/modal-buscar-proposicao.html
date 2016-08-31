@@ -70,7 +70,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <select ng-model="tipo" class="form-control" ng-options="tipo.nome for tipo in tipos">
+                            <select ng-model="tipo" placeholder="Tipo" class="form-control" ng-options="tipo.nome for tipo in tipos" ng-change="selectTipo()">
                                 <option value="">Tipo</option>
                             </select>
                         </div>
@@ -85,8 +85,6 @@
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
-
-
                     </div>
                 </form>
             </div>
@@ -98,11 +96,48 @@
                     <div class="panel-heading">
                         <div class="form-group mb-0">
                             <div class="input-group">
-                                <input ng-show="pautaReuniao.length>0" ng-model="buscaPalavraChave" placeholder="Filtrar por palavra chave" class="form-control mb-0">
+                                <input ng-show="proposicoesAvulsas.length>0||pautaReuniao.length>0" ng-model="buscaPalavraChave" placeholder="Filtrar por palavra chave"
+                                class="form-control mb-0">
                             </div>
                         </div>
                     </div>
                     <div class="panel-body line-7 rol-vert">
+                        <div class="list-group"  ng-show="proposicoesAvulsas.length>0">
+
+                            <div class="list-group-item active">
+                                <h4 class="list-group-item-heading">Procura independente de pauta</h4>
+                            </div>
+
+                            <div class=" list-proposicao">
+                                <div class=" list-proposicao">
+                                    <div class="list-proposicao-item" ng-repeat="proposicao in proposicoesAvulsas | filter:buscaPalavraChave" ng-click="adicionarProposicaoAvulsa(proposicao)">
+                                        <div class="clearfix">
+                                            <div class="pull-left width-auto">
+                                                <h4 class="list-group-item-heading">{{proposicao.sigla}}</h4>
+                                            </div>
+
+                                            <div class="pull-right width-auto">
+
+                                                <a href="{{proposicao.linkProposicao}}" target="_blank" ng-show="proposicao.linkProposicao != null" class="btn btn-info btn-xs"
+                                                title="Link da proposição"> <i class="fa fa-search-plus"></i>
+                                                </a>
+
+                                            </div>
+                                        </div>
+                                        <p>{{proposicao.ementa}}</p>
+                                        <p>
+                                            <strong>Origem: </strong>{{proposicao.origem}}
+                                        </p>
+                                        <p>
+                                            <strong>Comissao: </strong>{{proposicao.comissao}}
+                                        </p>
+                                        <p ng-show="proposicao.ultimoComentario">
+                                            <strong>Último comentário: </strong> {{proposicao.ultimoComentario.descricao}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div ng-repeat="pauta in pautaReuniao | orderBy : 'data' " class="list-group">
 
                             <div class="list-group-item active">
@@ -156,9 +191,14 @@
                     <div class="panel-body line-6 rol-vert">
                         <ul class="group-pills fontsize-sm">
                             <li class="group-pills-item" ng-model="proposicaoAdd" ng-repeat="proposicaoPautaAdd in listaProposicaoSelecao">
-                                <button type="button" class="close" ng-click="removerProposicao(proposicaoPautaAdd)">
+                                <button type="button" class="close" ng-click="removerProposicao(proposicaoPautaAdd.proposicao,proposicaoPautaAdd)">
                                     <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
                                 </button> {{proposicaoPautaAdd.proposicao.sigla}}
+                            </li>
+                            <li class="group-pills-item" ng-model="proposicaoAddAvulsa" ng-repeat="prop in listaProposicaoAvulsaSelecao">
+                                <button type="button" class="close" ng-click="removerProposicao(prop)">
+                                    <span aria-hidden="true">&times;</span> <span class="sr-only">Excluir</span>
+                                </button> {{prop.sigla}}
                             </li>
                         </ul>
                     </div>

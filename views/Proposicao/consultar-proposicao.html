@@ -81,26 +81,26 @@
 
                             <div class="box-tools pull-right">
                                 <button ng-if="Auth.isAspar(true) && item.estado=='FORADEPAUTA'" type="button" class="btn btn-default btn-sm" title="Marcar análise SAL"
+                                ng-click="setaEstado(item,'EMANALISE')"> <i class="fa fa-mail-forward"></i> Marcar para análise da SAL</button>
+                                <button ng-if="Auth.isAspar(true) && item.estado=='DESPACHADA'" type="button" class="btn btn-default btn-sm" title="Marcar <Re-></Re->análise SAL"
                                 ng-click="setaEstado(item,'EMANALISE')">
-                                    <button ng-if="Auth.isAspar(true) && item.estado=='DESPACHADA'" type="button" class="btn btn-default btn-sm" title="Marcar <Re-></Re->análise SAL"
-                                    ng-click="setaEstado(item,'EMANALISE')">
 
-                                        <i class="fa fa-mail-forward"></i> Marcar para análise da SAL</button>
-                                    <button ng-if="Auth.isEquipe(true) && item.estado=='EMANALISE'" type="button" class="btn btn-default btn-sm" title="Análise Completa"
-                                    ng-click="setaEstado(item,'ANALISADA')">
-                                        <i class="fa fa-check-circle-o"></i> Análise completa</button>
-                                    <button ng-if="Auth.isDiretor(true) && item.estado=='ANALISADA'" type="button" class="btn btn-default btn-sm" title="Análise Completa"
-                                    ng-click="setaEstado(item,'ADESPACHAR')">
-                                        <i class="fa fa-check-circle"></i> Enviar para despacho</button>
-                                    <button ng-if="Auth.isSecretario(true) && item.estado=='ADESPACHAR'" type="button" class="btn btn-default btn-sm" title="Análise Completa"
-                                    ng-click="setaEstado(item,'DESPACHADA')">
-                                        <i class="fa fa-paper-plane"></i> Despachar</button>
+                                    <i class="fa fa-mail-forward"></i> Marcar para análise da SAL</button>
+                                <button ng-if="Auth.isEquipe(true) && item.estado=='EMANALISE'" type="button" class="btn btn-default btn-sm" title="Análise Completa"
+                                ng-click="setaEstado(item,'ANALISADA')">
+                                    <i class="fa fa-check-circle-o"></i> Análise completa</button>
+                                <button ng-if="Auth.isDiretor(true) && item.estado=='ANALISADA'" type="button" class="btn btn-default btn-sm" title="Análise Completa"
+                                ng-click="setaEstado(item,'ADESPACHAR')">
+                                    <i class="fa fa-check-circle"></i> Enviar para despacho</button>
+                                <button ng-if="Auth.isSecretario(true) && item.estado=='ADESPACHAR'" type="button" class="btn btn-default btn-sm" title="Análise Completa"
+                                ng-click="setaEstado(item,'DESPACHADA')">
+                                    <i class="fa fa-paper-plane"></i> Despachar</button>
 
-                                    <button ng-if="Auth.isDiretor(true) && (item.estado=='ANALISADA' || item.estado=='ADESPACHAR')" type="button" class="btn btn-default btn-sm"
-                                    title="Análise Completa" ng-click="setaEstado(item,'EMANALISE')">
-                                        <i class="fa fa-retweet"></i> Re-Analisar</button>
-                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                                    </button>
+                                <button ng-if="Auth.isDiretor(true) && (item.estado=='ANALISADA' || item.estado=='ADESPACHAR')" type="button" class="btn btn-default btn-sm"
+                                title="Análise Completa" ng-click="setaEstado(item,'EMANALISE')">
+                                    <i class="fa fa-retweet"></i> Re-Analisar</button>
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
                             </div>
                             <!-- /. tools -->
                         </div>
@@ -125,9 +125,9 @@
                                 </div>
 
                                 <div class="divider-top clearfix">
-                                    <strong>Comissao: </strong>{{item.pautaComissaoAtual.pautaReuniaoComissao.comissao}}
+                                    <strong>Comissao: </strong><span ng-if="item.pautaComissaoAtual==null && item.comissao!=null">{{item.comissao}} <i style="font-size: xx-small;">última comissão</i></span>{{item.pautaComissaoAtual.pautaReuniaoComissao.comissao}}
                                     <br/>
-                                    <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} <span ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{item.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
+                                    <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} <span ng-show="item.pautaComissaoAtual && item.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{item.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
                                     <br/>
                                     <strong>Relator: </strong><span ng-if="item.pautaComissaoAtual.relator==null">Não identificado</span>{{item.pautaComissaoAtual.relator}}
                                     <br/>

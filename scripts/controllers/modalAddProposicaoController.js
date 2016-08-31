@@ -18,7 +18,7 @@ angular.module('sislegisapp')
             //					$scope.pesquisar = function() {
             //						$modalInstance.close($scope.listaProposicaoSelecao);
             //					};
-
+//
             $scope.ok = function () {
                 $modalInstance.close($scope.listaProposicaoSelecao);
             };
@@ -115,7 +115,7 @@ angular.module('sislegisapp')
                     toaster.pop('info', 'Proposição adicionada');
                 };
                 var errorCallback = function () {
-                    toaster.pop('info', 'Proposição já adicionada para a Reunião selecionada');
+                    toaster.pop('info', 'Proposição já adicionada');
                 };
 
                 ProposicaoResource.salvarProposicaoIndependente(proposicao, successCallback, errorCallback);
