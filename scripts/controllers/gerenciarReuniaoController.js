@@ -81,6 +81,8 @@ angular.module('sislegisapp')
 
 		    for (var i = 0; i < data.length; i++) {
 		    	$scope.listaReuniaoProposicoes.push(data[i]);
+                
+                
 		    }
 		    if ($scope.listaReuniaoProposicoes.length == 0) {
 		    	toaster.pop('info', 'Nenhuma Proposição encontrada.');
@@ -94,7 +96,7 @@ angular.module('sislegisapp')
 			toaster.pop('error', 'Falha ao consultar Proposição.');
 	    	$rootScope.inactivateSpinner = false;
 		};
-		
+		  
 		ProposicaoResource.consultar(
 				{
 					sigla: $scope.filtro.sigla,
@@ -107,7 +109,9 @@ angular.module('sislegisapp')
 					offset: $scope.infiniteScroll.offset
 				},successCallback, errorCallback);
 	}
-	
+	$scope.loadRevisoes=function(item){
+        item.revisoes=ProposicaoResource.listaRevisoes({ ProposicaoId:item.id});
+    }
 	$scope.filtrarConsulta = function() {
 		$scope.listaReuniaoProposicoes = [];
 	    $scope.infiniteScroll.busy = false;
@@ -514,7 +518,25 @@ angular.module('sislegisapp')
         }
             );
     }
-		
+	$scope.abrirModalParecerAreaMerito= function (item) {
+        $scope.selectedProposicao= item;
+          var modalInstance = $modal.open({
+                templateUrl: 'views/modal-parecer-areamerito.html',
+                controller: 'ModalParecerAreaMeritoController',
+                size: 'lg',
+                resolve: {
+                    proposicao: function () {
+                        return $scope.selectedProposicao;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (listaNotas) {
+                $scope.selectedProposicao.listaNotas = listaNotas;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+    }	
     $scope.abrirModalNotaTecnica = function (item) {
        $scope.selectedProposicao= item;
         if ($scope.selectedProposicao.listaNotas == null || $scope.selectedProposicao.listaNotas.length != $scope.selectedProposicao.totalNotasTecnicas) {

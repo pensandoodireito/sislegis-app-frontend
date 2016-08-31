@@ -87,6 +87,27 @@ module.controller('GlobalCtrl', function ($scope, $http, UsuarioResource, Auth) 
 
 module.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
+        .when('/relatorios', { templateUrl: 'views/relatorio/relatorios.html', controller: 'RelatorioController',
+         resolve: {
+                        tipo: function ($route) {
+
+                            return null;
+
+                        }
+                    }
+                 })
+        .when('/relatorios/Despachadas', { templateUrl: 'views/relatorio/relatorios.html', controller: 'RelatorioController' ,  
+            resolve: {
+                        tipo: function ($route) {
+
+                            return 'Padrao_Despachos';
+
+                        }
+                    }
+        })
+        .when('/notatecnica/:notaid', { templateUrl: 'views/relatorio/notatecnica.html', controller: 'NotaTecnicaController',
+        
+                 })   
         .when('/Reuniaos/reuniaonova', { templateUrl: 'views/Reuniao/reuniaonova.html', controller: 'GerenciarReuniaoController' })
         .when('/Reuniaos/gerenciar', { templateUrl: 'views/Reuniao/gerenciar.html', controller: 'GerenciarReuniaoController' })
         .when('/Reuniaos/gerenciar/:ReuniaoId', { templateUrl: 'views/Reuniao/gerenciar.html', controller: 'GerenciarReuniaoController' })

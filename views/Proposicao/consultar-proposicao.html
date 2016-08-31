@@ -133,44 +133,37 @@
                                     <br/>
                                 </div>
                                 <div class="divider-top clearfix">
-                                    <strong>Área de mérito </strong>
-                                    <br/>
-                                    <div class="table-responsive no-padding">
-                                        <table class="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>Nome</th>
-                                                    <th>Data</th>
-                                                    <th>Posicionamento</th>
-                                                    <th>Parecer</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
 
-                                                <tr>
-                                                    <td>Senacon</td>
-                                                    <td>15/07</td>
-                                                    <td><span class="label label-success">Favorável</span></td>
-                                                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>SDH</td>
-                                                    <td>25/07</td>
+                                    <strong>Área de mérito</strong> <span ng-show="item.totalParecerAreaMerito==0">nenhum parecer</span>
+                                    <span
+                                    ng-show="item.totalParecerAreaMerito>0">({{item.totalParecerAreaMerito}} pareceres)</span><a ng-click="abrirModalParecerAreaMerito(item)"
+                                        title="Adicionar parecer de área de mérito"><i class="fa   fa-plus-circle"></i></a>
+                                        <br/>
 
-                                                    <td><span class="label label-warning">Contrário</span></td>
-                                                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>SNJJ</td>
-                                                    <td>25/07</td>
+                                        <a ng-show="item.revisoes==null && item.totalParecerAreaMerito>0" ng-click="loadRevisoes(item)">Carregar pareceres</a>
+                                        <div class="table-responsive no-padding" ng-show="item.revisoes.length>0">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nome</th>
+                                                        <th>Data</th>
+                                                        <th>Posicionamento</th>
+                                                        <th>Parecer</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="revisao in item.revisoes">
+                                                        <td>{{revisao.areaMerito.nome}}</td>
+                                                        <td>{{revisao.dataAtualizacao| date:'dd/MM HH:mm'}}}</td>
+                                                        <td>{{revisao.posicionamento.nome}}</td>
+                                                        <td>{{revisao.parecer}}</td>
+                                                    </tr>
 
-                                                    <td>-</td>
-                                                    <td>-</td>
-                                                </tr>
 
-                                            </tbody>
-                                        </table>
-                                    </div>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
 
                                 </div>
 

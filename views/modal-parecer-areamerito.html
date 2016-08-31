@@ -1,0 +1,38 @@
+<!-- Modal Comentários -->
+<div class="modal-header">
+
+    <h4 class="modal-title" id="myModalLabel">Adicionar parecer área merito</h4>
+</div>
+<div class="modal-body">
+    <div class="box-body no-padding">
+        <form role="form">
+            
+            <div class="form-horizontal" role="form">
+                <div>
+                    <label for="areamerito">Selecione a área de mérito:</label>
+                    <select id="areamerito" ng-model="revisao.areaMerito" ng-options="area.nome for area in areaMeritos" class="form-control"></select>
+                </div>
+                <div>
+                    <label for="posicionamento">Selecione o posicionamento da área de mérito:</label>
+                    <select id="areamerito" ng-model="revisao.posicionamento" ng-options="p.nome for p in posicionamentos" class="form-control"></select>
+                </div>
+
+                <div>
+                    <label for="TextoComentario">Insira o parecer:</label>
+                    <textarea class="form-control" maxlength="5000" rows="8" ng-model="revisao.parecer" ng-required="true"></textarea>
+                </div>
+
+
+            </div>
+
+        </form>
+
+
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-default" ng-click="cancel()">Fechar</button>
+    <button type="submit" class="btn btn-success pull-right" ng-click="save()">Salvar</button>
+
+</div>

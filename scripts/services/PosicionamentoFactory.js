@@ -20,7 +20,7 @@ angular.module('sislegisapp').factory(
 						},
 						'query' : {
 							method : 'GET',
-							isArray : false
+							isArray : true
 						},
 						'update' : {
 							method : 'PUT'

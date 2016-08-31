@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
-    <title>Ministério da Justiça - SISLEGIS</title>
+    <title>{{$root.title}}</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 
     <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -14,94 +14,180 @@
     <!--<link rel="stylesheet" href="lib/ionicons/css/ionicons.min.css" />-->
     <link rel="stylesheet" href="styles/sislegis/css/sislegis.css" />
     <link href="lib/angularjs-toaster/toaster.css" rel="stylesheet" media="screen" />
-    <link rel="stylesheet" href="lib/ng-tags-input/ng-tags-input.min.css" />
+    <style>
+        div.divHeader {
+            width: 100%;
+            text-align: center;
+            font-size: 16pt;
+            font-family: serif;
+            font-weight: bold;
+        }
+        
+        @media screen {
+            div.divFooter {
+                display: none;
+            }
+        }
+        
+        .notatecnica {
+            font-family: sans-serif;
+        }
+        
+        .numeracao {
+            width: 100%;
+            text-align: center;
+            font-size: 18pt;
+            font-weight: bold;
+            margin-bottom: 20pt;
+        }
+        
+        .informacoes_gerais {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid black;
+            margin-bottom: 20pt;
+        }
+        
+        .titulo {
+            margin-bottom: 20pt;
+        }
+        
+        .informacoes_gerais> .titulo {
+            text-align: center;
+            font-size: 15pt;
+            font-weight: bold;
+        }
+        
+        .analise {
+            margin-bottom: 20pt;
+        }
+        
+        .conclusao {
+            margin-bottom: 20pt;
+        }
+        
+        .datalocal {
+            width: 100%;
+            text-align: right;
+        }
+        
+        div.analise > .titulo,
+        div.conclusao > .titulo {
+            font-size: 15pt;
+            font-weight: bold;
+        }
+        
+        span.rotulo {
+            font-size: 15pt;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        span.valor {
+            font-size: 15pt;
+        }
+        
+        div {
+            font-size: 15pt;
+        }
+        
+        .autoria {
+            text-align: center;
+        }
+        
+        .autoria>.entrada {
+            margin-top: 35pt;
+        }
+        
+        .autor {
+            font-style: italic;
+        }
+        
+        @media print {
+            thead {
+                display: table-header-group;
+            }
+        }
+        
+        @media print {
+            div.divFooter {
+                position: fixed;
+                bottom: 0;
+            }
+            .divider-top {
+                margin-top: 5px;
+                padding-top: 5px;
+            }
+            h1,
+            .h1 {
+                font-size: 22pt;
+            }
+            h2,
+            .h2 {
+                font-size: 18pt;
+            }
+            h3,
+            .h3 {
+                font-size: 16pt;
+            }
+            h1,
+            .h1,
+            h2,
+            .h2,
+            h3,
+            .h3 {
+                margin-top: 10px;
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini" ng-cloak="">
+<body class="hold-transition skin-blue layout-top-nav" ng-cloak="">
+
+
     <div class="wrapper">
+
+
         <header class="main-header">
-            <a href="index.html" class="logo">
-                <span class="logo-mini">
-                <!-- <img src="img/brasao-mj.png" class="img-responsive" style="width: 45px;" /> -->
-            </span>
-                <span class="logo-lg">SISLEGIS</span>
-            </a>
-            <nav class="navbar navbar-static-top" role="navigation">
-                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Menu</span> </a>
-                <div class="navbar-custom-menu">
-                    <ul class="nav navbar-nav" ng-controller="NotificacaoController">
-                        <li class="dropdown notifications-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                <i class="fa fa-bell-o"></i>
-                                <span ng-show="listaNotificacaoTarefas && listaNotificacaoTarefas.length>0" class="label label-warning">{{(listaNotificacaoTarefas | filter:{visualizada:false}).length}}</span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li class="header">Você tem {{listaNotificacaoTarefas.length}} notificações</li>
-                                <li>
-                                    <ul class="menu">
-                                        <li ng-repeat="notificacao in listaNotificacaoTarefas | orderBy : 'notificacao.criadaEm' | limitTo: 5">
-                                            <a href="#/Tarefas/edit/{{notificacao.identificacaoEntidade}}" ng-class="{true:'read', false:'unread', '':'unread'}[notificacao.visualizada]">{{notificacao.descricao}}</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="footer"><a href="#/Tarefas">ver todas</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+            <nav class="navbar navbar-static-top">
+                <div class="container">
+
+                    <div class="navbar-header">
+                        <a href="index.html" class="navbar-brand">
+                            <b>SAL</b> Sislegis</a>
+
+                    </div>
+                    <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+
+                        <form class="navbar-form navbar-left" role="search">
+                            <div class="form-group">
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="navbar-custom-menu">
+                        <ul class="nav navbar-nav">
+                            <li><a href="index.html"><i class="fa fa-reply"></i> Voltar ao Sislegis </a></li>
+                        </ul>
+                    </div>
+
                 </div>
+
             </nav>
         </header>
-        <aside class="main-sidebar">
-            <section class="sidebar">
-                <form action="#" method="get" class="sidebar-form">
-                    <div class="input-group">
-                        <input type="text" name="q" class="form-control" placeholder="Search...">
-                        <span class="input-group-btn">
-                            <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
-                        </span>
-                    </div>
-                </form>
-                <ul class="sidebar-menu" ng-controller="GlobalCtrl">
-                    <li class="header">MENU </li>
 
-                    <li ng-class="{'active':!itemMenu || itemMenu=='dashboard'}"> <a href="#/Tarefas"><i class="fa fa-dashboard"></i> <span>Painel de controle</span></a></li>
-                    <li ng-if="auth.isSecretario()" ng-class="{'active':itemMenu=='despachos'}"> <a href=""><i class="fa fa-send"></i> <span>Despachos</span></a></li>
-                    <li ng-class="{'active':itemMenu=='proposicao'}"><a href="#/Proposicao/consultar" ng-click="itemMenu='proposicao'"><i class="fa fa-files-o"></i><span>Proposições</span></a></li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-book"></i> <span>Relatórios</span> <i class="fa fa-angle-left pull-right"></i>
-                        </a>
-                        <ul class="treeview-menu">
-                             <li ><a href="index-relatorio.html#/relatorios/Despachadas" ><i class="fa fa-book"></i><span> Despachadas</span></a></li>
-                        </ul>
-                    </li>
 
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-plus"></i> <span>Mais ferramentas</span> <i class="fa fa-angle-left pull-right"></i>
-                        </a>
-                        <ul class="treeview-menu">
-
-                            <li ng-class="{'active':itemMenu=='reuniao'}"><a href="#/Reuniaos/reuniaonova" ng-click="itemMenu='reuniao'"><i class="fa fa-calendar"></i><span>Reuniões</span></a></li>
-                            <li ng-class="{'active':itemMenu=='posicionamento'}"><a href="#/Posicionamentos" ng-click="itemMenu='posicionamento'"><i class="fa fa-file"></i><span>Posicionamentos</span></a></li>
-                            <li ng-class="{'active':itemMenu=='tipoEncaminhamento'}"><a href="#/TipoEncaminhamentos" ng-click="itemMenu='tipoEncaminhamento'"><i class="fa fa-reply"></i><span>Tipo de Encaminhamentos</span></a></li>
-                            <li ng-class="{'active':itemMenu=='areaConsultada'}"><a href="#/AreaConsultadas" ng-click="itemMenu='areaConsultada'"><i class="fa fa-search"></i><span>Áreas Consultadas</span></a></li>
-                            <li ng-class="{'active':itemMenu=='orgao'}"><a href="#/Orgaos" ng-click="itemMenu='orgao'"><i class="fa fa-building-o"></i><span>Órgão</span></a></li>
-                            <li ng-class="{'active':itemMenu=='gerenciarComissao'}"><a href="#/GerenciarComissaoSeguida" ng-click="itemMenu='gerenciarComissao'"><i class="fa fa-share"></i><span>Seguir Pautas</span></a></li>
-                            <li ng-class="{'active':itemMenu=='gerenciarSituacao'}"><a href="#/GerenciarSituacoes" ng-click="itemMenu='gerenciarSituacao'"><i class="fa fa-share"></i><span>Situações Legislativas</span></a></li>
-                            <li ng-class="{'active':itemMenu=='usuario'}"><a href="#/Usuarios" ng-click="itemMenu='usuario'"><i class="fa fa-user"></i><span>Usuário</span></a></li>
-                            <li ng-class="{'active':itemMenu=='equipe'}"><a href="#/Equipes" ng-click="itemMenu='equipe'"><i class="fa fa-group"></i><span>Equipe</span></a></li>
-                            <li ng-class="{'active':itemMenu=='elaboracaoNormativa'}"><a href="#/ElaboracaoNormativa" ng-click="itemMenu='elaboracaoNormativa'"><i class="fa fa-book"></i><span>Elaboração normativa</span></a></li>
-
-                        </ul>
-                    </li>
-                    <li ng-hide="auth.loggedIn"><a href="#" ng-click="logout()"><i class="fa fa-sign-out"></i><span>Logout</span></a></li>
-                </ul>
-            </section>
-        </aside>
-        <div class="content-wrapper">
+        <div class="content-wrapper" style="min-height: 414px;">
             <toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-center'}"></toaster-container>
-            <div id="main" ng-view></div>
+            <div class="container">
+                <section class="content-header">
+
+                </section>
+                <div class="content" id="main" ng-view>
+                </div>
+            </div>
         </div>
         <footer class="main-footer">
             <strong>Copyleft 2015 <a href="http://sislegis.mj.gov.br">SISLegis</a>.</strong>
@@ -139,6 +225,8 @@
     <script src="scripts/directives/datetimepicker.js"></script>
     <script src="scripts/filters/startFromFilter.js"></script>
     <script src="scripts/filters/genericSearchFilter.js"></script>
+    <script src="scripts/controllers/relatorioController.js"></script>
+    <script src="scripts/controllers/notatecnicaController.js"></script>
 
     <script src="lib/ng-tags-input/ng-tags-input.js"></script>
     <script src="scripts/services/TagFactory.js"></script>
@@ -150,7 +238,6 @@
     <script src="scripts/controllers/modalAddProposicaoController.js"></script>
     <script src="scripts/controllers/modalComentariosController.js"></script>
     <script src="scripts/controllers/modalNotaTecnicaController.js"></script>
-    <script src="scripts/controllers/modalParecerAreaMeritoController.js"></script>
 
     <script src="scripts/controllers/modalEncaminhamentosController.js"></script>
     <script src="scripts/controllers/modalRelatorioReuniaoController.js"></script>
