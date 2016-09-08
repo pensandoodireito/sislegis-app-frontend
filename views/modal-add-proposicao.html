@@ -1,115 +1,101 @@
 <div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal"
-		ng-click="ok()">
-		<span aria-hidden="true">&times;</span> <span class="sr-only">Fechar</span>
-	</button>
-	<h4 class="modal-title">
+    <button type="button" class="close" data-dismiss="modal" ng-click="ok()">
+        <span aria-hidden="true">&times;</span> <span class="sr-only">Fechar</span>
+    </button>
+    <h4 class="modal-title">
 		Adicionar proposições independente</span>
 	</h4>
 </div>
 <div class="modal-body">
-	<div class="row">
+    <div class="row">
 
-		<form id="BuscarProposicaoForm" name="BuscarProposicaoForm"
-			role="form">
-			<div class="form-inline" role="form">
+        <form id="BuscarProposicaoForm" name="BuscarProposicaoForm" role="form">
+            <div class="form-inline" role="form">
 
-				<div class="panel-heading">
-					<div class="clearfix">
-						<div class="row" role="form">
-							<div>
-								<div class="col-sm-2">
-									<label>Casa legislativa:</label> <select ng-model="origem"
-										ng-change="selectOrigem()"
-										ng-options="origem.displayName for origem in origens"
-										class="form-control">
-										<option value=""></option>
-										<option value="CAMARA">CAMARA</option>
-										<option value="SENADO">SENADO</option>
-									</select>
-								</div>
-								<div class="col-sm-1">
-									<label>Tipo:</label> <select ng-model="filtro.tipo"
-										class="form-control" ng-options="tipo.nome for tipo in tipos">
-										<option value=""></option>
-									</select>
-								</div>
+                <div class="panel-heading">
+
+                    <div role="form">
+
+                        <div class="form-group">
+                            <label>Casa legislativa:</label>
+                            <select ng-model="origem" ng-change="selectOrigem()" ng-options="origem.displayName for origem in origens" class="form-control">
+                                <option value=""></option>
+                                <option value="CAMARA">CAMARA</option>
+                                <option value="SENADO">SENADO</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Número:</label>
+                            <input type="text" class="form-control" ng-model="filtro.numero" placeholder="Filtrar por número">
+                        </div>
+                        <div class="form-group">
+                            <label>Ano:</label>
+                            <input type="text" class="form-control" ng-model="filtro.ano" placeholder="Filtrar por ano">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="submit" class="btn btn-default" ng-click="buscarProposicao()">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
 
 
 
 
+                        <div class="row" role="form">
+                            <div class="form-group">
+                                <label>Tipo:</label>
+                                <select ng-model="filtro.tipo" class="form-control" ng-options="tipo.nome for tipo in tipos">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
 
-							</div>
-						</div>
-					</div>
-					<div class="row" role="form">
-						<div>
-							<div class="col-sm-3">
-								<label>Número:</label> <input type="text" class="form-control"
-									ng-model="filtro.numero" placeholder="Filtrar por número">
-							</div>
-							<div class="col-sm-3">
-								<label>Ano:</label> <input type="text" class="form-control"
-									ng-model="filtro.ano" placeholder="Filtrar por ano">
-							</div>
-							<div class="col-sm-1">
-								<label>&nbsp;</label>
-								<button type="submit" class="btn btn-default"
-									ng-click="buscarProposicao()">
-									<i class="fa fa-search"></i>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
+                    </div>
+                </div>
 
-			</div>
-		</form>
-	</div>
-	<div class="row mt-md">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<div class="form-group mb-0">
-					<div class="input-group">
-						<input ng-show="proposicoes.length" ng-model="buscaPalavraChave"
-							placeholder="Filtrar por palavra chave" class="form-control mb-0">
-					</div>
-				</div>
-			</div>
-			<div class="panel-body line-7 rol-vert list-proposicao">
-				<div class="list-proposicao-item" ng-model="proposicao"
-					ng-repeat="proposicao in proposicoes | filter:buscaPalavraChave"
-					ng-click="adicionarProposicao(proposicao)">
-					<div class="clearfix">
-						<div class="pull-left width-auto">
-							<h4 class="list-group-item-heading">{{proposicao.sigla}}</h4>
-						</div>
-						<div class="pull-right width-auto">
-							<a href="{{proposicao.linkProposicao}}" target="_blank"
-								ng-show="proposicao.linkProposicao != null"
-								class="btn btn-info btn-xs" title="Link da proposição"> <i
-								class="fa fa-search-plus"></i>
-							</a> <a href="{{proposicao.linkPauta}}" target="_blank"
-								ng-show="proposicao.linkPauta != null"
-								class="btn btn-info btn-xs" title="Link da pauta da reunião">
-								<i class="fa fa-external-link-square"></i>
-							</a>
-						</div>
-					</div>
-					<p>{{proposicao.ementa}}</p>
-					<p>
-						<strong>Origem: </strong>{{proposicao.origem}}
-					</p>
-					<p>
-						<strong>Comissao: </strong>{{proposicao.comissao}}
-					</p>
+            </div>
+        </form>
+    </div>
+    <div class="row mt-md">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="form-group mb-0">
+                    <div class="input-group">
+                        <input ng-show="proposicoes.length" ng-model="buscaPalavraChave" placeholder="Filtrar por palavra chave" class="form-control mb-0">
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body line-7 rol-vert list-proposicao">
+                <div class="list-proposicao-item" ng-model="proposicao" ng-repeat="proposicao in proposicoes | filter:buscaPalavraChave"
+                ng-click="adicionarProposicao(proposicao)">
+                    <div class="clearfix">
+                        <div class="pull-left width-auto">
+                            <h4 class="list-group-item-heading">{{proposicao.sigla}}</h4>
+                        </div>
+                        <div class="pull-right width-auto">
+                            <a href="{{proposicao.linkProposicao}}" target="_blank" ng-show="proposicao.linkProposicao != null" class="btn btn-info btn-xs"
+                            title="Link da proposição"> <i class="fa fa-search-plus"></i>
+                            </a>
+                            <a href="{{proposicao.linkPauta}}" target="_blank" ng-show="proposicao.linkPauta != null" class="btn btn-info btn-xs" title="Link da pauta da reunião">
+                                <i class="fa fa-external-link-square"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <p>{{proposicao.ementa}}</p>
+                    <p>
+                        <strong>Origem: </strong>{{proposicao.origem}}
+                    </p>
+                    <p>
+                        <strong>Comissao: </strong>{{proposicao.comissao}}
+                    </p>
 
-				</div>
-			</div>
-			<!-- /item -->
-		</div>
+                </div>
+            </div>
+            <!-- /item -->
+        </div>
 
-	</div>
+    </div>
 
 </div>
 

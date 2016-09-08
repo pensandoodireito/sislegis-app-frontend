@@ -1,0 +1,43 @@
+<!-- Modal Comentários -->
+<div class="modal-header">
+
+    <h4 class="modal-title" id="myModalLabel">Notas Técnicas</h4>
+</div>
+<div class="modal-body">
+    <div class="box-body no-padding">
+        <form role="form" ng-show="notaForm==true">
+
+            <div class="form-horizontal" role="form">
+                <div >
+                    <label for="TextoComentario">Insira uma nota:</label>
+                    <textarea class="form-control" maxlength="20000" rows="8" ng-model="nota.nota" ng-required="true"></textarea>
+                </div>
+
+
+            </div>
+
+        </form>
+        <div class="table-responsive mailbox-messages" ng-hide="notaForm==true">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr ng-repeat="nota in proposicao.listaNotas" ng-click="editNota(nota)">
+
+                        <td class="mailbox-name">{{nota.usuario.nome}}</a>
+                        </td>
+                        <td class="mailbox-subject"><a>{{nota.nota|limitTo: 15}} ...</a>
+                        </td>
+                        <td class="mailbox-date">{{nota.dataCriacao| date:'dd/MM HH:mm'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-default" ng-click="cancel()">Fechar</button>
+    <button type="submit" class="btn btn-info pull-right" ng-click="novaNota()" ng-hide="notaForm==true">Criar nova nota</button>
+    <button type="submit" class="btn btn-success pull-right" ng-click="save()" ng-show="notaForm==true">Salvar</button>
+
+</div>

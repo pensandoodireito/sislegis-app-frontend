@@ -30,6 +30,11 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource, 
 			url : BACKEND + "/proposicaos/salvarProposicaoExtra",
 			method : 'POST'
 		},
+        'salvarProposicoesExtras' : {
+			url : BACKEND + "/proposicaos/salvarProposicoesExtras",
+			method : 'POST'
+		},
+        
 		'buscarCamara' : {
 			url : BACKEND + "/proposicaos/proposicoesPautaCamara",
 			method : 'GET',
@@ -71,11 +76,22 @@ angular.module('sislegisapp').factory('ProposicaoResource', function($resource, 
             method: 'GET',
             isArray : true
         },
+        'listNotaTecnicas': {
+            url: BACKEND + "/proposicaos/:ProposicaoId/notatecnica",
+            method: 'GET',
+            isArray : true
+        },
+        'salvaNota': {
+            url: BACKEND + "/proposicaos/:ProposicaoId/notatecnica",
+            method: 'POST',
+            isArray : false
+        },
+        
         'buscarAvulsas': {
             url: BACKEND + "/proposicaos/buscaIndependente/:origem/:sigla/:ano",
             method: 'GET',
             isArray: true,
-            transformResponse: function(data){
+            __transformResponse: function(data){
 
                 var jsonRes = JSON.parse(data);
                 var dataAtual = new Date().getTime();

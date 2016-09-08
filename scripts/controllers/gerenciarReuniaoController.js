@@ -1,11 +1,27 @@
-angular.module('sislegisapp').controller(
+angular.module('sislegisapp')
+.directive('focusMe', function($timeout) {
+  return {
+    link: function(scope, element, attrs) {
+      scope.$watch(attrs.focusMe, function(value) {
+        if(value === true) { 
+          console.log('value=',value);
+          //$timeout(function() {
+            element[0].focus();
+            scope[attrs.focusMe] = false;
+          //});
+        }
+      });
+    }
+  };
+}).controller(
 		'GerenciarReuniaoController',
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
 				ReuniaoProposicaoResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
-                TipoEncaminhamentoResource, ElaboracaoNormativaResource, BACKEND) {
+                TipoEncaminhamentoResource, ElaboracaoNormativaResource, Auth,TagResource, BACKEND) {
     
 	var self = this;
+    $scope.Auth=Auth;
 	$scope.listaReuniaoProposicoes = [];
 	$scope.filtro = new ProposicaoResource();
 
@@ -86,6 +102,7 @@ angular.module('sislegisapp').controller(
 					autor: $scope.filtro.autor,
 					origem: $scope.filtro.origem,
 					isFavorita: $scope.filtro.isFavorita,
+                    estado: $scope.filtro.estado,
 					limit: $scope.infiniteScroll.limit, 
 					offset: $scope.infiniteScroll.offset
 				},successCallback, errorCallback);
@@ -97,7 +114,9 @@ angular.module('sislegisapp').controller(
 	    $scope.infiniteScroll.offset = 0;
 		$scope.consultarProposicoes();
 	}
-    
+    $scope.loadTags = function(query) {
+    	return TagResource.buscarPorSufixo({sufixo: query}).$promise;
+    };
     $scope.loadProposicoes = function(query) {
     	return ProposicaoResource.buscarPorSufixo({sufixo: query}).$promise;
     };
@@ -108,6 +127,9 @@ angular.module('sislegisapp').controller(
     
     $scope.setSelectedProposicao = function(item) {
     	$scope.responsavelNull = (item.responsavel==null);
+        $scope.initial = {
+            explicacao:item.explicacao
+        };
 		$scope.posicionamentoNull = (item.posicionamento==null);
     	$scope.selectedProposicao = item;
 	}
@@ -131,8 +153,25 @@ angular.module('sislegisapp').controller(
     		$scope.save(item);		
     	}
     };
+    $scope.updates = {};
+    $scope.setUpdated=function(field,item){
+        $scope.updates[field]=item;
+    }
 
-	
+    $scope.checkUpdatedField = function (field, item) {
+        var updated = $scope.updates[field];
+        console.log(updated);
+        if (updated == item) {
+            if (item[field] != $scope.initial[field]) {
+                $scope.save(item);
+            }
+        }
+
+    };
+    $scope.setaEstado = function(item,estado){
+        item.estado=estado;
+        $scope.save(item);
+    }
 
     $scope.updateSingleProposicao = function(item,toastMsg){
     	for (var i = 0; i < $scope.listaReuniaoProposicoes.length; i++) {    			
@@ -400,38 +439,7 @@ angular.module('sislegisapp').controller(
         });
     };
 
-		$scope.populaModalComentario = function(lista)
-		{
-			$scope.selectedProposicao.listaComentario=lista;
-			var modalInstance = $modal.open({
-				templateUrl: 'views/modal-comentarios.html',
-				controller: 'ModalComentariosController',
-				size: 'lg',
-				resolve: {
-					proposicao: function () {
-						return $scope.selectedProposicao;
-					}
-				}
-			});
-
-			modalInstance.result.then(function (listaComentario) {
-				$scope.selectedProposicao.listaComentario = listaComentario;
-			}, function () {
-				$log.info('Modal dismissed at: ' + new Date());
-			});
-		}
-
-		$scope.abrirModalComentarios = function (item) {
-			$scope.selectedProposicao = item;
-			if ($scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios) {
-				ComentarioResource.findByProposicao({
-					ProposicaoId: $scope.selectedProposicao.id},$scope.populaModalComentario
-				);
-			} else {
-				$scope.populaModalComentario($scope.selectedProposicao.listaComentario);
-
-			}
-		};
+	
 	    
     /**
      * MODALs
@@ -440,8 +448,9 @@ angular.module('sislegisapp').controller(
     	toaster.clear();
     	
     	if($scope.reuniao.data == null){
-    		toaster.pop('info', 'Selecione a data da reunião.');
-    		return;
+            $scope.reuniao.data=new Date();
+    		// toaster.pop('info', 'Selecione a data da reunião.');
+    		// return;
     	}
     	
         var modalInstance = $modal.open({
@@ -489,39 +498,88 @@ angular.module('sislegisapp').controller(
 		ComentarioService.save(comentario, item.id).then(successCallback, errorCallback);
     }
 
+    // $scope.populaProposicao=function(item){
+    //     if (item.listaComentario == null || item.listaComentario.length != item.totalComentarios) {
+    //         $scope.populaComentario(item);    
+    //     }
+    // }
+   
+    
+     $scope.populaNotas = function (prop, callbackFct) {
+        ProposicaoResource.listNotaTecnicas({ ProposicaoId: prop.id }, function (lista) {
+            prop.listaNotas = lista;
+            if (callbackFct != null) {
+                callbackFct();
+            }
+        }
+            );
+    }
+		
+    $scope.abrirModalNotaTecnica = function (item) {
+       $scope.selectedProposicao= item;
+        if ($scope.selectedProposicao.listaNotas == null || $scope.selectedProposicao.listaNotas.length != $scope.selectedProposicao.totalNotasTecnicas) {
+            $scope.populaNotas(item, function () { $scope.abrirModalNotaTecnica(item) });
+        } else {
 
-	$scope.populaModalComentario = function(lista)
-	{
-		$scope.selectedProposicao.listaComentario=lista;
-		var modalInstance = $modal.open({
-			templateUrl: 'views/modal-comentarios.html',
-			controller: 'ModalComentariosController',
-			size: 'lg',
-			resolve: {
-				proposicao: function () {
-					return $scope.selectedProposicao;
-				}
-			}
-		});
 
-		modalInstance.result.then(function (listaComentario) {
-			$scope.selectedProposicao.listaComentario = listaComentario;
-		}, function () {
-			$log.info('Modal dismissed at: ' + new Date());
-		});
-	}
+            var modalInstance = $modal.open({
+                templateUrl: 'views/modal-notatecnicas.html',
+                controller: 'ModalNotaTecnicaController',
+                size: 'lg',
+                resolve: {
+                    proposicao: function () {
+                        return $scope.selectedProposicao;
+                    }
+                }
+            });
 
-	$scope.abrirModalComentarios = function (item) {
-		$scope.selectedProposicao = item;
-		if ($scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios) {
-			ComentarioResource.findByProposicao({
-				ProposicaoId: $scope.selectedProposicao.id},$scope.populaModalComentario
-			);
-		} else {
-			$scope.populaModalComentario($scope.selectedProposicao.listaComentario);
+            modalInstance.result.then(function (listaNotas) {
+                $scope.selectedProposicao.listaNotas = listaNotas;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        }
+    }
+    $scope.populaComentario = function (prop, callbackFct) {
+        ComentarioResource.findByProposicao({ ProposicaoId: prop.id },
+            function (lista) {
+                prop.listaComentario = lista;
+                if (callbackFct != null) {
+                    callbackFct(prop);
+                }
+            }
+            );
+    };
+    $scope.abrirModalComentarios = function (item,cb) {
+        $scope.selectedProposicao = item;
+        if (cb!=true && ( $scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios)) {
+            $scope.populaComentario(item, function (prop) { 
+                $scope.abrirModalComentarios(prop,true); 
+              }
+             );
+        } else {
 
-		}
-	};
+
+            var modalInstance = $modal.open({
+                templateUrl: 'views/modal-comentarios.html',
+                controller: 'ModalComentariosController',
+                size: 'lg',
+                resolve: {
+                    proposicao: function () {
+                        return $scope.selectedProposicao;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (listaComentario) {
+                $scope.selectedProposicao.listaComentario = listaComentario;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        }
+    }
+
+	
     
     $scope.abrirModalRemoverProposicao = function(item) {
     	$scope.selectedProposicao = item;

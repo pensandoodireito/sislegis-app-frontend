@@ -43,6 +43,7 @@ var libs = [
     'scripts/controllers/modalBuscarProposicaoController.js',
     'scripts/controllers/modalAddProposicaoController.js',
     'scripts/controllers/modalComentariosController.js',
+    'scripts/controllers/modalNotaTecnicaController.js',
     'scripts/controllers/modalEncaminhamentosController.js',
     'scripts/controllers/modalRelatorioReuniaoController.js',
     'scripts/controllers/modalRelatorioProposicaoController.js',
@@ -106,8 +107,9 @@ var compilacao = function() {
     console.info("Compilação executada");
     return gulp.src(libs)
         .pipe(ngAnnotate())
-        .pipe(uglify())
+     //   .pipe(uglify())
         .pipe(concat('all.js'))
+        .pipe(uglify())
         .pipe(gulp.dest('./scripts'));
 }
 var generateHTMLs = function(){
