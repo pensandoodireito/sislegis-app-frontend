@@ -48,7 +48,7 @@
                             <label>Pelo estado na SAL:</label>
                             <select ng-model="filtro.estado" class="form-control" ng-change='filtrarConsulta()'>
                                 <option value=""></option>
-                                <option value="FORADEPAUTA">Fora de pauta</option>
+                                <option value="FORADEPAUTA">Fora de competência</option>
                                 <option value="EMANALISE">Em análise</option>
                                 <option value="ANALISADA">Analisada</option>
                                 <option value="ADESPACHAR">A despachar</option>
@@ -71,7 +71,7 @@
                                         </h3>
                             <span ng-if="item.posicionamentoAtual==null">Sem posicionamento</span>{{item.posicionamentoAtual.posicionamento.nome}}</span>
                             <div class=" label">
-                                <span class="label bg-gray" ng-if="item.estado=='FORADEPAUTA'" style="color:white" title="Proposição não é de interesse da SAL">Fora de pauta</span>
+                                <span class="label bg-gray" ng-if="item.estado=='FORADEPAUTA'" style="color:white" title="Proposição não é de interesse da SAL">Fora de competência</span>
                                 <span class="label label-warning" ng-if="item.estado=='EMANALISE'" title="Proposição está sendo analisada pela equipe da SAL">Em análise</span>
                                 <span class="label label-info" ng-if="item.estado=='ANALISADA'" title="Análise aguarda aprovação do diretor da equipe da SAL">Em revisão</span>
                                 <span class="label label-primary" ng-if="item.estado=='ADESPACHAR'" title="Análise aguarda despacho do secretário">Aguardando despacho</span>
@@ -81,24 +81,29 @@
 
                             <div class="box-tools pull-right">
                                 <button ng-if="Auth.isAspar(true) && item.estado=='FORADEPAUTA'" type="button" class="btn btn-default btn-sm" title="Marcar análise SAL"
-                                ng-click="setaEstado(item,'EMANALISE')"> <i class="fa fa-mail-forward"></i> Marcar para análise da SAL</button>
+                                ng-click="setaEstado(item,'EMANALISE')"> <i class="fa fa-mail-forward"></i> Marcar para análise da SAL
+                                </button>
                                 <button ng-if="Auth.isAspar(true) && item.estado=='DESPACHADA'" type="button" class="btn btn-default btn-sm" title="Marcar <Re-></Re->análise SAL"
                                 ng-click="setaEstado(item,'EMANALISE')">
-
-                                    <i class="fa fa-mail-forward"></i> Marcar para análise da SAL</button>
+                                    <i class="fa fa-mail-forward"></i> Marcar para análise da SAL
+                                </button>
                                 <button ng-if="Auth.isEquipe(true) && item.estado=='EMANALISE'" type="button" class="btn btn-default btn-sm" title="Análise Completa"
                                 ng-click="setaEstado(item,'ANALISADA')">
-                                    <i class="fa fa-check-circle-o"></i> Análise completa</button>
-                                <button ng-if="Auth.isDiretor(true) && item.estado=='ANALISADA'" type="button" class="btn btn-default btn-sm" title="Análise Completa"
+                                    <i class="fa fa-check-circle-o"></i> Análise completa
+                                </button>
+                                <button ng-if="Auth.isDiretor(true) && item.estado=='ANALISADA'" type="button" class="btn btn-default btn-sm" title="Enviar para despacho"
                                 ng-click="setaEstado(item,'ADESPACHAR')">
-                                    <i class="fa fa-check-circle"></i> Enviar para despacho</button>
-                                <button ng-if="Auth.isSecretario(true) && item.estado=='ADESPACHAR'" type="button" class="btn btn-default btn-sm" title="Análise Completa"
+                                    <i class="fa fa-check-circle"></i> Enviar para despacho
+                                </button>
+                                <button ng-if="Auth.isSecretario(true) && item.estado=='ADESPACHAR'" type="button" class="btn btn-default btn-sm" title="Despachar"
                                 ng-click="setaEstado(item,'DESPACHADA')">
-                                    <i class="fa fa-paper-plane"></i> Despachar</button>
+                                    <i class="fa fa-paper-plane"></i> Despachar
+                                </button>
 
                                 <button ng-if="Auth.isDiretor(true) && (item.estado=='ANALISADA' || item.estado=='ADESPACHAR')" type="button" class="btn btn-default btn-sm"
-                                title="Análise Completa" ng-click="setaEstado(item,'EMANALISE')">
-                                    <i class="fa fa-retweet"></i> Re-Analisar</button>
+                                title="Enviar para re análise" ng-click="setaEstado(item,'EMANALISE')">
+                                    <i class="fa fa-retweet"></i> Re-Analisar
+                                </button>
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                 </button>
                             </div>
