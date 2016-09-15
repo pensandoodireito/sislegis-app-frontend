@@ -101,6 +101,11 @@ angular.module('sislegisapp').factory('ProposicaoResource', function ($resource,
                 method: 'POST',
                 isArray: false
             },
+             'removeNota': {
+                url: BACKEND + "/proposicaos/:ProposicaoId/notatecnica/:notaId",
+                method: 'DELETE',
+                isArray: false
+            },
 
             'buscarAvulsas': {
                 url: BACKEND + "/proposicaos/buscaIndependente/:origem/:sigla/:ano",

@@ -8,9 +8,10 @@
         <form role="form" ng-show="notaForm==true">
 
             <div class="form-horizontal" role="form">
-                <div >
-                    <label for="TextoComentario">Insira uma nota:</label>
-                    <textarea class="form-control" maxlength="20000" rows="8" ng-model="nota.nota" ng-required="true"></textarea>
+                <div>
+                    <label for="link">Insira a link para a nota:</label>
+                    <input id="link" type="url" ng-model="nota.url_arquivo" placeholder="http://..." ng-required="true" class="form-control">
+
                 </div>
 
 
@@ -24,9 +25,10 @@
 
                         <td class="mailbox-name">{{nota.usuario.nome}}</a>
                         </td>
-                        <td class="mailbox-subject"><a>{{nota.nota|limitTo: 15}} ...</a>
+                        <td class="mailbox-subject"><a href="{{nota.url_arquivo}}" target="_BLANK">{{nota.url_arquivo}}</a>
                         </td>
                         <td class="mailbox-date">{{nota.dataCriacao| date:'dd/MM HH:mm'}}</td>
+                        <td class="mailbox-date" ng-click="removeNota(nota)"><i class="fa fa-remove"></i></td>
                     </tr>
                 </tbody>
             </table>

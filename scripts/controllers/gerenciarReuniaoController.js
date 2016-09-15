@@ -564,8 +564,8 @@ return UsuarioResource.buscaPorUsuario({ method: method, nome: val },{ method: m
                 }
             });
 
-            modalInstance.result.then(function (listaNotas) {
-                $scope.selectedProposicao.listaNotas = listaNotas;
+            modalInstance.result.then(function (prop) {
+                $scope.selectedProposicao = prop;
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
             });
