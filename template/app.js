@@ -53,7 +53,7 @@ var auth = {
 };
 
 var logout = function () {
-    console.log('*** LOGOUT');
+    
     auth.loggedIn = false;
     auth.authz = null;
     window.location = auth.logoutUrl;
@@ -68,7 +68,7 @@ angular.element(document).ready(function ($http) {
         auth.loggedIn = true;
         auth.authz = keycloakAuth;
 
-        auth.logoutUrl = keycloakAuth.authServerUrl + "/realms/" + keycloakAuth.realm + "/tokens/logout?redirect_uri=http://sislegis.local";
+        auth.logoutUrl = keycloakAuth.authServerUrl + "/realms/" + keycloakAuth.realm + "/tokens/logout?redirect_uri=http://sislegis.mj.gov.br";
         module.factory('Auth', function () {
             return auth;
         });
@@ -130,6 +130,10 @@ module.config(['$routeProvider', function ($routeProvider) {
         .when('/AreaConsultadas', { templateUrl: 'views/AreaConsultada/search.html', controller: 'SearchAreaConsultadaController' })
         .when('/AreaConsultadas/new', { templateUrl: 'views/AreaConsultada/detail.html', controller: 'NewAreaConsultadaController' })
         .when('/AreaConsultadas/edit/:AreaConsultadaId', { templateUrl: 'views/AreaConsultada/detail.html', controller: 'EditAreaConsultadaController' })
+        
+        .when('/AreaDeMerito', { templateUrl: 'views/AreaDeMerito/search.html', controller: 'SearchAreaMeritoController' })
+        .when('/AreaDeMerito/new', { templateUrl: 'views/AreaDeMerito/detail.html', controller: 'EditAreaMeritoController' })
+        .when('/AreaDeMerito/edit/:id', { templateUrl: 'views/AreaDeMerito/detail.html', controller: 'EditAreaMeritoController' })
 
         .when('/Orgaos', { templateUrl: 'views/SimpleEntity/search.html', controller: 'SearchOrgaoController' })
         .when('/Orgaos/new', { templateUrl: 'views/SimpleEntity/detail.html', controller: 'NewOrgaoController' })

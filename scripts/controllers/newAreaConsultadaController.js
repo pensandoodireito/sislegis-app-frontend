@@ -6,7 +6,7 @@ angular.module('sislegisapp').controller('NewAreaConsultadaController', function
     
 
     $scope.save = function() {
-        var successCallback = function(data,responseHeaders){
+        var successCallback = function(data, status, responseHeaders, config){
             var id = locationParser(responseHeaders);
             $location.path('/AreaConsultadas/edit/' + id);
             $scope.displayError = false;

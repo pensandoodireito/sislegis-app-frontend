@@ -32,7 +32,7 @@ angular.module('sislegisapp').controller('RelatorioController',
         $scope.getNomeComissao = function (origem, sigla) {
 
 
-            var comissao={};
+            var comissao = {};
             if (origem == 'CAMARA') {
 
 
@@ -40,12 +40,12 @@ angular.module('sislegisapp').controller('RelatorioController',
 
 
             } else {
-                
+
                 comissao = $scope.comissoes.senado[sigla];
 
 
             }
-            if (!comissao || comissao.nome==null || comissao.nome=="") {
+            if (!comissao || comissao.nome == null || comissao.nome == "") {
 
                 console.log("sigla no traduzida " + sigla, origem)
                 return sigla;
@@ -56,7 +56,7 @@ angular.module('sislegisapp').controller('RelatorioController',
             return comissao.nome;
 
         }
-        $scope.hoje = 1441546167000;//new Date().getTime();
+        $scope.hoje = new Date().getTime();
         $scope.proposicoes = [];
         var successCallback = function (data) {
 

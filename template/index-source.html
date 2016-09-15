@@ -72,27 +72,27 @@
                             <i class="fa fa-book"></i> <span>Relatórios</span> <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                             <li ><a href="index-relatorio.html#/relatorios/Despachadas" ><i class="fa fa-book"></i><span> Despachadas</span></a></li>
+                            <li><a href="index-relatorio.html#/relatorios/Despachadas"><i class="fa fa-book"></i><span> Despachadas</span></a></li>
                         </ul>
                     </li>
 
                     <li class="treeview">
                         <a href="#">
-                            <i class="fa fa-plus"></i> <span>Mais ferramentas</span> <i class="fa fa-angle-left pull-right"></i>
+                            <i class="fa fa-plus"></i> <span>Cadastros</span> <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
+                            <li ng-class="{'active':itemMenu=='areaDeMerito'}"><a href="#/AreaDeMerito" ng-click="itemMenu='areaDeMerito'"><i class="fa fa-institution"></i><span>Áreas</span></a></li>
 
-                            <li ng-class="{'active':itemMenu=='reuniao'}"><a href="#/Reuniaos/reuniaonova" ng-click="itemMenu='reuniao'"><i class="fa fa-calendar"></i><span>Reuniões</span></a></li>
                             <li ng-class="{'active':itemMenu=='posicionamento'}"><a href="#/Posicionamentos" ng-click="itemMenu='posicionamento'"><i class="fa fa-file"></i><span>Posicionamentos</span></a></li>
                             <li ng-class="{'active':itemMenu=='tipoEncaminhamento'}"><a href="#/TipoEncaminhamentos" ng-click="itemMenu='tipoEncaminhamento'"><i class="fa fa-reply"></i><span>Tipo de Encaminhamentos</span></a></li>
-                            <li ng-class="{'active':itemMenu=='areaConsultada'}"><a href="#/AreaConsultadas" ng-click="itemMenu='areaConsultada'"><i class="fa fa-search"></i><span>Áreas Consultadas</span></a></li>
+                            <!--<li ng-class="{'active':itemMenu=='areaConsultada'}"><a href="#/AreaConsultadas" ng-click="itemMenu='areaConsultada'"><i class="fa fa-search"></i><span>Áreas Consultadas</span></a></li>-->
                             <li ng-class="{'active':itemMenu=='orgao'}"><a href="#/Orgaos" ng-click="itemMenu='orgao'"><i class="fa fa-building-o"></i><span>Órgão</span></a></li>
                             <li ng-class="{'active':itemMenu=='gerenciarComissao'}"><a href="#/GerenciarComissaoSeguida" ng-click="itemMenu='gerenciarComissao'"><i class="fa fa-share"></i><span>Seguir Pautas</span></a></li>
-                            <li ng-class="{'active':itemMenu=='gerenciarSituacao'}"><a href="#/GerenciarSituacoes" ng-click="itemMenu='gerenciarSituacao'"><i class="fa fa-share"></i><span>Situações Legislativas</span></a></li>
+                            <!--<li ng-class="{'active':itemMenu=='gerenciarSituacao'}"><a href="#/GerenciarSituacoes" ng-click="itemMenu='gerenciarSituacao'"><i class="fa fa-share"></i><span>Situações Legislativas</span></a></li>-->
                             <li ng-class="{'active':itemMenu=='usuario'}"><a href="#/Usuarios" ng-click="itemMenu='usuario'"><i class="fa fa-user"></i><span>Usuário</span></a></li>
                             <li ng-class="{'active':itemMenu=='equipe'}"><a href="#/Equipes" ng-click="itemMenu='equipe'"><i class="fa fa-group"></i><span>Equipe</span></a></li>
-                            <li ng-class="{'active':itemMenu=='elaboracaoNormativa'}"><a href="#/ElaboracaoNormativa" ng-click="itemMenu='elaboracaoNormativa'"><i class="fa fa-book"></i><span>Elaboração normativa</span></a></li>
-
+                            <!--<li ng-class="{'active':itemMenu=='elaboracaoNormativa'}"><a href="#/ElaboracaoNormativa" ng-click="itemMenu='elaboracaoNormativa'"><i class="fa fa-book"></i><span>Elaboração normativa</span></a></li>-->
+                            <li ng-class="{'active':itemMenu=='reuniao'}"><a href="#/Reuniaos/reuniaonova" ng-click="itemMenu='reuniao'"><i class="fa fa-calendar"></i><span>Reuniões</span></a></li>
                         </ul>
                     </li>
                     <li ng-hide="auth.loggedIn"><a href="#" ng-click="logout()"><i class="fa fa-sign-out"></i><span>Logout</span></a></li>
@@ -114,6 +114,7 @@
     <script src="lib/modernizr/modernizr.js"></script>
     <script src="lib/angular/angular.min.js"></script>
     <script src="lib/angular-route/angular-route.min.js"></script>
+    <script src="lib/angular-cookies/angular-cookies.min.js"></script>
     <script src="lib/angular-resource/angular-resource.min.js"></script>
     <script src="lib/angular-i18n/angular-locale_pt-br.js"></script>
     <script src="lib/angular-bootstrap/ui-bootstrap.min.js"></script>
@@ -152,6 +153,8 @@
     <script src="scripts/controllers/modalNotaTecnicaController.js"></script>
     <script src="scripts/controllers/modalParecerAreaMeritoController.js"></script>
 
+    <script src="scripts/controllers/SislegisControllers.js"></script>
+
     <script src="scripts/controllers/modalEncaminhamentosController.js"></script>
     <script src="scripts/controllers/modalRelatorioReuniaoController.js"></script>
     <script src="scripts/controllers/modalRelatorioProposicaoController.js"></script>
@@ -165,6 +168,7 @@
     <script src="scripts/services/TarefaFactory.js"></script>
     <script src="scripts/services/NotificacaoFactory.js"></script>
     <script src="scripts/services/VotacaoFactory.js"></script>
+    <script src="scripts/services/SislegisFactories.js"></script>
 
     <!-- Posicionamento -->
     <script src="scripts/controllers/newPosicionamentoController.js"></script>

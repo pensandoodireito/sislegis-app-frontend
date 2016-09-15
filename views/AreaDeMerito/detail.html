@@ -1,0 +1,44 @@
+<section class="content-header">
+    <h1>Área</h1>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border" ng-switch on="$location.path().indexOf('/AreaDeMerito/new') > -1">
+                    <h3 class="box-title" ng-switch-when="true">Adicionar</h3>
+                    <h3 class="box-title" ng-switch-when="false">Editar</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form id="AreaDeMeritoForm" name="AreaDeMeritoForm" role="form">
+                    <div ng-show="displayError" class="alert alert-danger">
+                        <strong>Erro!</strong> {{error}}
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group" <label for="nome">Nome:</label>
+                            <input id="nome" type="text" class="form-control" ng-model="area.nome" placeholder="Escreva o nome da área de mérito" ng-required="true"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Contato: </label>
+                            <div>
+                                <input type="text" ng-model="area.contato" placeholder="Procurar usuário" ng-required="true"
+                                 typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)"
+                                class="form-control">
+                                <input type="checkbox" ng-model="item.buscaGeral"> Buscar completa
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+
+                    <div class="box-footer">
+                        <button class="btn btn-primary" ng-disabled="isClean()" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Salvar</button>
+                        <button id="cancel" name="cancel" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancelar</button>
+                        <button id="deleteArea" name="deleteArea" class="btn btn-danger" ng-show="area.id" ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Excluir</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

@@ -4,11 +4,15 @@ angular.module('sislegisapp')
     link: function(scope, element, attrs) {
       scope.$watch(attrs.focusMe, function(value) {
         if(value === true) { 
-          console.log('value=',value);
-          //$timeout(function() {
-            element[0].focus();
-            scope[attrs.focusMe] = false;
-          //});
+          
+          $timeout(function() {
+              try{
+                   element[0].focus();
+                   scope[attrs.focusMe] = false;
+              }catch(e){
+                  console.log(e);
+              }
+          },100);
         }
       });
     }
@@ -96,7 +100,7 @@ angular.module('sislegisapp')
 			toaster.pop('error', 'Falha ao consultar Proposição.');
 	    	$rootScope.inactivateSpinner = false;
 		};
-		  
+		
 		ProposicaoResource.consultar(
 				{
 					sigla: $scope.filtro.sigla,
@@ -129,11 +133,13 @@ angular.module('sislegisapp')
     	return ElaboracaoNormativaResource.buscarPorSufixo({sufixo: query}).$promise;
     };
     
-    $scope.setSelectedProposicao = function(item) {
+    $scope.setSelectedProposicao = function(item,param) {
+        console.log("selecionando ",item,param)
     	$scope.responsavelNull = (item.responsavel==null);
         $scope.initial = {
             explicacao:item.explicacao
         };
+        $scope.initial[param]=item[param];
 		$scope.posicionamentoNull = (item.posicionamento==null);
     	$scope.selectedProposicao = item;
 	}
@@ -164,9 +170,12 @@ angular.module('sislegisapp')
 
     $scope.checkUpdatedField = function (field, item) {
         var updated = $scope.updates[field];
-        console.log(updated);
+        
         if (updated == item) {
-            if (item[field] != $scope.initial[field]) {
+            if($scope.initial==null){
+                console.log("nao foi inicializado initial")
+            }
+            if ($scope.initial==null || item[field] != $scope.initial[field]) {
                 $scope.save(item);
             }
         }
@@ -418,14 +427,14 @@ angular.module('sislegisapp')
     
 	$scope.getUsuarios = function(val, buscaGeral) {
         var method = (buscaGeral) ? 'ldapSearch' : 'find';
-
-        return $http.get(BACKEND + '/usuarios/' + method, {
-	      params: {
-	        nome: val
-	      }
-	    }).then(function(response){
-            return (response.data.length == 0)?[]:response.data;
-	    });
+return UsuarioResource.buscaPorUsuario({ method: method, nome: val },{ method: method, nome: val },function(data){console.log("aee",data)}).$promise;
+        // return $http.get(BACKEND + '/usuarios/' + method, {
+	    //   params: {
+	    //     nome: val
+	    //   }
+	    // }).then(function(response){
+        //     return (response.data.length == 0)?[]:response.data;
+	    // });
 	  };
 
     $scope.abrirModalBuscaProposicaoAvulsa = function () {
