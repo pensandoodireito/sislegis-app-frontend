@@ -109,6 +109,7 @@ angular.module('sislegisapp')
 					origem: $scope.filtro.origem,
 					isFavorita: $scope.filtro.isFavorita,
                     estado: $scope.filtro.estado,
+                    idEquipe: $scope.filtro.idEquipe,
 					limit: $scope.infiniteScroll.limit, 
 					offset: $scope.infiniteScroll.offset
 				},successCallback, errorCallback);
@@ -134,12 +135,14 @@ angular.module('sislegisapp')
     };
     
     $scope.setSelectedProposicao = function(item,param) {
-        console.log("selecionando ",item,param)
+        
     	$scope.responsavelNull = (item.responsavel==null);
         $scope.initial = {
             explicacao:item.explicacao
         };
-        $scope.initial[param]=item[param];
+        if(param){
+            $scope.initial[param]=item[param];
+        }
 		$scope.posicionamentoNull = (item.posicionamento==null);
     	$scope.selectedProposicao = item;
 	}
@@ -158,9 +161,9 @@ angular.module('sislegisapp')
         return angular.equals(self.original, $scope.reuniao);
     };
     $scope.checkRemocaoResponsavel=function(item){
-    	if(!item.responsavel && $scope.responsavelNull==false){
-    		$scope.responsavelNull=false;
-    		$scope.save(item);		
+    	if(!item.responsavel && $scope.responsavelNull!=false){
+    		$scope.responsavelNull=(item.responsavel==null);
+    		$scope.save(item,"Responsável removido.");		
     	}
     };
     $scope.updates = {};
@@ -198,10 +201,13 @@ angular.module('sislegisapp')
 		}
     	return false;
     }
-    $scope.save = function(item) {
+    $scope.save = function(item,msg) {
     	if(item){
     		$scope.setSelectedProposicao(item);
     	}
+        if(!msg){
+            msg='Proposição atualizada com sucesso.';
+        }
     		
     	clear();
     	
@@ -218,7 +224,7 @@ angular.module('sislegisapp')
         	}, function() {
         		console.error('Erro ao carregar proposições');
         	});
-    		toaster.pop('success', 'Proposição atualizada com sucesso.');
+    		toaster.pop('success',msg );
         };
         var errorCallback = function() {
         	$rootScope.inactivateSpinner = false;
@@ -227,53 +233,65 @@ angular.module('sislegisapp')
         ProposicaoResource.update($scope.selectedProposicao, successCallback, errorCallback);
     };
     
-    $scope.checkRemocaoPosicionamento=function(item){
-		if(item.posicionamentoAtual && item.posicionamentoAtual.posicionamento==null){			
-			$scope.alterarPosicionamento(item,null);
-		}
-	};
+    
     $scope.previousPosicionamento=function(proposicao){
-    	console.log("entrou com ",proposicao.posicionamentoAtual)
+    	console.log("entrou o foco no posicionamento ",proposicao.posicionamentoAtual);
     	if(proposicao.posicionamentoAtual && proposicao.posicionamentoAtual.posicionamento){    		
     		proposicao.previousPosicionamentoNome = proposicao.posicionamentoAtual.posicionamento.nome;
     	}
     }
-	$scope.alterarPosicionamento = function(proposicao, posicionamentoSelecionado, $label) {
-		console.log(proposicao, posicionamentoSelecionado, $label)
-		if(proposicao){
-			$scope.setSelectedProposicao(proposicao);
+    $scope.checkRemocaoPosicionamento=function(item){
+        
+         
+		if(item.posicionamentoAtual && item.posicionamentoAtual.posicionamento==null){
+            
+			$scope.alterarPosicionamento(item,null);
 		}
+	};
+    $scope.alterarPosicionamento = function (proposicao, posicionamentoSelecionado, $label) {
+        
+        if (proposicao) {
+            $scope.setSelectedProposicao(proposicao);
+        }
+
+        if (posicionamentoSelecionado != null) {
+            if (proposicao.previousPosicionamentoNome && proposicao.previousPosicionamentoNome == posicionamentoSelecionado.nome) {
+                console.log("não alterou o posicionamento")
+                return;
+            }
+        } else if (proposicao.previousPosicionamentoNome == null) {
+            console.log("não alterou o posicionamento")
+            return;
+        }
 
 
-        if(posicionamentoSelecionado!=null){
-			if(proposicao.previousPosicionamentoNome && proposicao.previousPosicionamentoNome==posicionamentoSelecionado.nome){
-				console.log("não alterou o posicionamento")
-				return;
-			}	
-		}else if (proposicao.previousPosicionamentoNome==null){
-			console.log("não alterou o posicionamento")
-			return;
-		}
-		
-				
 
-		clear();
+        if (posicionamentoSelecionado && posicionamentoSelecionado.nome != null && posicionamentoSelecionado.id == null) {
+            toaster.pop('error', 'Selecione um posicionamento válido.');
+            return;
+        }
+        clear();
 
-		var successCallback = function(){
-			toaster.pop('success', 'Posicionamento atualizado com sucesso.');
-		};
-		var errorCallback = function() {
-			toaster.pop('error', 'Falha ao atualizar posicionamento.');
-		};
+        
+        var errorCallback = function () {
+            toaster.pop('error', 'Falha ao atualizar posicionamento.');
+        };
 
-        var isPreliminar =  posicionamentoSelecionado && posicionamentoSelecionado.nome.indexOf('Previamente ') != -1;
-		var idPosicionamento = null;
-		if(posicionamentoSelecionado){
-			idPosicionamento=posicionamentoSelecionado.id;
-		}
-		ProposicaoResource.alterarPosicionamento({id: $scope.selectedProposicao.id, idPosicionamento: idPosicionamento, preliminar: isPreliminar}, successCallback, errorCallback);
+        var isPreliminar = posicionamentoSelecionado && posicionamentoSelecionado.nome.indexOf('Previamente ') != -1;
+        var idPosicionamento = null;
+        var successCallback = function () {
+            toaster.pop('success', 'Posicionamento removido com sucesso.');
+        };
+        if (posicionamentoSelecionado && posicionamentoSelecionado.id != null) {
+            idPosicionamento = posicionamentoSelecionado.id;
+            successCallback = function () {
+                toaster.pop('success', 'Posicionamento atualizado com sucesso.');
+            };
+        }
+        ProposicaoResource.alterarPosicionamento({ id: $scope.selectedProposicao.id, idPosicionamento: idPosicionamento, preliminar: isPreliminar }, successCallback, errorCallback);
 
-	}
+
+    }
     
     var clear = function() {
     	delete $scope.selectedProposicao.comentarioTmp;
