@@ -113,7 +113,7 @@
 
                             <div class="col-sm-7">
                                 <div style="border:none;border-radius:0px;border-top: 1px solid #ddd; border-bottom: 1px solid #eee;    padding: 15px;background-color:white;font-family:inherit;"
-                                ng-click="showTextArea=true;temaTxt=true;" ng-hide="showTextArea || item.explicacao==null || item.explicacao==''"
+                                ng-click="showTextArea=true;temaTxt=true;" title="Clique para editar" ng-hide="showTextArea || item.explicacao==null || item.explicacao==''"
                                 style="margin-bottom=0">{{item.explicacao}}</div>
                                 <textarea class="form-control fontsize-sm " rows="3" ng-show="showTextArea || item.explicacao==null || item.explicacao==''"
                                 placeholder="Sem tema SAL. Digite o tema da proposição..." ngTrim="true" ng-model="item.explicacao"
@@ -204,33 +204,38 @@
                                         <div class=" clearfix">
 
                                             <div>
-                                                <label>Posicionamento SAL: </label> <span ng-click="editPosicaoSAL=true;posicaoSALInput=true;"
-                                                ng-hide="editPosicaoSAL"><span ng-if="item.posicionamentoAtual==null">Sem posicionamento</span>{{item.posicionamentoAtual.posicionamento.nome}}</span>
-                                                <div ng-show="editPosicaoSAL">
-                                                    <input focus-me="posicaoSALInput" type="text" ng-model="item.posicionamentoAtual.posicionamento" placeholder="Procurar" ng-required="true"
-                                                    ng-focus="previousPosicionamento(item);" ng-blur="checkRemocaoPosicionamento(item);"
-                                                    typeahead="posicao as posicao.nome for posicao in getPosicionamentos($viewValue) | filter:$viewValue"
-                                                    typeahead-on-select="alterarPosicionamento(item, $model, $label); item.posicionamentoNaoDefinido = false;editPosicaoSAL=false;"
+                                                <label>Posicionamento SAL: </label>
+                                                <div ng-show="semPosicionamento">
+                                                    <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                                </div>
+                                                <div class="form-group">
+
+                                                    <input typeahead-editable="false" type="text" ng-model="item.posicionamentoAtual.posicionamento" placeholder="Procurar" ng-required="true"
+                                                    typeahead-no-results="semPosicionamento" ng-blur="checkRemocaoPosicionamento(item);"
+                                                    ng-focus="previousPosicionamento(item);" typeahead-focus-first="true"
+                                                    ng-model-options="{ debounce: 500 }" typeahead="posicao as posicao.nome for posicao in getPosicionamentos($viewValue) | filter:$viewValue"
+                                                    typeahead-on-select="alterarPosicionamento(item, $model, $label); item.posicionamentoNaoDefinido = false;"
                                                     class="form-control">
                                                 </div>
                                             </div>
                                             <div>
-                                                <label>Responsável: </label> <span ng-click="editResponsavel=true;responsavelInput=true;"
-                                                ng-hide="editResponsavel"><span ng-if="item.responsavel==null">Sem responsável</span>{{item.responsavel.nome}}</span>
-                                                <div ng-show="editResponsavel">
-                                                    <input focus-me="responsavelInput" type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true"
+                                                <label>Responsável: </label>
+                                                <div>
+                                                    <input typeahead-editable="false" type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true"
                                                     typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)"
-                                                    typeahead-on-select="save(item); item.responsavelNaoDefinido = false;editResponsavel=false;"
+                                                    ng-focus="setSelectedProposicao(item)"
+                                                    typeahead-focus-first="true" ng-model-options="{ debounce: 500 }" ng-blur="checkRemocaoResponsavel(item)"
+                                                    typeahead-on-select="save(item); responsavelNull=(item.responsavel==null);item.responsavelNaoDefinido = false;"
                                                     class="form-control">
                                                     <input type="checkbox" ng-model="item.buscaGeral"> Buscar completa
                                                 </div>
                                             </div>
                                             <div>
                                                 <strong>Parecer SAL: </strong>
-                                                <pre style="border:none;border-radius:0px;border-top: 1px solid #ddd; border-bottom: 1px solid #eee;    padding: 15px;background-color:white;font-family:inherit;"
+                                                <pre title="Clique para editar" style="border:none;border-radius:0px;border-top: 1px solid #ddd; border-bottom: 1px solid #eee;    padding: 15px;background-color:white;font-family:inherit;"
                                                 ng-click="showParecerTextArea=true;parecerTXT=true;" ng-hide="showParecerTextArea"
                                                 style="margin-bottom=0"><span ng-if="item.parecerSAL==null">Sem parecer</span>{{item.parecerSAL}}</pre>
-                                                <textarea class="form-control fontsize-sm " rows="3" ng-show="showParecerTextArea " placeholder="Descreva o parecer da SAL..."
+                                                <textarea class="form-control fontsize-sm " rows="3" ng-show="showParecerTextArea" placeholder="Descreva o parecer da SAL..."
                                                 ngTrim="true" ng-model="item.parecerSAL" ng-change="setUpdated('parecerSAL',item)"
                                                 ng-focus="setSelectedProposicao(item)" ng-blur="checkUpdatedField('parecerSAL',item);showParecerTextArea=false;"
                                                 focus-me="parecerTXT" style="margin-bottom:5px;"></textarea>
@@ -278,24 +283,9 @@
 														encaminhamentos</a></strong>
                                             </div>
                                         </div>
-                                        <div class="divider-top form-inline" ng-if="Auth.isEquipe()">
-                                            <div class="form-group">
-                                                <label>Posicionamento:</label>
-                                                <input type="text" ng-model="item.posicionamentoAtual.posicionamento" placeholder="Procurar" ng-required="true" ng-focus="previousPosicionamento(item)"
-                                                ng-blur="checkRemocaoPosicionamento(item)" typeahead="posicao as posicao.nome for posicao in getPosicionamentos($viewValue) | filter:$viewValue"
-                                                typeahead-on-select="alterarPosicionamento(item, $model, $label); item.posicionamentoNaoDefinido = false"
-                                                class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="divider-top form-inline" ng-if="Auth.isEquipe()">
-                                            <div class="form-group">
-                                                <label>Responsável: </label>
-                                                <input type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true" typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)"
-                                                typeahead-on-select="save(item); item.responsavelNaoDefinido = false" class="form-control">
-                                                <input type="checkbox" ng-model="item.buscaGeral"> Buscar completa
-                                            </div>
-                                        </div>
-                                        <div class="divider-top row">
+
+
+                                        <div class="divider-top clearfix">
                                             <label>Situação: </label>
                                             <div class="form-group">
                                                 <div class="col-md-10">
