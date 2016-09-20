@@ -4,11 +4,15 @@ angular.module('sislegisapp')
     link: function(scope, element, attrs) {
       scope.$watch(attrs.focusMe, function(value) {
         if(value === true) { 
-          console.log('value=',value);
-          //$timeout(function() {
-            element[0].focus();
-            scope[attrs.focusMe] = false;
-          //});
+          
+          $timeout(function() {
+              try{
+                   element[0].focus();
+                   scope[attrs.focusMe] = false;
+              }catch(e){
+                  console.log(e);
+              }
+          },100);
         }
       });
     }
@@ -81,6 +85,8 @@ angular.module('sislegisapp')
 
 		    for (var i = 0; i < data.length; i++) {
 		    	$scope.listaReuniaoProposicoes.push(data[i]);
+                
+                
 		    }
 		    if ($scope.listaReuniaoProposicoes.length == 0) {
 		    	toaster.pop('info', 'Nenhuma Proposição encontrada.');
@@ -107,7 +113,9 @@ angular.module('sislegisapp')
 					offset: $scope.infiniteScroll.offset
 				},successCallback, errorCallback);
 	}
-	
+	$scope.loadRevisoes=function(item){
+        item.revisoes=ProposicaoResource.listaRevisoes({ ProposicaoId:item.id});
+    }
 	$scope.filtrarConsulta = function() {
 		$scope.listaReuniaoProposicoes = [];
 	    $scope.infiniteScroll.busy = false;
@@ -125,11 +133,13 @@ angular.module('sislegisapp')
     	return ElaboracaoNormativaResource.buscarPorSufixo({sufixo: query}).$promise;
     };
     
-    $scope.setSelectedProposicao = function(item) {
+    $scope.setSelectedProposicao = function(item,param) {
+        console.log("selecionando ",item,param)
     	$scope.responsavelNull = (item.responsavel==null);
         $scope.initial = {
             explicacao:item.explicacao
         };
+        $scope.initial[param]=item[param];
 		$scope.posicionamentoNull = (item.posicionamento==null);
     	$scope.selectedProposicao = item;
 	}
@@ -160,9 +170,12 @@ angular.module('sislegisapp')
 
     $scope.checkUpdatedField = function (field, item) {
         var updated = $scope.updates[field];
-        console.log(updated);
+        
         if (updated == item) {
-            if (item[field] != $scope.initial[field]) {
+            if($scope.initial==null){
+                console.log("nao foi inicializado initial")
+            }
+            if ($scope.initial==null || item[field] != $scope.initial[field]) {
                 $scope.save(item);
             }
         }
@@ -414,14 +427,14 @@ angular.module('sislegisapp')
     
 	$scope.getUsuarios = function(val, buscaGeral) {
         var method = (buscaGeral) ? 'ldapSearch' : 'find';
-
-        return $http.get(BACKEND + '/usuarios/' + method, {
-	      params: {
-	        nome: val
-	      }
-	    }).then(function(response){
-            return (response.data.length == 0)?[]:response.data;
-	    });
+return UsuarioResource.buscaPorUsuario({ method: method, nome: val },{ method: method, nome: val },function(data){console.log("aee",data)}).$promise;
+        // return $http.get(BACKEND + '/usuarios/' + method, {
+	    //   params: {
+	    //     nome: val
+	    //   }
+	    // }).then(function(response){
+        //     return (response.data.length == 0)?[]:response.data;
+	    // });
 	  };
 
     $scope.abrirModalBuscaProposicaoAvulsa = function () {
@@ -514,7 +527,25 @@ angular.module('sislegisapp')
         }
             );
     }
-		
+	$scope.abrirModalParecerAreaMerito= function (item) {
+        $scope.selectedProposicao= item;
+          var modalInstance = $modal.open({
+                templateUrl: 'views/modal-parecer-areamerito.html',
+                controller: 'ModalParecerAreaMeritoController',
+                size: 'lg',
+                resolve: {
+                    proposicao: function () {
+                        return $scope.selectedProposicao;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (listaNotas) {
+                $scope.selectedProposicao.listaNotas = listaNotas;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+    }	
     $scope.abrirModalNotaTecnica = function (item) {
        $scope.selectedProposicao= item;
         if ($scope.selectedProposicao.listaNotas == null || $scope.selectedProposicao.listaNotas.length != $scope.selectedProposicao.totalNotasTecnicas) {
@@ -533,8 +564,8 @@ angular.module('sislegisapp')
                 }
             });
 
-            modalInstance.result.then(function (listaNotas) {
-                $scope.selectedProposicao.listaNotas = listaNotas;
+            modalInstance.result.then(function (prop) {
+                $scope.selectedProposicao = prop;
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
             });
