@@ -34,7 +34,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="result in searchResults | searchFilter:searchResults | startFrom:currentPage*pageSize | limitTo:pageSize">
+                                        <tr ng-repeat="result in searchResults | searchFilter:searchResults | startFrom:currentPage*pageSize | limitTo:pageSize| orderBy:['nome']">
                                             <td><a href="#/AreaDeMerito/edit/{{result.id}}">{{result.nome}}</a></td>
                                             <td> {{result.contato.nome}} - {{result.contato.email}}</td>
                                         </tr>
