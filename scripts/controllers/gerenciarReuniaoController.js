@@ -22,7 +22,7 @@ angular.module('sislegisapp')
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
 				ReuniaoProposicaoResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
-                TipoEncaminhamentoResource, ElaboracaoNormativaResource, Auth,TagResource, BACKEND) {
+                TipoEncaminhamentoResource, ElaboracaoNormativaResource, Auth,TagResource, $q, BACKEND) {
     
 	var self = this;
     $scope.Auth=Auth;
@@ -184,11 +184,16 @@ angular.module('sislegisapp')
         }
 
     };
-    $scope.setaEstado = function(item,estado){
-        item.estado=estado;
-        $scope.save(item);
+    $scope.setaEstado = function (item, estado) {
+        var oldState = item.estado;
+        item.estado = estado;
+        $scope.save(item,"Fluxo de trabalho da proposição alterado","Falhou ao alterar proposição").then(function(){
+            
+        },function(){
+            item.estado = oldState;
+        })
     }
-
+    //usado para atualizar a proposicao na lista
     $scope.updateSingleProposicao = function(item,toastMsg){
     	for (var i = 0; i < $scope.listaReuniaoProposicoes.length; i++) {    			
 			if(item.id==$scope.listaReuniaoProposicoes[i].id){
@@ -201,36 +206,46 @@ angular.module('sislegisapp')
 		}
     	return false;
     }
-    $scope.save = function(item,msg) {
-    	if(item){
-    		$scope.setSelectedProposicao(item);
-    	}
-        if(!msg){
-            msg='Proposição atualizada com sucesso.';
+    $scope.save = function (item, msgSucesso, msgErro) {
+        var deferred = $q.defer();
+        if (item) {
+            $scope.setSelectedProposicao(item);
         }
-    		
-    	clear();
-    	
-    	$rootScope.inactivateSpinner = true;
-        var successCallback = function(){
-        	$rootScope.inactivateSpinner = false;
-        	 if($scope.updateSingleProposicao(item,'Proposição atualizada com sucesso.')){
-        		 return;
-        	 }
-        	console.log("Nao carregou a proposicao, recarregara a reuniao inteira");
-    		ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()},
-        	function(response) {
-        		$scope.listaReuniaoProposicoes = response;
-        	}, function() {
-        		console.error('Erro ao carregar proposições');
-        	});
-    		toaster.pop('success',msg );
+        if (!msgSucesso) {
+            msgSucesso = 'Proposição atualizada com sucesso.';
+        }
+        if (!msgErro) {
+            msgErro = 'Falha salvar proposição.';
+        }
+
+
+        clear();
+
+        $rootScope.inactivateSpinner = true;
+        var successCallback = function () {
+            $rootScope.inactivateSpinner = false;
+            if ($scope.updateSingleProposicao(item, msgSucesso)) {
+                deferred.resolve(item);
+                return;
+            }
+            console.log("Nao carregou a proposicao, recarregara a reuniao inteira");
+            ReuniaoResource.buscarReuniaoPorData({ data: $scope.dataFormatada() },
+                function (response) {
+                    $scope.listaReuniaoProposicoes = response;
+                    deferred.resolve(item);
+                }, function () {
+                    console.error('Erro ao carregar proposições');
+                    deferred.reject('Erro ao carregar proposições');
+                });
+            toaster.pop('success', msgSucesso);
         };
-        var errorCallback = function() {
-        	$rootScope.inactivateSpinner = false;
-        	toaster.pop('error', 'Falha salvar proposição.');
+        var errorCallback = function () {
+            $rootScope.inactivateSpinner = false;
+            toaster.pop('error', msgErro);
+            deferred.reject('Falha salvar proposição.');
         };
         ProposicaoResource.update($scope.selectedProposicao, successCallback, errorCallback);
+        return deferred.promise;
     };
     
     
