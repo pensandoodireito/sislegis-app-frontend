@@ -6,7 +6,12 @@
         <button type="button" class="btn btn-default " ng-click="selecionaTipo('Padrao_Despachos')">Relatório Padrão Despachos</button>
     </div>
 </div>
-<button type="button" class="btn btn-default btn-block no-print" ng-click="printIt()"><i class="fa fa-print"></i> Imprimir</button>
+<div class="col-xs-12 text-center no-print" ng-iaf="carregando==true">
+    <div class=" ajax" title="Carregando">
+        <i class="fa fa-spin fa-refresh"></i>&nbsp; Carregando...
+    </div>
+</div>
+<button type="button" class="btn btn-default btn-block no-print" ng-click="printIt()" ng-show="proposicoes.length>0"><i class="fa fa-print"></i> Imprimir</button>
 
 
 
@@ -28,8 +33,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="divider-top " style="page-break-inside: avoid; " ng-repeat="item in proposicoesPorComissao |orderBy:[
-'pautaComissaoAtual.pautaReuniaoComissao.data', 'numero'] ">
+                <tr class="divider-top " style="page-break-inside: avoid; " ng-repeat="item in proposicoesPorComissao |orderBy:['pautaComissaoAtual.pautaReuniaoComissao.data', 'numero'] ">
                     <td>
                         <h3><a >{{item.sigla}}</a> (<span ng-if="item.posicionamentoAtual==null ">Sem posicionamento</span>{{item.posicionamentoAtual.posicionamento.nome}})</h3>
                         <div class="ementaMax " ng-if="item.explicacao!=null && item.explicacao.length>0">{{item.explicacao}}</div>
