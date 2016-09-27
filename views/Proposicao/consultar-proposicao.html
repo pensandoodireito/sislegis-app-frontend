@@ -170,6 +170,17 @@
                                     </div>
 
                                 </div>
+                                <div class="divider-top clearfix">
+                                    <label>Posicionamento SUPAR: </label>
+                                    <div class="form-group">
+                                        <input typeahead-editable="false" type="text" ng-model="item.posicionamentoSupar" placeholder="SUPAR sem posicionamento definido" ng-required="false"                                        typeahead-no-results="semPosicionamentoSupar"
+                                        
+                                        ng-blur="checkAlteracaoSupar(item,4)"
+                                        ng-change="checkAlteracaoSupar(item,2,$item, $model, $label)" typeahead-on-select="checkAlteracaoSupar(item,3,$item, $model, $label)"
+                                         typeahead="posicao as posicao.nome for posicao in getPosicionamentos($viewValue) | filter:$viewValue"
+                                         class="form-control">
+                                    </div>
+                                </div>
 
                                 <div class="divider-top clearfix">
                                     <span ng-show="item.origem == 'SENADO'">
@@ -223,9 +234,8 @@
                                                 <div>
                                                     <input typeahead-editable="false" type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true"
                                                     typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)"
-                                                    ng-focus="setSelectedProposicao(item)"
-                                                    typeahead-focus-first="true" ng-model-options="{ debounce: 500 }" ng-blur="checkRemocaoResponsavel(item)"
-                                                    typeahead-on-select="save(item); responsavelNull=(item.responsavel==null);item.responsavelNaoDefinido = false;"
+                                                    ng-focus="setSelectedProposicao(item)" typeahead-focus-first="true" ng-model-options="{ debounce: 500 }"
+                                                    ng-blur="checkRemocaoResponsavel(item)" typeahead-on-select="save(item); responsavelNull=(item.responsavel==null);item.responsavelNaoDefinido = false;"
                                                     class="form-control">
                                                     <input type="checkbox" ng-model="item.buscaGeral"> Buscar completa
                                                 </div>

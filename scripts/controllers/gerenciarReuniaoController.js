@@ -255,6 +255,31 @@ angular.module('sislegisapp')
     		proposicao.previousPosicionamentoNome = proposicao.posicionamentoAtual.posicionamento.nome;
     	}
     }
+    $scope.checkAlteracaoSupar = function (item, left, $item, $model, $label) {
+        if (left == 1) {
+            item.posicionamentoSuparOld = item.posicionamentoSupar;
+        } else if (left == 2) {
+            console.log(item.posicionamentoSupar, $item, $model, $label);
+        
+        } else if (left == 4||left == 3) {
+            if(item.posicionamentoSuparOld!=item.posicionamentoSupar){
+                if(item.posicionamentoSupar==''){
+                    item.posicionamentoSupar=null;
+                }
+                console.log("tem q salvar",item.posicionamentoSupar);
+                $scope.save(item).then(function(){
+                    item.posicionamentoSuparOld = item.posicionamentoSupar;
+                },function(){
+                    item.posicionamentoSupar=item.posicionamentoSuparOld;
+                });
+            }else{
+                console.log("nada a fazer")
+            }
+        } else {
+            console.log("saiu...", left)
+        }
+    }
+    
     $scope.checkRemocaoPosicionamento=function(item){
         
          
