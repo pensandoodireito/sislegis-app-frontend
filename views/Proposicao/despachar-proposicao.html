@@ -1,0 +1,347 @@
+<div class="content">
+    <div class="pull-right">
+
+
+        <button type="button" class="btn btn-primary btn-sm" ng-click="buscarProposicoes()" class="btn btn-success"><i class="fa fa-plus"></i> Buscar/Adicionar proposições</a>
+
+    </div>
+    <h3>Consultar Proposições</h3>
+    <div class="row">
+        <div class="panel panel-default" style="background-color:transparent;">
+            <div class="panel-heading">
+                <div class="clearfix">
+                    <div class="row" role="form">
+
+                        <div class="col-sm-2">
+                            <label>Por tipo número/ano:</label>
+                            <input type="text" class="form-control" ng-model="filtro.sigla" placeholder="Filtrar pela sigla" ng-change="filtrarConsulta()">
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Pela ementa:</label>
+                            <input type="text" class="form-control" ng-model="filtro.ementa" placeholder="Filtrar pela ementa" ng-change="filtrarConsulta()">
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Por autor:</label>
+                            <input type="text" class="form-control" ng-model="filtro.autor" placeholder="Filtrar por autor" ng-change="filtrarConsulta()">
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Por casa legislativa:</label>
+                            <select ng-model="filtro.origem" class="form-control" ng-change="filtrarConsulta()">
+                                <option value=""></option>
+                                <option value="CAMARA">CAMARA</option>
+                                <option value="SENADO">SENADO</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Por favoritas:</label>
+                            <select ng-model="filtro.isFavorita" class="form-control" ng-change='filtrarConsulta()'>
+                                <option value=""></option>
+                                <option value="true">Favoritas</option>
+                                <option value="false">Não-favoritas</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="row" role="form">
+
+                        <!--<div class="col-sm-2">
+                            <label>Pelo estado na SAL:</label>
+                            <select ng-model="filtro.estado" class="form-control" ng-change='filtrarConsulta()'>
+                                <option value=""></option>
+                                <option value="FORADEPAUTA">Fora de competência</option>
+                                <option value="EMANALISE">Em análise</option>
+                                <option value="ANALISADA">Analisada</option>
+                                <option value="ADESPACHAR">A despachar</option>
+                                <option value="DESPACHADA">Despachada</option>
+                            </select>
+                        </div>-->
+                        <div class="col-sm-2">
+                            <label>Por equipe:</label>
+                            <select ng-model="filtro.equipe" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.nome for item in equipes track by item.id">
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <div infinite-scroll='consultarProposicoes()' infinite-scroll-disabled='infiniteScroll.busy'>
+                    <div class="box box-info" ng-repeat="item in listaReuniaoProposicoes | orderBy : 'seqOrdemPauta'">
+                        <div class="box-header ">
+                            <i class="fa fa-star-o" ng-show="!item.favorita" ng-click="item.favorita=true;save(item)"></i>
+                            <i class="fa fa-star" style="color: orange" ng-show="item.favorita" ng-click="item.favorita=false;save(item)"></i>
+
+                            <h3 class="box-title"><a href="#/Proposicao/id/{{item.id}}" target="_blank">{{item.sigla}}</a> 
+                                        </h3>
+                            <span ng-if="item.posicionamentoAtual==null">Sem posicionamento</span>{{item.posicionamentoAtual.posicionamento.nome}}</span>
+                            <div class=" label">
+                                <span class="label bg-gray" ng-if="item.estado=='FORADEPAUTA'" style="color:white" title="Proposição não é de interesse da SAL">Fora de competência</span>
+                                <span class="label label-warning" ng-if="item.estado=='EMANALISE'" title="Proposição está sendo analisada pela equipe da SAL">Em análise</span>
+                                <span class="label label-info" ng-if="item.estado=='ANALISADA'" title="Análise aguarda aprovação do diretor da equipe da SAL">Em revisão</span>
+                                <span class="label label-primary" ng-if="item.estado=='ADESPACHAR'" title="Análise aguarda despacho do secretário">Aguardando despacho</span>
+                                <span class="label label-success" ng-if="item.estado=='DESPACHADA'" title="Proposição com posicionamento despachado pelo secretário">Despachada</span>
+                            </div>
+                            <!-- tools box -->
+
+                            <div class="box-tools pull-right">
+                                <button ng-if="Auth.isAspar(true) && item.estado=='FORADEPAUTA'" type="button" class="btn btn-default btn-sm" title="Marcar análise SAL"
+                                ng-click="setaEstado(item,'EMANALISE')"> <i class="fa fa-mail-forward"></i> Marcar para análise da SAL
+                                </button>
+                                <button ng-if="Auth.isAspar(true) && item.estado=='DESPACHADA'" type="button" class="btn btn-default btn-sm" title="Marcar <Re-></Re->análise SAL"
+                                ng-click="setaEstado(item,'EMANALISE')">
+                                    <i class="fa fa-mail-forward"></i> Marcar para análise da SAL
+                                </button>
+                                <button ng-if="Auth.isEquipe(true) && item.estado=='EMANALISE'" type="button" class="btn btn-default btn-sm" title="Análise Completa"
+                                ng-click="setaEstado(item,'ANALISADA')">
+                                    <i class="fa fa-check-circle-o"></i> Análise completa
+                                </button>
+                                <button ng-if="Auth.isDiretor(true) && item.estado=='ANALISADA'" type="button" class="btn btn-default btn-sm" title="Enviar para despacho"
+                                ng-click="setaEstado(item,'ADESPACHAR')">
+                                    <i class="fa fa-check-circle"></i> Enviar para despacho
+                                </button>
+                                <button ng-if="Auth.isSecretario(true) && item.estado=='ADESPACHAR'" type="button" class="btn btn-default btn-sm" title="Despachar"
+                                ng-click="setaEstado(item,'DESPACHADA')">
+                                    <i class="fa fa-paper-plane"></i> Despachar
+                                </button>
+
+                                <button ng-if="Auth.isDiretor(true) && (item.estado=='ANALISADA' || item.estado=='ADESPACHAR')" type="button" class="btn btn-default btn-sm"
+                                title="Enviar para re análise" ng-click="setaEstado(item,'EMANALISE')">
+                                    <i class="fa fa-retweet"></i> Re-Analisar
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <!-- /. tools -->
+                        </div>
+                        <div class="box-body">
+
+                            <div class="col-sm-7">
+                                <div style="border:none;border-radius:0px;border-top: 1px solid #ddd; border-bottom: 1px solid #eee;    padding: 15px;background-color:white;font-family:inherit;"
+                                ng-click="showTextArea=true;temaTxt=true;" title="Clique para editar" ng-hide="showTextArea || item.explicacao==null || item.explicacao==''"
+                                style="margin-bottom=0">{{item.explicacao}}</div>
+                                <textarea class="form-control fontsize-sm " rows="3" ng-show="showTextArea || item.explicacao==null || item.explicacao==''"
+                                placeholder="Sem tema SAL. Digite o tema da proposição..." ngTrim="true" ng-model="item.explicacao"
+                                ng-focus="showTextArea=true;temaTxt=true;   setSelectedProposicao(item)" ng-change="setUpdated('explicacao',item)"
+                                ng-blur="checkUpdatedField('explicacao',item);showTextArea=false;" focus-me="temaTxt" style="margin-bottom:5px;"></textarea>
+                                <div class="divider-top clearfix">
+
+                                    <strong>Ementa: </strong>
+                                    <div>{{item.ementa}}</div>
+
+                                    <strong>Autor: </strong>{{item.autor}}
+                                    <br /> <strong>Origem: </strong>{{item.origem}}
+                                    <br />
+                                </div>
+
+                                <div class="divider-top clearfix">
+                                    <strong>Comissao: </strong><span ng-if="item.pautaComissaoAtual==null && item.comissao!=null">{{item.comissao}} <i style="font-size: xx-small;">última comissão</i></span>{{item.pautaComissaoAtual.pautaReuniaoComissao.comissao}}
+                                    <br/>
+                                    <strong>Ordem na Pauta: </strong>{{item.pautaComissaoAtual.ordemPauta}} <span ng-show="item.pautaComissaoAtual && item.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{item.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
+                                    <br/>
+                                    <strong>Relator: </strong><span ng-if="item.pautaComissaoAtual.relator==null">Não identificado</span>{{item.pautaComissaoAtual.relator}}
+                                    <br/>
+                                </div>
+                                <div class="divider-top clearfix">
+
+                                    <strong>Área de mérito</strong> <span ng-show="item.totalParecerAreaMerito==0">nenhum parecer</span>
+                                    <span ng-show="item.totalParecerAreaMerito>0"><a ng-show="item.revisoes==null && item.totalParecerAreaMerito>0" ng-click="loadRevisoes(item)">({{item.totalParecerAreaMerito}} pareceres)</a></span>
+                                    <a class="pull-right" ng-click="abrirModalParecerAreaMerito(item)" title="Adicionar parecer de área de mérito"><i class="fa fa-plus-circle"></i></a>
+                                    <br/>
+
+
+                                    <div class="table-responsive no-padding" ng-show="item.revisoes.length>0">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nome</th>
+                                                    <th>Data</th>
+                                                    <th>Posicionamento</th>
+                                                    <th>Parecer</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="revisao in item.revisoes">
+                                                    <td>{{revisao.areaMerito.nome}}</td>
+                                                    <td>{{revisao.dataAtualizacao| date:'dd/MM HH:mm'}}</td>
+                                                    <td>{{revisao.posicionamento.nome}}</td>
+                                                    <td>{{revisao.parecer}}</td>
+                                                </tr>
+
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                                <div class="divider-top clearfix">
+                                    <label>Posicionamento SUPAR: </label>
+                                    <div class="form-group">
+                                        <input typeahead-editable="false" type="text" ng-model="item.posicionamentoSupar" placeholder="SUPAR sem posicionamento definido"
+                                        ng-required="false" typeahead-no-results="semPosicionamentoSupar" ng-blur="checkAlteracaoSupar(item,4)"
+                                        ng-change="checkAlteracaoSupar(item,2,$item, $model, $label)" typeahead-on-select="checkAlteracaoSupar(item,3,$item, $model, $label)"
+                                        typeahead="posicao as posicao.nome for posicao in getPosicionamentos($viewValue) | filter:$viewValue"
+                                        class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="divider-top clearfix">
+                                    <span ng-show="item.origem == 'SENADO'">
+									<a
+										href="http://www.senado.leg.br/atividade/materia/detalhes.asp?p_cod_mate={{item.idProposicao}}#DIV_TRAMITACAO"
+										target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
+								</span>
+                                    <span ng-show="item.origem == 'CAMARA'">
+									<a
+										href="http://www.camara.gov.br/proposicoesWeb/fichadetramitacao?idProposicao={{item.idProposicao}}#tramitacoes"
+										target="_blank"><i class="fa fa-history"></i> Histórico de Tramitação</a>
+								</span>
+                                    <span class="divider-left">
+                                    <a  ng-show="isFollowed(item)" href ng-click="unfollowProposicao(item);"><i class="fa fa-check-square-o"></i> Seguindo proposição</a>
+                                    <a  ng-show="!isFollowed(item)" href ng-click="followProposicao(item);"><i class="fa fa-square-o"></i> Seguir proposição</a>
+								</span>
+                                    <span class="divider-left">
+                                    <a  href ng-click="checkUpdates(item);"><i class="fa  fa-refresh"></i> Atualizar dados da {{item.origem}}</a>
+
+								</span>
+                                </div>
+
+
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading ">
+                                        SAL
+                                    </div>
+                                    <div class="panel-body">
+
+                                        <div class=" clearfix">
+
+                                            <div>
+                                                <label>Posicionamento SAL: </label>
+                                                <div ng-show="semPosicionamento">
+                                                    <i class="glyphicon glyphicon-remove"></i> Nenhum resultado
+                                                </div>
+                                                <div class="form-group">
+
+                                                    <input typeahead-editable="false" type="text" ng-model="item.posicionamentoAtual.posicionamento" placeholder="Procurar" ng-required="true"
+                                                    typeahead-no-results="semPosicionamento" ng-blur="checkRemocaoPosicionamento(item);"
+                                                    ng-focus="previousPosicionamento(item);" typeahead-focus-first="true"
+                                                    ng-model-options="{ debounce: 500 }" typeahead="posicao as posicao.nome for posicao in getPosicionamentos($viewValue) | filter:$viewValue"
+                                                    typeahead-on-select="alterarPosicionamento(item, $model, $label); item.posicionamentoNaoDefinido = false;"
+                                                    class="form-control">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <strong>Explicação do posicionamento: </strong>
+                                                <pre title="Clique para editar" style="border:none;border-radius:0px;border-top: 1px solid #ddd; border-bottom: 1px solid #eee;    padding: 15px;background-color:white;font-family:inherit;"
+                                                ng-click="showParecerTextArea=true;parecerTXT=true;" ng-hide="showParecerTextArea"
+                                                style="margin-bottom=0"><span ng-if="item.parecerSAL==null">Sem parecer</span>{{item.parecerSAL}}</pre>
+                                                <textarea class="form-control fontsize-sm " rows="3" ng-show="showParecerTextArea" placeholder="Descreva o parecer da SAL..."
+                                                ngTrim="true" ng-model="item.parecerSAL" ng-change="setUpdated('parecerSAL',item)"
+                                                ng-focus="setSelectedProposicao(item)" ng-blur="checkUpdatedField('parecerSAL',item);showParecerTextArea=false;"
+                                                focus-me="parecerTXT" style="margin-bottom:5px;"></textarea>
+                                            </div>
+
+                                            <div>
+                                                <label>Equipe Responsável: </label>
+                                                <div>
+                                                    <input typeahead-editable="false" type="text" ng-model="item.equipe" placeholder="Procurar equipe" ng-required="false" typeahead="item as item.nome for item in equipes"
+                                                    ng-focus="setSelectedProposicao(item)" typeahead-focus-first="true" ng-model-options="{ debounce: 500 }"
+                                                    typeahead-on-select="save(item);" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label>Responsável: </label>
+                                                <div>
+                                                    <input typeahead-editable="false" type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true"
+                                                    typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)"
+                                                    ng-focus="setSelectedProposicao(item)" typeahead-focus-first="true" ng-model-options="{ debounce: 500 }"
+                                                    ng-blur="checkRemocaoResponsavel(item)" typeahead-on-select="save(item); responsavelNull=(item.responsavel==null);item.responsavelNaoDefinido = false;"
+                                                    class="form-control">
+                                                    <input type="checkbox" ng-model="item.buscaGeral"> Buscar completa
+                                                </div>
+                                            </div>
+
+
+
+                                            <div>
+                                                <label>Análise documental SAL: </label>
+
+
+                                                <div class="col-md-12 text-center">
+                                                    <strong> <a ng-click="abrirModalNotaTecnica(item)"><i
+														class="fa fa-file-text"></i> {{item.totalNotasTecnicas}} documentos</a></strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class=" clearfix">
+
+                                            <div class="col-md-12">
+                                                <div ng-show="item.listaComentario.length > 0">
+                                                    <strong>Últimos comentários:</strong>
+
+                                                    <p>{{item.listaComentario[item.listaComentario.length-1].dataCriacao | date:
+                                                        'dd/MM/yyyy'}} - {{item.listaComentario[item.listaComentario.length-1].descricao}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <textarea class="form-control fontsize-sm" rows="1" placeholder="Adicione um comentário" ng-model="item.comentarioTmp"></textarea>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button type="button" class="btn btn-success btn-sm" ng-click="incluirComentario(item)">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="divider-top clearfix">
+                                            <div class="col-md-6">
+                                                <strong> <a ng-click="abrirModalComentarios(item)"><i
+														class="fa fa-comment"></i> {{item.totalComentarios}} comentários</a></strong>
+                                            </div>
+                                            <div class="col-md-6 text-right">
+                                                <strong><a
+													ng-click="abrirModalEncaminhamentos(item)">
+														{{item.listaEncaminhamentoProposicao.length || item.totalEncaminhamentos}}
+														encaminhamentos</a></strong>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="divider-top clearfix">
+                                            <label>Situação: </label>
+                                            <div class="form-group">
+                                                <div class="col-md-10">
+                                                    <textarea class="form-control fontsize-sm" rows="3" placeholder="Adicione um resultado" ng-model="item.resultadoASPAR"></textarea>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button type="button" class="btn btn-success btn-sm" ng-click="save(item)"><i class="fa fa-check"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="divider-top ">
+                                            <label>Macrotema: </label>
+                                            <div class="form-group">
+                                                <tags-input ng-model="item.tags" ng-class="form-group" on-tag-added="save(item)" on-tag-removed="save(item)" min-length="1"
+                                                placeholder="Adicione uma palavra chave" display-property="tag">
+                                                    <auto-complete source="loadTags($query)"></auto-complete>
+                                                </tags-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-footer clearfix"></div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

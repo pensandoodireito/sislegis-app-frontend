@@ -65,7 +65,7 @@
                     <li class="header">MENU </li>
 
                     <li ng-class="{'active':!itemMenu || itemMenu=='dashboard'}"> <a href="#/Tarefas"><i class="fa fa-dashboard"></i> <span>Painel de controle</span></a></li>
-                    <li ng-if="auth.isSecretario()" ng-class="{'active':itemMenu=='despachos'}"> <a href=""><i class="fa fa-send"></i> <span>Despachos</span></a></li>
+                    <li ng-show="auth.isSecretario()" ng-class="{'active':itemMenu=='despachos'}"> <a href=""><i class="fa fa-send"></i> <span>Despachos</span></a></li>
                     <li ng-class="{'active':itemMenu=='proposicao'}"><a href="#/Proposicao/consultar" ng-click="itemMenu='proposicao'"><i class="fa fa-files-o"></i><span>Proposições</span></a></li>
                     <li class="treeview">
                         <a href="#">
@@ -135,6 +135,7 @@
 
     <script src="scripts/app.js"></script>
     <script src="scripts/offcanvas.js"></script>
+    <script src="scripts/directives/directives.js"></script>
     <script src="scripts/directives/datepicker.js"></script>
     <script src="scripts/directives/timepicker.js"></script>
     <script src="scripts/directives/datetimepicker.js"></script>

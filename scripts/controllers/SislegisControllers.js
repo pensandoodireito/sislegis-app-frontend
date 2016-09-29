@@ -1,5 +1,14 @@
+
+var angular;
 angular.module('sislegisapp')
 
+    .controller('DespachoController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
+        ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
+        EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
+        TipoEncaminhamentoResource, Auth, TagResource, $q, BACKEND) {
+
+
+    })
     .controller('SearchAreaMeritoController', function ($scope, $http, AreaMeritoResource) {
 
         $scope.search = {};
@@ -126,5 +135,4 @@ angular.module('sislegisapp')
 
 
 
-        }
-        );
+        });
