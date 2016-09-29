@@ -488,13 +488,7 @@ angular.module('sislegisapp')
 	$scope.getUsuarios = function(val, buscaGeral) {
         var method = (buscaGeral) ? 'ldapSearch' : 'find';
 return UsuarioResource.buscaPorUsuario({ method: method, nome: val },{ method: method, nome: val },function(data){console.log("aee",data)}).$promise;
-        // return $http.get(BACKEND + '/usuarios/' + method, {
-	    //   params: {
-	    //     nome: val
-	    //   }
-	    // }).then(function(response){
-        //     return (response.data.length == 0)?[]:response.data;
-	    // });
+    
 	  };
 
     $scope.abrirModalBuscaProposicaoAvulsa = function () {

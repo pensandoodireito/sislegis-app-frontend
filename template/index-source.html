@@ -65,7 +65,7 @@
                     <li class="header">MENU </li>
 
                     <li ng-class="{'active':!itemMenu || itemMenu=='dashboard'}"> <a href="#/Tarefas"><i class="fa fa-dashboard"></i> <span>Painel de controle</span></a></li>
-                    <li ng-show="auth.isSecretario()" ng-class="{'active':itemMenu=='despachos'}"> <a href=""><i class="fa fa-send"></i> <span>Despachos</span></a></li>
+                    <li ng-class="{'active':itemMenu=='despachos'}" ng-show="auth.isSecretario()" > <a href="#/Proposicao/despachar"  ng-click="itemMenu='despachos'"><i class="fa fa-send"></i> <span>Despachos</span></a></li>
                     <li ng-class="{'active':itemMenu=='proposicao'}"><a href="#/Proposicao/consultar" ng-click="itemMenu='proposicao'"><i class="fa fa-files-o"></i><span>Proposições</span></a></li>
                     <li class="treeview">
                         <a href="#">
@@ -150,9 +150,9 @@
     <script src="scripts/controllers/proposicaoController.js"></script>
     <script src="scripts/controllers/modalBuscarProposicaoController.js"></script>
     <script src="scripts/controllers/modalAddProposicaoController.js"></script>
-    <script src="scripts/controllers/modalComentariosController.js"></script>
+    
     <script src="scripts/controllers/modalNotaTecnicaController.js"></script>
-    <script src="scripts/controllers/modalParecerAreaMeritoController.js"></script>
+    
 
     <script src="scripts/controllers/SislegisControllers.js"></script>
 
