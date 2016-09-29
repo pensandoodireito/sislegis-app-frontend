@@ -55,7 +55,12 @@
                                 <option value="DESPACHADA">Despachada</option>
                             </select>
                         </div>
+                        <div class="col-sm-2">
+                            <label>Por equipe:</label>
+                            <select ng-model="filtro.equipe" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.nome for item in equipes track by item.id">
 
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -173,12 +178,11 @@
                                 <div class="divider-top clearfix">
                                     <label>Posicionamento SUPAR: </label>
                                     <div class="form-group">
-                                        <input typeahead-editable="false" type="text" ng-model="item.posicionamentoSupar" placeholder="SUPAR sem posicionamento definido" ng-required="false"                                        typeahead-no-results="semPosicionamentoSupar"
-                                        
-                                        ng-blur="checkAlteracaoSupar(item,4)"
+                                        <input typeahead-editable="false" type="text" ng-model="item.posicionamentoSupar" placeholder="SUPAR sem posicionamento definido"
+                                        ng-required="false" typeahead-no-results="semPosicionamentoSupar" ng-blur="checkAlteracaoSupar(item,4)"
                                         ng-change="checkAlteracaoSupar(item,2,$item, $model, $label)" typeahead-on-select="checkAlteracaoSupar(item,3,$item, $model, $label)"
-                                         typeahead="posicao as posicao.nome for posicao in getPosicionamentos($viewValue) | filter:$viewValue"
-                                         class="form-control">
+                                        typeahead="posicao as posicao.nome for posicao in getPosicionamentos($viewValue) | filter:$viewValue"
+                                        class="form-control">
                                     </div>
                                 </div>
 
@@ -230,6 +234,25 @@
                                                 </div>
                                             </div>
                                             <div>
+                                                <strong>Explicação do posicionamento: </strong>
+                                                <pre title="Clique para editar" style="border:none;border-radius:0px;border-top: 1px solid #ddd; border-bottom: 1px solid #eee;    padding: 15px;background-color:white;font-family:inherit;"
+                                                ng-click="showParecerTextArea=true;parecerTXT=true;" ng-hide="showParecerTextArea"
+                                                style="margin-bottom=0"><span ng-if="item.parecerSAL==null">Sem parecer</span>{{item.parecerSAL}}</pre>
+                                                <textarea class="form-control fontsize-sm " rows="3" ng-show="showParecerTextArea" placeholder="Descreva o parecer da SAL..."
+                                                ngTrim="true" ng-model="item.parecerSAL" ng-change="setUpdated('parecerSAL',item)"
+                                                ng-focus="setSelectedProposicao(item)" ng-blur="checkUpdatedField('parecerSAL',item);showParecerTextArea=false;"
+                                                focus-me="parecerTXT" style="margin-bottom:5px;"></textarea>
+                                            </div>
+
+                                            <div>
+                                                <label>Equipe Responsável: </label>
+                                                <div>
+                                                    <input typeahead-editable="false" type="text" ng-model="item.equipe" placeholder="Procurar equipe" ng-required="false" typeahead="item as item.nome for item in equipes"
+                                                    ng-focus="setSelectedProposicao(item)" typeahead-focus-first="true" ng-model-options="{ debounce: 500 }"
+                                                    typeahead-on-select="save(item);" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div>
                                                 <label>Responsável: </label>
                                                 <div>
                                                     <input typeahead-editable="false" type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true"
@@ -240,24 +263,16 @@
                                                     <input type="checkbox" ng-model="item.buscaGeral"> Buscar completa
                                                 </div>
                                             </div>
+
+
+
                                             <div>
-                                                <strong>Análise SAL: </strong>
-                                                <pre title="Clique para editar" style="border:none;border-radius:0px;border-top: 1px solid #ddd; border-bottom: 1px solid #eee;    padding: 15px;background-color:white;font-family:inherit;"
-                                                ng-click="showParecerTextArea=true;parecerTXT=true;" ng-hide="showParecerTextArea"
-                                                style="margin-bottom=0"><span ng-if="item.parecerSAL==null">Sem parecer</span>{{item.parecerSAL}}</pre>
-                                                <textarea class="form-control fontsize-sm " rows="3" ng-show="showParecerTextArea" placeholder="Descreva o parecer da SAL..."
-                                                ngTrim="true" ng-model="item.parecerSAL" ng-change="setUpdated('parecerSAL',item)"
-                                                ng-focus="setSelectedProposicao(item)" ng-blur="checkUpdatedField('parecerSAL',item);showParecerTextArea=false;"
-                                                focus-me="parecerTXT" style="margin-bottom:5px;"></textarea>
-                                            </div>
+                                                <label>Análise documental SAL: </label>
 
-
-
-                                            <div class="row">
 
                                                 <div class="col-md-12 text-center">
                                                     <strong> <a ng-click="abrirModalNotaTecnica(item)"><i
-														class="fa fa-file-text"></i> {{item.totalNotasTecnicas}} notas técnicas</a></strong>
+														class="fa fa-file-text"></i> {{item.totalNotasTecnicas}} documentos</a></strong>
                                                 </div>
                                             </div>
                                         </div>

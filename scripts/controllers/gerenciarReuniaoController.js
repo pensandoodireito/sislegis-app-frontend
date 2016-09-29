@@ -57,6 +57,8 @@ angular.module('sislegisapp')
     $scope.allProposicoes = [];
     
     $scope.filtroTags = [];
+    
+    $scope.equipes= EquipeResource.queryAll();
 
 	$scope.infiniteScroll = {
 			busy: false,
@@ -109,7 +111,7 @@ angular.module('sislegisapp')
 					origem: $scope.filtro.origem,
 					isFavorita: $scope.filtro.isFavorita,
                     estado: $scope.filtro.estado,
-                    idEquipe: $scope.filtro.idEquipe,
+                    idEquipe: $scope.filtro.equipe?$scope.filtro.equipe.id:null,
 					limit: $scope.infiniteScroll.limit, 
 					offset: $scope.infiniteScroll.offset
 				},successCallback, errorCallback);
