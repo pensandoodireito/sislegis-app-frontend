@@ -1,4 +1,4 @@
-<div class="col-sm-7">
+<div class="col-sm-5">
     <div style="border:none;border-radius:0px;border-top: 1px solid #ddd; border-bottom: 1px solid #eee;    padding: 15px;background-color:white;font-family:inherit;"
     ng-click="showTextArea=true;temaTxt=true;" title="Clique para editar" ng-hide="showTextArea || proposicao.explicacao==null || proposicao.explicacao==''"
     style="margin-bottom=0">{{proposicao.explicacao}}</div>
@@ -89,7 +89,7 @@
 
 
 </div>
-<div class="col-sm-5">
+<div class="col-sm-7">
     <div class="panel panel-primary">
         <div class="panel-heading ">
             SAL
@@ -144,14 +144,9 @@
 
 
 
-                <div>
-                    <label>Análise documental SAL: </label>
-
-
-                    <div class="col-md-12 text-center">
-                        <strong> <a ng-click="abrirModalNotaTecnica(proposicao)"><i
-														class="fa fa-file-text"></i> {{proposicao.totalNotasTecnicas}} documentos</a></strong>
-                    </div>
+                <div class="well">
+                    <label>Análise documental SAL: <strong> <a ng-click="abrirModalNotaTecnica(proposicao)" class="ng-binding"><i class="fa fa-file-text"></i>  {{proposicao.totalNotasTecnicas}} documentos</a></strong></label>
+                   
                 </div>
             </div>
             <div class=" clearfix">
@@ -189,7 +184,7 @@
 
 
             <div class="divider-top clearfix">
-                <label>Situação: </label>
+                <label>Anotação ASPAR: </label>
                 <div class="form-group">
                     <div class="col-md-10">
                         <textarea class="form-control fontsize-sm" rows="3" placeholder="Adicione um resultado" ng-model="proposicao.resultadoASPAR"></textarea>
