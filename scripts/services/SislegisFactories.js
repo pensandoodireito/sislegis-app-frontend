@@ -6,4 +6,7 @@ angular.module('sislegisapp').factory('AreaMeritoResource', function ($resource,
 
         });
     return resource;
+}).service('DashboardService', function ($http, $q, $resource, BACKEND) {
+    return $resource(BACKEND + '/dashboard');
+
 });

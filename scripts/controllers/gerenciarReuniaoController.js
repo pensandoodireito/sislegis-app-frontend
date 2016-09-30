@@ -22,7 +22,7 @@ angular.module('sislegisapp')
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
 				ReuniaoProposicaoResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
-                TipoEncaminhamentoResource, ElaboracaoNormativaResource, Auth,TagResource, BACKEND) {
+                TipoEncaminhamentoResource, ElaboracaoNormativaResource, Auth,TagResource, $q, BACKEND) {
     
 	var self = this;
     $scope.Auth=Auth;
@@ -57,6 +57,8 @@ angular.module('sislegisapp')
     $scope.allProposicoes = [];
     
     $scope.filtroTags = [];
+    
+    $scope.equipes= EquipeResource.queryAll();
 
 	$scope.infiniteScroll = {
 			busy: false,
@@ -108,8 +110,8 @@ angular.module('sislegisapp')
 					autor: $scope.filtro.autor,
 					origem: $scope.filtro.origem,
 					isFavorita: $scope.filtro.isFavorita,
-                    estado: $scope.filtro.estado,
-                    idEquipe: $scope.filtro.idEquipe,
+                    estado: $scope.filtro.estado!=""?$scope.filtro.estado:null,
+                    idEquipe: $scope.filtro.equipe?$scope.filtro.equipe.id:null,
 					limit: $scope.infiniteScroll.limit, 
 					offset: $scope.infiniteScroll.offset
 				},successCallback, errorCallback);
@@ -184,11 +186,16 @@ angular.module('sislegisapp')
         }
 
     };
-    $scope.setaEstado = function(item,estado){
-        item.estado=estado;
-        $scope.save(item);
+    $scope.setaEstado = function (item, estado) {
+        var oldState = item.estado;
+        item.estado = estado;
+        $scope.save(item,"Fluxo de trabalho da proposição alterado","Falhou ao alterar proposição").then(function(){
+            
+        },function(){
+            item.estado = oldState;
+        })
     }
-
+    //usado para atualizar a proposicao na lista
     $scope.updateSingleProposicao = function(item,toastMsg){
     	for (var i = 0; i < $scope.listaReuniaoProposicoes.length; i++) {    			
 			if(item.id==$scope.listaReuniaoProposicoes[i].id){
@@ -201,36 +208,46 @@ angular.module('sislegisapp')
 		}
     	return false;
     }
-    $scope.save = function(item,msg) {
-    	if(item){
-    		$scope.setSelectedProposicao(item);
-    	}
-        if(!msg){
-            msg='Proposição atualizada com sucesso.';
+    $scope.save = function (item, msgSucesso, msgErro) {
+        var deferred = $q.defer();
+        if (item) {
+            $scope.setSelectedProposicao(item);
         }
-    		
-    	clear();
-    	
-    	$rootScope.inactivateSpinner = true;
-        var successCallback = function(){
-        	$rootScope.inactivateSpinner = false;
-        	 if($scope.updateSingleProposicao(item,'Proposição atualizada com sucesso.')){
-        		 return;
-        	 }
-        	console.log("Nao carregou a proposicao, recarregara a reuniao inteira");
-    		ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()},
-        	function(response) {
-        		$scope.listaReuniaoProposicoes = response;
-        	}, function() {
-        		console.error('Erro ao carregar proposições');
-        	});
-    		toaster.pop('success',msg );
+        if (!msgSucesso) {
+            msgSucesso = 'Proposição atualizada com sucesso.';
+        }
+        if (!msgErro) {
+            msgErro = 'Falha salvar proposição.';
+        }
+
+
+        clear();
+
+        $rootScope.inactivateSpinner = true;
+        var successCallback = function () {
+            $rootScope.inactivateSpinner = false;
+            if ($scope.updateSingleProposicao(item, msgSucesso)) {
+                deferred.resolve(item);
+                return;
+            }
+            console.log("Nao carregou a proposicao, recarregara a reuniao inteira");
+            ReuniaoResource.buscarReuniaoPorData({ data: $scope.dataFormatada() },
+                function (response) {
+                    $scope.listaReuniaoProposicoes = response;
+                    deferred.resolve(item);
+                }, function () {
+                    console.error('Erro ao carregar proposições');
+                    deferred.reject('Erro ao carregar proposições');
+                });
+            toaster.pop('success', msgSucesso);
         };
-        var errorCallback = function() {
-        	$rootScope.inactivateSpinner = false;
-        	toaster.pop('error', 'Falha salvar proposição.');
+        var errorCallback = function () {
+            $rootScope.inactivateSpinner = false;
+            toaster.pop('error', msgErro);
+            deferred.reject('Falha salvar proposição.');
         };
         ProposicaoResource.update($scope.selectedProposicao, successCallback, errorCallback);
+        return deferred.promise;
     };
     
     
@@ -240,6 +257,31 @@ angular.module('sislegisapp')
     		proposicao.previousPosicionamentoNome = proposicao.posicionamentoAtual.posicionamento.nome;
     	}
     }
+    $scope.checkAlteracaoSupar = function (item, left, $item, $model, $label) {
+        if (left == 1) {
+            item.posicionamentoSuparOld = item.posicionamentoSupar;
+        } else if (left == 2) {
+            console.log(item.posicionamentoSupar, $item, $model, $label);
+        
+        } else if (left == 4||left == 3) {
+            if(item.posicionamentoSuparOld!=item.posicionamentoSupar){
+                if(item.posicionamentoSupar==''){
+                    item.posicionamentoSupar=null;
+                }
+                console.log("tem q salvar",item.posicionamentoSupar);
+                $scope.save(item).then(function(){
+                    item.posicionamentoSuparOld = item.posicionamentoSupar;
+                },function(){
+                    item.posicionamentoSupar=item.posicionamentoSuparOld;
+                });
+            }else{
+                console.log("nada a fazer")
+            }
+        } else {
+            console.log("saiu...", left)
+        }
+    }
+    
     $scope.checkRemocaoPosicionamento=function(item){
         
          
@@ -446,13 +488,7 @@ angular.module('sislegisapp')
 	$scope.getUsuarios = function(val, buscaGeral) {
         var method = (buscaGeral) ? 'ldapSearch' : 'find';
 return UsuarioResource.buscaPorUsuario({ method: method, nome: val },{ method: method, nome: val },function(data){console.log("aee",data)}).$promise;
-        // return $http.get(BACKEND + '/usuarios/' + method, {
-	    //   params: {
-	    //     nome: val
-	    //   }
-	    // }).then(function(response){
-        //     return (response.data.length == 0)?[]:response.data;
-	    // });
+    
 	  };
 
     $scope.abrirModalBuscaProposicaoAvulsa = function () {
@@ -564,6 +600,15 @@ return UsuarioResource.buscaPorUsuario({ method: method, nome: val },{ method: m
                 $log.info('Modal dismissed at: ' + new Date());
             });
     }	
+    $scope.populaNotas = function (prop, callbackFct) {
+        ProposicaoResource.listNotaTecnicas({ ProposicaoId: prop.id }, function (lista) {
+            prop.listaNotas = lista;
+            if (callbackFct != null) {
+                callbackFct();
+            }
+        }
+            );
+    }
     $scope.abrirModalNotaTecnica = function (item) {
        $scope.selectedProposicao= item;
         if ($scope.selectedProposicao.listaNotas == null || $scope.selectedProposicao.listaNotas.length != $scope.selectedProposicao.totalNotasTecnicas) {

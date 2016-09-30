@@ -1,0 +1,96 @@
+<div class="content">
+    <h3>Painel de Controle</h3>
+
+    <div class="row">
+        <div class="col-md-5">
+            <div class="info-box" ng-show="Auth.isSecretario()">
+                <span class="info-box-icon bg-aqua"><i class="glyphicon glyphicon-inbox"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Proposições a despachar</span>
+                    <span class="info-box-number">{{info.totalProposicoesADespachar}}</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+
+            <div class="info-box">
+                <span class="info-box-icon bg-yellow"><i class="glyphicon glyphicon-folder-open"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Proposições em análise</span>
+                    <span class="info-box-number">{{info.totalProposicoesEmAnalise}}</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <div class="info-box bg-green" ng-show="Auth.isSecretario()">
+                <span class="info-box-icon"><i class="glyphicon glyphicon-send"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Proposições despachadas no mês</span>
+                    <span class="info-box-number">{{info.totalProposicoesDespachadasNoMes}}</span>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: {{(info.totalProposicoesDespachadasNoMes*100)/info.totalProposicoesDespachadasNoAno}}%"></div>
+                    </div>
+                    <span class="progress-description">
+                    {{(info.totalProposicoesDespachadasNoMes*100)/info.totalProposicoesDespachadasNoAno}}% de todos despachos do ano
+                  </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <div class="info-box bg-yellow">
+                <span class="info-box-icon"><i class="glyphicon glyphicon-file"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Proposições trabalhadas pela SAL no mês</span>
+                    <span class="info-box-number">{{info.totalProposicoesAlteradasNoMes}}</span>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: {{(info.totalProposicoesAlteradasNoMes*100)/info.totalProposicoesAlteradasNoAno}}%"></div>
+                    </div>
+                    <span class="progress-description">
+                    {{(info.totalProposicoesAlteradasNoMes*100)/info.totalProposicoesAlteradasNoAno}}% de todas do ano
+                  </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-6">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Encaminhamentos (Tarefas)</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Tipo</th>
+                                <th>Detalhes</th>
+                                <th>Criada</th>
+                                <th>Prazo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr ng-repeat="tarefa in tarefas |orderBy:['data']">
+                                <td> {{$index + 1}} </td>
+                                <td><i></i>{{tarefa.encaminhamentoProposicao.tipoEncaminhamento.nome}}</td>
+                                <td><i></i>{{tarefa.encaminhamentoProposicao.detalhes}}</td>
+                                <td><i></i>{{tarefa.data|date}}</td>
+                                <td><i></i>{{tarefa.encaminhamentoProposicao.dataHoraLimite|date}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+
+    </div>
+</div>

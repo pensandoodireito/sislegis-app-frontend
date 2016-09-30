@@ -1,7 +1,7 @@
 angular.module('sislegisapp').controller('RelatorioController',
     function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster,
         ProposicaoResource, ComentarioResource, PosicionamentoResource, EncaminhamentoProposicaoResource, VotacaoResource, ComissaoResource, BACKEND, tipo, $q) {
-
+        $scope.carregando = false;
         $rootScope.title = 'Ministério da Justiça e Cidadania';
         $scope.tipo = tipo;
         $scope.comissoes = {
@@ -59,7 +59,7 @@ angular.module('sislegisapp').controller('RelatorioController',
         $scope.hoje = new Date().getTime();
         $scope.proposicoes = [];
         var successCallback = function (data) {
-
+            $scope.carregando = false;
             if (data.length == 0) {
                 toaster.pop('info', 'Nenhuma Proposição encontrada.');
                 return;
@@ -68,13 +68,15 @@ angular.module('sislegisapp').controller('RelatorioController',
             $scope.proposicoes = data;
         };
         var errorCallback = function () {
-            toaster.pop('error', 'Falha ao consultar Proposição.');
+            $scope.carregando = false;
+            toaster.pop('error', 'Falha ao carregar relatório.');
             $rootScope.inactivateSpinner = false;
         };
         $scope.selecionaTipo = function (tipo) {
             switch (tipo) {
                 case "Padrao_Despachos":
                     $rootScope.title = 'Ministério da Justiça e Cidadania';
+                    $scope.carregando = true;
                     ProposicaoResource.consultar(
                         {
                             estado: 'DESPACHADA',

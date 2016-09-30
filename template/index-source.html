@@ -64,8 +64,8 @@
                 <ul class="sidebar-menu" ng-controller="GlobalCtrl">
                     <li class="header">MENU </li>
 
-                    <li ng-class="{'active':!itemMenu || itemMenu=='dashboard'}"> <a href="#/Tarefas"><i class="fa fa-dashboard"></i> <span>Painel de controle</span></a></li>
-                    <li ng-if="auth.isSecretario()" ng-class="{'active':itemMenu=='despachos'}"> <a href=""><i class="fa fa-send"></i> <span>Despachos</span></a></li>
+                    <li ng-class="{'active':!itemMenu || itemMenu=='dashboard'}"> <a href="#/Dashboard"><i class="fa fa-dashboard"></i> <span>Painel de controle</span></a></li>
+                    <li ng-class="{'active':itemMenu=='despachos'}" ng-show="auth.isSecretario()" > <a href="#/Proposicao/despachar"  ng-click="itemMenu='despachos'"><i class="fa fa-send"></i> <span>Despachos</span></a></li>
                     <li ng-class="{'active':itemMenu=='proposicao'}"><a href="#/Proposicao/consultar" ng-click="itemMenu='proposicao'"><i class="fa fa-files-o"></i><span>Proposições</span></a></li>
                     <li class="treeview">
                         <a href="#">
@@ -95,7 +95,7 @@
                             <li ng-class="{'active':itemMenu=='reuniao'}"><a href="#/Reuniaos/reuniaonova" ng-click="itemMenu='reuniao'"><i class="fa fa-calendar"></i><span>Reuniões</span></a></li>
                         </ul>
                     </li>
-                    <li ng-hide="auth.loggedIn"><a href="#" ng-click="logout()"><i class="fa fa-sign-out"></i><span>Logout</span></a></li>
+                    <li ng-show="auth.loggedIn"><a href="#" ng-click="logout()"><i class="fa fa-sign-out"></i><span>Logout</span></a></li>
                 </ul>
             </section>
         </aside>
@@ -135,6 +135,7 @@
 
     <script src="scripts/app.js"></script>
     <script src="scripts/offcanvas.js"></script>
+    <script src="scripts/directives/directives.js"></script>
     <script src="scripts/directives/datepicker.js"></script>
     <script src="scripts/directives/timepicker.js"></script>
     <script src="scripts/directives/datetimepicker.js"></script>
@@ -149,9 +150,9 @@
     <script src="scripts/controllers/proposicaoController.js"></script>
     <script src="scripts/controllers/modalBuscarProposicaoController.js"></script>
     <script src="scripts/controllers/modalAddProposicaoController.js"></script>
-    <script src="scripts/controllers/modalComentariosController.js"></script>
+    
     <script src="scripts/controllers/modalNotaTecnicaController.js"></script>
-    <script src="scripts/controllers/modalParecerAreaMeritoController.js"></script>
+    
 
     <script src="scripts/controllers/SislegisControllers.js"></script>
 

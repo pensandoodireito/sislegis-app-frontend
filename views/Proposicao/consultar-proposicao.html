@@ -13,7 +13,7 @@
                     <div class="row" role="form">
 
                         <div class="col-sm-2">
-                            <label>Pela sigla:</label>
+                            <label>Por tipo número/ano:</label>
                             <input type="text" class="form-control" ng-model="filtro.sigla" placeholder="Filtrar pela sigla" ng-change="filtrarConsulta()">
                         </div>
                         <div class="col-sm-3">
@@ -55,7 +55,12 @@
                                 <option value="DESPACHADA">Despachada</option>
                             </select>
                         </div>
+                        <div class="col-sm-2">
+                            <label>Por equipe:</label>
+                            <select ng-model="filtro.equipe" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.nome for item in equipes track by item.id">
 
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -170,6 +175,16 @@
                                     </div>
 
                                 </div>
+                                <div class="divider-top clearfix">
+                                    <label>Posicionamento SUPAR: </label>
+                                    <div class="form-group">
+                                        <input typeahead-editable="false" type="text" ng-model="item.posicionamentoSupar" placeholder="SUPAR sem posicionamento definido"
+                                        ng-required="false" typeahead-no-results="semPosicionamentoSupar" ng-blur="checkAlteracaoSupar(item,4)"
+                                        ng-change="checkAlteracaoSupar(item,2,$item, $model, $label)" typeahead-on-select="checkAlteracaoSupar(item,3,$item, $model, $label)"
+                                        typeahead="posicao as posicao.nome for posicao in getPosicionamentos($viewValue) | filter:$viewValue"
+                                        class="form-control">
+                                    </div>
+                                </div>
 
                                 <div class="divider-top clearfix">
                                     <span ng-show="item.origem == 'SENADO'">
@@ -206,7 +221,7 @@
                                             <div>
                                                 <label>Posicionamento SAL: </label>
                                                 <div ng-show="semPosicionamento">
-                                                    <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                                    <i class="glyphicon glyphicon-remove"></i> Nenhum resultado
                                                 </div>
                                                 <div class="form-group">
 
@@ -219,19 +234,7 @@
                                                 </div>
                                             </div>
                                             <div>
-                                                <label>Responsável: </label>
-                                                <div>
-                                                    <input typeahead-editable="false" type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true"
-                                                    typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)"
-                                                    ng-focus="setSelectedProposicao(item)"
-                                                    typeahead-focus-first="true" ng-model-options="{ debounce: 500 }" ng-blur="checkRemocaoResponsavel(item)"
-                                                    typeahead-on-select="save(item); responsavelNull=(item.responsavel==null);item.responsavelNaoDefinido = false;"
-                                                    class="form-control">
-                                                    <input type="checkbox" ng-model="item.buscaGeral"> Buscar completa
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <strong>Parecer SAL: </strong>
+                                                <strong>Explicação do posicionamento: </strong>
                                                 <pre title="Clique para editar" style="border:none;border-radius:0px;border-top: 1px solid #ddd; border-bottom: 1px solid #eee;    padding: 15px;background-color:white;font-family:inherit;"
                                                 ng-click="showParecerTextArea=true;parecerTXT=true;" ng-hide="showParecerTextArea"
                                                 style="margin-bottom=0"><span ng-if="item.parecerSAL==null">Sem parecer</span>{{item.parecerSAL}}</pre>
@@ -241,13 +244,35 @@
                                                 focus-me="parecerTXT" style="margin-bottom:5px;"></textarea>
                                             </div>
 
+                                            <div>
+                                                <label>Equipe Responsável: </label>
+                                                <div>
+                                                    <input typeahead-editable="false" type="text" ng-model="item.equipe" placeholder="Procurar equipe" ng-required="false" typeahead="item as item.nome for item in equipes"
+                                                    ng-focus="setSelectedProposicao(item)" typeahead-focus-first="true" ng-model-options="{ debounce: 500 }"
+                                                    typeahead-on-select="save(item);" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label>Responsável: </label>
+                                                <div>
+                                                    <input typeahead-editable="false" type="text" ng-model="item.responsavel" placeholder="Procurar usuário" ng-required="true"
+                                                    typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)"
+                                                    ng-focus="setSelectedProposicao(item)" typeahead-focus-first="true" ng-model-options="{ debounce: 500 }"
+                                                    ng-blur="checkRemocaoResponsavel(item)" typeahead-on-select="save(item); responsavelNull=(item.responsavel==null);item.responsavelNaoDefinido = false;"
+                                                    class="form-control">
+                                                    <input type="checkbox" ng-model="item.buscaGeral"> Buscar completa
+                                                </div>
+                                            </div>
 
 
-                                            <div class="row">
+
+                                            <div>
+                                                <label>Análise documental SAL: </label>
+
 
                                                 <div class="col-md-12 text-center">
                                                     <strong> <a ng-click="abrirModalNotaTecnica(item)"><i
-														class="fa fa-file-text"></i> {{item.totalNotasTecnicas}} notas técnicas</a></strong>
+														class="fa fa-file-text"></i> {{item.totalNotasTecnicas}} documentos</a></strong>
                                                 </div>
                                             </div>
                                         </div>

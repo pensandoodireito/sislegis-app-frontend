@@ -9,7 +9,7 @@
                     <h3 class="box-title" ng-switch-when="true">Adicionar</h3>
                     <h3 class="box-title" ng-switch-when="false">Editar</h3>
                 </div>
-              
+
                 <form id="EquipeForm" name="EquipeForm" role="form">
                     <div ng-show="displayError" class="alert alert-danger">
                         <strong>Error!</strong> Something broke. Retry, or cancel and start afresh.
@@ -32,14 +32,12 @@
                             <table class="table" ng-show="equipe.listaEquipeUsuario.length">
                                 <tr>
                                     <td>Nome</td>
-                                    <td>Coordenador</td>
+
                                     <td>Ações</td>
                                 </tr>
-                                <tr ng-repeat="equipeUsuario in equipe.listaEquipeUsuario | orderBy:'usuario.nome'">
-                                    <td>{{equipeUsuario.usuario.nome}}</td>
-                                    <td>
-                                        <input type="checkbox" ng-model="equipeUsuario.isCoordenador">
-                                    </td>
+                                <tr ng-repeat="equipeUsuario in equipe.listaEquipeUsuario | orderBy:'nome'">
+                                    <td>{{equipeUsuario.nome}}</td>
+
                                     <td>
                                         <button type="button" class="btn btn-danger" ng-click="removerUsuario(equipeUsuario)"><span class="glyphicon glyphicon-trash"></span> Excluir Usuário</button>
                                     </td>
@@ -47,7 +45,7 @@
                             </table>
                         </div>
                     </div>
-                    
+
 
                     <div class="box-footer">
                         <button id="saveEquipe" name="saveEquipe" class="btn btn-primary" ng-disabled="EquipeForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Salvar</button>

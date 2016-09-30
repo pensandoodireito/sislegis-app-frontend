@@ -40,7 +40,7 @@ var auth = {
 
     },
     hasRole: function (role) {
-        if (this.me != null) {
+        if (this.me != null && this.me.papeis!=null) {
             for (var index = 0; index < this.me.papeis.length; index++) {
                 var element = this.me.papeis[index];
                 if (element == role) {
@@ -80,8 +80,10 @@ angular.element(document).ready(function ($http) {
     });
 });
 
-module.controller('GlobalCtrl', function ($scope, $http, UsuarioResource, Auth) {    
+module.controller('GlobalCtrl', function ($scope, $http, UsuarioResource, Auth) {   
+      
     Auth.me = UsuarioResource.me();
+    $scope.auth=Auth;
     $scope.logout = logout;
 });
 
@@ -113,6 +115,7 @@ module.config(['$routeProvider', function ($routeProvider) {
         .when('/Reuniaos/gerenciar/:ReuniaoId', { templateUrl: 'views/Reuniao/gerenciar.html', controller: 'GerenciarReuniaoController' })
 
         .when('/Proposicao/consultar', { templateUrl: 'views/Proposicao/consultar-proposicao.html', controller: 'GerenciarReuniaoController' })
+        .when('/Proposicao/despachar', { templateUrl: 'views/Proposicao/despachar-proposicao.html', controller: 'DespachoController' })
         .when('/Proposicao/id/:ProposicaoId', { templateUrl: 'views/Proposicao/single-proposicao.html', controller: 'ProposicaoController' })
 
         .when('/Posicionamentos', { templateUrl: 'views/SimpleEntity/search.html', controller: 'SearchPosicionamentoController' })
@@ -157,7 +160,7 @@ module.config(['$routeProvider', function ($routeProvider) {
 
         .when('/Upload', { templateUrl: 'views/Upload/upload.html', controller: 'UploadController' })
         .when('/Tarefas', { templateUrl: 'views/Tarefa/detail.html', controller: 'TarefaController' })
-        .when('/Dashboard', { templateUrl: 'views/Tarefa/detail.html', controller: 'TarefaController' })
+        .when('/Dashboard', { templateUrl: 'views/dashboard.html', controller: 'DashboardController' })
         .when('/Tarefas/edit/:TarefaId', { templateUrl: 'views/Tarefa/detail.html', controller: 'TarefaController' })
 
         .when('/GerenciarComissaoSeguida', { templateUrl: 'views/AgendaComissao/search.html', controller: 'SearchAgendaComissaoController' })
