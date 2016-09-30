@@ -65,7 +65,40 @@ angular.module('sislegisapp')
                 });
             }
         };
+        $scope.populaNotas = function (prop, callbackFct) {
+            ProposicaoResource.listNotaTecnicas({ ProposicaoId: prop.id }, function (lista) {
+                prop.listaNotas = lista;
+                if (callbackFct != null) {
+                    callbackFct();
+                }
+            }
+                );
+        }
+        $scope.abrirModalNotaTecnica = function (item, cb) {
 
+            if (cb != true && item.listaNotas == null || item.listaNotas.length != item.totalNotasTecnicas) {
+                $scope.populaNotas(item, function () { $scope.abrirModalNotaTecnica(item, true) });
+            } else {
+
+
+                var modalInstance = $modal.open({
+                    templateUrl: 'views/modal-notatecnicas.html',
+                    controller: 'ModalNotaTecnicaController',
+                    size: 'lg',
+                    resolve: {
+                        proposicao: function () {
+                            return item;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (prop) {
+                    item = prop;
+                }, function () {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            }
+        }
 
         $scope.abrirModalEncaminhamentos = function (item, cb) {
             if (cb != true && item.listaEncaminhamentoProposicao == null || item.listaEncaminhamentoProposicao.length != item.totalEncaminhamentos) {
@@ -143,7 +176,7 @@ angular.module('sislegisapp')
                 var fct = function () {
                     $scope.save($scope.proposicao);
                 }
-               newValue.lastSaveTimer = $timeout(fct, 2500, true, newValue);
+                newValue.lastSaveTimer = $timeout(fct, 2500, true, newValue);
             }
         }, true);
         $scope.getPosicionamentos = function (current) {
@@ -163,9 +196,11 @@ angular.module('sislegisapp')
             return TagResource.buscarPorSufixo({ sufixo: query }).$promise;
         };
         $scope.validaPosicionamento = function (item, field) {
-            var p = item[field];
-            if (p != null && p.id == null) {
-                item[field] = null;
+            if (field != null && item != null) {
+                var p = item[field];
+                if (p != null && p.id == null) {
+                    item[field] = null;
+                }
             }
         }
 
@@ -263,6 +298,14 @@ angular.module('sislegisapp')
 
         };
 
+
+    })
+
+    .controller('DashboardController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster,
+        DashboardService, Auth, $q, TarefaResource, BACKEND) {
+        $scope.Auth = Auth;
+        $scope.info = DashboardService.get();
+        $scope.tarefas = TarefaResource.buscarPorUsuario();
     })
     .controller('DespachoController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
         ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
@@ -303,7 +346,6 @@ angular.module('sislegisapp')
             $scope.proposicoes = [];
             $scope.infiniteScroll.busy = false;
             $scope.infiniteScroll.offset = 0;
-            console.log('trocou filtro')
             $scope.infiniteScroll.full = false;
             $scope.consultarProposicoes();
         }, true);

@@ -110,7 +110,7 @@ angular.module('sislegisapp')
 					autor: $scope.filtro.autor,
 					origem: $scope.filtro.origem,
 					isFavorita: $scope.filtro.isFavorita,
-                    estado: $scope.filtro.estado,
+                    estado: $scope.filtro.estado!=""?$scope.filtro.estado:null,
                     idEquipe: $scope.filtro.equipe?$scope.filtro.equipe.id:null,
 					limit: $scope.infiniteScroll.limit, 
 					offset: $scope.infiniteScroll.offset
@@ -600,6 +600,15 @@ return UsuarioResource.buscaPorUsuario({ method: method, nome: val },{ method: m
                 $log.info('Modal dismissed at: ' + new Date());
             });
     }	
+    $scope.populaNotas = function (prop, callbackFct) {
+        ProposicaoResource.listNotaTecnicas({ ProposicaoId: prop.id }, function (lista) {
+            prop.listaNotas = lista;
+            if (callbackFct != null) {
+                callbackFct();
+            }
+        }
+            );
+    }
     $scope.abrirModalNotaTecnica = function (item) {
        $scope.selectedProposicao= item;
         if ($scope.selectedProposicao.listaNotas == null || $scope.selectedProposicao.listaNotas.length != $scope.selectedProposicao.totalNotasTecnicas) {

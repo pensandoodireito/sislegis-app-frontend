@@ -64,7 +64,7 @@
                 <ul class="sidebar-menu" ng-controller="GlobalCtrl">
                     <li class="header">MENU </li>
 
-                    <li ng-class="{'active':!itemMenu || itemMenu=='dashboard'}"> <a href="#/Tarefas"><i class="fa fa-dashboard"></i> <span>Painel de controle</span></a></li>
+                    <li ng-class="{'active':!itemMenu || itemMenu=='dashboard'}"> <a href="#/Dashboard"><i class="fa fa-dashboard"></i> <span>Painel de controle</span></a></li>
                     <li ng-class="{'active':itemMenu=='despachos'}" ng-show="auth.isSecretario()" > <a href="#/Proposicao/despachar"  ng-click="itemMenu='despachos'"><i class="fa fa-send"></i> <span>Despachos</span></a></li>
                     <li ng-class="{'active':itemMenu=='proposicao'}"><a href="#/Proposicao/consultar" ng-click="itemMenu='proposicao'"><i class="fa fa-files-o"></i><span>Proposições</span></a></li>
                     <li class="treeview">
@@ -95,7 +95,7 @@
                             <li ng-class="{'active':itemMenu=='reuniao'}"><a href="#/Reuniaos/reuniaonova" ng-click="itemMenu='reuniao'"><i class="fa fa-calendar"></i><span>Reuniões</span></a></li>
                         </ul>
                     </li>
-                    <li ng-hide="auth.loggedIn"><a href="#" ng-click="logout()"><i class="fa fa-sign-out"></i><span>Logout</span></a></li>
+                    <li ng-show="auth.loggedIn"><a href="#" ng-click="logout()"><i class="fa fa-sign-out"></i><span>Logout</span></a></li>
                 </ul>
             </section>
         </aside>

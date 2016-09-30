@@ -160,7 +160,7 @@ module.config(['$routeProvider', function ($routeProvider) {
 
         .when('/Upload', { templateUrl: 'views/Upload/upload.html', controller: 'UploadController' })
         .when('/Tarefas', { templateUrl: 'views/Tarefa/detail.html', controller: 'TarefaController' })
-        .when('/Dashboard', { templateUrl: 'views/Tarefa/detail.html', controller: 'TarefaController' })
+        .when('/Dashboard', { templateUrl: 'views/dashboard.html', controller: 'DashboardController' })
         .when('/Tarefas/edit/:TarefaId', { templateUrl: 'views/Tarefa/detail.html', controller: 'TarefaController' })
 
         .when('/GerenciarComissaoSeguida', { templateUrl: 'views/AgendaComissao/search.html', controller: 'SearchAgendaComissaoController' })
