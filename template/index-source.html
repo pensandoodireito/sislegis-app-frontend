@@ -64,7 +64,7 @@
                 <ul class="sidebar-menu" ng-controller="GlobalCtrl">
                     <li class="header">MENU </li>
 
-                    <li ng-class="{'active':!itemMenu || itemMenu=='dashboard'}"> <a href="#/Dashboard"><i class="fa fa-dashboard"></i> <span>Painel de controle</span></a></li>
+                    <li ng-class="{'active':!itemMenu || itemMenu=='dashboard'}"> <a href="#/Dashboard"  ng-click="itemMenu='dashboard'"><i class="fa fa-dashboard"></i> <span>Painel de controle</span></a></li>
                     <li ng-class="{'active':itemMenu=='despachos'}" ng-show="auth.isSecretario()" > <a href="#/Proposicao/despachar"  ng-click="itemMenu='despachos'"><i class="fa fa-send"></i> <span>Despachos</span></a></li>
                     <li ng-class="{'active':itemMenu=='proposicao'}"><a href="#/Proposicao/consultar" ng-click="itemMenu='proposicao'"><i class="fa fa-files-o"></i><span>Proposições</span></a></li>
                     <li class="treeview">

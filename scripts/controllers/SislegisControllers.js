@@ -167,9 +167,37 @@ angular.module('sislegisapp')
 
         };
         $scope.lastSaveTimer = null;
+        $scope.$watch('proposicao.poaaasicionamentoAtual', function (newValue, oldValue, scope) {
+            if (oldValue == null && newValue == null) {
+                console.log("old null")
+                return;
+            }
+            console.log("posicionamento ", oldValue, "is", newValue);
+            var errorCallback = function () {
+                toaster.pop('error', 'Falha ao atualizar posicionamento.');
+            };
+            var posicionamentoSelecionado = newValue.posicionamento;
+            var isPreliminar = posicionamentoSelecionado && posicionamentoSelecionado.nome.indexOf('Previamente ') != -1;
+            var idPosicionamento = null;
+            var successCallback = function (data) {
+                $scope.proposicao.posicionamentoAtual = data;
+                toaster.pop('success', 'Posicionamento removido com sucesso.');
+            };
+            if (posicionamentoSelecionado && posicionamentoSelecionado.id != null) {
+                idPosicionamento = posicionamentoSelecionado.id;
+                successCallback = function () {
+                    toaster.pop('success', 'Posicionamento atualizado com sucesso.');
+                };
+            }
+            ProposicaoResource.alterarPosicionamento({ id: $scope.proposicao.id, idPosicionamento: idPosicionamento, preliminar: isPreliminar }, successCallback, errorCallback);
+        });
         $scope.$watch('proposicao', function (newValue, oldValue, scope) {
             console.log("was", oldValue, "is", newValue);
             if (oldValue != null) {
+                // if (oldValue.posicionamentoAtual != newValue.posicionamentoAtual) {
+                //     console.log("alterou posicionameto");
+                //     return;
+                // }
                 if (newValue.lastSaveTimer != null) {
                     $timeout.cancel(newValue.lastSaveTimer);
                 }
