@@ -1,26 +1,22 @@
 <section class="content-header">
-    <h1>Área</h1>
+    <h1>Gerenciar Glossário</h1>
 </section>
-
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Listagem</h3>
-                </div>
-                <!-- /.box-header -->
+                    <h3 class="box-title">Glossário</h3>
+                </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="dataTables_wrapper form-inline dt-bootstrap">
                         <div class="row">
                             <div class="col-sm-6">
-                                <a class="btn btn-primary" href="#/AreaDeMerito/new"><span class="glyphicon glyphicon-plus-sign"></span> Adicionar</a>
+                                <a id="create" class="btn btn-primary" href="#/Tags/new"><span class="glyphicon glyphicon-plus-sign"></span> Adicionar</a>
                             </div>
                             <div class="col-sm-6">
                                 <div class="dataTables_filter">
-                                    <label>Busca:&nbsp;
-                                        <input type="search" class="form-control input-sm" placeholder="" ng-model="search.nome" placeholder="Escreve o nome da área consultada">
-                                    </label>
+                                    <label>Busca:&nbsp;<input id="nome" name="nome" class="form-control" type="text" ng-model="search.nome" />
                                 </div>
                             </div>
                         </div>
@@ -28,16 +24,14 @@
                             <div class="col-sm-12">
                                 <table class="table table-bordered table-hover">
                                     <thead>
-                                        <tr>
-                                            <th>Nome</th>
-                                            <th>Contato</th>
-                                        </tr>
+                                    <tr>
+                                        <th>Nome</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="result in searchResults | searchFilter:searchResults | startFrom:currentPage*pageSize | limitTo:pageSize| orderBy:['nome']">
-                                            <td><a href="#/AreaDeMerito/edit/{{result.id}}">{{result.nome}}</a></td>
-                                            <td> {{result.nomeContato}} - {{result.emailContato}}</td>
-                                        </tr>
+                                    <tr ng-repeat="result in searchResults | searchFilter:searchResults | startFrom:currentPage*pageSize | limitTo:pageSize | orderBy:['nome']">
+                                        <td><a href="#/Tags/edit/{{result.tag}}">{{result.tag}}</a></td>
+                                    </tr>
                                     </tbody>
                                 </table>
 
@@ -55,11 +49,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- /.box-body -->
-            </div>
-            <!-- /.box -->
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
 </section>

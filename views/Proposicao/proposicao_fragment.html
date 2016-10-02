@@ -26,9 +26,9 @@
     </div>
     <div class="divider-top clearfix">
 
-        <strong>Área de mérito</strong> <span ng-show="proposicao.totalParecerAreaMerito==0">nenhum parecer</span>
+        <strong>Área externa</strong> <span ng-show="proposicao.totalParecerAreaMerito==0">nenhum parecer</span>
         <span ng-show="proposicao.totalParecerAreaMerito>0"><a ng-show="proposicao.revisoes==null && proposicao.totalParecerAreaMerito>0" ng-click="loadRevisoes(proposicao)">({{proposicao.totalParecerAreaMerito}} pareceres)</a></span>
-        <a class="pull-right" ng-click="abrirModalParecerAreaMerito(proposicao)" title="Adicionar parecer de área de mérito"><i class="fa fa-plus-circle"></i></a>
+        <a class="pull-right" ng-click="abrirModalParecerAreaMerito(proposicao)" title="Adicionar parecer de área externa"><i class="fa fa-plus-circle"></i></a>
         <br/>
 
 
@@ -43,7 +43,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="revisao in proposicao.revisoes">
+                    <tr ng-repeat="revisao in proposicao.revisoes" ng-click="abrirModalParecerAreaMerito(proposicao,revisao)">
                         <td>{{revisao.areaMerito.nome}}</td>
                         <td>{{revisao.dataAtualizacao| date:'dd/MM HH:mm'}}</td>
                         <td>{{revisao.posicionamento.nome}}</td>
@@ -146,7 +146,7 @@
 
                 <div class="well">
                     <label>Análise documental SAL: <strong> <a ng-click="abrirModalNotaTecnica(proposicao)" class="ng-binding"><i class="fa fa-file-text"></i>  {{proposicao.totalNotasTecnicas}} documentos</a></strong></label>
-                   
+                    <strong>  <a ng-click="baixarTemplate(item)"> <i class="fa fa-download"></i> Baixar template</a></strong>
                 </div>
             </div>
             <div class=" clearfix">

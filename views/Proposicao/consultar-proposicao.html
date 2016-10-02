@@ -61,6 +61,13 @@
 
                             </select>
                         </div>
+
+                        <div class="col-sm-2">
+                            <label>Por macrotema:</label>
+                            <select ng-model="filtro.macrotema" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.tag for item in macrotemas">
+
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -144,9 +151,9 @@
                                 </div>
                                 <div class="divider-top clearfix">
 
-                                    <strong>Área de mérito</strong> <span ng-show="item.totalParecerAreaMerito==0">nenhum parecer</span>
+                                    <strong>Área externa</strong> <span ng-show="item.totalParecerAreaMerito==0">nenhum parecer</span>
                                     <span ng-show="item.totalParecerAreaMerito>0"><a ng-show="item.revisoes==null && item.totalParecerAreaMerito>0" ng-click="loadRevisoes(item)">({{item.totalParecerAreaMerito}} pareceres)</a></span>
-                                    <a class="pull-right" ng-click="abrirModalParecerAreaMerito(item)" title="Adicionar parecer de área de mérito"><i class="fa fa-plus-circle"></i></a>
+                                    <a class="pull-right" ng-click="abrirModalParecerAreaMerito(item)" title="Adicionar parecer de área externa"><i class="fa fa-plus-circle"></i></a>
                                     <br/>
 
 
@@ -274,7 +281,7 @@
                                                     <div class="well">
                                                         <label>Análise documental SAL: <strong> <a ng-click="abrirModalNotaTecnica(item)" class="ng-binding"><i class="fa fa-file-text"></i>  {{item.totalNotasTecnicas}} documentos</a></strong></label>
                                                     </div>
-                                                    
+
                                                 </div>
                                             </div>
                                         </div>

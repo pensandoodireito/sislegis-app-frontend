@@ -55,11 +55,18 @@
 
                             </select>
                         </div>
+                        <div class="col-sm-2">
+                            <label>Por macrotema:</label>
+                            <select ng-model="filtro.macrotema" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.tag for item in macrotemas">
+
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="panel-body">
+                
                 <div infinite-scroll='consultarProposicoes()' infinite-scroll-disabled='infiniteScroll.busy'>
                     <div class="box box-info collapsed-box" ng-repeat="item in proposicoes | orderBy : ['origem','comissao']">
                         <div class="box-header ">
