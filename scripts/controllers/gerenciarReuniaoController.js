@@ -66,6 +66,12 @@ angular.module('sislegisapp')
 			offset: 0
 	}
 
+    $scope.baixarTemplate = function (item) {
+
+            // http://localhost:8080/sislegis/rest/proposicaos/2047/templateBriefing
+            var back = BACKEND.substr(0, BACKEND.length - 5);
+            window.open(back + "/template?id=" + item.id);
+        };
     $scope.maisFiltros = function(){
         var selector = $($.AdminLTE.options.controlSidebarOptions.selector);
         $scope.isSidebarOpen = !$scope.isSidebarOpen;
