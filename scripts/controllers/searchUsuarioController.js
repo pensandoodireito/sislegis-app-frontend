@@ -10,7 +10,7 @@ angular.module('sislegisapp').controller('SearchUsuarioController', function ($s
     $scope.filteredResults = [];
     $scope.pageRange = [];
     $scope.numberOfPages = function () {
-        var result = Math.ceil($scope.filteredResults.length / $scope.pageSize);
+        var result = Math.ceil($scope.searchResults.length / $scope.pageSize);
         var max = (result == 0) ? 1 : result;
         $scope.pageRange = [];
         for (var ctr = 0; ctr < max; ctr++) {
@@ -51,25 +51,26 @@ angular.module('sislegisapp').controller('SearchUsuarioController', function ($s
 
     }
 
-    $scope.buscarPorEquipe = function () {
-        if ($scope.equipeSelecionada) {
-            angular.forEach($scope.listaEquipe, function (equipe) {
-                if (equipe.id == $scope.equipeSelecionada) {
-                    var listaUsuarios = [];
-                    angular.forEach(equipe.listaEquipeUsuario, function (value) {
-                        listaUsuarios.push(value.usuario);
-                    });
-                    $scope.searchResults = listaUsuarios;
-                    $scope.numberOfPages();
-                }
-            });
-        } else {
-            $scope.performSearch();
-        }
-    }
+    // $scope.buscarPorEquipe = function () {
+    //     if ($scope.equipeSelecionada) {
+    //         angular.forEach($scope.listaEquipe, function (equipe) {
+    //             if (equipe.id == $scope.equipeSelecionada) {
+    //                 var listaUsuarios = [];
+    //                 angular.forEach(equipe.listaEquipeUsuario, function (value) {
+    //                     listaUsuarios.push(value.usuario);
+    //                 });
+    //                 $scope.searchResults = listaUsuarios;
+    //                 $scope.numberOfPages();
+    //             }
+    //         });
+    //     } else {
+    //         $scope.performSearch();
+    //     }
+    // }
 
     $scope.performSearch = function () {
         $scope.searchResults = UsuarioResource.queryAll(function () {
+            console.log($scope.searchResults)            
             $scope.numberOfPages();
         });
     };

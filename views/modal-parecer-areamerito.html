@@ -9,12 +9,12 @@
             
             <div class="form-horizontal" role="form">
                 <div>
-                    <label for="areamerito">Selecione a área de mérito:</label>
-                    <select id="areamerito" ng-model="revisao.areaMerito" ng-options="area.nome for area in areaMeritos" class="form-control"></select>
+                    <label for="areamerito">Selecione a área de mérito:</label>                    
+                    <select id="areamerito" ng-model="revisao.areaMerito.id" ng-options="area.id as area.nome for area in areaMeritos" class="form-control"></select>
                 </div>
                 <div>
                     <label for="posicionamento">Selecione o posicionamento da área de mérito:</label>
-                    <select id="areamerito" ng-model="revisao.posicionamento" ng-options="p.nome for p in posicionamentos" class="form-control"></select>
+                    <select id="areamerito" ng-model="revisao.posicionamento.id" ng-options="p.id as p.nome for p in posicionamentos" class="form-control"></select>
                 </div>
 
                 <div>

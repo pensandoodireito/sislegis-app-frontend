@@ -23,10 +23,14 @@
                         <div class="form-group">
                             <label>Contato: </label>
                             <div>
-                                <input type="text" ng-model="area.contato" placeholder="Procurar usuário" ng-required="true"
-                                 typeahead="item as item.nome for item in getUsuarios($viewValue, buscaGeral)"
-                                class="form-control">
-                                <input type="checkbox" ng-model="item.buscaGeral"> Buscar completa
+                                <label>Nome: </label>
+                                <input id="contatonome" type="text" class="form-control" ng-model="area.nomeContato" placeholder="Escreva o nome do contato"
+                                />
+                            </div>
+                            <div>
+                                <label>Email: </label>
+                                <input id="email" type="text" class="form-control" ng-model="area.emailContato" placeholder="Escreva o email do contato"
+                                />
                             </div>
                         </div>
                     </div>

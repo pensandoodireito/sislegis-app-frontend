@@ -110,6 +110,11 @@ module.config(['$routeProvider', function ($routeProvider) {
         .when('/notatecnica/:notaid', { templateUrl: 'views/relatorio/notatecnica.html', controller: 'NotaTecnicaController',
         
                  })   
+                 
+        .when('/Tags', { templateUrl: 'views/Tag/search.html', controller: 'SearchTagController' })
+        .when('/Tags/new', { templateUrl: 'views/Tag/detail.html', controller: 'EditTagController' })
+        .when('/Tags/edit/:id', { templateUrl: 'views/Tag/detail.html', controller: 'EditTagController' })
+        
         .when('/Reuniaos/reuniaonova', { templateUrl: 'views/Reuniao/reuniaonova.html', controller: 'GerenciarReuniaoController' })
         .when('/Reuniaos/gerenciar', { templateUrl: 'views/Reuniao/gerenciar.html', controller: 'GerenciarReuniaoController' })
         .when('/Reuniaos/gerenciar/:ReuniaoId', { templateUrl: 'views/Reuniao/gerenciar.html', controller: 'GerenciarReuniaoController' })

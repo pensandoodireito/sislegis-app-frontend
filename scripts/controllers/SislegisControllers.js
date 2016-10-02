@@ -1,14 +1,19 @@
 
 var angular;
 angular.module('sislegisapp')
-    .controller('ProposicaoItemController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
+    .controller('ProposicaoItemController', function ($scope, $window, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
         ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
         EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
         TipoEncaminhamentoResource, Auth, TagResource, $q, BACKEND) {
 
 
+        $scope.baixarTemplate = function (item) {
 
-        $scope.abrirModalParecerAreaMerito = function (item) {
+            // http://localhost:8080/sislegis/rest/proposicaos/2047/templateBriefing
+            var back = BACKEND.substr(0, BACKEND.length - 5);
+            window.open(back + "/template?id=" + item.id);
+        }
+        $scope.abrirModalParecerAreaMerito = function (item, revisao) {
             var modalInstance = $modal.open({
                 templateUrl: 'views/modal-parecer-areamerito.html',
                 controller: 'ModalParecerAreaMeritoController',
@@ -16,6 +21,9 @@ angular.module('sislegisapp')
                 resolve: {
                     proposicao: function () {
                         return item;
+                    },
+                    revisao: function () {
+                        return revisao;
                     }
                 }
             });
@@ -167,30 +175,7 @@ angular.module('sislegisapp')
 
         };
         $scope.lastSaveTimer = null;
-        $scope.$watch('proposicao.poaaasicionamentoAtual', function (newValue, oldValue, scope) {
-            if (oldValue == null && newValue == null) {
-                console.log("old null")
-                return;
-            }
-            console.log("posicionamento ", oldValue, "is", newValue);
-            var errorCallback = function () {
-                toaster.pop('error', 'Falha ao atualizar posicionamento.');
-            };
-            var posicionamentoSelecionado = newValue.posicionamento;
-            var isPreliminar = posicionamentoSelecionado && posicionamentoSelecionado.nome.indexOf('Previamente ') != -1;
-            var idPosicionamento = null;
-            var successCallback = function (data) {
-                $scope.proposicao.posicionamentoAtual = data;
-                toaster.pop('success', 'Posicionamento removido com sucesso.');
-            };
-            if (posicionamentoSelecionado && posicionamentoSelecionado.id != null) {
-                idPosicionamento = posicionamentoSelecionado.id;
-                successCallback = function () {
-                    toaster.pop('success', 'Posicionamento atualizado com sucesso.');
-                };
-            }
-            ProposicaoResource.alterarPosicionamento({ id: $scope.proposicao.id, idPosicionamento: idPosicionamento, preliminar: isPreliminar }, successCallback, errorCallback);
-        });
+
         $scope.$watch('proposicao', function (newValue, oldValue, scope) {
             console.log("was", oldValue, "is", newValue);
             if (oldValue != null) {
@@ -338,11 +323,13 @@ angular.module('sislegisapp')
     .controller('DespachoController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
         ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
         EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
-        TipoEncaminhamentoResource, Auth, TagResource, $q, BACKEND) {
+        TipoEncaminhamentoResource, Auth, TagResource, UploadService, $q, BACKEND) {
         $scope.proposicoes = [];
         $scope.Auth = Auth;
         $scope.posicionamentos = PosicionamentoResource.queryAll();
+        $scope.macrotemas = TagResource.listarTodos();
         $scope.filtro = new ProposicaoResource();
+
 
         $scope.proposicoesSeguidas = [];
         UsuarioResource.proposicoesSeguidas({}, function (data) {
@@ -415,11 +402,13 @@ angular.module('sislegisapp')
                     origem: $scope.filtro.origem,
                     isFavorita: $scope.filtro.isFavorita,
                     estado: 'ADESPACHAR',
+                    macrotema: $scope.filtro.macrotema?$scope.filtro.macrotema.tag : null,
                     idEquipe: $scope.filtro.equipe ? $scope.filtro.equipe.id : null,
                     limit: $scope.infiniteScroll.limit,
                     offset: $scope.infiniteScroll.offset
                 }, successCallback, errorCallback);
         }
+
     })
     .controller('SearchAreaMeritoController', function ($scope, $http, AreaMeritoResource) {
 
@@ -494,10 +483,7 @@ angular.module('sislegisapp')
         };
 
         $scope.save = function () {
-            if ($scope.area.contato.id == null) {
-                toaster.pop('error', 'Um usuário deve ser selecionado/criado para ser o contato dessa Área de Mérito');
-                return;
-            }
+
             var successCallback = function (data, responseHeaders) {
                 if ($scope.isNew) {
                     var id = locationParser(responseHeaders);
@@ -535,28 +521,135 @@ angular.module('sislegisapp')
             var removeIt = function () {
                 $scope.area.$remove(successCallback, errorCallback);
             }
-            $confirm({ text: 'Deseja realmente apagar essa área de mérito? Qualquer parecer associado a ela será apagado.', title: 'Apagar área de mérito', ok: 'Sim', cancel: 'Não' })
+            $confirm({ text: 'Deseja realmente apagar essa área externa? Qualquer parecer associado a ela será apagado.', title: 'Apagar área', ok: 'Sim', cancel: 'Não' })
                 .then(removeIt);
         };
 
 
         $scope.get();
-    }).controller('NotaTecnicaController',
-        function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster,
-            ProposicaoResource, ComentarioResource, PosicionamentoResource, ComissaoResource, BACKEND, $q) {
+    }).controller('ModalNotaTecnicaController',
+        function ($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource,
+            ProposicaoResource, UsuarioResource, ComentarioService, UploadService, $confirm, BACKEND) {
+
+            var self = this;
+
+            $scope.proposicao = proposicao || new ProposicaoResource();
 
 
+
+            $scope.nota = {
+
+            };
+            $scope.notaForm = false;
+            $scope.showNotaForm = function (b) {
+                $scope.notaForm = b
+            }
+
+            $scope.editNota = function (nota) {
+                $scope.notaForm = true;
+                $scope.nota = nota;
+
+            };
+            $scope.novaNota = function () {
+                $scope.notaForm = true;
+                $scope.nota = {
+
+                };
+            };
+            $scope.ok = function () {
+                $modalInstance.close($scope.proposicao);
+            };
+
+            $scope.cancel = function () {
+                if ($scope.notaForm == true) {
+                    $scope.notaForm = false;
+                } else {
+
+                    $modalInstance.dismiss('cancel');
+                }
+            };
+            $scope.removeNota = function (notaARemover) {
+                var successCallback = function (data, responseHeaders) {
+
+                    for (var index = 0; index < $scope.proposicao.listaNotas.length; index++) {
+                        var element = $scope.proposicao.listaNotas[index];
+                        if (element.id == notaARemover.id) {
+                            $scope.proposicao.listaNotas.splice(index, 1);
+                            break;
+                        }
+                    }
+                    $scope.proposicao.totalNotasTecnicas = $scope.proposicao.listaNotas.length;
+                    toaster.pop('success', 'Nota removida com sucesso');
+                    $scope.notaForm = false;
+                };
+
+                var errorCallback = function () {
+                    toaster.pop('error', 'Falha ao tentar remove nota técnica.');
+                };
+
+                var removeIt = function () {
+                    ProposicaoResource.removeNota({ ProposicaoId: $scope.proposicao.id, notaId: notaARemover.id }, successCallback, errorCallback);
+                }
+
+                $confirm({ text: 'Deseja realmente apagar essa nota técnica.', title: 'Apagar nota técnica', ok: 'Sim', cancel: 'Não' })
+                    .then(removeIt);
+
+            }
+            // $scope.save = function () {
+
+
+            //     ProposicaoResource.salvaNota({ ProposicaoId:  }, $scope.nota, successCallback, errorCallback);
+            // };
+            $scope.uploadfile = function (actionUrl) {
+                var successCallback = function (data, responseHeaders) {
+                    $scope.uploading = false;
+                    var found = false;
+                    for (var index = 0; index < $scope.proposicao.listaNotas.length; index++) {
+                        var element = $scope.proposicao.listaNotas[index];
+
+                        if (element.id == data.id) {
+                            element = data;
+                            found = true;
+                            break;
+                        }
+
+                    }
+                    if (!found) {
+                        $scope.proposicao.listaNotas.push(data);
+                    }
+                    $scope.proposicao.totalNotasTecnicas = $scope.proposicao.listaNotas.length;
+                    toaster.pop('success', 'Nota inserida com sucesso');
+                    $scope.notaForm = false;
+                };
+
+                var errorCallback = function () {
+                    $scope.uploading = false;
+                    toaster.pop('error', 'Falha ao tentar salvar nota técnica.');
+                };
+                var file = $scope.myFile;
+                console.log("file", file);
+                $scope.uploading = true;
+                UploadService('documentos', file, { type: 1, idProposicao: $scope.proposicao.id }).then(successCallback, errorCallback);
+            };
+            $scope.openFile = function (nota) {
+                var back = BACKEND.substr(0, BACKEND.length - 5);
+
+                window.open(back + "/documentos?id=" + nota.documento.id);
+            }
 
         }).controller('ModalParecerAreaMeritoController',
             function ($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource,
-                ProposicaoResource, UsuarioResource, ComentarioService, PosicionamentoResource) {
+                ProposicaoResource, UsuarioResource, ComentarioService, PosicionamentoResource, UploadService, revisao) {
 
 
                 $scope.areaMeritos = ProposicaoResource.listaAreaMerito();
-
                 $scope.revisao = {
                     proposicao: proposicao
                 }
+                if (revisao != null) {
+                    $scope.revisao = revisao;
+                }
+
                 $scope.posicionamentos = PosicionamentoResource.query();
 
 
@@ -656,4 +749,114 @@ angular.module('sislegisapp')
 
                     }
 
+                }).controller('EditTagController', function ($scope, $routeParams, $location, TagResource, locationParser, $confirm) {
+                    var self = this;
+                    $scope.disabled = false;
+                    $scope.$location = $location;
+                    $scope.isNew = false;
+                    $scope.get = function () {
+                        var successCallback = function (data) {
+                            self.original = data;
+                            $scope.tag = new TagResource(self.original);
+                        };
+                        var errorCallback = function () {
+                            $location.path("/Tags");
+                        };
+                        if ($routeParams.id == null) {
+                            $scope.isNew = true;
+                        } else {
+                            TagResource.get({ TagId: $routeParams.id }, successCallback, errorCallback);
+                        }
+                    };
+
+                    $scope.isClean = function () {
+                        return angular.equals(self.original, $scope.tag);
+                    };
+
+                    $scope.save = function () {
+
+                        var successCallback = function (data, responseHeaders) {
+                            if ($scope.isNew) {
+                                var id = locationParser(responseHeaders);
+                                $location.path('/Tags/edit/' + id);
+                            } else {
+                                $scope.get();
+                                $scope.displayError = false;
+                            }
+                        };
+                        var errorCallback = function () {
+                            $scope.displayError = true;
+                        };
+                        if ($scope.isNew) {
+                            $scope.tag = new TagResource($scope.tag);
+                            $scope.tag.$save(successCallback, errorCallback);
+                            // AreaMeritoResource.save($scope.tag, successCallback, errorCallback);
+                        } else {
+                            TagResource.update({ TagId: $routeParams.id }, $scope.tag, successCallback, errorCallback);
+                        }
+                    };
+
+                    $scope.cancel = function () {
+                        $location.path("/Tags");
+                    };
+
+                    $scope.remove = function () {
+
+                        var successCallback = function () {
+                            $location.path("/Tags");
+                            $scope.displayError = false;
+                        };
+                        var errorCallback = function () {
+                            $scope.displayError = true;
+                        };
+                        var removeIt = function () {
+                            TagResource.remove({ TagId: $routeParams.id }, successCallback, errorCallback);
+                        }
+                        $confirm({ text: 'Deseja realmente apagar essa palavra chave? Qualquer proposicao  associado a ela será apagado.', title: 'Apagar palavra chave', ok: 'Sim', cancel: 'Não' })
+                            .then(removeIt);
+                    };
+
+
+                    $scope.get();
+                }).controller('SearchTagController', function ($scope, $http, TagResource) {
+
+                    $scope.search = {};
+                    $scope.currentPage = 0;
+                    $scope.pageSize = 10;
+                    $scope.searchResults = [];
+                    $scope.filteredResults = [];
+                    $scope.pageRange = [];
+                    $scope.numberOfPages = function () {
+                        var result = Math.ceil($scope.filteredResults.length / $scope.pageSize);
+                        var max = (result == 0) ? 1 : result;
+                        $scope.pageRange = [];
+                        for (var ctr = 0; ctr < max; ctr++) {
+                            $scope.pageRange.push(ctr);
+                        }
+                        return max;
+                    };
+
+                    $scope.performSearch = function () {
+                        $scope.searchResults = TagResource.listarTodos(function () {
+                            $scope.numberOfPages();
+                        });
+                    };
+
+                    $scope.previous = function () {
+                        if ($scope.currentPage > 0) {
+                            $scope.currentPage--;
+                        }
+                    };
+
+                    $scope.next = function () {
+                        if ($scope.currentPage < ($scope.numberOfPages() - 1)) {
+                            $scope.currentPage++;
+                        }
+                    };
+
+                    $scope.setPage = function (n) {
+                        $scope.currentPage = n;
+                    };
+
+                    $scope.performSearch();
                 });

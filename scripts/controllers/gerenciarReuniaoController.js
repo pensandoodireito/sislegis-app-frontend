@@ -57,7 +57,7 @@ angular.module('sislegisapp')
     $scope.allProposicoes = [];
     
     $scope.filtroTags = [];
-    
+    $scope.macrotemas = TagResource.listarTodos();
     $scope.equipes= EquipeResource.queryAll();
 
 	$scope.infiniteScroll = {
@@ -110,6 +110,7 @@ angular.module('sislegisapp')
 					autor: $scope.filtro.autor,
 					origem: $scope.filtro.origem,
 					isFavorita: $scope.filtro.isFavorita,
+                    macrotema: $scope.filtro.macrotema?$scope.filtro.macrotema.tag : null,
                     estado: $scope.filtro.estado!=""?$scope.filtro.estado:null,
                     idEquipe: $scope.filtro.equipe?$scope.filtro.equipe.id:null,
 					limit: $scope.infiniteScroll.limit, 
