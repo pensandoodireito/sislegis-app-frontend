@@ -588,7 +588,7 @@ return UsuarioResource.buscaPorUsuario({ method: method, nome: val },{ method: m
         }
             );
     }
-	$scope.abrirModalParecerAreaMerito= function (item) {
+	$scope.abrirModalParecerAreaMerito= function (item,revisao) {
         $scope.selectedProposicao= item;
           var modalInstance = $modal.open({
                 templateUrl: 'views/modal-parecer-areamerito.html',
@@ -596,13 +596,17 @@ return UsuarioResource.buscaPorUsuario({ method: method, nome: val },{ method: m
                 size: 'lg',
                 resolve: {
                     proposicao: function () {
-                        return $scope.selectedProposicao;
+                        return item;
+                    },
+                     revisao: function () {
+                        return revisao;
                     }
                 }
             });
 
             modalInstance.result.then(function (listaNotas) {
                 $scope.selectedProposicao.listaNotas = listaNotas;
+                console.log(listaNotas)
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
             });
