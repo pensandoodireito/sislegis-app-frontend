@@ -58,7 +58,16 @@ angular.module('sislegisapp')
     
     $scope.filtroTags = [];
     $scope.macrotemas = TagResource.listarTodos();
-    $scope.equipes= EquipeResource.queryAll();
+    $scope.equipes=[];
+     EquipeResource.queryAll(function(data){
+        for (var index = 0; index < data.length; index++) {
+            var element = data[index];
+            if(element.nome!="ASPAR"){
+                $scope.equipes.push(element);
+            }
+            
+        }
+    });
 
 	$scope.infiniteScroll = {
 			busy: false,

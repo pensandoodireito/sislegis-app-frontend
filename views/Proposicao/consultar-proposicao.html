@@ -33,11 +33,11 @@
                             </select>
                         </div>
                         <div class="col-sm-2">
-                            <label>Por favoritas:</label>
+                            <label>Por prioritárias:</label>
                             <select ng-model="filtro.isFavorita" class="form-control" ng-change='filtrarConsulta()'>
                                 <option value=""></option>
-                                <option value="true">Favoritas</option>
-                                <option value="false">Não-favoritas</option>
+                                <option value="true">Prioritária</option>
+                                <option value="false">Não-prioritária</option>
                             </select>
                         </div>
 
@@ -50,7 +50,7 @@
                                 <option value=""></option>
                                 <option value="FORADEPAUTA">Fora de competência</option>
                                 <option value="EMANALISE">Em análise</option>
-                                <option value="ANALISADA">Analisada</option>
+                                <option value="ANALISADA">Em revisão</option>
                                 <option value="ADESPACHAR">A despachar</option>
                                 <option value="DESPACHADA">Despachada</option>
                             </select>

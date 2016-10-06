@@ -30,6 +30,7 @@ var libs = [
     'lib/angular-i18n/angular-locale_pt-br.js',
     'lib/modernizr/modernizr.js',
     'lib/checklist-model/checklist-model.js',
+    'lib/admin-lte/plugins/chartjs/Chart.min.js',
     'scripts/app.js',
     'scripts/offcanvas.js',
     'scripts/directives/datepicker.js',
