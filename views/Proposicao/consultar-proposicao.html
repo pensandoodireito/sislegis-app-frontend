@@ -79,7 +79,7 @@
                             <i class="fa fa-star-o" ng-show="!item.favorita" ng-click="item.favorita=true;save(item)"></i>
                             <i class="fa fa-star" style="color: orange" ng-show="item.favorita" ng-click="item.favorita=false;save(item)"></i>
 
-                            <h3 class="box-title"><a href="#/Proposicao/id/{{item.id}}" target="_blank">{{item.sigla}}</a> 
+                            <h3 class="box-title"><a href=""   data-widget="collapse"  >{{item.sigla}}</a> 
                                         </h3>
                             <span ng-if="item.posicionamentoAtual==null">Sem posicionamento</span>{{item.posicionamentoAtual.posicionamento.nome}}</span>
                             <div class=" label">
@@ -280,7 +280,7 @@
                                                 <div class="col-md-12 text-center">
                                                     <div class="well">
                                                         <label>Análise documental SAL: <strong> <a ng-click="abrirModalNotaTecnica(item)" class="ng-binding"><i class="fa fa-file-text"></i>  {{item.totalNotasTecnicas}} documentos</a></strong></label>
-                                                        <strong>  <a ng-click="baixarTemplate(item)"> <i class="fa fa-download"></i> Baixar template</a></strong>
+                                                        <strong>  <a ng-click="baixarTemplate(item)"> <i class="fa fa-download"></i> Baixar Resumo Analítico</a></strong>
                                                     </div>
 
                                                 </div>
