@@ -117,11 +117,17 @@ var compilacao = function () {
         .pipe(uglify())
         .pipe(gulp.dest('./scripts'));
 }
-var generateHTMLs = function () {
-    console.info("Atualizando entradas do keycloak para apontar para: " + process.env.KEYCLOAK_SERVER);
-    if (!process.env.KEYCLOAK_SERVER) {
-        throw "Variável de ambiente KEYCLOAKSERVER não foi encontrada. Sete o valor de KEYCLOAKSERVER e tente novamente";
-    }
+var generateHTMLs = function (){
+	 console.info("Atualizando entradas do keycloak para apontar para: "+process.env.KEYCLOAK_SERVER);
+	 if(!process.env.KEYCLOAK_SERVER){
+		throw "Variável de ambiente KEYCLOAK_SERVER não foi encontrada. Defina o valor de KEYCLOAK_SERVER e tente novamente";
+	 }
+
+	 console.info("Atualizando app.js para apontar para a API Sislegis: "+process.env.API_SERVER);
+	 if(!process.env.API_SERVER){
+		throw "Variável de ambiente API_SERVER não foi encontrada. Defina o valor de API_SERVER e tente novamente";
+	 }
+
     console.info("Gerando index-dev.html");
     var generateIndexDEVHtml = gulp.src(['template/index-source.html'])
         .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
@@ -147,9 +153,9 @@ var generateHTMLs = function () {
     console.info("Gerando scripts/app.js");
 
     var generateFinalappjs = gulp.src(['template/app.js'])
-        .pipe(replace('BACKEND_SERVER', process.env.KEYCLOAK_SERVER))
-        .pipe(gulp.dest('./scripts/'));
-
+        .pipe(replace('BACKEND_SERVER', process.env.API_SERVER))
+        .pipe(gulp.dest('./scripts/'));	    
+	 
 };
 gulp.task('generateHTMLs', generateHTMLs);
 
