@@ -119,8 +119,24 @@ module.config(['$routeProvider', function ($routeProvider) {
         .when('/Reuniaos/gerenciar', { templateUrl: 'views/Reuniao/gerenciar.html', controller: 'GerenciarReuniaoController' })
         .when('/Reuniaos/gerenciar/:ReuniaoId', { templateUrl: 'views/Reuniao/gerenciar.html', controller: 'GerenciarReuniaoController' })
 
-        .when('/Proposicao/consultar', { templateUrl: 'views/Proposicao/consultar-proposicao.html', controller: 'GerenciarReuniaoController' })
-        .when('/Proposicao/despachar', { templateUrl: 'views/Proposicao/despachar-proposicao.html', controller: 'DespachoController' })
+        .when('/Proposicao/consultar', { templateUrl: 'views/Proposicao/consultar-proposicao.html', controller: 'ConsultaProposicoesController',
+                resolve: {
+                        configConsulta: function ($route) {
+
+                            return {botoes:'GENERICO'};
+
+                        }
+                    }
+        })
+        .when('/Proposicao/despachar', { templateUrl: 'views/Proposicao/consultar-proposicao.html', controller: 'ConsultaProposicoesController',
+                resolve: {
+                        configConsulta: function ($route) {
+
+                            return {filtro:{estado:'ADESPACHAR'},botoes:'DESPACHO'};
+
+                        }
+                    }
+        })
         .when('/Proposicao/id/:ProposicaoId', { templateUrl: 'views/Proposicao/single-proposicao.html', controller: 'ProposicaoController' })
 
         .when('/Posicionamentos', { templateUrl: 'views/SimpleEntity/search.html', controller: 'SearchPosicionamentoController' })

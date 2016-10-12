@@ -7,6 +7,11 @@ angular.module('sislegisapp').controller(
         $scope.disabled = false;
         $scope.showDetalhamentoProposicao = false;
         $scope.$location = $location;
+        if (reuniao == null) {
+            reuniao = {
+                data: new Date()
+            }
+        }
         $scope.campoData = new Date(reuniao.data);
 
         $scope.comissao = new Object();

@@ -17,7 +17,7 @@
     </div>
 
     <div class="divider-top clearfix">
-        <strong>Comissao: </strong><span ng-if="proposicao.pautaComissaoAtual==null && proposicao.comissao!=null">{{proposicao.comissao}} <i style="font-size: xx-small;">última comissão</i></span>{{proposicao.pautaComissaoAtual.pautaReuniaoComissao.comissao}}
+        <strong>Comissao: </strong><span ng-if="proposicao.pautaComissaoAtual==null && proposicao.comissao!=null">{{proposicao.comissao}} </span>{{proposicao.pautaComissaoAtual.pautaReuniaoComissao.comissao}}
         <br/>
         <strong>Ordem na Pauta: </strong>{{proposicao.pautaComissaoAtual.ordemPauta}} <span ng-show="proposicao.pautaComissaoAtual && proposicao.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{proposicao.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
         <br/>
@@ -145,8 +145,10 @@
 
 
                 <div class="well">
-                    <label>Análise documental SAL: <strong> <a ng-click="abrirModalNotaTecnica(proposicao)" class="ng-binding"><i class="fa fa-file-text"></i>  {{proposicao.totalNotasTecnicas}} documentos</a></strong></label>
-                    <strong>  <a ng-click="baixarTemplate(proposicao)"> <i class="fa fa-download"></i> Baixar Resumo Analítico</a></strong>
+                    <label>Análise documental SAL: <strong> <a ng-click="abrirModalNotaTecnica(proposicao)" class="ng-binding"><i class="fa fa-file-text"></i>  {{proposicao.totalNotasTecnicas+proposicao.totalBriefings+proposicao.totalEmendas}} documentos</a></strong></label>
+                    <div><strong>  <a ng-click="baixarTemplate(proposicao,'briefing')"> <i class="fa fa-download"></i> Baixar Resumo Analítico</a> 
+                    <a ng-click="baixarTemplate(proposicao,'nota')"> <i class="fa fa-download"></i> Baixar Nota Técnica</a>
+                    <a ng-click="baixarTemplate(proposicao,'emenda')"> <i class="fa fa-download"></i> Baixar Emenda</a></strong></div>
                 </div>
             </div>
             <div class=" clearfix">
