@@ -1,6 +1,6 @@
 <div class="content">
     <h3>Painel de Controle</h3>
-    <div class="row" ng-show="Auth.isSecretario()" >
+    <div class="row" ng-show="Auth.isSecretario()">
         <div class="col-md-6">
             <div class="info-box" ng-cloak ng-click="go('/Proposicao/despachar')" style="cursor:pointer;">
                 <span class="info-box-icon bg-aqua"><i class="glyphicon glyphicon-inbox"></i></span>
@@ -40,7 +40,7 @@
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                         </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+
                     </div>
                 </div>
                 <!-- /.box-header -->
@@ -76,7 +76,112 @@
 
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-cloak ng-show="Auth.isDiretor()">
+        <div class="col-md-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Minha equipe {{info.minhaEquipe.equipe.nome}}</h3>
+                    <h3 class="box-title" ng-if="info.error">{{info.error}}</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body" ng-hide="info.error!=null">
+
+                    <div class="col-md-4">
+                        <!-- small box -->
+                        <div class="small-box small-box bg-light-blue">
+                            <div class="inner">
+                                <h3>{{info.minhaEquipe.totalEmAnalise}}</h3>
+
+                                <p>Proposições em análise associadas à equipe</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-university"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">Abrir proposições <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                        <div class="small-box bg-light-blue">
+                            <div class="inner">
+                                <h3>{{info.minhaEquipe.totalSemResponsavel}}</h3>
+
+                                <p>Proposições associadas à equipe sem responsável</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person-add"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">Abrir proposições <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                        <div class="small-box bg-light-blue">
+                            <div class="inner">
+                                <h3>{{info.minhaEquipe.totalEmRevisao}}</h3>
+
+                                <p>Proposições para revisão do diretor</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-ios-search-strong"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">Abrir proposições <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        <p class="text-center">
+                            <strong>Proposições em análise por membro da equipe</strong>
+                        </p>
+                        <div class="progress-group" ng-repeat="pessoal in info.minhaEquipe.pessoal|orderBy:['totalEmAnalise']:[true]">
+                            <span class="progress-text">{{pessoal.nome}}</span>
+                            <span class="progress-number"><b>{{pessoal.totalEmAnalise}}</b>/{{info.minhaEquipe.totalEmAnalise}}</span>
+
+                            <div class="progress sm">
+                                <div class="progress-bar " ng-class="{
+                                'progress-bar-aqua':((pessoal.totalEmAnalise*100)/info.minhaEquipe.totalEmAnalise)<50,
+                                'progress-bar-red':((pessoal.totalEmAnalise*100)/info.minhaEquipe.totalEmAnalise)>80 
+                                }" style="width: {{(pessoal.totalEmAnalise*100)/info.minhaEquipe.totalEmAnalise}}%"></div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <p class="text-center">
+                            <strong>Proposições analisadas por membro da equipe no mês </strong>
+                        </p>
+                        <div class="progress-group" ng-repeat="pessoal in info.minhaEquipe.pessoal|orderBy:['totalAnalisadas']:[true]">
+                            <span class="progress-text">{{pessoal.nome}}</span>
+                            <span class="progress-number"><b>{{pessoal.totalAnalisadas}}</b>/{{info.minhaEquipe.totalAnalisadas}}</span>
+
+                            <div class="progress sm">
+                                <div class="progress-bar " ng-class="{
+                                'progress-bar-aqua':((pessoal.totalAnalisadas*100)/info.minhaEquipe.totalAnalisadas)<50,
+                                'progress-bar-red':((pessoal.totalAnalisadas*100)/info.minhaEquipe.totalAnalisadas)>80 }"
+                                style="width: {{(pessoal.totalAnalisadas*100)/info.minhaEquipe.totalAnalisadas}}%"></div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                
+                <div class="box-footer no-padding">
+
+                </div>
+                
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+
         <div class="col-md-5">
 
 
