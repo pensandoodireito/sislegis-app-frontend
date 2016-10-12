@@ -23,12 +23,17 @@ angular.module('sislegisapp')
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
 				ReuniaoProposicaoResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
                 TipoEncaminhamentoResource, ElaboracaoNormativaResource, Auth,TagResource, $q, BACKEND) {
+    console.log("RouteParams", $routeParams);
     
 	var self = this;
     $scope.Auth=Auth;
 	$scope.listaReuniaoProposicoes = [];
 	$scope.filtro = new ProposicaoResource();
-
+    if($routeParams.filter){
+        $scope.filtro.sigla=$routeParams.filter.sigla;
+        $scope.filtro.equipe=$routeParams.filter.equipe;
+        $scope.filtro.estado=$routeParams.filter.estado;
+    }
     $scope.sidebarPath = "views/Reuniao/sidebar-search.html";
 
 	$scope.proposicoesSeguidas = [];

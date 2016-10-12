@@ -317,8 +317,9 @@ angular.module('sislegisapp')
     .controller('DashboardController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster,
         DashboardService, Auth, $q, TarefaResource, BACKEND) {
         $scope.Auth = Auth;
-        $scope.go = function (url) {
-            $location.path(url);
+
+        $scope.go = function (url, p) {
+            $location.path(url).search({ filter: p });;
         }
         $scope.tarefas = TarefaResource.buscarPorUsuario();
         $scope.PieData = [];
@@ -387,6 +388,8 @@ angular.module('sislegisapp')
         ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
         EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
         TipoEncaminhamentoResource, Auth, TagResource, UploadService, $q, BACKEND) {
+
+        console.log("RouteParams", $routeParams)
         $scope.proposicoes = [];
         $scope.Auth = Auth;
         $scope.posicionamentos = PosicionamentoResource.queryAll();

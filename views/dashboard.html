@@ -50,28 +50,28 @@
                             <div class="chart-responsive">
                                 <canvas id="pieChart" height="310" width="292" style="width: 146px; height: 155px;"></canvas>
                             </div>
-                            <!-- ./chart-responsive -->
+
                         </div>
-                        <!-- /.col -->
+
                         <div class="col-md-7">
                             <ul class="chart-legend clearfix nav nav-pills nav-stacked">
                                 <li>Equipe <span class="pull-right ">Total em análise (% do mês)</span></li>
-                                <li ng-repeat="dados in PieData"><i class="fa fa-circle-o " style="color:{{dados.color}}"></i> {{dados.label}} <span class="pull-right ">
+                                <li ng-repeat="dados in PieData" ng-click="go('/Proposicao/consultar',{equipe:dados.equipe.e,estado:'EMANALISE'})" style="cursor:pointer;"><i class="fa fa-circle-o " style="color:{{dados.color}}"></i> {{dados.label}} <span class="pull-right ">
                                     <i class="fa "></i> <span ng-hide="dados.label=='Sem Equipe'">{{dados.equipe.totalEmAnalise}} ({{(dados.equipe.totalEmAnalise*100)/(dados.equipe.totalAnalisada+dados.equipe.totalEmAnalise) | number:1}}%)</span>
                                     <span ng-show="dados.label=='Sem Equipe'">{{dados.value}}</span>
                                     </span>
                                 </li>
                             </ul>
                         </div>
-                        <!-- /.col -->
+
                     </div>
-                    <!-- /.row -->
+
                 </div>
-                <!-- /.box-body -->
+
                 <div class="box-footer no-padding">
 
                 </div>
-                <!-- /.footer -->
+
             </div>
 
         </div>
@@ -101,7 +101,7 @@
                             <div class="icon">
                                 <i class="ion ion-university"></i>
                             </div>
-                            <a href="#" class="small-box-footer">Abrir proposições <i class="fa fa-arrow-circle-right"></i></a>
+                            <a ng-click="go('/Proposicao/consultar',{equipe:info.minhaEquipe.equipe,estado:'EMANALISE'})" class="small-box-footer">Abrir proposições <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
                         <div class="small-box bg-light-blue">
                             <div class="inner">
@@ -112,7 +112,7 @@
                             <div class="icon">
                                 <i class="ion ion-person-add"></i>
                             </div>
-                            <a href="#" class="small-box-footer">Abrir proposições <i class="fa fa-arrow-circle-right"></i></a>
+                            <a ng-click="go('/Proposicao/consultar',{equipe:info.minhaEquipe.equipe})" class="small-box-footer">Abrir proposições <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
                         <div class="small-box bg-light-blue">
                             <div class="inner">
@@ -123,7 +123,7 @@
                             <div class="icon">
                                 <i class="ion ion-ios-search-strong"></i>
                             </div>
-                            <a href="#" class="small-box-footer">Abrir proposições <i class="fa fa-arrow-circle-right"></i></a>
+                            <a ng-click="go('/Proposicao/consultar',{equipe:info.minhaEquipe.equipe,estado:'ANALISADA'})" class="small-box-footer">Abrir proposições <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -167,11 +167,11 @@
                     </div>
 
                 </div>
-                
+
                 <div class="box-footer no-padding">
 
                 </div>
-                
+
 
             </div>
         </div>
@@ -185,14 +185,14 @@
         <div class="col-md-5">
 
 
-            <div class="info-box" ng-cloak ng-click="go('/Proposicao/consultar')" style="cursor:pointer;">
+            <div class="info-box" ng-cloak ng-click="go('/Proposicao/consultar',{estado:'EMANALISE'})" style="cursor:pointer;">
                 <span class="info-box-icon bg-yellow"><i class="glyphicon glyphicon-folder-open"></i></span>
 
                 <div class="info-box-content">
                     <span class="info-box-text">Proposições em análise</span>
                     <span class="info-box-number">{{info.totalProposicoesEmAnalise}}</span>
                 </div>
-                <!-- /.info-box-content -->
+
             </div>
 
             <div class="info-box bg-yellow" ng-cloak>
