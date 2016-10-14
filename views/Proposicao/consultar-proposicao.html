@@ -86,7 +86,8 @@
                 <div infinite-scroll='consultarProposicoes()' infinite-scroll-disabled='infiniteScroll.busy'>
                     <div class="box box-info collapsed-box" ng-repeat="item in proposicoes | orderBy : ['origem','comissao']">
                         <div class="box-header ">
-                            <div class="box-tools pull-right" ng-if="configConsulta.botoes=='GENERICO'">
+                            <div class="box-tools pull-right" ng-if="configConsulta.botoes=='GENERICO'" >
+
                                 <button ng-if="Auth.isAspar(true) && item.estado=='FORADEPAUTA'" type="button" class="btn btn-default btn-sm" title="Marcar análise SAL"
                                 ng-click="setaEstado(item,'EMANALISE')"> <i class="fa fa-mail-forward"></i> Marcar para análise da SAL
                                 </button>
@@ -94,9 +95,9 @@
                                 ng-click="setaEstado(item,'EMANALISE')">
                                     <i class="fa fa-mail-forward"></i> Marcar para análise da SAL
                                 </button>
-                                <button ng-if="Auth.isEquipe(true) && item.estado=='EMANALISE'" type="button" class="btn btn-default btn-sm" title="Análise Completa"
+                                <button ng-if="Auth.isEquipe(true) && item.estado=='EMANALISE'" type="button" class="btn btn-default btn-sm" title="Enviar para revisão"
                                 ng-click="setaEstado(item,'ANALISADA')">
-                                    <i class="fa fa-check-circle-o"></i> Análise completa
+                                    <i class="fa fa-check-circle-o"></i> Enviar para revisão
                                 </button>
                                 <button ng-if="Auth.isDiretor(true) && item.estado=='ANALISADA'" type="button" class="btn btn-default btn-sm" title="Enviar para despacho"
                                 ng-click="setaEstado(item,'ADESPACHAR')">

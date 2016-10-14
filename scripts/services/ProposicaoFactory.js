@@ -86,6 +86,16 @@ angular.module('sislegisapp').factory('ProposicaoResource', function ($resource,
                 method: 'GET',
                 isArray: true
             },
+            'removeAnexoRevisao': {
+                url: BACKEND + "/proposicaos/:ProposicaoId/revisaoMerito/:RevisaoId/anexo",
+                method: 'DELETE',
+                isArray: false
+            },
+            'removeRevisao': {
+                url: BACKEND + "/proposicaos/:ProposicaoId/revisaoMerito/:RevisaoId",
+                method: 'DELETE',
+                isArray: false
+            },
             'salvarRevisao': {
                 url: BACKEND + "/proposicaos/:ProposicaoId/revisaoMerito",
                 method: 'POST',

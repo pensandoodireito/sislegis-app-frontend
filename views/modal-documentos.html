@@ -1,7 +1,7 @@
 <!-- Modal Comentários -->
 <div class="modal-header">
 
-    <h4 class="modal-title" id="myModalLabel">Notas Técnicas</h4>
+    <h4 class="modal-title" id="myModalLabel">Documentação</h4>
 </div>
 <div class="modal-body" ng-init="currTab='nota'">
     <div class="col-lg-12">
@@ -40,14 +40,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="nota in proposicao.listaNotas">
+                        <tr ng-repeat="doc in proposicao.listaNotas">
 
-                            <td class="mailbox-subject"><a ng-click="openFile(doc)">{{nota.documento.nome}}</a>
+                            <td class="mailbox-subject">
+                                <form action="{{getFormURL()}}" method="POST" target="_BLANK">
+                                    <input type="hidden" name="id" value="{{doc.documento.id}}">
+                                    <input type="hidden" name="a" value="{{getAuthorization()}}">
+                                    <input type="hidden" name="v" value="v">
+                                    <button class="btn btn-flat btn-sm"><i class="fa fa-download"></i> {{doc.documento.nome}}</button>
+                                </form>
                             </td>
-                            <td class="mailbox-name">{{nota.usuario.nome}}</a>
+                            <td class="mailbox-name">{{doc.usuario.nome}}</a>
                             </td>
-                            <td class="mailbox-date">{{nota.dataCriacao| date:'dd/MM HH:mm'}}</td>
-                            <td class="mailbox-date" ng-click="removeDoc(nota)"><i class="fa fa-remove"></i></td>
+                            <td class="mailbox-date">{{doc.dataCriacao| date:'dd/MM HH:mm'}}</td>
+                            <td class="mailbox-date" ng-click="removeDoc(doc)"><i class="fa fa-remove"></i></td>
                         </tr>
                     </tbody>
                 </table>
@@ -70,7 +76,13 @@
                         <tr ng-repeat="doc in proposicao.listaBriefings">
 
 
-                            <td class="mailbox-subject"><a ng-click="openFile(doc)">{{doc.documento.nome}}</a>
+                            <td class="mailbox-subject">
+                                <form action="{{getFormURL()}}" method="POST" target="_BLANK">
+                                    <input type="hidden" name="id" value="{{doc.documento.id}}">
+                                    <input type="hidden" name="a" value="{{getAuthorization()}}">
+                                    <input type="hidden" name="v" value="v">
+                                    <button class="btn btn-flat btn-sm"><i class="fa fa-download"></i> {{doc.documento.nome}}</button>
+                                </form>
                             </td>
                             <td class="mailbox-name">{{doc.usuario.nome}}</a>
                             </td>
@@ -98,7 +110,14 @@
                         <tr ng-repeat="doc in proposicao.listaEmendas">
 
 
-                            <td class="mailbox-subject"><a ng-click="openFile(doc)">{{doc.documento.nome}}</a>
+                            <td class="mailbox-subject">
+                                <form action="{{getFormURL()}}" method="POST" target="_BLANK">
+                                    <input type="hidden" name="id" value="{{doc.documento.id}}">
+                                    <input type="hidden" name="a" value="{{getAuthorization()}}">
+                                    <input type="hidden" name="v" value="v">
+                                    <button class="btn btn-flat btn-sm"><i class="fa fa-download"></i> {{doc.documento.nome}}</button>
+                                </form>
+
                             </td>
                             <td class="mailbox-name">{{doc.usuario.nome}}</a>
                             </td>
@@ -110,20 +129,7 @@
             </div>
 
         </div>
-        <form role="form" ng-show="notaForm==true">
-
-            <div class="form-horizontal" role="form">
-
-                <div class="box-footer clearfix">
-                    <div class="form-group">
-                        <label for="">Subir briefing </label> <span ng-show="uploading==true"><i class="fa fa-refresh fa-spin"></i>  Subindo arquivo...</span>
-                        <input type="file" file-model='myFile' name="file" id="form-group">
-                        <p class="help-block">Selecione o arquivo da nota técnica.</p>
-                    </div>
-                </div>
-            </div>
-
-        </form>
+      
 
     </div>
     <div class="modal-footer">

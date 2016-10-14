@@ -7,11 +7,10 @@ angular.module('sislegisapp')
         TipoEncaminhamentoResource, Auth, TagResource, $q, BACKEND) {
 
 
-        $scope.baixarTemplate = function (item,tipo) {
+        $scope.baixarTemplate = function (item, tipo) {
 
-            // http://localhost:8080/sislegis/rest/proposicaos/2047/templateBriefing
             var back = BACKEND.substr(0, BACKEND.length - 5);
-            window.open(back + "/template?id=" + item.id+"&type="+tipo);
+            window.open(back + "/template?id=" + item.id + "&type=" + tipo);
         }
         $scope.abrirModalParecerAreaMerito = function (item, revisao) {
             var modalInstance = $modal.open({
@@ -167,23 +166,61 @@ angular.module('sislegisapp')
 
         };
         $scope.lastSaveTimer = null;
+        $scope.scheduleSaveTimer = function (newValue, oldValue, scope) {
 
-        $scope.$watch('proposicao', function (newValue, oldValue, scope) {
-            console.log("was", oldValue, "is", newValue);
             if (oldValue != null) {
+                console.log("was", oldValue, "is", newValue);
+                //evitar alguns inuteis:
+                if (oldValue.revisoes != null && newValue.revisoes != null) {
+                    console.log(oldValue.revisoes.length, newValue.revisoes.length)
+                    if (oldValue.revisoes.length != newValue.revisoes.length) {
+                        console.log("persistido por fora");
+                        return;
+                    }
+                }
                 // if (oldValue.posicionamentoAtual != newValue.posicionamentoAtual) {
                 //     console.log("alterou posicionameto");
                 //     return;
                 // }
-                if (newValue.lastSaveTimer != null) {
-                    $timeout.cancel(newValue.lastSaveTimer);
+                if ($scope.lastSaveTimer != null) {
+                    $timeout.cancel($scope.lastSaveTimer);
                 }
                 var fct = function () {
                     $scope.save($scope.proposicao);
                 }
-                newValue.lastSaveTimer = $timeout(fct, 2500, true, newValue);
+                $scope.lastSaveTimer = $timeout(fct, 2500, true, newValue);
             }
-        }, true);
+        }
+        $scope.$watch('proposicao.explicacao', $scope.scheduleSaveTimer, true);
+        $scope.$watch('proposicao.posicionamento', $scope.scheduleSaveTimer, true);
+        $scope.$watch('proposicao.responsavel', $scope.scheduleSaveTimer, true);
+        $scope.$watch('proposicao.posicionamentoSupar', $scope.scheduleSaveTimer, true);
+        $scope.$watch('proposicao.posicionamentoAtual', $scope.scheduleSaveTimer, true);
+        $scope.$watch('proposicao.parecerSAL', $scope.scheduleSaveTimer, true);
+        $scope.$watch('proposicao.equipe', $scope.scheduleSaveTimer, true);
+        $scope.handlingState = false;
+        $scope.trataAlteracaoDeEstado = function (newValue, oldValue, scope) {
+            if ($scope.handlingState == false && oldValue != null) {
+                $scope.handlingState = true;
+
+                if ($scope.lastSaveTimer != null) {
+                    $timeout.cancel($scope.lastSaveTimer);
+                }
+                $scope.save($scope.proposicao, "Estado alterado", "Falhou ao alterar estado").then(function () {
+
+                    $scope.handlingState = true;
+                }, function () {
+
+                    $scope.handlingState = true;
+                    $scope.proposicao.estado = oldValue;
+
+                });
+            }
+
+        };
+        $scope.estadoWatcher = $scope.$watch('proposicao.estado', $scope.trataAlteracaoDeEstado, true);
+
+
         $scope.getPosicionamentos = function (current) {
             var copy = $scope.posicionamentos.slice(0);
             if (current) {
@@ -226,7 +263,6 @@ angular.module('sislegisapp')
             }
 
 
-            // clear();
 
             $rootScope.inactivateSpinner = true;
             var successCallback = function () {
@@ -242,7 +278,7 @@ angular.module('sislegisapp')
                 toaster.pop('error', msgErro);
                 deferred.reject('Falha salvar proposição.');
             };
-            ProposicaoResource.update(item, successCallback, errorCallback);
+            ProposicaoResource.update({}, item, successCallback, errorCallback);
             return deferred.promise;
         };
 
@@ -734,9 +770,9 @@ angular.module('sislegisapp')
         $scope.setaEstado = function (item, estado) {
             var oldState = item.estado;
             item.estado = estado;
-            console.log(item.lastSaveTimer)
-            $timeout.cancel(item.lastSaveTimer);
-            ProposicaoResource.update(item, function () { }, function () { item.estado = oldState });
+            
+            // $timeout.cancel(item.lastSaveTimer);
+            // ProposicaoResource.update(item, function () { }, function () { item.estado = oldState });
         }
 
         $scope.$watch('filtro', function (newValue, oldValue, scope) {
@@ -911,12 +947,19 @@ angular.module('sislegisapp')
         $scope.get();
     }).controller('ModalNotaTecnicaController',
         function ($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource,
-            ProposicaoResource, UsuarioResource, ComentarioService, UploadService, $confirm, BACKEND) {
+            ProposicaoResource, UsuarioResource, ComentarioService, UploadService, $confirm, BACKEND, $sce, Auth) {
 
 
 
 
             var self = this;
+            $scope.getAuthorization = function () {
+                return 'Bearer ' + Auth.authz.token;
+            }
+            $scope.getFormURL = function () {
+                var back = BACKEND.substr(0, BACKEND.length - 5);
+                return $sce.trustAsResourceUrl(back + "/documentos")
+            }
 
             $scope.proposicao = proposicao || new ProposicaoResource();
             proposicao.listaNotas = ProposicaoResource.listNotaTecnicas({ ProposicaoId: proposicao.id });
@@ -1026,29 +1069,83 @@ angular.module('sislegisapp')
                 $scope.uploading = true;
                 UploadService('documentos', file, { type: type, idProposicao: $scope.proposicao.id }).then(successCallback, errorCallback);
             };
-            $scope.openFile = function (id) {
-                var back = BACKEND.substr(0, BACKEND.length - 5);
 
-                window.open(back + "/documentos?id=" + id);
-            }
+
 
         }).controller('ModalParecerAreaMeritoController',
             function ($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource,
-                ProposicaoResource, UsuarioResource, ComentarioService, PosicionamentoResource, UploadService, revisao) {
+                ProposicaoResource, UsuarioResource, ComentarioService, PosicionamentoResource, UploadService, revisao, Auth, BACKEND, $sce) {
+                $scope.getAuthorization = function () {
+                    return 'Bearer ' + Auth.authz.token;
+                }
+                $scope.getFormURL = function () {
+                    var back = BACKEND.substr(0, BACKEND.length - 5);
+                    return $sce.trustAsResourceUrl(back + "/documentos")
+                }
 
+                $scope.removeAnexo = function () {
+                    var successCallback = function (data, responseHeaders) {
 
-                $scope.areaMeritos = ProposicaoResource.listaAreaMerito();
+                        $scope.revisao.documento = null;
+                        toaster.pop('success', 'Anexo removido');
+
+                    };
+
+                    var errorCallback = function () {
+
+                        toaster.pop('error', 'Falha ao remover documento.');
+                    };
+                    ProposicaoResource.removeAnexoRevisao({ ProposicaoId: $scope.revisao.proposicao.id, RevisaoId: $scope.revisao.id }, $scope.revisao, successCallback, errorCallback);
+                }
+                $scope.remove = function () {
+                    var successCallback = function (data, responseHeaders) {
+                        var indexOf = proposicao.revisoes.indexOf($scope.revisao);
+                        if (indexOf != -1) {
+                            proposicao.revisoes.splice(indexOf, 1);
+                        }
+                        toaster.pop('success', 'Revisão removida');
+                         $modalInstance.dismiss('cancel');
+
+                    };
+
+                    var errorCallback = function () {
+
+                        toaster.pop('error', 'Falha ao remover revisão.');
+                    };
+                    ProposicaoResource.removeRevisao({ ProposicaoId: $scope.revisao.proposicao.id, RevisaoId: $scope.revisao.id }, $scope.revisao, successCallback, errorCallback);
+                }
+
                 $scope.revisao = {
                     proposicao: proposicao
                 }
                 if (revisao != null) {
                     $scope.revisao = revisao;
                 }
-
+                console.log($scope.revisao);
                 $scope.posicionamentos = PosicionamentoResource.query();
 
 
+                $scope.uploadfile = function (actionUrl) {
 
+                    var successCallback = function (data, responseHeaders) {
+                        $scope.uploading = false;
+
+                        $scope.revisao.documento = data.documento;
+                        console.log($scope.revisao);
+                        toaster.pop('success', 'Parecer inserido com sucesso');
+
+                    };
+
+                    var errorCallback = function () {
+                        $scope.uploading = false;
+                        toaster.pop('error', 'Falha ao tentar anexar documento, mas parecer de area foi salvo.');
+                    };
+
+                    var file = $scope.myFile;
+                    console.log(file)
+                    $scope.uploading = true;
+                    UploadService('documentos', file, { type: 4, idRevisao: $scope.revisao.id }).then(successCallback, errorCallback);
+                };
 
 
                 $scope.cancel = function () {
@@ -1058,15 +1155,22 @@ angular.module('sislegisapp')
 
                 };
                 $scope.save = function () {
+
                     var successCallback = function (data, responseHeaders) {
 
                         if ($scope.revisao.proposicao.revisoes == null) {
                             $scope.revisao.proposicao.revisoes = [];
                         }
+                        $scope.revisao.id = data.id;
                         $scope.revisao.proposicao.revisoes.push(data);
-
-                        toaster.pop('success', 'Parecer inserido com sucesso');
-                        $modalInstance.close($scope.revisao.proposicao);
+                        var file = $scope.myFile;
+                        console.log("File", file)
+                        if (file != null) {
+                            $scope.uploadfile();
+                        } else {
+                            toaster.pop('success', 'Parecer inserido com sucesso');
+                        }
+                        // $modalInstance.close($scope.revisao.proposicao);
                     };
 
                     var errorCallback = function () {

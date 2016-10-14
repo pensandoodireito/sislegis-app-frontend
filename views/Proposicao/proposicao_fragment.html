@@ -40,6 +40,7 @@
                         <th>Data</th>
                         <th>Posicionamento</th>
                         <th>Parecer</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,7 +48,8 @@
                         <td>{{revisao.areaMerito.nome}}</td>
                         <td>{{revisao.dataAtualizacao| date:'dd/MM HH:mm'}}</td>
                         <td>{{revisao.posicionamento.nome}}</td>
-                        <td>{{revisao.parecer}}</td>
+                        <td>{{revisao.parecer|limitTo:10}}</td>
+                        <td><i class="fa  fa-paperclip" ng-show="revisao.documento!=null"></i></td>
                     </tr>
 
 
@@ -146,9 +148,9 @@
 
                 <div class="well">
                     <label>Análise documental SAL: <strong> <a ng-click="abrirModalNotaTecnica(proposicao)" class="ng-binding"><i class="fa fa-file-text"></i>  {{proposicao.totalNotasTecnicas+proposicao.totalBriefings+proposicao.totalEmendas}} documentos</a></strong></label>
-                    <div><strong>  <a ng-click="baixarTemplate(proposicao,'briefing')"> <i class="fa fa-download"></i> Baixar Resumo Analítico</a> 
-                    <a ng-click="baixarTemplate(proposicao,'nota')"> <i class="fa fa-download"></i> Baixar Nota Técnica</a>
-                    <a ng-click="baixarTemplate(proposicao,'emenda')"> <i class="fa fa-download"></i> Baixar Emenda</a></strong></div>
+                    <div><strong>  <a ng-click="baixarTemplate(proposicao,'briefing')"> <i class="fa fa-download"></i> Resumo Analítico</a> 
+                    <a ng-click="baixarTemplate(proposicao,'nota')"> <i class="fa fa-download"></i> Nota Técnica</a>
+                    <a ng-click="baixarTemplate(proposicao,'emenda')"> <i class="fa fa-download"></i> Emenda</a></strong></div>
                 </div>
             </div>
             <div class=" clearfix">
