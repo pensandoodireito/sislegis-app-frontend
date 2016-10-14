@@ -20,65 +20,79 @@
         <div class="panel panel-default" style="background-color:transparent;">
             <div class="panel-heading">
                 <div class="clearfix">
-                    <div class="row" role="form">
-
-                        <div class="col-sm-2">
-                            <label>Por tipo número/ano:</label>
-                            <input type="text" class="form-control" ng-model="filtro.sigla" placeholder="Filtrar pela sigla">
-                        </div>
-                        <div class="col-sm-3">
-                            <label>Pela ementa:</label>
-                            <input type="text" class="form-control" ng-model="filtro.ementa" placeholder="Filtrar pela ementa">
-                        </div>
-                        <div class="col-sm-3">
-                            <label>Por autor:</label>
-                            <input type="text" class="form-control" ng-model="filtro.autor" placeholder="Filtrar por autor">
-                        </div>
-                        <div class="col-sm-2">
-                            <label>Por casa legislativa:</label>
-                            <select ng-model="filtro.origem" class="form-control">
-                                <option value=""></option>
-                                <option value="CAMARA">CAMARA</option>
-                                <option value="SENADO">SENADO</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-2">
-                            <label>Por prioritárias:</label>
-                            <select ng-model="filtro.isFavorita" class="form-control">
-                                <option value=""></option>
-                                <option value="true">Prioritárias</option>
-                                <option value="false">Não-prioritárias</option>
-                            </select>
+                    <form action="{{getReportURL()}}" ng-submit="token=getAuthorization()" target="_relatorio" method="POST">
+                        <div class="box-tools pull-right">
+                            <button type="submit" class="btn btn-default" title="Relatório"> <i class="fa  fa-file-word-o"></i> Gerar Relatório
+                            </button>
                         </div>
 
-                    </div>
-                    <div class="row" role="form">
+                        <div class="row" role="form">
 
-                        <div class="col-sm-2" ng-if="configConsulta.botoes=='GENERICO'">
-                            <label>Pelo estado na SAL:</label>
-                            <select ng-model="filtro.estado" class="form-control" ng-change='filtrarConsulta()'>
-                                <option value=""></option>
-                                <option value="FORADEPAUTA">Fora de competência</option>
-                                <option value="EMANALISE">Em análise</option>
-                                <option value="ANALISADA">Em revisão</option>
-                                <option value="ADESPACHAR">A despachar</option>
-                                <option value="DESPACHADA">Despachada</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-2">
-                            <label>Por equipe:</label>
-                            <select ng-model="filtro.equipe" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.nome for item in equipes track by item.id">
+                            <div class="col-sm-2">
+                                <label>Por tipo número/ano:</label>
+                                <input name="sigla" type="text" class="form-control" ng-model="filtro.sigla" placeholder="Filtrar pela sigla">
+                            </div>
+                            <div class="col-sm-3">
+                                <label>Pela ementa:</label>
+                                <input name="ementa" type="text" class="form-control" ng-model="filtro.ementa" placeholder="Filtrar pela ementa">
+                            </div>
+                            <div class="col-sm-3">
+                                <label>Por autor:</label>
+                                <input name="autor" type="text" class="form-control" ng-model="filtro.autor" placeholder="Filtrar por autor">
+                            </div>
+                            <div class="col-sm-2">
+                                <label>Por casa legislativa:</label>
+                                <select name="origem" ng-model="filtro.origem" class="form-control">
+                                    <option value=""></option>
+                                    <option value="CAMARA">CAMARA</option>
+                                    <option value="SENADO">SENADO</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
 
-                            </select>
-                        </div>
-                        <div class="col-sm-2">
-                            <label>Por macrotema:</label>
-                            <select ng-model="filtro.macrotema" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.tag for item in macrotemas">
+                            </div>
 
-                            </select>
                         </div>
-                    </div>
+                        <div class="row" role="form">
+                            <div class="col-sm-2">
+                                <label>Por prioritárias:</label>
+                                <select name="isFavorita" ng-model="filtro.isFavorita" class="form-control">
+                                    <option value=""></option>
+                                    <option value="true">Prioritárias</option>
+                                    <option value="false">Não-prioritárias</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2" ng-if="configConsulta.botoes=='GENERICO'">
+                                <label>Pelo estado na SAL:</label>
+                                <select name="estado" ng-model="filtro.estado" class="form-control" ng-change='filtrarConsulta()'>
+                                    <option value=""></option>
+                                    <option value="FORADEPAUTA">Fora de competência</option>
+                                    <option value="EMANALISE">Em análise</option>
+                                    <option value="ANALISADA">Em revisão</option>
+                                    <option value="ADESPACHAR">A despachar</option>
+                                    <option value="DESPACHADA">Despachada</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <label>Por equipe:</label>
+                                <select name="idEquipe" ng-model="filtro.equipe" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.nome for item in equipes track by item.id">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <label>Por macrotema:</label>
+                                <select name="macrotema" ng-model="filtro.macrotema" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.tag for item in macrotemas">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <input type="hidden" name="a" value="{{token}}">
+
+
+
+                        </div>
+                    </form>
                 </div>
+
             </div>
 
             <div class="panel-body">
@@ -86,7 +100,7 @@
                 <div infinite-scroll='consultarProposicoes()' infinite-scroll-disabled='infiniteScroll.busy'>
                     <div class="box box-info collapsed-box" ng-repeat="item in proposicoes | orderBy : ['origem','comissao']">
                         <div class="box-header ">
-                            <div class="box-tools pull-right" ng-if="configConsulta.botoes=='GENERICO'" >
+                            <div class="box-tools pull-right" ng-if="configConsulta.botoes=='GENERICO'">
 
                                 <button ng-if="Auth.isAspar(true) && item.estado=='FORADEPAUTA'" type="button" class="btn btn-default btn-sm" title="Marcar análise SAL"
                                 ng-click="setaEstado(item,'EMANALISE')"> <i class="fa fa-mail-forward"></i> Marcar para análise da SAL
@@ -138,17 +152,18 @@
                                 </button>
                             </div>
                             <div class="row">
-                                <div class="col-sm-2 col-lg-2">
+                                <div class="col-sm-6 col-md-3 col-lg-3">
                                     <i class="fa fa-star-o" ng-show="!item.favorita" ng-click="item.favorita=true;save(item)"></i>
                                     <i class="fa fa-star" style="color: orange" ng-show="item.favorita" ng-click="item.favorita=false;save(item)"></i>
 
-                                    <h3 class="box-title"><a href=""  data-widget="collapse" target="_blank">{{item.sigla}}</a> 
-                                        </h3>
+                                    <h3 class="box-title"><a href=""  data-widget="collapse" target="_blank">{{item.sigla}}</a></h3>
+                                    <div style="cursor:default" class="time" ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.data>getSunday()" title="Pautada para {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'fullDate'}}"> <i class="fa fa-clock-o"></i> {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'EEE, H:mm'}}</div>
                                 </div>
-                                <div class="col-sm-3 col-lg-3">
+
+                                <div class="col-sm-6 col-md-3 col-lg-3">
                                     <strong>Relator: </strong><span ng-if="item.pautaComissaoAtual.relator==null">Não identificado</span>{{item.pautaComissaoAtual.relator}}
                                 </div>
-                                <div class="col-sm-3 col-lg-3">
+                                <div class="col-sm-6 col-md-2 col-lg-2">
 
 
                                     <span class="label" ng-class="{'bg-gray':item.posicionamentoAtual==null,

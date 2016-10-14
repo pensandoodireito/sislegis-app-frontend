@@ -679,8 +679,18 @@ angular.module('sislegisapp')
     .controller('ConsultaProposicoesController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
         ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
         EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
-        TipoEncaminhamentoResource, Auth, TagResource, UploadService, $q, BACKEND, configConsulta) {
-
+        TipoEncaminhamentoResource, Auth, TagResource, UploadService, $q, BACKEND, configConsulta, $sce) {
+        $scope.getAuthorization = function () {
+            return 'Bearer ' + Auth.authz.token;
+        }
+        
+        $scope.getReportURL = function () {
+            var back = BACKEND.substr(0, BACKEND.length - 5);
+            return $sce.trustAsResourceUrl(back + "/relatorio");
+        }
+        $scope.getSunday=function(){
+            return new Date();
+        }
         console.log("RouteParams", $routeParams);
         $scope.filtro = new ProposicaoResource();
         if ($routeParams.filter) {
@@ -704,6 +714,7 @@ angular.module('sislegisapp')
         $scope.proposicoes = [];
         $scope.Auth = Auth;
         $scope.posicionamentos = PosicionamentoResource.queryAll();
+        
         $scope.macrotemas = TagResource.listarTodos();
 
         $scope.buscarProposicoes = function () {
@@ -1104,7 +1115,7 @@ angular.module('sislegisapp')
                             proposicao.revisoes.splice(indexOf, 1);
                         }
                         toaster.pop('success', 'Revisão removida');
-                         $modalInstance.dismiss('cancel');
+                        $modalInstance.dismiss('cancel');
 
                     };
 
