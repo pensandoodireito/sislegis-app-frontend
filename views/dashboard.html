@@ -46,22 +46,22 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
+
+                        <div class="col-md-7">
+                            <ul class="chart-legend clearfix nav nav-pills nav-stacked">
+                                <li>Equipe <span class="pull-right ">Total em análise/Total analisada e em análise no mês</span></li>
+                                <li ng-repeat="dados in PieData" ng-click="go('/Proposicao/consultar',{equipe:dados.equipe.e,estado:'EMANALISE'})" style="cursor:pointer;"><i class="fa fa-circle-o " style="color:{{dados.color}}"></i> {{dados.label}} <span class="pull-right ">
+                                    <i class="fa "></i> <span ng-hide="dados.label=='Sem Equipe'">{{dados.equipe.totalEmAnalise}}/{{(dados.equipe.totalAnalisada+dados.equipe.totalEmAnalise)}} ({{(dados.equipe.totalEmAnalise*100)/(dados.equipe.totalAnalisada+dados.equipe.totalEmAnalise) | number:1}}%)</span>
+                                    <span ng-show="dados.label=='Sem Equipe'">{{dados.value}}</span>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
                         <div class="col-md-5">
                             <div class="chart-responsive">
                                 <canvas id="pieChart" height="310" width="292" style="width: 146px; height: 155px;"></canvas>
                             </div>
 
-                        </div>
-
-                        <div class="col-md-7">
-                            <ul class="chart-legend clearfix nav nav-pills nav-stacked">
-                                <li>Equipe <span class="pull-right ">Total em análise (% do mês)</span></li>
-                                <li ng-repeat="dados in PieData" ng-click="go('/Proposicao/consultar',{equipe:dados.equipe.e,estado:'EMANALISE'})" style="cursor:pointer;"><i class="fa fa-circle-o " style="color:{{dados.color}}"></i> {{dados.label}} <span class="pull-right ">
-                                    <i class="fa "></i> <span ng-hide="dados.label=='Sem Equipe'">{{dados.equipe.totalEmAnalise}} ({{(dados.equipe.totalEmAnalise*100)/(dados.equipe.totalAnalisada+dados.equipe.totalEmAnalise) | number:1}}%)</span>
-                                    <span ng-show="dados.label=='Sem Equipe'">{{dados.value}}</span>
-                                    </span>
-                                </li>
-                            </ul>
                         </div>
 
                     </div>
@@ -235,7 +235,7 @@
 
                             <tr ng-repeat="tarefa in tarefas |orderBy:['data']">
                                 <td> {{$index + 1}} </td>
-                                <td><i></i>{{tarefa.encaminhamentoProposicao.tipoEncaminhamento.nome}}</td>
+                                <td><i></i><a href="#/Tarefas/edit/{{tarefa.id}}">{{tarefa.encaminhamentoProposicao.tipoEncaminhamento.nome}}</a></td>
                                 <td><i></i>{{tarefa.encaminhamentoProposicao.detalhes}}</td>
                                 <td><i></i>{{tarefa.data|date}}</td>
                                 <td><i></i>{{tarefa.encaminhamentoProposicao.dataHoraLimite|date}}</td>

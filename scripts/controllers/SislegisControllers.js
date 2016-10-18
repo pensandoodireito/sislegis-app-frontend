@@ -168,9 +168,9 @@ angular.module('sislegisapp')
         $scope.lastSaveTimer = null;
         $scope.scheduleSaveTimer = function (newValue, oldValue, scope) {
             // console.log(oldValue===undefined,oldValue===null, "was", oldValue, "is", newValue);
-            if (!(oldValue===undefined)) {
+            if (!(oldValue === undefined)) {
                 console.log("was", oldValue, "is", newValue);
-                     
+
                 if ($scope.lastSaveTimer != null) {
                     $timeout.cancel($scope.lastSaveTimer);
                 }
@@ -393,7 +393,7 @@ angular.module('sislegisapp')
                 //String - A legend template
                 legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
                 //String - A tooltip template
-                tooltipTemplate: "<%=value %> <%=label%>"
+                tooltipTemplate: "<%=label%> <%=value %> projetos analisados no mês" 
             };
             //Create pie or douhnut chart
             // You can switch between pie and douhnut using the method below.
@@ -767,6 +767,27 @@ angular.module('sislegisapp')
             }
         });
 
+        $scope.despachoPresencial = function (item) {
+
+            var modalInstance = $modal.open({
+                templateUrl: 'views/modal-encaminhamento-despacho.html',
+                controller: 'ModalEncaminhamentoDespachoController',
+                size: 'md',
+                resolve: {
+                    proposicao: function () {
+                        return item;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (novoEncaminhamento) {                
+                item.estado='ADESPACHAR_PRESENCA';
+                item.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ ProposicaoId: item.id });
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+
+        }
 
         $scope.setaEstado = function (item, estado) {
             var oldState = item.estado;
@@ -1360,4 +1381,84 @@ angular.module('sislegisapp')
                     };
 
                     $scope.performSearch();
-                });
+                }).controller(
+                    'ModalEncaminhamentoDespachoController',
+                    function ($scope, $rootScope, $http, $filter, $routeParams, $location, $modalInstance, toaster, proposicao,
+                        TipoEncaminhamentoResource, ProposicaoResource, EncaminhamentoProposicaoResource, EncaminhamentoProposicaoHttp, UsuarioResource,
+                        ComentarioResource, BACKEND, $confirm) {
+
+                        var self = this;
+                        $scope.disabled = false;
+                        $scope.$location = $location;
+
+                        $scope.proposicao = proposicao || new ProposicaoResource();
+                        $scope.tipoEncaminhamento = new TipoEncaminhamentoResource();
+                        $scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
+                        $scope.encaminhamentoProposicao.responsavel = proposicao.responsavel;
+                        $scope.listaEncaminhamento = TipoEncaminhamentoResource.queryAll() || [];
+
+                        $scope.getUsuarios = function (val) {
+                            return $http.get(BACKEND + '/usuarios/find', {
+                                params: {
+                                    nome: val
+                                }
+                            }).then(function (response) {
+                                return response.data.map(function (item) {
+                                    return item;
+                                });
+                            });
+                        };
+
+                        $scope.ok = function () {
+                            $modalInstance.close($scope.proposicao.listaEncaminhamentoProposicao);
+                        };
+
+                        $scope.cancel = function () {
+                            $modalInstance.dismiss('cancel');
+                        };
+
+                        $scope.isClean = function () {
+                            return angular.equals(self.original, $scope.encaminhamentoProposicao);
+                        };
+
+                        $scope.save = function () {
+
+                            $scope.encaminhamentoProposicao.proposicao = new ProposicaoResource();
+                            $scope.encaminhamentoProposicao.proposicao.id = $scope.proposicao.id;
+                            if ($scope.encaminhamentoProposicao.dataHoraLimite != null) {
+                                $scope.encaminhamentoProposicao.dataHoraLimite = $scope.encaminhamentoProposicao.dataHoraLimite
+                                    .getTime();
+                            }
+
+                            var successCallback = function (data, responseHeaders) {
+                                $modalInstance.close($scope.encaminhamentoProposicao);
+
+                                toaster.pop('success', 'Despacho presencial criado com sucesso');
+
+                            };
+                            var errorCallback = function () {
+                                toaster.pop('error', 'Falha ao realizar operação.');
+                            };
+                            EncaminhamentoProposicaoResource.saveDespachoPresencial($scope.encaminhamentoProposicao, successCallback, errorCallback);
+                        };
+
+                        // CALENDARIO
+                        $scope.setCalendar = function () {
+                            $scope.openCalendar = function ($event) {
+                                $event.preventDefault();
+                                $event.stopPropagation();
+
+                                $scope.opened = true;
+                            };
+
+                            $scope.dateOptions = {
+                                formatYear: 'yy',
+                                startingDay: 1
+                            };
+
+                            $scope.format = 'dd/MM/yyyy';
+                        }
+
+                        $scope.setCalendar();
+
+                    });;
