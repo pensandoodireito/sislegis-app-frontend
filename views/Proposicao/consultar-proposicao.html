@@ -30,7 +30,7 @@
 
                             <div class="col-sm-2">
                                 <label>Por tipo número/ano:</label>
-                                <input name="sigla" type="text" class="form-control" ng-model="filtro.sigla" placeholder="Filtrar pela sigla">
+                                <input name="sigla" type="text" class="form-control" ng-model="filtro.sigla" placeholder="Filtrar pela sigla" ng-model-options="{ debounce: 1000 }">
                             </div>
                             <div class="col-sm-3">
                                 <label>Pela ementa:</label>
@@ -67,9 +67,9 @@
                                 <select name="estado" ng-model="filtro.estado" class="form-control" ng-change='filtrarConsulta()'>
                                     <option value=""></option>
                                     <option value="FORADEPAUTA">Fora de competência</option>
-                                    <option value="EMANALISE">Em análise</option>
-                                    <option value="ANALISADA">Em revisão</option>
-                                    <option value="ADESPACHAR">A despachar</option>
+                                    <option value="EMANALISE">Em análise pelos técnicos</option>
+                                    <option value="ANALISADA">Em revisão pelo diretor</option>
+                                    <option value="ADESPACHAR">A despachar pelo secretário</option>
                                     <option value="DESPACHADA">Despachada</option>
                                 </select>
                             </div>
@@ -84,6 +84,18 @@
                                 <select name="macrotema" ng-model="filtro.macrotema" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.tag for item in macrotemas">
                                     <option value=""></option>
                                 </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="checkbox">
+                                    <label for="pautadas">
+                                        <input type="checkbox" id="pautadas" name="somentePautadas" ng-model="filtro.somentePautadas" ng-change='filtrarConsulta()'
+                                        />Somente Pautadas
+                                    </label>
+                                </div>
+
+
+
+
                             </div>
                             <input type="hidden" name="a" value="{{token}}">
 
@@ -105,17 +117,17 @@
                                 <button ng-if="Auth.isAspar(true) && item.estado=='FORADEPAUTA'" type="button" class="btn btn-default btn-sm" title="Marcar análise SAL"
                                 ng-click="setaEstado(item,'EMANALISE')"> <i class="fa fa-mail-forward"></i> Marcar para análise da SAL
                                 </button>
-                                <button ng-if="Auth.isAspar(true) && item.estado=='DESPACHADA'" type="button" class="btn btn-default btn-sm" title="Marcar <Re-></Re->análise SAL"
+                                <button ng-if="Auth.isAspar(true) && item.estado=='DESPACHADA'" type="button" class="btn btn-default btn-sm" title="Fazer nova avaliação"
                                 ng-click="setaEstado(item,'EMANALISE')">
-                                    <i class="fa fa-mail-forward"></i> Marcar para análise da SAL
+                                    <i class="fa fa-mail-forward"></i> Fazer nova avaliação
                                 </button>
                                 <button ng-if="Auth.isEquipe(true) && item.estado=='EMANALISE'" type="button" class="btn btn-default btn-sm" title="Enviar para revisão"
                                 ng-click="setaEstado(item,'ANALISADA')">
                                     <i class="fa fa-check-circle-o"></i> Enviar para revisão
                                 </button>
-                                <button ng-if="Auth.isDiretor(true) && item.estado=='ANALISADA'" type="button" class="btn btn-default btn-sm" title="Enviar para despacho"
+                                <button ng-if="Auth.isDiretor(true) && item.estado=='ANALISADA'" type="button" class="btn btn-default btn-sm" title="Enviar para despacho do Secretário"
                                 ng-click="setaEstado(item,'ADESPACHAR')">
-                                    <i class="fa fa-check-circle"></i> Enviar para despacho
+                                    <i class="fa fa-check-circle"></i> Enviar para despacho do Secretário
                                 </button>
                                 <button ng-if="Auth.isSecretario(true) && item.estado=='ADESPACHAR'" type="button" class="btn btn-default btn-sm" title="Despachar"
                                 ng-click="setaEstado(item,'DESPACHADA')">
@@ -124,8 +136,10 @@
 
                                 <button ng-if="Auth.isDiretor(true) && (item.estado=='ANALISADA' || item.estado=='ADESPACHAR')" type="button" class="btn btn-default btn-sm"
                                 title="Enviar para re análise" ng-click="setaEstado(item,'EMANALISE')">
-                                    <i class="fa fa-retweet"></i> Re-Analisar
+                                    <i class="fa fa-retweet"></i> Nova análise pelo técnico
                                 </button>
+
+
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
                                 </button>
                             </div>
@@ -157,7 +171,9 @@
                                     <i class="fa fa-star" style="color: orange" ng-show="item.favorita" ng-click="item.favorita=false;save(item)"></i>
 
                                     <h3 class="box-title"><a href=""  data-widget="collapse" target="_blank">{{item.sigla}}</a></h3>
-                                    <div style="cursor:default" class="time" ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.data>getSunday()" title="Pautada para {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'fullDate'}}"> <i class="fa fa-clock-o"></i> {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'EEE, H:mm'}}</div>
+                                    <div style="cursor:default" class="time" ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.data>getSunday()" title="Pautada para {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'fullDate'}}">
+                                        <i class="fa fa-clock-o"></i> {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'EEE, H:mm'}}
+                                    </div>
                                 </div>
 
                                 <div class="col-sm-6 col-md-3 col-lg-3">
@@ -179,10 +195,11 @@
                             <div class="row">
 
                                 <div class="col-sm-12 col-lg-12 onlyclosed">
-                                    <blockquote ng-if="item.explicacao!=null">
-                                        <small> {{item.explicacao}}</small>
-                                    </blockquote>
-                                    <span ng-if="item.explicacao==null" style="font-style:italic;">Sem explicação SAL</span>
+                                    <blockquote >
+                                        <small ng-if="item.explicacao!=null" title="Explicação da SAL"> {{item.explicacao}}</small>
+                                        <small ng-if="item.explicacao==null" title="Ementa"> {{item.ementa}}</small>
+                                    </blockquote>                                    
+                                    
                                 </div>
 
                             </div>

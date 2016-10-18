@@ -167,21 +167,10 @@ angular.module('sislegisapp')
         };
         $scope.lastSaveTimer = null;
         $scope.scheduleSaveTimer = function (newValue, oldValue, scope) {
-
-            if (oldValue != null) {
+            // console.log(oldValue===undefined,oldValue===null, "was", oldValue, "is", newValue);
+            if (!(oldValue===undefined)) {
                 console.log("was", oldValue, "is", newValue);
-                //evitar alguns inuteis:
-                if (oldValue.revisoes != null && newValue.revisoes != null) {
-                    console.log(oldValue.revisoes.length, newValue.revisoes.length)
-                    if (oldValue.revisoes.length != newValue.revisoes.length) {
-                        console.log("persistido por fora");
-                        return;
-                    }
-                }
-                // if (oldValue.posicionamentoAtual != newValue.posicionamentoAtual) {
-                //     console.log("alterou posicionameto");
-                //     return;
-                // }
+                     
                 if ($scope.lastSaveTimer != null) {
                     $timeout.cancel($scope.lastSaveTimer);
                 }
@@ -193,6 +182,7 @@ angular.module('sislegisapp')
         }
         $scope.$watch('proposicao.explicacao', $scope.scheduleSaveTimer, true);
         $scope.$watch('proposicao.posicionamento', $scope.scheduleSaveTimer, true);
+        $scope.$watch('proposicao.efetividade', $scope.scheduleSaveTimer, true);
         $scope.$watch('proposicao.responsavel', $scope.scheduleSaveTimer, true);
         $scope.$watch('proposicao.posicionamentoSupar', $scope.scheduleSaveTimer, true);
         $scope.$watch('proposicao.posicionamentoAtual', $scope.scheduleSaveTimer, true);
@@ -683,12 +673,12 @@ angular.module('sislegisapp')
         $scope.getAuthorization = function () {
             return 'Bearer ' + Auth.authz.token;
         }
-        
+
         $scope.getReportURL = function () {
             var back = BACKEND.substr(0, BACKEND.length - 5);
             return $sce.trustAsResourceUrl(back + "/relatorio");
         }
-        $scope.getSunday=function(){
+        $scope.getSunday = function () {
             return new Date();
         }
         console.log("RouteParams", $routeParams);
@@ -714,7 +704,7 @@ angular.module('sislegisapp')
         $scope.proposicoes = [];
         $scope.Auth = Auth;
         $scope.posicionamentos = PosicionamentoResource.queryAll();
-        
+
         $scope.macrotemas = TagResource.listarTodos();
 
         $scope.buscarProposicoes = function () {
@@ -833,6 +823,7 @@ angular.module('sislegisapp')
                     estado: $scope.filtro.estado,
                     macrotema: $scope.filtro.macrotema ? $scope.filtro.macrotema.tag : null,
                     idEquipe: $scope.filtro.equipe ? $scope.filtro.equipe.id : null,
+                    somentePautadas: $scope.filtro.somentePautadas,
                     limit: $scope.infiniteScroll.limit,
                     offset: $scope.infiniteScroll.offset
                 }, successCallback, errorCallback);

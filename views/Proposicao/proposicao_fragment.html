@@ -113,6 +113,7 @@
                         class="form-control">
                     </div>
                 </div>
+
                 <div>
                     <strong>Explicação do posicionamento: </strong>
                     <pre title="Clique para editar" style="border:none;border-radius:0px;border-top: 1px solid #ddd; border-bottom: 1px solid #eee;    padding: 15px;background-color:white;font-family:inherit;"
@@ -122,6 +123,8 @@
                     ng-blur="checkUpdatedField('parecerSAL',proposicao);showParecerTextArea=false;" focus-me="parecerTXT"
                     style="margin-bottom:5px;"></textarea>
                 </div>
+
+
 
                 <div>
                     <label>Equipe Responsável: </label>
@@ -143,7 +146,6 @@
                         <input type="checkbox" ng-model="proposicao.buscaGeral"> Buscar completa
                     </div>
                 </div>
-
 
 
                 <div class="well">
@@ -199,6 +201,21 @@
                     </div>
                 </div>
             </div>
+            <div>
+                <label>Efetividade SAL: </label>
+                <div class="form-group">
+
+                    <select ng-model="proposicao.efetividade">
+                        <option value="null"></option>
+                        <option value="ACATADA">Acatada</option>
+                        <option value="ACATADA_PONTOS_IMPORTANTES">Acatada Pontos Importantes</option>
+                        <option value="ACATADA_PONTOS_NAO_IMPORTANTES">Acatada Pontos não importantes</option>
+                        <option value="NAO_ACATADA">Não Acatada</option>
+
+                    </select>
+                </div>
+            </div>
+
             <div class="divider-top ">
                 <label>Macrotema: </label>
                 <div class="form-group">
