@@ -82,7 +82,7 @@
                             </div>
                             <div class="col-sm-2">
                                 <label>Por macrotema:</label>
-                                <select name="macrotema" ng-model="filtro.macrotema" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.tag for item in macrotemas">
+                                <select name="macrotema" ng-model="filtro.macrotema" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.tag for item in macrotemas|orderBy:'tag'">
                                     <option value=""></option>
                                 </select>
                             </div>
@@ -113,7 +113,12 @@
                 <div infinite-scroll='consultarProposicoes()' infinite-scroll-disabled='infiniteScroll.busy'>
                     <div class="box box-info collapsed-box" ng-repeat="item in proposicoes | orderBy : ['origem','comissao']">
                         <div class="box-header " title="{{configConsulta.botoes}}">
-                            <div class="box-tools pull-right" ng-if="configConsulta.botoes=='GENERICO'">
+
+                            <div class="box-tools pull-right" ng-show="inactivateSpinner==true && item===savingItem">
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </div>
+
+                            <div class="box-tools pull-right" ng-if="configConsulta.botoes=='GENERICO'" ng-hide="inactivateSpinner==true && item===savingItem">
 
                                 <button ng-if="Auth.isAspar(true) && item.estado=='FORADEPAUTA'" type="button" class="btn btn-default btn-sm" title="Marcar análise SAL"
                                 ng-click="setaEstado(item,'EMANALISE')"> <i class="fa fa-mail-forward"></i> Marcar para análise da SAL
@@ -136,9 +141,9 @@
                                 ng-click="setaEstado(item,'DESPACHADA')">
                                     <i class="fa fa-paper-plane"></i> Despachar
                                 </button>
-                                <button ng-if="Auth.isEquipe(true)  && item.estado=='ADESPACHAR_PRESENCA'" type="button" class="btn btn-default btn-sm" title="Despachar"
-                                ng-click="setaEstado(item,'DESPACHADA')">
-                                    <i class="fa fa-paper-plane-o"></i> Finalizar despacho
+                                <button ng-if="Auth.isEquipe(true)  && item.estado=='ADESPACHAR_PRESENCA'" type="button" class="btn btn-default btn-sm" title="Re enviar para despacho do secretário"
+                                ng-click="setaEstado(item,'ADESPACHAR')">
+                                    <i class="fa fa-check-circle"></i> Enviar para despacho do Secretário
                                 </button>
                                 <button ng-if="Auth.isEquipe(true)  && item.estado=='ADESPACHAR_PRESENCA'" type="button" class="btn btn-default btn-sm" title="Enviar para re análise"
                                 ng-click="setaEstado(item,'EMANALISE')">
@@ -154,7 +159,7 @@
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
                                 </button>
                             </div>
-                            <div class="box-tools pull-right" ng-if="Auth.isSecretario(true) && configConsulta.botoes=='DESPACHO'">
+                            <div class="box-tools pull-right" ng-if="Auth.isSecretario(true) && configConsulta.botoes=='DESPACHO'" ng-hide="inactivateSpinner==true && item===savingItem">
 
 
                                 <button ng-if="item.estado=='EMANALISE'" type="button" class="btn btn-default btn-sm" title="Desfazer" ng-click="setaEstado(item,'ADESPACHAR')">

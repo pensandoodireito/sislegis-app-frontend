@@ -94,7 +94,7 @@ angular.module('sislegisapp')
             modalInstance.result.then(function (prop) {
                 item = prop;
             }, function () {
-                $log.info('Modal dismissed at: ' + new Date());
+
             });
         }
         // }
@@ -188,27 +188,30 @@ angular.module('sislegisapp')
         $scope.$watch('proposicao.posicionamentoAtual', $scope.scheduleSaveTimer, true);
         $scope.$watch('proposicao.parecerSAL', $scope.scheduleSaveTimer, true);
         $scope.$watch('proposicao.equipe', $scope.scheduleSaveTimer, true);
-        $scope.handlingState = false;
+
         $scope.trataAlteracaoDeEstado = function (newValue, oldValue, scope) {
-            if ($scope.handlingState == false && oldValue != null) {
-                $scope.handlingState = true;
+
+            if (oldValue !== undefined) {
+
 
                 if ($scope.lastSaveTimer != null) {
                     $timeout.cancel($scope.lastSaveTimer);
                 }
-                $scope.save($scope.proposicao, "Estado alterado", "Falhou ao alterar estado").then(function () {
 
-                    $scope.handlingState = true;
+                $scope.save($scope.proposicao, "Estado alterado", "Falhou ao alterar estado").then(function (data) {
+                    console.log(data, $scope.estadoHandler);
+                
+                    // $scope.$watch('proposicao.estado', $scope.trataAlteracaoDeEstado, true);
                 }, function () {
 
-                    $scope.handlingState = true;
+
                     $scope.proposicao.estado = oldValue;
 
                 });
             }
 
         };
-        $scope.estadoWatcher = $scope.$watch('proposicao.estado', $scope.trataAlteracaoDeEstado, true);
+        $scope.estadoHandler = $scope.$watch('proposicao.estado', $scope.trataAlteracaoDeEstado, true);
 
 
         $scope.getPosicionamentos = function (current) {
@@ -237,6 +240,7 @@ angular.module('sislegisapp')
         }
 
         $scope.save = function (item, msgSucesso, msgErro) {
+
             if ($scope.lastSaveTimer != null) {
                 $timeout.cancel($scope.lastSaveTimer);
             }
@@ -252,16 +256,12 @@ angular.module('sislegisapp')
                 msgErro = 'Falha salvar proposição.';
             }
 
-
-
+            $rootScope.savingItem = item;
             $rootScope.inactivateSpinner = true;
             var successCallback = function () {
                 $rootScope.inactivateSpinner = false;
-
-                deferred.resolve(item);
-
-
                 toaster.pop('success', msgSucesso);
+                deferred.resolve(item);
             };
             var errorCallback = function () {
                 $rootScope.inactivateSpinner = false;
@@ -335,7 +335,15 @@ angular.module('sislegisapp')
     .controller('DashboardController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster,
         DashboardService, Auth, $q, TarefaResource, BACKEND) {
         $scope.Auth = Auth;
-
+        $scope.c=0;
+        $scope.update = function () {
+            if($scope.c%2==0){
+                $http.get(BACKEND + '/proposicaos/autoSenado');
+            }else{
+                $http.get(BACKEND + '/proposicaos/autoCamara');
+            }
+            $scope.c++;
+        }
         $scope.go = function (url, p) {
             $location.path(url).search({ filter: p });;
         }
@@ -393,7 +401,7 @@ angular.module('sislegisapp')
                 //String - A legend template
                 legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
                 //String - A tooltip template
-                tooltipTemplate: "<%=label%> <%=value %> projetos analisados no mês" 
+                tooltipTemplate: "<%=label%> <%=value %> projetos analisados no mês"
             };
             //Create pie or douhnut chart
             // You can switch between pie and douhnut using the method below.
@@ -679,7 +687,9 @@ angular.module('sislegisapp')
             return $sce.trustAsResourceUrl(back + "/relatorio");
         }
         $scope.getSunday = function () {
-            return new Date();
+            var d = new Date();
+            d.setDate(d.getDate() - d.getDay())
+            return d;
         }
         console.log("RouteParams", $routeParams);
         $scope.filtro = new ProposicaoResource();
@@ -780,11 +790,10 @@ angular.module('sislegisapp')
                 }
             });
 
-            modalInstance.result.then(function (novoEncaminhamento) {                
-                item.estado='ADESPACHAR_PRESENCA';
+            modalInstance.result.then(function (novoEncaminhamento) {
+                item.estado = 'ADESPACHAR_PRESENCA';
                 item.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ ProposicaoId: item.id });
             }, function () {
-                $log.info('Modal dismissed at: ' + new Date());
             });
 
         }
@@ -792,9 +801,6 @@ angular.module('sislegisapp')
         $scope.setaEstado = function (item, estado) {
             var oldState = item.estado;
             item.estado = estado;
-            
-            // $timeout.cancel(item.lastSaveTimer);
-            // ProposicaoResource.update(item, function () { }, function () { item.estado = oldState });
         }
 
         $scope.$watch('filtro', function (newValue, oldValue, scope) {
@@ -1097,7 +1103,7 @@ angular.module('sislegisapp')
 
         }).controller('ModalParecerAreaMeritoController',
             function ($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource,
-                ProposicaoResource, UsuarioResource, ComentarioService, PosicionamentoResource, UploadService, revisao, Auth, BACKEND, $sce) {
+                ProposicaoResource, UsuarioResource, ComentarioService, PosicionamentoResource, UploadService, AreaMeritoResource, revisao, Auth, BACKEND, $sce) {
                 $scope.getAuthorization = function () {
                     return 'Bearer ' + Auth.authz.token;
                 }
@@ -1105,6 +1111,7 @@ angular.module('sislegisapp')
                     var back = BACKEND.substr(0, BACKEND.length - 5);
                     return $sce.trustAsResourceUrl(back + "/documentos")
                 }
+                $scope.areas = AreaMeritoResource.query();
 
                 $scope.removeAnexo = function () {
                     var successCallback = function (data, responseHeaders) {

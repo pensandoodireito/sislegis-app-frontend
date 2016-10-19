@@ -1,5 +1,5 @@
 <div class="content">
-    <h3>Painel de Controle</h3>
+    <h3 ng-click="update()">Painel de Controle</h3>
     <div class="row" ng-show="Auth.isSecretario()">
         <div class="col-md-6">
             <div class="info-box" ng-cloak ng-click="go('/Proposicao/despachar')" style="cursor:pointer;">
@@ -49,7 +49,7 @@
 
                         <div class="col-md-7">
                             <ul class="chart-legend clearfix nav nav-pills nav-stacked">
-                                <li>Equipe <span class="pull-right ">Total em análise/Total analisada e em análise no mês</span></li>
+                                <li>Equipe <span class="pull-right ">Total em análise / Total atribuído à equipe no mês</span></li>
                                 <li ng-repeat="dados in PieData" ng-click="go('/Proposicao/consultar',{equipe:dados.equipe.e,estado:'EMANALISE'})" style="cursor:pointer;"><i class="fa fa-circle-o " style="color:{{dados.color}}"></i> {{dados.label}} <span class="pull-right ">
                                     <i class="fa "></i> <span ng-hide="dados.label=='Sem Equipe'">{{dados.equipe.totalEmAnalise}}/{{(dados.equipe.totalAnalisada+dados.equipe.totalEmAnalise)}} ({{(dados.equipe.totalEmAnalise*100)/(dados.equipe.totalAnalisada+dados.equipe.totalEmAnalise) | number:1}}%)</span>
                                     <span ng-show="dados.label=='Sem Equipe'">{{dados.value}}</span>
@@ -189,7 +189,7 @@
                 <span class="info-box-icon bg-yellow"><i class="glyphicon glyphicon-folder-open"></i></span>
 
                 <div class="info-box-content">
-                    <span class="info-box-text">Proposições em análise</span>
+                    <span class="info-box-text">Proposições em análise na SAL</span>
                     <span class="info-box-number">{{info.totalProposicoesEmAnalise}}</span>
                 </div>
 
