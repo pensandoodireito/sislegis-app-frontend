@@ -335,14 +335,17 @@ angular.module('sislegisapp')
     .controller('DashboardController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster,
         DashboardService, Auth, $q, TarefaResource, BACKEND) {
         $scope.Auth = Auth;
-        $scope.c = 0;
+        
         $scope.update = function () {
-            if ($scope.c % 2 == 0) {
-                $http.get(BACKEND + '/proposicaos/autoSenado');
-            } else {
-                $http.get(BACKEND + '/proposicaos/autoCamara');
-            }
-            $scope.c++;
+            var origem="c";
+            var data = "10102016"
+            if(window.o){
+                origem=window.o;
+            }    
+            if(window.s){
+                data=window.s;
+            }    
+            $http.get(BACKEND + '/proposicaos/auto?o='+origem+'&s='+data);
         }
         $scope.go = function (url, p) {
             $location.path(url).search({ filter: p });;
