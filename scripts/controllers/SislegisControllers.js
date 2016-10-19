@@ -335,11 +335,11 @@ angular.module('sislegisapp')
     .controller('DashboardController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster,
         DashboardService, Auth, $q, TarefaResource, BACKEND) {
         $scope.Auth = Auth;
-        $scope.c=0;
+        $scope.c = 0;
         $scope.update = function () {
-            if($scope.c%2==0){
+            if ($scope.c % 2 == 0) {
                 $http.get(BACKEND + '/proposicaos/autoSenado');
-            }else{
+            } else {
                 $http.get(BACKEND + '/proposicaos/autoCamara');
             }
             $scope.c++;
@@ -1146,12 +1146,14 @@ angular.module('sislegisapp')
                 }
 
                 $scope.revisao = {
-                    proposicao: proposicao
+                    proposicao: {
+                        id: proposicao.id
+                    }
                 }
                 if (revisao != null) {
                     $scope.revisao = revisao;
                 }
-                console.log($scope.revisao);
+
                 $scope.posicionamentos = PosicionamentoResource.query();
 
 
@@ -1188,11 +1190,11 @@ angular.module('sislegisapp')
 
                     var successCallback = function (data, responseHeaders) {
 
-                        if ($scope.revisao.proposicao.revisoes == null) {
-                            $scope.revisao.proposicao.revisoes = [];
+                        if (proposicao.revisoes == null) {
+                            proposicao.revisoes = [];
                         }
                         $scope.revisao.id = data.id;
-                        $scope.revisao.proposicao.revisoes.push(data);
+                        proposicao.revisoes.push(data);
                         var file = $scope.myFile;
                         console.log("File", file)
                         if (file != null) {
