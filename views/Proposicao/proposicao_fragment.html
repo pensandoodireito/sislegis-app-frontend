@@ -148,26 +148,32 @@
                 </div>
 
 
-                <div class="divider-top clearfix">                                 
-                
+                <div class="divider-top clearfix">
+
 
                     <table class="table table-condensed">
                         <tbody>
-                            <tr>                                
+                            <tr>
                                 <th>Análise documental SAL</th>
-                                <th>Modelo</th>                                
+                                <th>Modelo</th>
                             </tr>
                             <tr>
                                 <td><strong><a ng-click="abrirModalNotaTecnica(proposicao)">Resumo Analítico ({{proposicao.totalBriefings}})</a></strong></td>
-                                <td><button type="button" class="btn btn-default btn-sm" ng-click="baixarTemplate(proposicao,'briefing')"><i class="fa fa-download"></i></button></td>                                
+                                <td>
+                                    <button type="button" class="btn btn-default btn-sm" ng-click="baixarTemplate(proposicao,'briefing')"><i class="fa fa-download"></i></button>
+                                </td>
                             </tr>
                             <tr>
                                 <td><strong><a ng-click="abrirModalNotaTecnica(proposicao)">Nota técnica ({{proposicao.totalNotasTecnicas}})</a></strong></td>
-                                <td><button type="button" class="btn btn-default btn-sm" ng-click="baixarTemplate(proposicao,'nota')"><i class="fa fa-download"></i></button></td>                                
+                                <td>
+                                    <button type="button" class="btn btn-default btn-sm" ng-click="baixarTemplate(proposicao,'nota')"><i class="fa fa-download"></i></button>
+                                </td>
                             </tr>
                             <tr>
                                 <td><strong><a ng-click="abrirModalNotaTecnica(proposicao)">Emenda ({{proposicao.totalEmendas}})</a></strong></td>
-                                <td><button type="button" class="btn btn-default btn-sm" ng-click="baixarTemplate(proposicao,'emenda')"><i class="fa fa-download"></i></button></td>                                
+                                <td>
+                                    <button type="button" class="btn btn-default btn-sm" ng-click="baixarTemplate(proposicao,'emenda')"><i class="fa fa-download"></i></button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

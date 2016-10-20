@@ -29,8 +29,8 @@
                         <div class="row" role="form">
 
                             <div class="col-sm-2">
-                                <label>Por tipo número/ano:</label>
-                                <input name="sigla" type="text" class="form-control" ng-model="filtro.sigla" placeholder="Filtrar pela sigla" ng-model-options="{ debounce: 1000 }">
+                                <label>Por tipo/número/ano:</label>
+                                <input name="sigla" type="text" class="form-control" ng-model="filtro.sigla" placeholder="Filtrar pelo tipo/número/ano" ng-model-options="{ debounce: 1000 }">
                             </div>
                             <div class="col-sm-3">
                                 <label>Pela ementa:</label>
@@ -112,7 +112,7 @@
 
                 <div infinite-scroll='consultarProposicoes()' infinite-scroll-disabled='infiniteScroll.busy'>
                     <div class="box box-info collapsed-box" ng-repeat="item in proposicoes | orderBy : ['origem','comissao']">
-                        <div class="box-header " title="{{configConsulta.botoes}}">
+                        <div class="box-header" title="{{item.sigla}}">
 
                             <div class="box-tools pull-right" ng-show="inactivateSpinner==true && item===savingItem">
                                 <i class="fa fa-refresh fa-spin"></i>

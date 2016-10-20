@@ -20,10 +20,10 @@ var module = angular.module('sislegisapp',
 module.constant('BACKEND', 'http://BACKEND_SERVER/sislegis/rest');
 
 var auth = {
-   me: null,
+    me: null,
     loggedIn: false,
     isAdmin: function () {
-        return this.hasRole('ADMIN') || (auth.authz!=null && auth.authz.hasRealmRole("admin"));//part dois é para o admin via keycloak
+        return this.hasRole('ADMIN') || (auth.authz != null && auth.authz.hasRealmRole("admin"));//part dois é para o admin via keycloak
     },
     isSecretario: function (ascendente) {
         return this.hasRole('SECRETARIO') || (ascendente && this.isAdmin(true));
@@ -40,7 +40,7 @@ var auth = {
 
     },
     hasRole: function (role) {
-        if (this.me != null && this.me.papeis!=null) {
+        if (this.me != null && this.me.papeis != null) {
             for (var index = 0; index < this.me.papeis.length; index++) {
                 var element = this.me.papeis[index];
                 if (element == role) {
@@ -49,14 +49,40 @@ var auth = {
             }
         }
         return false;
+    },
+    refreshToken: function () {
+        if (auth.authz != null) {
+            auth.authz.updateToken(60).success(function (refreshed) {
+                if (refreshed) {
+                    console.log('Token was successfully refreshed');
+                } else {
+                    console.log('Token is still valid');
+                }
+            }).error(function () {
+                console.log('Failed to refresh the token, or the session has expired');
+            });
+        } else {
+            console.log("no authz")
+        }
+    },
+    repeatId:null,
+    initTokenRefresh:function(){
+        var self = this;
+        this.repeatId = setInterval(self.refreshToken, 30000);
+
+    },
+    logout:function(){
+        clearInterval(this.repeatId);
+        this.loggedIn = false;
+        this.authz = null;
+        window.location = this.logoutUrl;
     }
 };
 
 var logout = function () {
+    auth.logout();
     
-    auth.loggedIn = false;
-    auth.authz = null;
-    window.location = auth.logoutUrl;
+    
 };
 
 angular.element(document).ready(function ($http) {
@@ -72,6 +98,8 @@ angular.element(document).ready(function ($http) {
         module.factory('Auth', function () {
             return auth;
         });
+        
+        auth.initTokenRefresh();
 
         angular.bootstrap(document, ["sislegisapp"]);
 

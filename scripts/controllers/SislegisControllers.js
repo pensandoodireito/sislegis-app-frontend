@@ -335,17 +335,17 @@ angular.module('sislegisapp')
     .controller('DashboardController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster,
         DashboardService, Auth, $q, TarefaResource, BACKEND) {
         $scope.Auth = Auth;
-        
+
         $scope.update = function () {
-            var origem="c";
+            var origem = "c";
             var data = "10102016"
-            if(window.o){
-                origem=window.o;
-            }    
-            if(window.s){
-                data=window.s;
-            }    
-            $http.get(BACKEND + '/proposicaos/auto?o='+origem+'&s='+data);
+            if (window.o) {
+                origem = window.o;
+            }
+            if (window.s) {
+                data = window.s;
+            }
+            $http.get(BACKEND + '/proposicaos/auto?o=' + origem + '&s=' + data);
         }
         $scope.go = function (url, p) {
             $location.path(url).search({ filter: p });;
@@ -1198,6 +1198,8 @@ angular.module('sislegisapp')
                         }
                         $scope.revisao.id = data.id;
                         proposicao.revisoes.push(data);
+                        $scope.revisao = data;
+                        proposicao.totalParecerAreaMerito = proposicao.revisoes.length;
                         var file = $scope.myFile;
                         console.log("File", file)
                         if (file != null) {
