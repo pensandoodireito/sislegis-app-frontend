@@ -13,6 +13,9 @@ angular.module('sislegisapp')
             window.open(back + "/template?id=" + item.id + "&type=" + tipo);
         }
         $scope.abrirModalParecerAreaMerito = function (item, revisao) {
+            if (item.revisoes == null) {
+                $scope.loadRevisoes(item);
+            }
             var modalInstance = $modal.open({
                 templateUrl: 'views/modal-parecer-areamerito.html',
                 controller: 'ModalParecerAreaMeritoController',
