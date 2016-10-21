@@ -52,13 +52,14 @@ var auth = {
     },
     refreshToken: function () {
         if (auth.authz != null) {
-            auth.authz.updateToken(60).success(function (refreshed) {
+            auth.authz.updateToken(180).success(function (refreshed) {
                 if (refreshed) {
                     console.log('Token was successfully refreshed');
                 } else {
                     console.log('Token is still valid');
                 }
             }).error(function () {
+                clearInterval(auth.repeatId);
                 console.log('Failed to refresh the token, or the session has expired');
             });
         } else {
@@ -68,7 +69,7 @@ var auth = {
     repeatId:null,
     initTokenRefresh:function(){
         var self = this;
-        this.repeatId = setInterval(self.refreshToken, 30000);
+        this.repeatId = setInterval(self.refreshToken, 120000);
 
     },
     logout:function(){
