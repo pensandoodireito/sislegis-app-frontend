@@ -168,6 +168,19 @@ angular.module('sislegisapp')
             return UsuarioResource.buscaPorUsuario(params, params, function (data) { }).$promise;
 
         };
+        $scope.validaEquipeSaver = function (newValue, oldValue, scope) {
+            if (!(oldValue === undefined)) {
+                if (!newValue || newValue == "" || newValue.id == null) {
+                    newValue = null;
+                    if (!oldValue || oldValue == "" || oldValue.id == null) {
+                        console.log("ignora alteracao equipe");
+                        return;
+                    }
+                    $scope.proposicao.equipe = null;
+                }
+                $scope.scheduleSaveTimer(newValue, oldValue, scope);
+            }
+        }
         $scope.lastSaveTimer = null;
         $scope.scheduleSaveTimer = function (newValue, oldValue, scope) {
             // console.log(oldValue===undefined,oldValue===null, "was", oldValue, "is", newValue);
@@ -190,7 +203,7 @@ angular.module('sislegisapp')
         $scope.$watch('proposicao.posicionamentoSupar', $scope.scheduleSaveTimer, true);
         $scope.$watch('proposicao.posicionamentoAtual', $scope.scheduleSaveTimer, true);
         $scope.$watch('proposicao.parecerSAL', $scope.scheduleSaveTimer, true);
-        $scope.$watch('proposicao.equipe', $scope.scheduleSaveTimer, true);
+        $scope.$watch('proposicao.equipe', $scope.validaEquipeSaver, true);
 
         $scope.trataAlteracaoDeEstado = function (newValue, oldValue, scope) {
 
@@ -233,6 +246,11 @@ angular.module('sislegisapp')
         $scope.loadTags = function (query) {
             return TagResource.buscarPorSufixo({ sufixo: query }).$promise;
         };
+        $scope.validaEquipe = function (item) {
+            if (!item.equipe || item.equipe.id == null) {
+                item.equipe = null;
+            }
+        }
         $scope.validaPosicionamento = function (item, field) {
             if (field != null && item != null) {
                 var p = item[field];
@@ -250,6 +268,8 @@ angular.module('sislegisapp')
             var deferred = $q.defer();
             $scope.validaPosicionamento(item, 'posicionamentoSupar');
             $scope.validaPosicionamento(item.posicionamentoAtual, 'posicionamento');
+
+            //$scope.validaEquipe(item);
 
 
             if (!msgSucesso) {
@@ -831,7 +851,20 @@ angular.module('sislegisapp')
                     $scope.infiniteScroll.full = true;
                     return;
                 };
-                $scope.proposicoes = $scope.proposicoes.concat(data);
+                // for (var index = 0; index < data.length; index++) {
+                //     var serverProp = data[index];
+                //     var indexOf = $scope.proposicoes.indexOf(serverProp);
+                //     if (indexOf != -1) {
+                //         $scope.proposicoes[indexOf] = data;
+                //         // $scope.proposicoes.push(data);
+                //     } else {
+
+                //         $scope.proposicoes.push(data);
+                //     }
+
+                // }
+                $scope.proposicoes=$scope.proposicoes.concat(data);
+
                 if ($scope.proposicoes.length == 0) {
                     toaster.pop('info', 'Nenhuma Proposição encontrada.');
                     return;
@@ -845,8 +878,7 @@ angular.module('sislegisapp')
                 $rootScope.inactivateSpinner = false;
                 $scope.infiniteScroll.busy = false;
             };
-
-            ProposicaoResource.consultar(
+            var filtroAtual =
                 {
                     sigla: $scope.filtro.sigla,
                     ementa: $scope.filtro.ementa,
@@ -859,7 +891,9 @@ angular.module('sislegisapp')
                     somentePautadas: $scope.filtro.somentePautadas,
                     limit: $scope.infiniteScroll.limit,
                     offset: $scope.infiniteScroll.offset
-                }, successCallback, errorCallback);
+                };
+            ProposicaoResource.consultar(
+                filtroAtual, successCallback, errorCallback);
         }
 
     })

@@ -111,7 +111,7 @@
             <div class="panel-body">
 
                 <div infinite-scroll='consultarProposicoes()' infinite-scroll-disabled='infiniteScroll.busy'>
-                    <div class="box box-info collapsed-box" ng-repeat="item in proposicoes | orderBy : ['origem','comissao']">
+                    <div class="box box-info collapsed-box" ng-repeat="item in proposicoes track by item.idProposicao | orderBy : ['origem','comissao']">
                         <div class="box-header" title="{{item.sigla}}">
 
                             <div class="box-tools pull-right" ng-show="inactivateSpinner==true && item===savingItem">
