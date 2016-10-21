@@ -792,12 +792,14 @@ angular.module('sislegisapp')
             full: false
         };
 
+        $scope.equipesFiltro = [{id:-1,nome:"Sem Equipe"}];
         $scope.equipes = [];
         EquipeResource.queryAll(function (data) {
             for (var index = 0; index < data.length; index++) {
                 var element = data[index];
                 if (element.nome != "ASPAR") {
                     $scope.equipes.push(element);
+                    $scope.equipesFiltro.push(element);
                 }
 
             }
@@ -836,6 +838,7 @@ angular.module('sislegisapp')
             $scope.infiniteScroll.full = false;
             $scope.consultarProposicoes();
         }, true);
+        $scope.today = new Date().getTime();
 
         $scope.consultarProposicoes = function () {
 
@@ -863,7 +866,7 @@ angular.module('sislegisapp')
                 //     }
 
                 // }
-                $scope.proposicoes=$scope.proposicoes.concat(data);
+                $scope.proposicoes = $scope.proposicoes.concat(data);
 
                 if ($scope.proposicoes.length == 0) {
                     toaster.pop('info', 'Nenhuma Proposição encontrada.');
