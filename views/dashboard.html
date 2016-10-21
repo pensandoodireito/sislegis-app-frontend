@@ -108,12 +108,12 @@
                             <div class="inner">
                                 <h3>{{info.minhaEquipe.totalSemResponsavel}}</h3>
 
-                                <p>Proposições associadas à equipe sem responsável</p>
+                                <p>Proposições em análise associadas à equipe sem responsável</p>
                             </div>
                             <div class="icon">
                                 <i class="ion ion-person-add"></i>
                             </div>
-                            <a ng-click="go('/Proposicao/consultar',{equipe:info.minhaEquipe.equipe,responsavel:{id:-1,nome:'Sem Responsável Associado'}})" class="small-box-footer">Abrir proposições <i class="fa fa-arrow-circle-right"></i></a>
+                            <a ng-click="go('/Proposicao/consultar',{equipe:info.minhaEquipe.equipe,estado:'EMANALISE',responsavel:{id:-1,nome:'Sem Responsável Associado'}})" class="small-box-footer">Abrir proposições <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
                         <div class="small-box bg-light-blue">
                             <div class="inner">
@@ -133,7 +133,7 @@
                             <strong>Proposições em análise por membro da equipe</strong>
                         </p>
                         <div class="progress-group" ng-repeat="pessoal in info.minhaEquipe.pessoal|orderBy:['totalEmAnalise']:[true]">
-                            <span class="progress-text" style="cursor:pointer" ng-click="go('/Proposicao/consultar',{equipe:info.minhaEquipe.equipe,responsavel:pessoal})">{{pessoal.nome}}</span>
+                            <span class="progress-text" style="cursor:pointer" ng-click="go('/Proposicao/consultar',{equipe:info.minhaEquipe.equipe,estado:'EMANALISE',responsavel:pessoal})">{{pessoal.nome}}</span>
                             <span class="progress-number"><b>{{pessoal.totalEmAnalise}}</b>/{{info.minhaEquipe.totalEmAnalise}}</span>
 
                             <div class="progress sm">
