@@ -743,6 +743,20 @@ angular.module('sislegisapp')
         $scope.posicionamentos = PosicionamentoResource.queryAll();
 
         $scope.macrotemas = TagResource.listarTodos();
+        
+        $scope.getAutores  = function (val){
+              return ProposicaoResource.buscaAutor({ nome: val }, { nome: val },
+                function (data) { 
+                    
+                        $scope.autores=data;
+                   
+                    
+                },
+                function (error) { 
+                toaster.pop('error', 'Falha ao buscar autores'); }
+                ).$promise;
+               
+        }
         $scope.getUsuarios = function (val, buscaGeral) {
             var method = (buscaGeral) ? 'ldapSearch' : 'find';
             return UsuarioResource.buscaPorUsuario({ method: method, nome: val }, { method: method, nome: val },
@@ -803,7 +817,7 @@ angular.module('sislegisapp')
             full: false
         };
 
-        $scope.equipesFiltro = [{ id: -1, nome: "Sem Equipe" }];
+        $scope.equipesFiltro = [{ id: -1, nome: "Sem Equipe Associada" }];
         $scope.equipes = [];
         EquipeResource.queryAll(function (data) {
             for (var index = 0; index < data.length; index++) {

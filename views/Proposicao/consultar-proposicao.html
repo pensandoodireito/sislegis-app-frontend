@@ -38,7 +38,10 @@
                             </div>
                             <div class="col-sm-3">
                                 <label>Por autor:</label>
-                                <input name="autor" type="text" class="form-control" ng-model="filtro.autor" placeholder="Filtrar por autor">
+                                <input typeahead-editable="true" ng-model="filtro.autor" type="text" placeholder="Filtro por autor" typeahead-min-length="2"
+                                typeahead="entrada.nome for entrada in  getAutores($viewValue) | limitTo:8" ng-model-options="{ debounce: 500 }"
+                                typeahead-on-select="filtrarConsulta()" class="form-control">
+
                             </div>
                             <div class="col-sm-2">
                                 <label>Por casa legislativa:</label>

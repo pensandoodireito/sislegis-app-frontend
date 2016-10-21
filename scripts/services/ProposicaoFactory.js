@@ -101,6 +101,11 @@ angular.module('sislegisapp').factory('ProposicaoResource', function ($resource,
                 method: 'POST',
                 isArray: false
             },
+            'buscaAutor': {
+                url: BACKEND + "/proposicaos/autores",
+                method: 'GET',
+                isArray: true
+            },
             'listaAreaMerito': {
                 url: BACKEND + "/areamerito",
                 method: 'GET',
