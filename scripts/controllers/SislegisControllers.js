@@ -398,7 +398,7 @@ angular.module('sislegisapp')
                 color: "#d2d6de",
                 highlight: "#d2d6de",
                 label: "Sem Equipe",
-                equipe: null
+                equipe: {e:{id:-1}}
             });
 
 
@@ -724,6 +724,7 @@ angular.module('sislegisapp')
             $scope.filtro.sigla = $routeParams.filter.sigla;
             $scope.filtro.equipe = $routeParams.filter.equipe;
             $scope.filtro.estado = $routeParams.filter.estado;
+            $scope.filtro.responsavel = $routeParams.filter.responsavel;
         } else {
             console.log(" nenhum parametro filtro ativo");
         }
@@ -742,7 +743,17 @@ angular.module('sislegisapp')
         $scope.posicionamentos = PosicionamentoResource.queryAll();
 
         $scope.macrotemas = TagResource.listarTodos();
+        $scope.getUsuarios = function (val, buscaGeral) {
+            var method = (buscaGeral) ? 'ldapSearch' : 'find';
+            return UsuarioResource.buscaPorUsuario({ method: method, nome: val }, { method: method, nome: val },
+                function (data) { 
+                 data.push({id:-1,nome:"Sem responsável associado"});   
+                },
+                function (error) { t
+                toaster.pop('error', 'Falha ao buscar usuários'); }
+                ).$promise;
 
+        };
         $scope.buscarProposicoes = function () {
             toaster.clear();
 
@@ -792,7 +803,7 @@ angular.module('sislegisapp')
             full: false
         };
 
-        $scope.equipesFiltro = [{id:-1,nome:"Sem Equipe"}];
+        $scope.equipesFiltro = [{ id: -1, nome: "Sem Equipe" }];
         $scope.equipes = [];
         EquipeResource.queryAll(function (data) {
             for (var index = 0; index < data.length; index++) {
@@ -891,6 +902,7 @@ angular.module('sislegisapp')
                     estado: $scope.filtro.estado,
                     macrotema: $scope.filtro.macrotema ? $scope.filtro.macrotema.tag : null,
                     idEquipe: $scope.filtro.equipe ? $scope.filtro.equipe.id : null,
+                    idResponsavel: $scope.filtro.responsavel ? $scope.filtro.responsavel.id : null,
                     somentePautadas: $scope.filtro.somentePautadas,
                     limit: $scope.infiniteScroll.limit,
                     offset: $scope.infiniteScroll.offset

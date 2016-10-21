@@ -78,9 +78,17 @@
                                 <label>Por equipe:</label>
                                 <select name="idEquipe" ng-model="filtro.equipe" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.nome for item in equipesFiltro track by item.id">
                                     <option value=""></option>
-                                    
+
                                 </select>
                             </div>
+
+                            <div class="col-sm-2">
+                                <label>Por responsável:</label>
+                                <input typeahead-editable="false" ng-model="filtro.responsavel" type="text" placeholder="Filtro por responsável" typeahead="user as user.nome for user in getUsuarios($viewValue, false)"
+                                ng-model-options="{ debounce: 500 }" typeahead-on-select="filtrarConsulta()" class="form-control">
+
+                            </div>
+
                             <div class="col-sm-2">
                                 <label>Por macrotema:</label>
                                 <select name="macrotema" ng-model="filtro.macrotema" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.tag for item in macrotemas|orderBy:'tag'">
@@ -191,7 +199,8 @@
                                     <i class="fa fa-star" style="color: orange" ng-show="item.favorita" ng-click="item.favorita=false;save(item)"></i>
 
                                     <h3 class="box-title"><a href=""  data-widget="collapse" target="_blank"  title="{{item.sigla}} - {{item.estado}}">{{item.sigla}}</a></h3>
-                                    <div style="cursor:default" class="time" ng-class="{'text-muted':item.pautaComissaoAtual.pautaReuniaoComissao.data<today}" ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.data>getSunday()" title="Pautada para {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'fullDate'}}">
+                                    <div style="cursor:default" class="time" ng-class="{'text-muted':item.pautaComissaoAtual.pautaReuniaoComissao.data<today}"
+                                    ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.data>getSunday()" title="Pautada para {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'fullDate'}}">
                                         <i class="fa fa-clock-o"></i> {{item.pautaComissaoAtual.pautaReuniaoComissao.data|
                                         date:'EEE, H:mm'}}
                                     </div>
