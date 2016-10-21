@@ -189,8 +189,8 @@
                                     <i class="fa fa-star-o" ng-show="!item.favorita" ng-click="item.favorita=true;save(item)"></i>
                                     <i class="fa fa-star" style="color: orange" ng-show="item.favorita" ng-click="item.favorita=false;save(item)"></i>
 
-                                    <h3 class="box-title"><a href=""  data-widget="collapse" target="_blank">{{item.sigla}}</a></h3>
-                                    <div style="cursor:default" class="time" ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.data>getSunday()" title="Pautada para {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'fullDate'}}">
+                                    <h3 class="box-title"><a href=""  data-widget="collapse" target="_blank"  title="{{item.sigla}} - {{item.estado}}">{{item.sigla}}</a></h3>
+                                    <div style="cursor:default" class="time" ng-class="{'text-muted':item.pautaComissaoAtual.pautaReuniaoComissao.data<(new Date().getTime())}" ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.data>getSunday()" title="Pautada para {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'fullDate'}}">
                                         <i class="fa fa-clock-o"></i> {{item.pautaComissaoAtual.pautaReuniaoComissao.data|
                                         date:'EEE, H:mm'}}
                                     </div>
