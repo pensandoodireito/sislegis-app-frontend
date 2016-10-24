@@ -360,6 +360,9 @@ angular.module('sislegisapp')
         $scope.Auth = Auth;
 
         $scope.update = function () {
+            if (!window.o) {
+                return;
+            }
             var origem = "c";
             var data = "10102016"
             if (window.o) {
@@ -385,7 +388,7 @@ angular.module('sislegisapp')
             for (var index = 0; index < $scope.info.equipes.length; index++) {
                 var equipe = $scope.info.equipes[index];
                 $scope.PieData.push({
-                    value: equipe.totalEmAnalise + equipe.totalAnalisada,
+                    value: equipe.totalEmAnalise + equipe.totalProcessada,
                     color: colorArray[index],//"#f56954",
                     highlight: colorArray[index],
                     label: equipe.e.nome,
@@ -411,7 +414,7 @@ angular.module('sislegisapp')
                 //Number - The width of each segment stroke
                 segmentStrokeWidth: 1,
                 //Number - The percentage of the chart that we cut out of the middle
-                percentageInnerCutout: 50, // This is 0 for Pie charts
+                percentageInnerCutout: 20, // This is 0 for Pie charts
                 //Number - Amount of animation steps
                 animationSteps: 100,
                 //String - Animation easing effect
@@ -427,7 +430,7 @@ angular.module('sislegisapp')
                 //String - A legend template
                 legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
                 //String - A tooltip template
-                tooltipTemplate: "<%=label%> <%=value %> projetos analisados no mês"
+                tooltipTemplate: "<%=label%> <%=value %> analisados no mês"
             };
             //Create pie or douhnut chart
             // You can switch between pie and douhnut using the method below.
@@ -703,11 +706,11 @@ angular.module('sislegisapp')
     .controller('ConsultaProposicoesController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
         ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
         EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
-        TipoEncaminhamentoResource, Auth, TagResource, UploadService, $q, BACKEND, configConsulta, $sce) {
+        TipoEncaminhamentoResource, Auth, TagResource, UploadService, $q, BACKEND, configConsulta, $sce,ComissaoService) {
         $scope.getAuthorization = function () {
             return 'Bearer ' + Auth.authz.token;
         }
-
+        
         $scope.getReportURL = function () {
             var back = BACKEND.substr(0, BACKEND.length - 5);
             return $sce.trustAsResourceUrl(back + "/relatorio");
@@ -737,6 +740,29 @@ angular.module('sislegisapp')
         } else {
             console.log(" nenhum pre filtro ativo");
         }
+        $scope.filtrosCol = false;
+        try {
+             
+            console.log("a")
+            
+            var fct1 = function () {
+                $scope.filtroExpandido = true ;                
+            };
+            var fct2 = function () {
+                $scope.filtroExpandido = false ;                
+            };
+            console.log(this,$scope);
+            $('#collapseFullFilters').on('shown.bs.collapse',function(){
+                $('#expandido').css('display','none');
+                $('#colapsado').css('display','block');
+            });
+            $('#collapseFullFilters').on('hidden.bs.collapse', function(){
+                $('#expandido').css('display','block');
+                $('#colapsado').css('display','none');
+            });
+        } catch (e) {
+            console.log(e)
+        }
 
         $scope.proposicoes = [];
         $scope.Auth = Auth;
@@ -744,6 +770,18 @@ angular.module('sislegisapp')
 
         $scope.macrotemas = TagResource.listarTodos();
         
+        $scope.getRelatores = function(val){
+             return ProposicaoResource.buscaRelator({ nome: val }, { nome: val },
+                function (data) { 
+                    
+                        $scope.relatores=data;
+                   
+                    
+                },
+                function (error) { 
+                toaster.pop('error', 'Falha ao buscar relatores'); }
+                ).$promise;
+        }
         $scope.getAutores  = function (val){
               return ProposicaoResource.buscaAutor({ nome: val }, { nome: val },
                 function (data) { 
@@ -768,6 +806,32 @@ angular.module('sislegisapp')
                 ).$promise;
 
         };
+        
+        $scope.posicionamentoFiltro = [{ id: -1, nome: "Sem posicionamento definido" }];
+         PosicionamentoResource.query({},function(data){
+            $scope.posicionamentoFiltro=$scope.posicionamentoFiltro.concat(data);
+         });
+         $scope.comissoes=[];
+        //  $scope.comissoesCache=;
+         $scope.updateComissoes = function () {
+             var origemSelecionada = $scope.filtro.origem;
+             switch (origemSelecionada) {
+                 case 'SENADO':
+                     $scope.comissoes = ComissaoService.getComissoesSenado();
+                     return;
+
+
+                 case 'CAMARA':
+                     $scope.comissoes = ComissaoService.getComissoesCamara();
+                     return;
+                 default:
+                     $scope.comissoes = [];
+                     return;
+
+             }
+         }
+         
+         
         $scope.buscarProposicoes = function () {
             toaster.clear();
 
@@ -857,7 +921,17 @@ angular.module('sislegisapp')
         }
 
         $scope.$watch('filtro', function (newValue, oldValue, scope) {
+            if(newValue.relator!=oldValue.relator && newValue.relator!=null && newValue.relator!='' && newValue.relator.length<4 ){
+                console.log("evitando watch por relator")
+                return;
+            }
+            if(newValue.autor!=oldValue.autor && newValue.autor!=null && newValue.autor!='' && newValue.autor.length<4 ){
+                console.log("evitando watch por autor")
+                return;
+            }
+            console.log("Limpou proposicoes");
             $scope.proposicoes = [];
+            
             $scope.infiniteScroll.busy = false;
             $scope.infiniteScroll.offset = 0;
             $scope.infiniteScroll.full = false;
@@ -879,18 +953,7 @@ angular.module('sislegisapp')
                     $scope.infiniteScroll.full = true;
                     return;
                 };
-                // for (var index = 0; index < data.length; index++) {
-                //     var serverProp = data[index];
-                //     var indexOf = $scope.proposicoes.indexOf(serverProp);
-                //     if (indexOf != -1) {
-                //         $scope.proposicoes[indexOf] = data;
-                //         // $scope.proposicoes.push(data);
-                //     } else {
-
-                //         $scope.proposicoes.push(data);
-                //     }
-
-                // }
+               
                 $scope.proposicoes = $scope.proposicoes.concat(data);
 
                 if ($scope.proposicoes.length == 0) {
@@ -911,11 +974,14 @@ angular.module('sislegisapp')
                     sigla: $scope.filtro.sigla,
                     ementa: $scope.filtro.ementa,
                     autor: $scope.filtro.autor,
+                    relator: $scope.filtro.relator,
                     origem: $scope.filtro.origem,
                     isFavorita: $scope.filtro.isFavorita,
                     estado: $scope.filtro.estado,
+                    comissao: $scope.filtro.comissao?$scope.filtro.comissao.sigla.trim():null,
                     macrotema: $scope.filtro.macrotema ? $scope.filtro.macrotema.tag : null,
                     idEquipe: $scope.filtro.equipe ? $scope.filtro.equipe.id : null,
+                    idPosicionamento: $scope.filtro.posicionamento ? $scope.filtro.posicionamento.id : null,
                     idResponsavel: $scope.filtro.responsavel ? $scope.filtro.responsavel.id : null,
                     somentePautadas: $scope.filtro.somentePautadas,
                     limit: $scope.infiniteScroll.limit,
@@ -926,6 +992,11 @@ angular.module('sislegisapp')
         }
 
     })
+//     .factory('$exceptionHandler', function() {
+//     return function(exception, cause) {
+//     console.log("opa",exception,cause);
+//     }
+//   })
     .controller('SearchAreaMeritoController', function ($scope, $http, AreaMeritoResource) {
 
         $scope.search = {};
