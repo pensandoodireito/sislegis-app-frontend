@@ -28,11 +28,11 @@
 
                         <div class="row" role="form">
 
-                            <div class="col-sm-2">
+                            <div class="col-sm-12 col-md-2 col-lg-2 col-xs-12">
                                 <label>Por tipo/número/ano:</label>
                                 <input name="sigla" type="text" class="form-control" ng-model="filtro.sigla" placeholder="Filtrar pelo tipo/número/ano" ng-model-options="{ debounce: 1000 }">
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6">
                                 <label>Por casa legislativa:</label>
                                 <select name="origem" ng-model="filtro.origem" class="form-control" ng-change="updateComissoes()">
                                     <option value=""></option>
@@ -40,13 +40,14 @@
                                     <option value="SENADO">SENADO</option>
                                 </select>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6">
                                 <label>Por comissão:</label>
-                                <select name="comissao" ng-model="filtro.comissao" class="form-control" ng-disabled="filtro.origem==null" ng-options="item as item.sigla+' - '+(item.nome!=null?item.nome:'') for item in comissoes track by item.sigla.trim()|orderBy:'nome'">
+                                <select name="comissao" ng-model="filtro.comissao" class="form-control" ng-disabled="filtro.origem==null || filtro.origem==''"
+                                ng-options="item as item.sigla+' - '+(item.nome!=null?item.nome:'') for item in comissoes track by item.sigla.trim()|orderBy:'nome'">
                                     <option value=""></option>
                                 </select>
                             </div>
-                            <div class="col-sm-2" ng-if="configConsulta.botoes=='GENERICO'">
+                            <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6" ng-if="configConsulta.botoes=='GENERICO'">
                                 <label>Pelo estado na SAL:</label>
                                 <select name="estado" ng-model="filtro.estado" class="form-control" ng-change='filtrarConsulta()'>
                                     <option value=""></option>
@@ -58,7 +59,7 @@
                                     <option value="DESPACHADA">Despachada</option>
                                 </select>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6">
                                 <label>Por prioritárias:</label>
                                 <select name="isFavorita" ng-model="filtro.isFavorita" class="form-control">
                                     <option value=""></option>
@@ -67,24 +68,25 @@
                                 </select>
                             </div>
 
+
                         </div>
                         <div class="row" role="form">
 
 
-                            <div class="col-sm-2">
+                            <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6">
                                 <label>Por equipe:</label>
                                 <select name="idEquipe" ng-model="filtro.equipe" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.nome for item in equipesFiltro track by item.id">
                                     <option value=""></option>
 
                                 </select>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6">
                                 <label>Por responsável:</label>
                                 <input typeahead-editable="false" ng-model="filtro.responsavel" type="text" placeholder="Filtro por responsável" typeahead="user as user.nome for user in getUsuarios($viewValue, false)"
                                 ng-model-options="{ debounce: 500 }" typeahead-on-select="consultarProposicoes()" class="form-control">
 
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6">
                                 <label>Por posicionamento:</label>
                                 <select name="idPosicionamento" ng-model="filtro.posicionamento" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.nome for item in posicionamentoFiltro track by item.id">
                                     <option value=""></option>
@@ -92,14 +94,14 @@
                                 </select>
                             </div>
 
-                            <div class="col-sm-2">
+                            <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6">
                                 <label>Por macrotema:</label>
                                 <select name="macrotema" ng-model="filtro.macrotema" class="form-control" ng-change='filtrarConsulta()' ng-options="item as item.tag for item in macrotemas|orderBy:'tag'">
                                     <option value=""></option>
                                 </select>
                             </div>
 
-                            <div class="col-sm-2">
+                            <div class="col-sm-12 col-md-2 col-lg-2 col-xs-6">
                                 <div class="checkbox">
                                     <label for="pautadas">
                                         <input type="checkbox" id="pautadas" name="somentePautadas" ng-model="filtro.somentePautadas" ng-change='filtrarConsulta()'
@@ -116,11 +118,11 @@
                         <div class="collapse" id="collapseFullFilters">
                             <div class="row " role="form">
 
-                                <div class="col-sm-2">
+                                <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6">
                                     <label>Pela ementa:</label>
                                     <input name="ementa" type="text" class="form-control" ng-model="filtro.ementa" placeholder="Filtrar pela ementa">
                                 </div>
-                                <div class="col-sm-3">
+                                <div class="col-sm-3 col-xs-6">
                                     <label>Por autor:</label>
                                     <input typeahead-editable="true" ng-model="filtro.autor" type="text" placeholder="Filtro por autor" typeahead-min-length="2"
                                     typeahead="entrada.nome for entrada in  getAutores($viewValue) | limitTo:8" ng-model-options="{ debounce: 500 }"
@@ -129,7 +131,7 @@
                                 </div>
 
 
-                                <div class="col-sm-3">
+                                <div class="col-sm-3 col-xs-6">
                                     <label>Por relator:</label>
                                     <input typeahead-editable="true" ng-model="filtro.relator" type="text" placeholder="Filtro por relator" typeahead-min-length="2"
                                     typeahead="entrada.nome for entrada in  getRelatores($viewValue) | limitTo:8" ng-model-options="{ debounce: 500 }"
@@ -147,8 +149,7 @@
                         <input type="hidden" name="a" value="{{token}}">
                 </div>
                 </form>
-                <a class="small-box-footer"  data-toggle="collapse" aria-expanded="false" data-target="#collapseFullFilters"
-                aria-controls="collapseFullFilters">
+                <a class="small-box-footer" data-toggle="collapse" aria-expanded="false" data-target="#collapseFullFilters" aria-controls="collapseFullFilters">
                     <span id="expandido">Mais filtros <i class="fa fa-caret-down"></i></span><span id="colapsado" style="display:none;">Reduzir filtros <i class="fa fa-caret-up "></i></span>
                 </a>
             </div>
@@ -278,7 +279,7 @@
                         </div>
 
                     </div>
-                    <div class="box-footer clearfix"></div>
+                    <div class="box-footer clearfix" title="{{item.sigla}} (inserida {{item.created| date:'shortDate'}}, atualizada {{item.updated| date:'shortDate'}})"></div>
                 </div>
 
 

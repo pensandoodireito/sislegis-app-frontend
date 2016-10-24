@@ -371,7 +371,11 @@ angular.module('sislegisapp')
             if (window.s) {
                 data = window.s;
             }
-            $http.get(BACKEND + '/proposicaos/auto?o=' + origem + '&s=' + data);
+            var comissao ="";
+            if(window.c){
+                comissao="&c="+window.c;
+            }
+            $http.get(BACKEND + '/proposicaos/auto?o=' + origem + '&s=' + data+comissao);
         }
         $scope.go = function (url, p) {
             $location.path(url).search({ filter: p });;
@@ -743,15 +747,14 @@ angular.module('sislegisapp')
         $scope.filtrosCol = false;
         try {
              
-            console.log("a")
-            
+            //por alguma razao só funcionou via jquery           
             var fct1 = function () {
                 $scope.filtroExpandido = true ;                
             };
             var fct2 = function () {
                 $scope.filtroExpandido = false ;                
             };
-            console.log(this,$scope);
+            
             $('#collapseFullFilters').on('shown.bs.collapse',function(){
                 $('#expandido').css('display','none');
                 $('#colapsado').css('display','block');
