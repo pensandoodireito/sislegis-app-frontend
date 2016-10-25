@@ -17,7 +17,7 @@
     </div>
 
     <div class="divider-top clearfix">
-        <strong>Comissao: </strong><span ng-if="proposicao.pautaComissaoAtual==null && proposicao.comissao!=null">{{proposicao.comissao}} <i style="font-size: xx-small;">última comissão</i></span>{{proposicao.pautaComissaoAtual.pautaReuniaoComissao.comissao}}
+        <strong>Comissao: </strong><span ng-if="proposicao.pautaComissaoAtual==null && proposicao.comissao!=null">{{proposicao.comissao}} </span>{{proposicao.pautaComissaoAtual.pautaReuniaoComissao.comissao}}
         <br/>
         <strong>Ordem na Pauta: </strong>{{proposicao.pautaComissaoAtual.ordemPauta}} <span ng-show="proposicao.pautaComissaoAtual && proposicao.pautaComissaoAtual.pautaReuniaoComissao.manual!=true">({{proposicao.pautaComissaoAtual.pautaReuniaoComissao.data | date:'dd/MM HH:mm'}})</span>
         <br/>
@@ -40,6 +40,7 @@
                         <th>Data</th>
                         <th>Posicionamento</th>
                         <th>Parecer</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,7 +48,8 @@
                         <td>{{revisao.areaMerito.nome}}</td>
                         <td>{{revisao.dataAtualizacao| date:'dd/MM HH:mm'}}</td>
                         <td>{{revisao.posicionamento.nome}}</td>
-                        <td>{{revisao.parecer}}</td>
+                        <td>{{revisao.parecer|limitTo:10}}</td>
+                        <td><i class="fa  fa-paperclip" ng-show="revisao.documento!=null"></i></td>
                     </tr>
 
 
@@ -111,6 +113,7 @@
                         class="form-control">
                     </div>
                 </div>
+
                 <div>
                     <strong>Explicação do posicionamento: </strong>
                     <pre title="Clique para editar" style="border:none;border-radius:0px;border-top: 1px solid #ddd; border-bottom: 1px solid #eee;    padding: 15px;background-color:white;font-family:inherit;"
@@ -120,6 +123,8 @@
                     ng-blur="checkUpdatedField('parecerSAL',proposicao);showParecerTextArea=false;" focus-me="parecerTXT"
                     style="margin-bottom:5px;"></textarea>
                 </div>
+
+
 
                 <div>
                     <label>Equipe Responsável: </label>
@@ -135,7 +140,7 @@
                     <div>
                         <input typeahead-editable="false" type="text" ng-model="proposicao.responsavel" placeholder="Procurar usuário" ng-required="true"
                         typeahead="proposicao as proposicao.nome for proposicao in getUsuarios($viewValue, buscaGeral)" ng-focus="setSelectedProposicao(proposicao)"
-                        typeahead-focus-first="true" ng-model-options="{ debounce: 500 }" ng-blur="checkRemocaoResponsavel(proposicao)"
+                        typeahead-focus-first="true" ng-model-options="{ debounce: 500 }" 
                         typeahead-on-select="save(proposicao); responsavelNull=(proposicao.responsavel==null);proposicao.responsavelNaoDefinido = false;"
                         class="form-control">
                         <input type="checkbox" ng-model="proposicao.buscaGeral"> Buscar completa
@@ -143,13 +148,39 @@
                 </div>
 
 
+                <div class="divider-top clearfix">
 
-                <div class="well">
-                    <label>Análise documental SAL: <strong> <a ng-click="abrirModalNotaTecnica(proposicao)" class="ng-binding"><i class="fa fa-file-text"></i>  {{proposicao.totalNotasTecnicas}} documentos</a></strong></label>
-                    <strong>  <a ng-click="baixarTemplate(proposicao)"> <i class="fa fa-download"></i> Baixar template</a></strong>
+
+                    <table class="table table-condensed">
+                        <tbody>
+                            <tr>
+                                <th>Análise documental SAL</th>
+                                <th>Modelo</th>
+                            </tr>
+                            <tr>
+                                <td><strong><a ng-click="abrirModalNotaTecnica(proposicao)">Resumo Analítico ({{proposicao.totalBriefings}})</a></strong></td>
+                                <td>
+                                    <button type="button" class="btn btn-default btn-sm" ng-click="baixarTemplate(proposicao,'briefing')"><i class="fa fa-download"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong><a ng-click="abrirModalNotaTecnica(proposicao)">Nota técnica ({{proposicao.totalNotasTecnicas}})</a></strong></td>
+                                <td>
+                                    <button type="button" class="btn btn-default btn-sm" ng-click="baixarTemplate(proposicao,'nota')"><i class="fa fa-download"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong><a ng-click="abrirModalNotaTecnica(proposicao)">Emenda ({{proposicao.totalEmendas}})</a></strong></td>
+                                <td>
+                                    <button type="button" class="btn btn-default btn-sm" ng-click="baixarTemplate(proposicao,'emenda')"><i class="fa fa-download"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
-            <div class=" clearfix">
+            <div class="divider-top clearfix">
 
                 <div class="col-md-12">
                     <div ng-show="proposicao.listaComentario.length > 0">
@@ -195,6 +226,21 @@
                     </div>
                 </div>
             </div>
+            <div>
+                <label>Efetividade SAL: </label>
+                <div class="form-group">
+
+                    <select ng-model="proposicao.efetividade">
+                        <option value="null"></option>
+                        <option value="ACATADA">Acatada</option>
+                        <option value="ACATADA_PONTOS_IMPORTANTES">Acatada Pontos Importantes</option>
+                        <option value="ACATADA_PONTOS_NAO_IMPORTANTES">Acatada Pontos não importantes</option>
+                        <option value="NAO_ACATADA">Não Acatada</option>
+
+                    </select>
+                </div>
+            </div>
+
             <div class="divider-top ">
                 <label>Macrotema: </label>
                 <div class="form-group">

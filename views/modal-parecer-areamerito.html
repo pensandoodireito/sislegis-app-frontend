@@ -1,37 +1,67 @@
-<!-- Modal Comentários -->
 <div class="modal-header">
 
     <h4 class="modal-title" id="myModalLabel">Adicionar parecer área merito</h4>
 </div>
 <div class="modal-body">
     <div class="box-body no-padding">
-        <form role="form">
-            
-            <div class="form-horizontal" role="form">
-                <div>
-                    <label for="areamerito">Selecione a área de mérito:</label>                    
-                    <select id="areamerito" ng-model="revisao.areaMerito.id" ng-options="area.id as area.nome for area in areaMeritos" class="form-control"></select>
-                </div>
-                <div>
-                    <label for="posicionamento">Selecione o posicionamento da área de mérito:</label>
-                    <select id="areamerito" ng-model="revisao.posicionamento.id" ng-options="p.id as p.nome for p in posicionamentos" class="form-control"></select>
-                </div>
-
-                <div>
-                    <label for="TextoComentario">Insira o parecer:</label>
-                    <textarea class="form-control" maxlength="5000" rows="8" ng-model="revisao.parecer" ng-required="true"></textarea>
-                </div>
 
 
+        <div class="form-horizontal" role="form">
+            <div>
+                <label for="areamerito">Selecione a área de mérito:</label>
+                <select id="areamerito" ng-model="revisao.areaMerito" ng-options="area as area.nome for area in areas track by area.id"
+                class="form-control"></select>
+            </div>
+            <div>
+                <label for="posicionamento">Selecione o posicionamento da área de mérito:</label>
+                <select id="areamerito" ng-model="revisao.posicionamento" ng-options="p as p.nome for p in posicionamentos track by p.id"
+                class="form-control"></select>
             </div>
 
-        </form>
+            <div>
+                <label for="TextoComentario">Insira o parecer:</label>
+                <textarea class="form-control" maxlength="5000" rows="4" ng-model="revisao.parecer" ng-required="true"></textarea>
+            </div>
 
+
+
+        </div>
+        <div class="col-lg-12" ng-show="revisao.documento!=null">
+            <div>
+                <label for="TextoComentario">Anexo:</label>
+                <form action="{{getFormURL()}}" method="POST" target="_BLANK">
+                    <input type="hidden" name="id" value="{{revisao.documento.id}}">
+                    <input type="hidden" name="a" value="{{getAuthorization()}}">
+                    <input type="hidden" name="v" value="v">
+                    <button class="btn btn-flat btn-sm"><i class="fa fa-download"></i> {{revisao.documento.nome}}</button>
+                    <a ng-click="removeAnexo()"> <i class="fa fa-remove"></i></a>
+                </form>
+                
+
+            </div>
+        </div>
+
+        <div class="col-lg-12" ng-show="revisao.documento==null">
+            <form role="form">
+
+                <div class="form-horizontal" role="form">
+                    <div class="box-footer clearfix">
+                        <div class="form-group">
+                            <label for="">Subir novo documento </label> <span ng-show="uploading==true"><i class="fa fa-refresh fa-spin"></i>  Subindo arquivo...</span>
+                            <input type="file" file-model='myFile' name="file" id="form-group">
+                            <p class="help-block">Selecione o arquivo do documento.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
 
     </div>
 
 </div>
 <div class="modal-footer">
+    <button type="submit" class="btn btn-danger" ng-if="revisao.id!=null" ng-click="remove()">Apagar</button>
     <button type="submit" class="btn btn-default" ng-click="cancel()">Fechar</button>
     <button type="submit" class="btn btn-success pull-right" ng-click="save()">Salvar</button>
 

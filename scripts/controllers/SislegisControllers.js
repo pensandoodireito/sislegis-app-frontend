@@ -7,13 +7,15 @@ angular.module('sislegisapp')
         TipoEncaminhamentoResource, Auth, TagResource, $q, BACKEND) {
 
 
-        $scope.baixarTemplate = function (item) {
+        $scope.baixarTemplate = function (item, tipo) {
 
-            // http://localhost:8080/sislegis/rest/proposicaos/2047/templateBriefing
             var back = BACKEND.substr(0, BACKEND.length - 5);
-            window.open(back + "/template?id=" + item.id);
+            window.open(back + "/template?id=" + item.id + "&type=" + tipo);
         }
         $scope.abrirModalParecerAreaMerito = function (item, revisao) {
+            if (item.revisoes == null) {
+                $scope.loadRevisoes(item);
+            }
             var modalInstance = $modal.open({
                 templateUrl: 'views/modal-parecer-areamerito.html',
                 controller: 'ModalParecerAreaMeritoController',
@@ -73,40 +75,32 @@ angular.module('sislegisapp')
                 });
             }
         };
-        $scope.populaNotas = function (prop, callbackFct) {
-            ProposicaoResource.listNotaTecnicas({ ProposicaoId: prop.id }, function (lista) {
-                prop.listaNotas = lista;
-                if (callbackFct != null) {
-                    callbackFct();
-                }
-            }
-                );
-        }
+
         $scope.abrirModalNotaTecnica = function (item, cb) {
 
-            if (cb != true && item.listaNotas == null || item.listaNotas.length != item.totalNotasTecnicas) {
-                $scope.populaNotas(item, function () { $scope.abrirModalNotaTecnica(item, true) });
-            } else {
+            // if (cb != true && item.listaNotas == null || item.listaNotas.length != item.totalNotasTecnicas) {
+            //     $scope.populaNotas(item, function () { $scope.abrirModalNotaTecnica(item, true) });
+            // } else {
 
 
-                var modalInstance = $modal.open({
-                    templateUrl: 'views/modal-notatecnicas.html',
-                    controller: 'ModalNotaTecnicaController',
-                    size: 'lg',
-                    resolve: {
-                        proposicao: function () {
-                            return item;
-                        }
+            var modalInstance = $modal.open({
+                templateUrl: 'views/modal-documentos.html',
+                controller: 'ModalNotaTecnicaController',
+                size: 'lg',
+                resolve: {
+                    proposicao: function () {
+                        return item;
                     }
-                });
+                }
+            });
 
-                modalInstance.result.then(function (prop) {
-                    item = prop;
-                }, function () {
-                    $log.info('Modal dismissed at: ' + new Date());
-                });
-            }
+            modalInstance.result.then(function (prop) {
+                item = prop;
+            }, function () {
+
+            });
         }
+        // }
 
         $scope.abrirModalEncaminhamentos = function (item, cb) {
             if (cb != true && item.listaEncaminhamentoProposicao == null || item.listaEncaminhamentoProposicao.length != item.totalEncaminhamentos) {
@@ -174,24 +168,68 @@ angular.module('sislegisapp')
             return UsuarioResource.buscaPorUsuario(params, params, function (data) { }).$promise;
 
         };
+        $scope.validaEquipeSaver = function (newValue, oldValue, scope) {
+            if (!(oldValue === undefined)) {
+                if (!newValue || newValue == "" || newValue.id == null) {
+                    newValue = null;
+                    if (!oldValue || oldValue == "" || oldValue.id == null) {
+                        console.log("ignora alteracao equipe");
+                        return;
+                    }
+                    $scope.proposicao.equipe = null;
+                }
+                $scope.scheduleSaveTimer(newValue, oldValue, scope);
+            }
+        }
         $scope.lastSaveTimer = null;
+        $scope.scheduleSaveTimer = function (newValue, oldValue, scope) {
+            // console.log(oldValue===undefined,oldValue===null, "was", oldValue, "is", newValue);
+            if (!(oldValue === undefined)) {
+                console.log("was", oldValue, "is", newValue);
 
-        $scope.$watch('proposicao', function (newValue, oldValue, scope) {
-            console.log("was", oldValue, "is", newValue);
-            if (oldValue != null) {
-                // if (oldValue.posicionamentoAtual != newValue.posicionamentoAtual) {
-                //     console.log("alterou posicionameto");
-                //     return;
-                // }
-                if (newValue.lastSaveTimer != null) {
-                    $timeout.cancel(newValue.lastSaveTimer);
+                if ($scope.lastSaveTimer != null) {
+                    $timeout.cancel($scope.lastSaveTimer);
                 }
                 var fct = function () {
                     $scope.save($scope.proposicao);
                 }
-                newValue.lastSaveTimer = $timeout(fct, 2500, true, newValue);
+                $scope.lastSaveTimer = $timeout(fct, 2500, true, newValue);
             }
-        }, true);
+        }
+        $scope.$watch('proposicao.explicacao', $scope.scheduleSaveTimer, true);
+        $scope.$watch('proposicao.posicionamento', $scope.scheduleSaveTimer, true);
+        $scope.$watch('proposicao.efetividade', $scope.scheduleSaveTimer, true);
+        $scope.$watch('proposicao.responsavel', $scope.scheduleSaveTimer, true);
+        $scope.$watch('proposicao.posicionamentoSupar', $scope.scheduleSaveTimer, true);
+        $scope.$watch('proposicao.posicionamentoAtual', $scope.scheduleSaveTimer, true);
+        $scope.$watch('proposicao.parecerSAL', $scope.scheduleSaveTimer, true);
+        $scope.$watch('proposicao.equipe', $scope.validaEquipeSaver, true);
+
+        $scope.trataAlteracaoDeEstado = function (newValue, oldValue, scope) {
+
+            if (oldValue !== undefined) {
+
+
+                if ($scope.lastSaveTimer != null) {
+                    $timeout.cancel($scope.lastSaveTimer);
+                }
+
+                $scope.save($scope.proposicao, "Estado alterado", "Falhou ao alterar estado").then(function (data) {
+                    console.log(data, $scope.estadoHandler);
+                
+                    // $scope.$watch('proposicao.estado', $scope.trataAlteracaoDeEstado, true);
+                }, function () {
+
+
+                    $scope.proposicao.estado = oldValue;
+
+                });
+            }
+
+        };
+        $scope.estadoHandler = $scope.$watch('proposicao.estado', $scope.trataAlteracaoDeEstado, true);
+
+
         $scope.getPosicionamentos = function (current) {
             var copy = $scope.posicionamentos.slice(0);
             if (current) {
@@ -208,6 +246,11 @@ angular.module('sislegisapp')
         $scope.loadTags = function (query) {
             return TagResource.buscarPorSufixo({ sufixo: query }).$promise;
         };
+        $scope.validaEquipe = function (item) {
+            if (!item.equipe || item.equipe.id == null) {
+                item.equipe = null;
+            }
+        }
         $scope.validaPosicionamento = function (item, field) {
             if (field != null && item != null) {
                 var p = item[field];
@@ -218,12 +261,15 @@ angular.module('sislegisapp')
         }
 
         $scope.save = function (item, msgSucesso, msgErro) {
+
             if ($scope.lastSaveTimer != null) {
                 $timeout.cancel($scope.lastSaveTimer);
             }
             var deferred = $q.defer();
             $scope.validaPosicionamento(item, 'posicionamentoSupar');
             $scope.validaPosicionamento(item.posicionamentoAtual, 'posicionamento');
+
+            //$scope.validaEquipe(item);
 
 
             if (!msgSucesso) {
@@ -233,24 +279,19 @@ angular.module('sislegisapp')
                 msgErro = 'Falha salvar proposição.';
             }
 
-
-            // clear();
-
+            $rootScope.savingItem = item;
             $rootScope.inactivateSpinner = true;
             var successCallback = function () {
                 $rootScope.inactivateSpinner = false;
-
-                deferred.resolve(item);
-
-
                 toaster.pop('success', msgSucesso);
+                deferred.resolve(item);
             };
             var errorCallback = function () {
                 $rootScope.inactivateSpinner = false;
                 toaster.pop('error', msgErro);
                 deferred.reject('Falha salvar proposição.');
             };
-            ProposicaoResource.update(item, successCallback, errorCallback);
+            ProposicaoResource.update({}, item, successCallback, errorCallback);
             return deferred.promise;
         };
 
@@ -317,19 +358,449 @@ angular.module('sislegisapp')
     .controller('DashboardController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster,
         DashboardService, Auth, $q, TarefaResource, BACKEND) {
         $scope.Auth = Auth;
-        $scope.info = DashboardService.get();
+
+        $scope.update = function () {
+            var origem = "c";
+            var data = "10102016"
+            if (window.o) {
+                origem = window.o;
+            }
+            if (window.s) {
+                data = window.s;
+            }
+            $http.get(BACKEND + '/proposicaos/auto?o=' + origem + '&s=' + data);
+        }
+        $scope.go = function (url, p) {
+            $location.path(url).search({ filter: p });;
+        }
         $scope.tarefas = TarefaResource.buscarPorUsuario();
+        $scope.PieData = [];
+        $scope.initChart = function () {
+            //#d2d6de
+            var colorArray = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc'];
+            // Get context with jQuery - using jQuery's .get() method.
+            var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
+            var pieChart = new Chart(pieChartCanvas);
+
+            for (var index = 0; index < $scope.info.equipes.length; index++) {
+                var equipe = $scope.info.equipes[index];
+                $scope.PieData.push({
+                    value: equipe.totalEmAnalise + equipe.totalAnalisada,
+                    color: colorArray[index],//"#f56954",
+                    highlight: colorArray[index],
+                    label: equipe.e.nome,
+                    equipe: equipe
+                });
+
+            }
+            $scope.PieData.push({
+                value: $scope.info.semEquipe,
+                color: "#d2d6de",
+                highlight: "#d2d6de",
+                label: "Sem Equipe",
+                equipe: {e:{id:-1}}
+            });
+
+
+
+            var pieOptions = {
+                //Boolean - Whether we should show a stroke on each segment
+                segmentShowStroke: true,
+                //String - The colour of each segment stroke
+                segmentStrokeColor: "#fff",
+                //Number - The width of each segment stroke
+                segmentStrokeWidth: 1,
+                //Number - The percentage of the chart that we cut out of the middle
+                percentageInnerCutout: 50, // This is 0 for Pie charts
+                //Number - Amount of animation steps
+                animationSteps: 100,
+                //String - Animation easing effect
+                animationEasing: "easeOutBounce",
+                //Boolean - Whether we animate the rotation of the Doughnut
+                animateRotate: true,
+                //Boolean - Whether we animate scaling the Doughnut from the centre
+                animateScale: false,
+                //Boolean - whether to make the chart responsive to window resizing
+                responsive: true,
+                // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+                maintainAspectRatio: false,
+                //String - A legend template
+                legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
+                //String - A tooltip template
+                tooltipTemplate: "<%=label%> <%=value %> projetos analisados no mês"
+            };
+            //Create pie or douhnut chart
+            // You can switch between pie and douhnut using the method below.
+            pieChart.Doughnut($scope.PieData, pieOptions);
+        }
+        $scope.info = DashboardService.get($scope.initChart);
+
     })
-    .controller('DespachoController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
+
+    .controller(
+        'ModalBuscaUnicaDeProposicaoController',
+        function ($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, ProposicaoResource,
+            listaProposicaoSelecao, BACKEND) {
+
+
+            $scope.disabled = false;
+            $scope.showDetalhamentoProposicao = false;
+            $scope.$location = $location;
+
+            $scope.campoData = new Date();
+
+            $scope.comissao = new Object();
+            $scope.listaProposicaoSelecao = [];
+            $scope.listaProposicaoPesquisa = {};
+
+            $scope.origem = {
+                value: ''
+            }
+
+            $scope.tiposPadraoCamara = [
+                { sigla: "MPV ", nome: "MPV - Medida Provisória" },
+                { sigla: "PEC ", nome: "PEC - Proposta de Emenda à Constituição" },
+                { sigla: "PL ", nome: "PL - Projeto de Lei" },
+                { sigla: "PLC ", nome: "PLC - Projeto de Lei da Câmara" },
+                { sigla: "PLS ", nome: "PLS - Projeto de Lei do Senado Federal" },
+                { sigla: "", nome: "-- Carregar Todos os Tipos -- ", virtual: true }
+            ];
+            $scope.tiposPadraoSenado = [
+                { sigla: "MPV ", nome: "MPV - Medida Provisória" },
+                { sigla: "PEC ", nome: "PEC - Proposta de Emenda à Constituição" },
+                { sigla: "PL ", nome: "PL - Projeto de Lei" },
+                { sigla: "PLC ", nome: "PLC - Projeto de Lei da Câmara" },
+                { sigla: "PLS ", nome: "PLS - Projeto de Lei do Senado Federal" },
+                { sigla: "", nome: "-- Carregar Todos os Tipos -- ", virtual: true }
+            ];
+
+            $scope.origens = [{
+                value: 'C',
+                displayName: 'Câmara',
+                tipos: $scope.tiposPadraoCamara
+            }, {
+                    value: 'S',
+                    displayName: 'Senado',
+                    tipos: $scope.tiposPadraoSenado
+                }];
+
+            $scope.pesquisar = function () {
+                $modalInstance.close($scope.listaProposicaoSelecao);
+            };
+
+            $scope.ok = function () {
+                $modalInstance.close($scope.listaProposicaoSelecao);
+            };
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+            $scope.proposicoesAvulsas = [];
+            $scope.buscarProposicaoAvulsa = function () {
+                var origem = ($scope.origem.value == 'C') ? "CAMARA" : "SENADO";;
+                var sigla = $scope.tipo.sigla.trim();
+                var numero = $scope.numero;
+                var ano = $scope.ano;
+                var params = { "origem": origem, "sigla": sigla, "ano": ano };
+                if (undefined !== numero && numero != '') {
+                    params.numero = numero;
+                }
+
+                ProposicaoResource.buscarAvulsas(params, function (proposicoesAvulsas) {
+                    $scope.pautaReuniao = [];
+                    if (proposicoesAvulsas.length == 0) {
+                        toaster.pop('info', 'Nenhuma proposição encontrada');
+                    }
+                    $scope.proposicoesAvulsas = proposicoesAvulsas;
+
+                });
+            };
+
+            $scope.mostrarAvulsa = function () {
+                $scope.selectOrigemComissoes();
+                $scope.habilitaAvulsa = true;
+            };
+
+            $scope.esconderAvulsa = function () {
+                $scope.habilitaAvulsa = false;
+                $scope.selectOrigemComissoes();
+            };
+
+
+            $scope.selectTipo = function () {
+                if ($scope.tipo.virtual == true) {
+                    var origemSelecionada = $scope.origem.value;
+                    if (origemSelecionada == 'S') {
+                        $http.get(BACKEND + '/proposicaos/listTipos/SENADO').success(function (data) {
+                            $scope.tiposPadraoSenado.splice($scope.tiposPadraoSenado.length - 1);
+                            $scope.origens[1].tipos = $scope.tiposPadraoSenado.slice();;
+                            $scope.origens[1].tipos = $scope.origens[1].tipos.concat(data);
+                            $scope.tipos = $scope.origens[1].tipos;
+                        }).error(function (error) {
+                        });
+                    } else if (origemSelecionada == 'C') {
+                        $http.get(BACKEND + '/proposicaos/listTipos/CAMARA').success(function (data) {
+                            $scope.tiposPadraoCamara.splice($scope.tiposPadraoCamara.length - 1);
+                            $scope.origens[0].tipos = $scope.tiposPadraoCamara.slice();
+
+                            $scope.origens[0].tipos = $scope.origens[0].tipos.concat(data);
+
+                            $scope.tipos = $scope.origens[0].tipos;
+                        }).error(function (error) {
+                        });
+                    }
+                }
+            }
+
+            $scope.comissoesCache = {
+                'C': null,
+                'S': null
+
+            };
+            $scope.selectOrigemComissoes = function () {
+                var origemSelecionada = $scope.origem.value;
+                if (origemSelecionada != null) {
+                    var url = '';
+                    switch (origemSelecionada) {
+                        case 'S':
+                            url = BACKEND + '/comissaos/comissoesSenado';
+                            $scope.tipos = $scope.origens[1].tipos;
+                            break;
+                        case 'C':
+                            url = BACKEND + '/comissaos/comissoesCamara';
+                            $scope.tipos = $scope.origens[0].tipos;
+                            break;
+                        default:
+                            break;
+                    }
+                    if ($scope.comissoesCache[$scope.origem.value]) {
+                        $scope.comissoes = $scope.comissoesCache[$scope.origem.value];
+                    } else {
+                        $http.get(url).success(function (data) {
+                            $scope.comissoesCache[$scope.origem.value] = data;
+                            $scope.comissoes = data;
+                        }).error(function (error) {
+                        });
+                    }
+                }
+
+            };
+
+
+
+            $scope.buscarProposicao = function () {
+
+                var formattedDate = $filter('date')(new Date($scope.campoData), 'MM/dd/yyyy');
+
+                var successCallback = function (sucess) {
+                    $scope.detalheProposicao = null;
+                    $scope.showDetalhamentoProposicao = false;
+                    $scope.pautaReuniao = sucess;
+                    // $scope.naoEncontrado = sucess.length == 0;
+                    if (sucess.length == 0) {
+                        toaster.pop('info', 'Nenhuma proposição encontrada');
+                    }
+                    $scope.comissaoProposicao = $scope.comissao.sigla;
+                };
+
+                var errorCallback = function (err) { };
+
+                if ($scope.origem.value == 'C') {
+                    ProposicaoResource.buscarCamara({
+                        idComissao: $scope.comissao.id,
+                        siglaComissao: $scope.comissao.sigla,
+                        data: formattedDate
+                    }, successCallback, errorCallback);
+                } else {
+                    ProposicaoResource.buscarSenado({
+                        idComissao: $scope.comissao.id, // usado para a
+                        // camara
+                        siglaComissao: $scope.comissao.sigla, // usado para o
+                        // senado
+                        data: formattedDate
+                    }, successCallback, errorCallback);
+                }
+            };
+
+            $scope.detalharProposicao = function (p) {
+                $http(
+                    {
+                        method: 'GET',
+                        url: ($scope.origem.value == 'C') ? BACKEND + "/proposicaos/detalharProposicaoCamaraWS"
+                            : BACKEND + "/proposicaos/detalharProposicaoSenadoWS",
+                        params: {
+                            'id': p.idProposicao
+                        }
+                    }).success(function (data) {
+                        $scope.detalheProposicao = data;
+                        $scope.detalheProposicao.comissao = p.comissao;
+                        $scope.detalheProposicao.seqOrdemPauta = p.seqOrdemPauta;
+                        $scope.showDetalhamentoProposicao = true;
+                    }).error(function (error) {
+                    });
+            };
+            $scope.listaProposicaoAvulsaSelecao = [];
+            $scope.listaPautas = [];
+
+            $scope.adicionarProposicao = function (proposicao, pauta) {
+                if ($scope.listaProposicaoAvulsaSelecao.indexOf(proposicao) == -1) {
+                    $scope.listaProposicaoAvulsaSelecao.push(proposicao);
+                    $scope.listaPautas.push(pauta);
+                }
+
+
+
+            };
+
+            $scope.removerProposicao = function (proposicao) {
+                var index2 = $scope.listaProposicaoAvulsaSelecao.indexOf(proposicao);
+                if (index2 != -1) {
+                    $scope.listaProposicaoAvulsaSelecao.splice(index2, 1);
+                    $scope.listaPautas.splice(index2, 1);
+                }
+            };
+
+            $scope.salvar = function () {
+
+                var successCallback = function () {
+                    $modalInstance.close($scope.listaProposicaoSelecao);
+                };
+                var errorCallback = function () {
+                    toaster.pop('info', '');
+                };
+
+                ProposicaoResource.salvarProposicoesGenericas({
+                    pautas: $scope.listaPautas,
+                    proposicoes: $scope.listaProposicaoAvulsaSelecao
+
+                }, successCallback, errorCallback);
+            };
+
+
+            
+            // CALENDARIO
+            $scope.setCalendar = function () {
+                $scope.openCalendar = function ($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+
+                    $scope.opened = true;
+                };
+
+                $scope.dateOptions = {
+                    formatYear: 'yy',
+                    startingDay: 1
+                };
+
+                $scope.format = 'dd/MM/yyyy';
+            }
+
+            $scope.setCalendar();
+            $scope.habilitaAvulsa = true;
+
+        })
+
+    .controller('ConsultaProposicoesController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
         ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
         EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
-        TipoEncaminhamentoResource, Auth, TagResource, UploadService, $q, BACKEND) {
+        TipoEncaminhamentoResource, Auth, TagResource, UploadService, $q, BACKEND, configConsulta, $sce) {
+        $scope.getAuthorization = function () {
+            return 'Bearer ' + Auth.authz.token;
+        }
+
+        $scope.getReportURL = function () {
+            var back = BACKEND.substr(0, BACKEND.length - 5);
+            return $sce.trustAsResourceUrl(back + "/relatorio");
+        }
+        $scope.getSunday = function () {
+            var d = new Date();
+            d.setDate(d.getDate() - d.getDay())
+            return d;
+        }
+        console.log("RouteParams", $routeParams);
+        $scope.filtro = new ProposicaoResource();
+        if ($routeParams.filter) {
+            console.log("parametro filtro ativo", $routeParams.filter);
+            $scope.filtro.sigla = $routeParams.filter.sigla;
+            $scope.filtro.equipe = $routeParams.filter.equipe;
+            $scope.filtro.estado = $routeParams.filter.estado;
+            $scope.filtro.responsavel = $routeParams.filter.responsavel;
+        } else {
+            console.log(" nenhum parametro filtro ativo");
+        }
+        $scope.configConsulta = configConsulta;
+        if (configConsulta) {
+            if (configConsulta.filtro) {
+                console.log("pre filtro ativo", configConsulta.filtro);
+                $scope.filtro.estado = configConsulta.filtro.estado;
+            }
+        } else {
+            console.log(" nenhum pre filtro ativo");
+        }
+
         $scope.proposicoes = [];
         $scope.Auth = Auth;
         $scope.posicionamentos = PosicionamentoResource.queryAll();
-        $scope.macrotemas = TagResource.listarTodos();
-        $scope.filtro = new ProposicaoResource();
 
+        $scope.macrotemas = TagResource.listarTodos();
+        
+        $scope.getAutores  = function (val){
+              return ProposicaoResource.buscaAutor({ nome: val }, { nome: val },
+                function (data) { 
+                    
+                        $scope.autores=data;
+                   
+                    
+                },
+                function (error) { 
+                toaster.pop('error', 'Falha ao buscar autores'); }
+                ).$promise;
+               
+        }
+        $scope.getUsuarios = function (val, buscaGeral) {
+            var method = (buscaGeral) ? 'ldapSearch' : 'find';
+            return UsuarioResource.buscaPorUsuario({ method: method, nome: val }, { method: method, nome: val },
+                function (data) { 
+                 data.push({id:-1,nome:"Sem responsável associado"});   
+                },
+                function (error) { t
+                toaster.pop('error', 'Falha ao buscar usuários'); }
+                ).$promise;
+
+        };
+        $scope.buscarProposicoes = function () {
+            toaster.clear();
+
+            var modalInstance = $modal.open({
+                templateUrl: 'views/Proposicao/modal-busca-unica-proposicao.html',
+                controller: 'ModalBuscaUnicaDeProposicaoController',
+                size: 'lg',
+                resolve: {
+                    reuniao: function () {
+                        return null;
+                    },
+
+                    reuniaoProposicao: function () {
+                        return null;
+                    },
+                    listaProposicaoSelecao: function () {
+                        return [];
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (listaProposicaoSelecao) {
+                if (listaProposicaoSelecao.length > 0) {
+                    for (var index = 0; index < listaProposicaoSelecao.length; index++) {
+                        var element = listaProposicaoSelecao[index];
+                        $scope.proposicoes.push(element)
+                    }
+
+                }
+            }, function () {
+                // $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
 
         $scope.proposicoesSeguidas = [];
         UsuarioResource.proposicoesSeguidas({}, function (data) {
@@ -341,20 +812,48 @@ angular.module('sislegisapp')
 
         $scope.infiniteScroll = {
             busy: false,
-            limit: 10,
+            limit: 20,
             offset: 0,
             full: false
         };
 
-        $scope.equipes = EquipeResource.queryAll();
+        $scope.equipesFiltro = [{ id: -1, nome: "Sem Equipe Associada" }];
+        $scope.equipes = [];
+        EquipeResource.queryAll(function (data) {
+            for (var index = 0; index < data.length; index++) {
+                var element = data[index];
+                if (element.nome != "ASPAR") {
+                    $scope.equipes.push(element);
+                    $scope.equipesFiltro.push(element);
+                }
 
+            }
+        });
+
+        $scope.despachoPresencial = function (item) {
+
+            var modalInstance = $modal.open({
+                templateUrl: 'views/modal-encaminhamento-despacho.html',
+                controller: 'ModalEncaminhamentoDespachoController',
+                size: 'md',
+                resolve: {
+                    proposicao: function () {
+                        return item;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (novoEncaminhamento) {
+                item.estado = 'ADESPACHAR_PRESENCA';
+                item.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ ProposicaoId: item.id });
+            }, function () {
+            });
+
+        }
 
         $scope.setaEstado = function (item, estado) {
             var oldState = item.estado;
             item.estado = estado;
-            console.log(item.lastSaveTimer)
-            $timeout.cancel(item.lastSaveTimer);
-            ProposicaoResource.update(item, function () { }, function () { item.estado = oldState });
         }
 
         $scope.$watch('filtro', function (newValue, oldValue, scope) {
@@ -364,6 +863,7 @@ angular.module('sislegisapp')
             $scope.infiniteScroll.full = false;
             $scope.consultarProposicoes();
         }, true);
+        $scope.today = new Date().getTime();
 
         $scope.consultarProposicoes = function () {
 
@@ -379,7 +879,20 @@ angular.module('sislegisapp')
                     $scope.infiniteScroll.full = true;
                     return;
                 };
+                // for (var index = 0; index < data.length; index++) {
+                //     var serverProp = data[index];
+                //     var indexOf = $scope.proposicoes.indexOf(serverProp);
+                //     if (indexOf != -1) {
+                //         $scope.proposicoes[indexOf] = data;
+                //         // $scope.proposicoes.push(data);
+                //     } else {
+
+                //         $scope.proposicoes.push(data);
+                //     }
+
+                // }
                 $scope.proposicoes = $scope.proposicoes.concat(data);
+
                 if ($scope.proposicoes.length == 0) {
                     toaster.pop('info', 'Nenhuma Proposição encontrada.');
                     return;
@@ -393,20 +906,23 @@ angular.module('sislegisapp')
                 $rootScope.inactivateSpinner = false;
                 $scope.infiniteScroll.busy = false;
             };
-
-            ProposicaoResource.consultar(
+            var filtroAtual =
                 {
                     sigla: $scope.filtro.sigla,
                     ementa: $scope.filtro.ementa,
                     autor: $scope.filtro.autor,
                     origem: $scope.filtro.origem,
                     isFavorita: $scope.filtro.isFavorita,
-                    estado: 'ADESPACHAR',
-                    macrotema: $scope.filtro.macrotema?$scope.filtro.macrotema.tag : null,
+                    estado: $scope.filtro.estado,
+                    macrotema: $scope.filtro.macrotema ? $scope.filtro.macrotema.tag : null,
                     idEquipe: $scope.filtro.equipe ? $scope.filtro.equipe.id : null,
+                    idResponsavel: $scope.filtro.responsavel ? $scope.filtro.responsavel.id : null,
+                    somentePautadas: $scope.filtro.somentePautadas,
                     limit: $scope.infiniteScroll.limit,
                     offset: $scope.infiniteScroll.offset
-                }, successCallback, errorCallback);
+                };
+            ProposicaoResource.consultar(
+                filtroAtual, successCallback, errorCallback);
         }
 
     })
@@ -529,32 +1045,32 @@ angular.module('sislegisapp')
         $scope.get();
     }).controller('ModalNotaTecnicaController',
         function ($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource,
-            ProposicaoResource, UsuarioResource, ComentarioService, UploadService, $confirm, BACKEND) {
+            ProposicaoResource, UsuarioResource, ComentarioService, UploadService, $confirm, BACKEND, $sce, Auth) {
+
+
+
 
             var self = this;
+            $scope.getAuthorization = function () {
+                return 'Bearer ' + Auth.authz.token;
+            }
+            $scope.getFormURL = function () {
+                var back = BACKEND.substr(0, BACKEND.length - 5);
+                return $sce.trustAsResourceUrl(back + "/documentos")
+            }
 
             $scope.proposicao = proposicao || new ProposicaoResource();
+            proposicao.listaNotas = ProposicaoResource.listNotaTecnicas({ ProposicaoId: proposicao.id });
+            proposicao.listaBriefings = ProposicaoResource.listDocRelated({ ProposicaoId: proposicao.id, type: 2 });
+            proposicao.listaEmendas = ProposicaoResource.listDocRelated({ ProposicaoId: proposicao.id, type: 3 });
 
-
-
-            $scope.nota = {
-
-            };
             $scope.notaForm = false;
             $scope.showNotaForm = function (b) {
                 $scope.notaForm = b
             }
 
-            $scope.editNota = function (nota) {
-                $scope.notaForm = true;
-                $scope.nota = nota;
-
-            };
             $scope.novaNota = function () {
                 $scope.notaForm = true;
-                $scope.nota = {
-
-                };
             };
             $scope.ok = function () {
                 $modalInstance.close($scope.proposicao);
@@ -564,48 +1080,63 @@ angular.module('sislegisapp')
                 if ($scope.notaForm == true) {
                     $scope.notaForm = false;
                 } else {
-
                     $modalInstance.dismiss('cancel');
                 }
             };
-            $scope.removeNota = function (notaARemover) {
+            $scope.removeDoc = function (notaARemover) {
+                var type = 1; var arr = $scope.proposicao.listaNotas;
+                switch ($scope.currTab) {
+                    case 'nota': type = 1; arr = $scope.proposicao.listaNotas; break;
+                    case 'brief': type = 2; arr = $scope.proposicao.listaBriefings; break;
+                    case 'emenda': type = 3; arr = $scope.proposicao.listaEmendas; break;
+                    default: throw ("Nao achou o tipo de documento");
+                }
                 var successCallback = function (data, responseHeaders) {
 
-                    for (var index = 0; index < $scope.proposicao.listaNotas.length; index++) {
-                        var element = $scope.proposicao.listaNotas[index];
+                    for (var index = 0; index < arr.length; index++) {
+                        var element = arr[index];
                         if (element.id == notaARemover.id) {
-                            $scope.proposicao.listaNotas.splice(index, 1);
+                            arr.splice(index, 1);
                             break;
                         }
                     }
-                    $scope.proposicao.totalNotasTecnicas = $scope.proposicao.listaNotas.length;
-                    toaster.pop('success', 'Nota removida com sucesso');
+                    switch (type) {
+                        case 1: $scope.proposicao.totalNotasTecnicas = arr.length; break;
+                        case 2: $scope.proposicao.totalBriefings = arr.length; break;
+                        case 3: $scope.proposicao.totalEmendas = arr.length; break;
+                        default: throw ("Nao achou o tipo de documento");
+                    }
+                    toaster.pop('success', 'Documento removido com sucesso');
                     $scope.notaForm = false;
                 };
 
                 var errorCallback = function () {
-                    toaster.pop('error', 'Falha ao tentar remove nota técnica.');
+                    toaster.pop('error', 'Falha ao tentar remove documento.');
                 };
 
                 var removeIt = function () {
-                    ProposicaoResource.removeNota({ ProposicaoId: $scope.proposicao.id, notaId: notaARemover.id }, successCallback, errorCallback);
+                    ProposicaoResource.removeDoc({ ProposicaoId: $scope.proposicao.id, docId: notaARemover.id, type: type }, successCallback, errorCallback);
                 }
 
-                $confirm({ text: 'Deseja realmente apagar essa nota técnica.', title: 'Apagar nota técnica', ok: 'Sim', cancel: 'Não' })
+                $confirm({ text: 'Deseja realmente apagar esse documento.', title: 'Apagar documento', ok: 'Sim', cancel: 'Não' })
                     .then(removeIt);
 
             }
-            // $scope.save = function () {
 
-
-            //     ProposicaoResource.salvaNota({ ProposicaoId:  }, $scope.nota, successCallback, errorCallback);
-            // };
             $scope.uploadfile = function (actionUrl) {
+                var type = 1; var arr = $scope.proposicao.listaNotas;
+                switch ($scope.currTab) {
+                    case 'nota': type = 1; arr = $scope.proposicao.listaNotas; break;
+                    case 'brief': type = 2; arr = $scope.proposicao.listaBriefings; break;
+                    case 'emenda': type = 3; arr = $scope.proposicao.listaEmendas; break;
+                    default: throw ("Nao achou o tipo de documento");
+                }
                 var successCallback = function (data, responseHeaders) {
                     $scope.uploading = false;
                     var found = false;
-                    for (var index = 0; index < $scope.proposicao.listaNotas.length; index++) {
-                        var element = $scope.proposicao.listaNotas[index];
+
+                    for (var index = 0; index < arr.length; index++) {
+                        var element = arr[index];
 
                         if (element.id == data.id) {
                             element = data;
@@ -615,36 +1146,78 @@ angular.module('sislegisapp')
 
                     }
                     if (!found) {
-                        $scope.proposicao.listaNotas.push(data);
+                        arr.push(data);
                     }
-                    $scope.proposicao.totalNotasTecnicas = $scope.proposicao.listaNotas.length;
-                    toaster.pop('success', 'Nota inserida com sucesso');
+                    switch (type) {
+                        case 1: $scope.proposicao.totalNotasTecnicas = arr.length; break;
+                        case 2: $scope.proposicao.totalBriefings = arr.length; break;
+                        case 3: $scope.proposicao.totalEmendas = arr.length; break;
+                        default: throw ("Nao achou o tipo de documento");
+                    }
+
+                    toaster.pop('success', 'Documento inserido com sucesso');
                     $scope.notaForm = false;
                 };
 
                 var errorCallback = function () {
                     $scope.uploading = false;
-                    toaster.pop('error', 'Falha ao tentar salvar nota técnica.');
+                    toaster.pop('error', 'Falha ao tentar salvar documento.');
                 };
                 var file = $scope.myFile;
-                console.log("file", file);
                 $scope.uploading = true;
-                UploadService('documentos', file, { type: 1, idProposicao: $scope.proposicao.id }).then(successCallback, errorCallback);
+                UploadService('documentos', file, { type: type, idProposicao: $scope.proposicao.id }).then(successCallback, errorCallback);
             };
-            $scope.openFile = function (nota) {
-                var back = BACKEND.substr(0, BACKEND.length - 5);
 
-                window.open(back + "/documentos?id=" + nota.documento.id);
-            }
+
 
         }).controller('ModalParecerAreaMeritoController',
             function ($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource,
-                ProposicaoResource, UsuarioResource, ComentarioService, PosicionamentoResource, UploadService, revisao) {
+                ProposicaoResource, UsuarioResource, ComentarioService, PosicionamentoResource, UploadService, AreaMeritoResource, revisao, Auth, BACKEND, $sce) {
+                $scope.getAuthorization = function () {
+                    return 'Bearer ' + Auth.authz.token;
+                }
+                $scope.getFormURL = function () {
+                    var back = BACKEND.substr(0, BACKEND.length - 5);
+                    return $sce.trustAsResourceUrl(back + "/documentos")
+                }
+                $scope.areas = AreaMeritoResource.query();
 
+                $scope.removeAnexo = function () {
+                    var successCallback = function (data, responseHeaders) {
 
-                $scope.areaMeritos = ProposicaoResource.listaAreaMerito();
+                        $scope.revisao.documento = null;
+                        toaster.pop('success', 'Anexo removido');
+
+                    };
+
+                    var errorCallback = function () {
+
+                        toaster.pop('error', 'Falha ao remover documento.');
+                    };
+                    ProposicaoResource.removeAnexoRevisao({ ProposicaoId: $scope.revisao.proposicao.id, RevisaoId: $scope.revisao.id }, $scope.revisao, successCallback, errorCallback);
+                }
+                $scope.remove = function () {
+                    var successCallback = function (data, responseHeaders) {
+                        var indexOf = proposicao.revisoes.indexOf($scope.revisao);
+                        if (indexOf != -1) {
+                            proposicao.revisoes.splice(indexOf, 1);
+                        }
+                        toaster.pop('success', 'Revisão removida');
+                        $modalInstance.dismiss('cancel');
+
+                    };
+
+                    var errorCallback = function () {
+
+                        toaster.pop('error', 'Falha ao remover revisão.');
+                    };
+                    ProposicaoResource.removeRevisao({ ProposicaoId: $scope.revisao.proposicao.id, RevisaoId: $scope.revisao.id }, $scope.revisao, successCallback, errorCallback);
+                }
+
                 $scope.revisao = {
-                    proposicao: proposicao
+                    proposicao: {
+                        id: proposicao.id
+                    }
                 }
                 if (revisao != null) {
                     $scope.revisao = revisao;
@@ -653,7 +1226,27 @@ angular.module('sislegisapp')
                 $scope.posicionamentos = PosicionamentoResource.query();
 
 
+                $scope.uploadfile = function (actionUrl) {
 
+                    var successCallback = function (data, responseHeaders) {
+                        $scope.uploading = false;
+
+                        $scope.revisao.documento = data.documento;
+                        console.log($scope.revisao);
+                        toaster.pop('success', 'Parecer inserido com sucesso');
+
+                    };
+
+                    var errorCallback = function () {
+                        $scope.uploading = false;
+                        toaster.pop('error', 'Falha ao tentar anexar documento, mas parecer de area foi salvo.');
+                    };
+
+                    var file = $scope.myFile;
+                    console.log(file)
+                    $scope.uploading = true;
+                    UploadService('documentos', file, { type: 4, idRevisao: $scope.revisao.id }).then(successCallback, errorCallback);
+                };
 
 
                 $scope.cancel = function () {
@@ -663,15 +1256,24 @@ angular.module('sislegisapp')
 
                 };
                 $scope.save = function () {
+
                     var successCallback = function (data, responseHeaders) {
 
-                        if ($scope.revisao.proposicao.revisoes == null) {
-                            $scope.revisao.proposicao.revisoes = [];
+                        if (proposicao.revisoes == null) {
+                            proposicao.revisoes = [];
                         }
-                        $scope.revisao.proposicao.revisoes.push(data);
-
-                        toaster.pop('success', 'Parecer inserido com sucesso');
-                        $modalInstance.close($scope.revisao.proposicao);
+                        $scope.revisao.id = data.id;
+                        proposicao.revisoes.push(data);
+                        $scope.revisao = data;
+                        proposicao.totalParecerAreaMerito = proposicao.revisoes.length;
+                        var file = $scope.myFile;
+                        console.log("File", file)
+                        if (file != null) {
+                            $scope.uploadfile();
+                        } else {
+                            toaster.pop('success', 'Parecer inserido com sucesso');
+                        }
+                        // $modalInstance.close($scope.revisao.proposicao);
                     };
 
                     var errorCallback = function () {
@@ -859,4 +1461,84 @@ angular.module('sislegisapp')
                     };
 
                     $scope.performSearch();
-                });
+                }).controller(
+                    'ModalEncaminhamentoDespachoController',
+                    function ($scope, $rootScope, $http, $filter, $routeParams, $location, $modalInstance, toaster, proposicao,
+                        TipoEncaminhamentoResource, ProposicaoResource, EncaminhamentoProposicaoResource, EncaminhamentoProposicaoHttp, UsuarioResource,
+                        ComentarioResource, BACKEND, $confirm) {
+
+                        var self = this;
+                        $scope.disabled = false;
+                        $scope.$location = $location;
+
+                        $scope.proposicao = proposicao || new ProposicaoResource();
+                        $scope.tipoEncaminhamento = new TipoEncaminhamentoResource();
+                        $scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
+                        $scope.encaminhamentoProposicao.responsavel = proposicao.responsavel;
+                        $scope.listaEncaminhamento = TipoEncaminhamentoResource.queryAll() || [];
+
+                        $scope.getUsuarios = function (val) {
+                            return $http.get(BACKEND + '/usuarios/find', {
+                                params: {
+                                    nome: val
+                                }
+                            }).then(function (response) {
+                                return response.data.map(function (item) {
+                                    return item;
+                                });
+                            });
+                        };
+
+                        $scope.ok = function () {
+                            $modalInstance.close($scope.proposicao.listaEncaminhamentoProposicao);
+                        };
+
+                        $scope.cancel = function () {
+                            $modalInstance.dismiss('cancel');
+                        };
+
+                        $scope.isClean = function () {
+                            return angular.equals(self.original, $scope.encaminhamentoProposicao);
+                        };
+
+                        $scope.save = function () {
+
+                            $scope.encaminhamentoProposicao.proposicao = new ProposicaoResource();
+                            $scope.encaminhamentoProposicao.proposicao.id = $scope.proposicao.id;
+                            if ($scope.encaminhamentoProposicao.dataHoraLimite != null) {
+                                $scope.encaminhamentoProposicao.dataHoraLimite = $scope.encaminhamentoProposicao.dataHoraLimite
+                                    .getTime();
+                            }
+
+                            var successCallback = function (data, responseHeaders) {
+                                $modalInstance.close($scope.encaminhamentoProposicao);
+
+                                toaster.pop('success', 'Despacho presencial criado com sucesso');
+
+                            };
+                            var errorCallback = function () {
+                                toaster.pop('error', 'Falha ao realizar operação.');
+                            };
+                            EncaminhamentoProposicaoResource.saveDespachoPresencial($scope.encaminhamentoProposicao, successCallback, errorCallback);
+                        };
+
+                        // CALENDARIO
+                        $scope.setCalendar = function () {
+                            $scope.openCalendar = function ($event) {
+                                $event.preventDefault();
+                                $event.stopPropagation();
+
+                                $scope.opened = true;
+                            };
+
+                            $scope.dateOptions = {
+                                formatYear: 'yy',
+                                startingDay: 1
+                            };
+
+                            $scope.format = 'dd/MM/yyyy';
+                        }
+
+                        $scope.setCalendar();
+
+                    });;

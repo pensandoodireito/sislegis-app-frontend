@@ -13,6 +13,11 @@ angular.module('sislegisapp').factory('EncaminhamentoProposicaoResource', functi
 		'update' : {
 			method : 'PUT'
 		},
+        'saveDespachoPresencial':{
+            method : 'POST',
+            url : BACKEND + "/encaminhamentoProposicao/despachoPresencial",
+            isArray : false
+        },
 		'findByProposicao' : {
 			url : BACKEND + "/encaminhamentoProposicao/proposicao/:ProposicaoId",
 			method : 'GET',

@@ -29,7 +29,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="result in searchResults | searchFilter:searchResults | startFrom:currentPage*pageSize | limitTo:pageSize | orderBy:['nome']">
+                                    <tr ng-repeat="result in searchResults | searchFilter:searchResults | startFrom:currentPage*pageSize | limitTo:pageSize | orderBy:['tag']">
                                         <td><a href="#/Tags/edit/{{result.tag}}">{{result.tag}}</a></td>
                                     </tr>
                                     </tbody>

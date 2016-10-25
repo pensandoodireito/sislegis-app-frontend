@@ -52,7 +52,8 @@
                                         <dt>Detalhes</dt>
                                         <dd>{{tarefa.encaminhamentoProposicao.detalhes}}</dd>
                                         <dt>Proposição</dt>
-                                        <dd>{{tarefa.encaminhamentoProposicao.proposicao.sigla}}</dd>
+                                        <dd ng-cloak><a ng-click="go('/Proposicao/consultar',{sigla:tarefa.encaminhamentoProposicao.proposicao.sigla})">{{tarefa.encaminhamentoProposicao.proposicao.sigla}}</a>
+                                        </dd>
 
 
                                         <dd>{{tarefa.encaminhamentoProposicao.proposicao.ementa}}</dd>

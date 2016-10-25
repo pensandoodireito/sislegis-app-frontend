@@ -25,6 +25,8 @@ angular.module('sislegisapp').directive('focusMe', function ($timeout) {
 
             element.bind('change', function () {
                 scope.$apply(function () {
+                    console.log("setou ",element[0])
+                    console.log("setou2 ",scope,element[0].files[0])
                     modelSetter(scope, element[0].files[0]);
                 });
             });

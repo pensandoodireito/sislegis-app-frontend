@@ -34,6 +34,11 @@ angular.module('sislegisapp').factory('ProposicaoResource', function ($resource,
                 url: BACKEND + "/proposicaos/salvarProposicoesExtras",
                 method: 'POST'
             },
+            'salvarProposicoesGenericas': {
+                url: BACKEND + "/proposicaos/salvarProposicoesGenericas",
+                isArray: true,
+                method: 'POST'
+            },
 
             'buscarCamara': {
                 url: BACKEND + "/proposicaos/proposicoesPautaCamara",
@@ -81,10 +86,25 @@ angular.module('sislegisapp').factory('ProposicaoResource', function ($resource,
                 method: 'GET',
                 isArray: true
             },
+            'removeAnexoRevisao': {
+                url: BACKEND + "/proposicaos/:ProposicaoId/revisaoMerito/:RevisaoId/anexo",
+                method: 'DELETE',
+                isArray: false
+            },
+            'removeRevisao': {
+                url: BACKEND + "/proposicaos/:ProposicaoId/revisaoMerito/:RevisaoId",
+                method: 'DELETE',
+                isArray: false
+            },
             'salvarRevisao': {
                 url: BACKEND + "/proposicaos/:ProposicaoId/revisaoMerito",
                 method: 'POST',
                 isArray: false
+            },
+            'buscaAutor': {
+                url: BACKEND + "/proposicaos/autores",
+                method: 'GET',
+                isArray: true
             },
             'listaAreaMerito': {
                 url: BACKEND + "/areamerito",
@@ -96,13 +116,18 @@ angular.module('sislegisapp').factory('ProposicaoResource', function ($resource,
                 method: 'GET',
                 isArray: true
             },
+            'listDocRelated': {
+                url: BACKEND + "/proposicaos/:ProposicaoId/docrelated/:type",
+                method: 'GET',
+                isArray: true
+            },
             'salvaNota': {
                 url: BACKEND + "/proposicaos/:ProposicaoId/notatecnica",
                 method: 'POST',
                 isArray: false
             },
-             'removeNota': {
-                url: BACKEND + "/proposicaos/:ProposicaoId/notatecnica/:notaId",
+            'removeDoc': {
+                url: BACKEND + "/proposicaos/:ProposicaoId/docrelated/:type/:docId",
                 method: 'DELETE',
                 isArray: false
             },
