@@ -213,11 +213,27 @@ angular.module('sislegisapp')
                 if ($scope.lastSaveTimer != null) {
                     $timeout.cancel($scope.lastSaveTimer);
                 }
+                switch (newValue) {
+                    case "EMANALISE":
+                        $scope.proposicao.foiEncaminhada = new Date().getTime();
+                        break;
+                    case "ANALISADA":
+                        $scope.proposicao.foiAnalisada = new Date().getTime();
+                        break;
+                    case "ADESPACHAR":
+                        $scope.proposicao.foiRevisada = new Date().getTime();
+                        break;
+                    case "DESPACHADA":
+                        $scope.proposicao.foiDespachada = new Date().getTime();
+                        break;
 
-                $scope.save($scope.proposicao, "Estado alterado", "Falhou ao alterar estado").then(function (data) {
-                    console.log(data, $scope.estadoHandler);
+                    default:
+                        break;
+                }
                 
-                    // $scope.$watch('proposicao.estado', $scope.trataAlteracaoDeEstado, true);
+                $scope.save($scope.proposicao, "Estado alterado", "Falhou ao alterar estado").then(function (data) {
+                    console.log(data, $scope.estadoHandler);                
+                    
                 }, function () {
 
 

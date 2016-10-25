@@ -171,21 +171,21 @@
                             <button ng-if="Auth.isAspar(true) && item.estado=='FORADEPAUTA'" type="button" class="btn btn-default btn-sm" title="Marcar análise SAL"
                             ng-click="setaEstado(item,'EMANALISE')"> <i class="fa fa-mail-forward"></i> Marcar para análise da SAL
                             </button>
-                            <button ng-if="Auth.isAspar(true) && item.estado=='DESPACHADA'" type="button" class="btn btn-default btn-sm" title="Fazer nova avaliação"
+                            <button ng-if="Auth.isAspar(true) && item.estado=='DESPACHADA'" type="button" class="btn btn-default btn-sm" title="Fazer nova avaliação, despachada desde {{item.foiDespachada|date:'shortDate'}}"
                             ng-click="setaEstado(item,'EMANALISE')">
                                 <i class="fa fa-mail-forward"></i> Fazer nova avaliação
                             </button>
-                            <button ng-if="Auth.isEquipe(true) && item.estado=='EMANALISE'" type="button" class="btn btn-default btn-sm" title="Enviar para revisão"
+                            <button ng-if="Auth.isEquipe(true) && item.estado=='EMANALISE'" type="button" class="btn btn-default btn-sm" title="Enviar para revisão, em análise desde {{item.foiEncaminhada|date:'shortDate'}}"
                             ng-click="setaEstado(item,'ANALISADA')">
                                 <i class="fa fa-check-circle-o"></i> Enviar para revisão
                             </button>
-                            <button ng-if="Auth.isDiretor(true) && item.estado=='ANALISADA'" type="button" class="btn btn-default btn-sm" title="Enviar para despacho do Secretário"
+                            <button ng-if="Auth.isDiretor(true) && item.estado=='ANALISADA'" type="button" class="btn btn-default btn-sm" title="Enviar para despacho do Secretário, em revisão desde {{item.foiAnalisada|date:'shortDate'}}""
                             ng-click="setaEstado(item,'ADESPACHAR')">
                                 <i class="fa fa-check-circle"></i> Enviar para despacho do Secretário
                             </button>
 
 
-                            <button ng-if="Auth.isSecretario(true) && item.estado=='ADESPACHAR'" type="button" class="btn btn-default btn-sm" title="Despachar"
+                            <button ng-if="Auth.isSecretario(true) && item.estado=='ADESPACHAR'" type="button" class="btn btn-default btn-sm" title="Despachar, em despacho desde {{item.foiRevisada|date:'shortDate'}}"
                             ng-click="setaEstado(item,'DESPACHADA')">
                                 <i class="fa fa-paper-plane"></i> Despachar
                             </button>
