@@ -240,8 +240,7 @@
                                 <h3 class="box-title"><a href=""  data-widget="collapse" target="_blank"  title="{{item.sigla}} - {{item.estado}}">{{item.sigla}}</a></h3>
                                 <div style="cursor:default" class="time" ng-class="{'text-muted':item.pautaComissaoAtual.pautaReuniaoComissao.data<today}"
                                 ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.data>getSunday()" title="Pautada para {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'fullDate'}}">
-                                    <i class="fa fa-clock-o"></i> {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'EEE,
-                                    H:mm'}}
+                                    <i class="fa fa-clock-o"></i> {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'EEE, H:mm'}} 
                                 </div>
                             </div>
 
