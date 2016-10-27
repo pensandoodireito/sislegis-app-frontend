@@ -4,9 +4,9 @@ angular.module('sislegisapp')
     .controller('ProposicaoItemController', function ($scope, $window, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
         ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
         EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
-        TipoEncaminhamentoResource, Auth, TagResource, $q, BACKEND) {
+        TipoEncaminhamentoResource, Auth, TagResource, $q,$sce, BACKEND) {
 
-
+        
         $scope.baixarTemplate = function (item, tipo) {
 
             var back = BACKEND.substr(0, BACKEND.length - 5);
@@ -245,7 +245,10 @@ angular.module('sislegisapp')
         };
         $scope.estadoHandler = $scope.$watch('proposicao.estado', $scope.trataAlteracaoDeEstado, true);
 
-
+        $scope.getHTML=function(valor){//TODO virar diretiva
+            var a= $sce.trustAsHtml(valor.replace(/\n\r?/g, '<br />'));
+            return a;
+        }
         $scope.getPosicionamentos = function (current) {
             var copy = $scope.posicionamentos.slice(0);
             if (current) {
@@ -849,9 +852,10 @@ angular.module('sislegisapp')
             $scope.posicionamentoFiltro=$scope.posicionamentoFiltro.concat(data);
          });
          $scope.comissoes=[];
-        //  $scope.comissoesCache=;
+        
          $scope.updateComissoes = function () {
              var origemSelecionada = $scope.filtro.origem;
+             $scope.filtro.comissao=null;
              switch (origemSelecionada) {
                  case 'SENADO':
                      $scope.comissoes = ComissaoService.getComissoesSenado();
@@ -861,6 +865,7 @@ angular.module('sislegisapp')
                      $scope.comissoes = ComissaoService.getComissoesCamara();
                      return;
                  default:
+                 
                      $scope.comissoes = [];
                      return;
 
@@ -929,7 +934,37 @@ angular.module('sislegisapp')
 
             }
         });
+        $scope.desmarcarAtencaoEspecial=function(item){
+            $rootScope.savingItem = item;
+             $rootScope.inactivateSpinner = true;
+            
+                
+            ProposicaoResource.removerAtencaoEspecial({id:item.id},function(){
+                $rootScope.inactivateSpinner = false;
+                item.comAtencaoEspecial=null;
+            }, function(){
+                $rootScope.inactivateSpinner = false;
+                toaster.pop('error', 'Falha ao alterar o status da proposicao'); 
+            });
+        }
+        $scope.marcarAtencaoEspecial = function(item){
+             var modalInstance = $modal.open({
+                templateUrl: 'views/modal-encaminhamento-despacho-ministro.html',
+                controller: 'ModalEncaminhamentoDespachoMinistroController',
+                size: 'md',
+                resolve: {
+                    proposicao: function () {
+                        return item;
+                    }
+                }
+            });
 
+            modalInstance.result.then(function () {                
+                item.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ ProposicaoId: item.id });
+                item.comAtencaoEspecial=1;
+            }, function () {
+            });
+        }
         $scope.despachoPresencial = function (item) {
 
             var modalInstance = $modal.open({
@@ -1022,6 +1057,7 @@ angular.module('sislegisapp')
                     isFavorita: $scope.filtro.isFavorita,
                     estado: $scope.filtro.estado,
                     inseridaApos: getDateStr(),
+                    comAtencaoEspecial:$scope.filtro.comAtencaoEspecial,
                     comissao: $scope.filtro.comissao?$scope.filtro.comissao.sigla.trim():null,
                     macrotema: $scope.filtro.macrotema ? $scope.filtro.macrotema.tag : null,
                     idEquipe: $scope.filtro.equipe ? $scope.filtro.equipe.id : null,
@@ -1400,11 +1436,15 @@ angular.module('sislegisapp')
 
 
             }).controller('ModalComentariosController',
-                function ($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource,
+                function ($scope, $http, $filter, $sce,$routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource,
                     ProposicaoResource, UsuarioResource, ComentarioService) {
 
                     var self = this;
 
+$scope.getHTML=function(valor){//TODO virar diretiva
+            var a= $sce.trustAsHtml(valor.replace(/\n\r?/g, '<br />'));
+            return a;
+        }
                     $scope.proposicao = proposicao || new ProposicaoResource();
                     $scope.comentario = $scope.comentario || new ComentarioResource();
 
@@ -1577,6 +1617,73 @@ angular.module('sislegisapp')
 
                     $scope.performSearch();
                 }).controller(
+                    'ModalEncaminhamentoDespachoMinistroController',
+                    function ($scope, $rootScope, $http, $filter, $routeParams, $location, $modalInstance, toaster, proposicao,
+                        TipoEncaminhamentoResource, ProposicaoResource, EncaminhamentoProposicaoResource, EncaminhamentoProposicaoHttp, UsuarioResource,
+                        ComentarioResource, BACKEND, $confirm) {
+
+                        var self = this;
+                        $scope.disabled = false;
+                        $scope.$location = $location;
+
+                        $scope.proposicao = proposicao || new ProposicaoResource();
+                        $scope.tipoEncaminhamento = new TipoEncaminhamentoResource();
+                        $scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
+                                               
+                       
+                        $scope.ok = function () {
+                            $modalInstance.close($scope.proposicao.listaEncaminhamentoProposicao);
+                        };
+
+                        $scope.cancel = function () {
+                            $modalInstance.dismiss('cancel');
+                        };
+
+                        $scope.isClean = function () {
+                            return angular.equals(self.original, $scope.encaminhamentoProposicao);
+                        };
+
+                        $scope.save = function () {
+
+                            $scope.encaminhamentoProposicao.proposicao = new ProposicaoResource();
+                            $scope.encaminhamentoProposicao.proposicao.id = $scope.proposicao.id;
+                            if ($scope.encaminhamentoProposicao.dataHoraLimite != null) {
+                                $scope.encaminhamentoProposicao.dataHoraLimite = $scope.encaminhamentoProposicao.dataHoraLimite
+                                    .getTime();
+                            }
+
+                            var successCallback = function (data, responseHeaders) {
+                                $modalInstance.close($scope.encaminhamentoProposicao);
+
+                                toaster.pop('success', 'Marcada para atenção especial');
+
+                            };
+                            var errorCallback = function () {
+                                toaster.pop('error', 'Falha ao realizar operação.');
+                            };
+                            EncaminhamentoProposicaoResource.saveAtencaoEspecial($scope.encaminhamentoProposicao, successCallback, errorCallback);
+                        };
+
+                        // CALENDARIO
+                        $scope.setCalendar = function () {
+                            $scope.openCalendar = function ($event) {
+                                $event.preventDefault();
+                                $event.stopPropagation();
+
+                                $scope.opened = true;
+                            };
+
+                            $scope.dateOptions = {
+                                formatYear: 'yy',
+                                startingDay: 1
+                            };
+
+                            $scope.format = 'dd/MM/yyyy';
+                        }
+
+                        $scope.setCalendar();
+
+                    }).controller(
                     'ModalEncaminhamentoDespachoController',
                     function ($scope, $rootScope, $http, $filter, $routeParams, $location, $modalInstance, toaster, proposicao,
                         TipoEncaminhamentoResource, ProposicaoResource, EncaminhamentoProposicaoResource, EncaminhamentoProposicaoHttp, UsuarioResource,
@@ -1656,4 +1763,4 @@ angular.module('sislegisapp')
 
                         $scope.setCalendar();
 
-                    });;
+                    });

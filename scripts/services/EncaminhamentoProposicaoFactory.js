@@ -13,6 +13,11 @@ angular.module('sislegisapp').factory('EncaminhamentoProposicaoResource', functi
 		'update' : {
 			method : 'PUT'
 		},
+        'saveAtencaoEspecial':{
+            method : 'POST',
+            url : BACKEND + "/encaminhamentoProposicao/marcaAtencaoEspecial",
+            isArray : false  
+        },
         'saveDespachoPresencial':{
             method : 'POST',
             url : BACKEND + "/encaminhamentoProposicao/despachoPresencial",

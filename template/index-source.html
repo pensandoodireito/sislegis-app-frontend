@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="lib/admin-lte/dist/css/AdminLTE.min.css" />
     <link rel="stylesheet" href="lib/admin-lte/dist/css/skins/skin-blue.min.css" />
     <link rel="stylesheet" href="lib/components-font-awesome/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="lib/ionicons/css/ionicons.min.css"/>    
+    <link rel="stylesheet" href="lib/ionicons/css/ionicons.min.css" />
     <link rel="stylesheet" href="styles/sislegis/css/sislegis.css" />
     <link href="lib/angularjs-toaster/toaster.css" rel="stylesheet" media="screen" />
     <link rel="stylesheet" href="lib/ng-tags-input/ng-tags-input.min.css" />
@@ -53,30 +53,36 @@
         </header>
         <aside class="main-sidebar">
             <section class="sidebar">
-                <form action="#" method="get" class="sidebar-form">
+                <!--<form action="#" method="get" class="sidebar-form">
                     <div class="input-group">
                         <input type="text" name="q" class="form-control" placeholder="Search...">
                         <span class="input-group-btn">
                             <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
                         </span>
                     </div>
-                </form>
-                <ul class="sidebar-menu" ng-controller="GlobalCtrl">
+                </form>-->
+                <ul class="sidebar-menu" ng-controller="GlobalCtrl" ng-cloak ng-show="auth.isMinistro()">
+                    <li class="header">MENU </li>
+                    <li ng-class="{'active':!itemMenu || itemMenu=='dashboard'}"> <a href="#/Dashboard" ng-click="itemMenu='dashboard'"><i class="fa fa-dashboard"></i> <span>Painel de controle</span></a></li>
+                    <li ng-class="{'active':itemMenu=='despachoministro'}"> <a href="#/Proposicao/despachoministro" ng-click="itemMenu='despachoministro'"><i class="fa fa-send"></i> <span>Despachos SAL</span></a></li>
+                    <li ng-show="auth.loggedIn"><a href="#" ng-click="logout()"><i class="fa fa-sign-out"></i><span>Logout</span></a></li>
+                </ul>
+                <ul class="sidebar-menu" ng-controller="GlobalCtrl" ng-cloak ng-show="!auth.isMinistro() || auth.isAdmin()">
                     <li class="header">MENU </li>
 
-                    <li ng-class="{'active':!itemMenu || itemMenu=='dashboard'}"> <a href="#/Dashboard"  ng-click="itemMenu='dashboard'"><i class="fa fa-dashboard"></i> <span>Painel de controle</span></a></li>
-                    <li ng-class="{'active':itemMenu=='despachos'}" ng-show="auth.isSecretario()" > <a href="#/Proposicao/despachar"  ng-click="itemMenu='despachos'"><i class="fa fa-send"></i> <span>Despachos</span></a></li>
+                    <li ng-class="{'active':!itemMenu || itemMenu=='dashboard'}"> <a href="#/Dashboard" ng-click="itemMenu='dashboard'"><i class="fa fa-dashboard"></i> <span>Painel de controle</span></a></li>
+                    <li ng-class="{'active':itemMenu=='despachos'}" ng-show="auth.isSecretario()"> <a href="#/Proposicao/despachar" ng-click="itemMenu='despachos'"><i class="fa fa-send"></i> <span>Despachos</span></a></li>
                     <li ng-class="{'active':itemMenu=='proposicao'}"><a href="#/Proposicao/consultar" ng-click="itemMenu='proposicao'"><i class="fa fa-files-o"></i><span>Proposições</span></a></li>
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-book"></i> <span>Relatórios</span> <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="http://KEYCLOAK_SERVER/sislegis/relatorio" target="_blank"><i class="fa fa-book"></i><span> Despachadas</span></a></li>
+                            <li><a href="http://API_SERVER/sislegis/relatorio" target="_blank"><i class="fa fa-book"></i><span> Despachadas</span></a></li>
                         </ul>
                     </li>
 
-                    <li class="treeview">
+                    <li class="treeview" ng-cloak>
                         <a href="#">
                             <i class="fa fa-plus"></i> <span>Cadastros</span> <i class="fa fa-angle-left pull-right"></i>
                         </a>
@@ -133,6 +139,8 @@
     <script src="lib/angular-confirm-modal/angular-confirm.min.js"></script>
     <script src="lib/admin-lte/dist/js/app.min.js"></script>
     <script src="lib/off-bower/pace.min.js"></script>
+    <script src="lib/angular-sanitize/angular-sanitize.js"></script>
+    
 
     <script src="scripts/app.js"></script>
     <script src="scripts/offcanvas.js"></script>
@@ -150,9 +158,9 @@
     <script src="scripts/controllers/gerenciarReuniaoController.js"></script>
     <script src="scripts/controllers/proposicaoController.js"></script>
     <script src="scripts/controllers/modalBuscarProposicaoController.js"></script>
-    <script src="scripts/controllers/modalAddProposicaoController.js"></script>    
-    
-    
+    <script src="scripts/controllers/modalAddProposicaoController.js"></script>
+
+
 
     <script src="scripts/controllers/SislegisControllers.js"></script>
 
@@ -235,7 +243,7 @@
     <script src="scripts/services/ElaboracaoNormativaConsultaFactory.js"></script>
     <script src="scripts/services/StatusSidofFactory.js"></script>
     <script src="scripts/services/locationParser.js"></script>
-    
+
     <script src="lib/admin-lte/plugins/chartjs/Chart.min.js"></script>
     <!-- endbuild -->
 
@@ -243,4 +251,4 @@
 
 </body>
 
-</html>
+</html>1

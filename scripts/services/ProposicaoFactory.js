@@ -76,6 +76,11 @@ angular.module('sislegisapp').factory('ProposicaoResource', function ($resource,
                 url: BACKEND + "/proposicaos/alterarPosicionamento",
                 method: 'POST'
             },
+            'removerAtencaoEspecial': {
+                url: BACKEND + "/proposicaos/:ProposicaoId/desmarcaAtencaoEspecial",
+                method: 'POST',
+                isArray: false
+            },
             'buscarPautas': {
                 url: BACKEND + "/proposicaos/:ProposicaoId/pautas",
                 method: 'GET',

@@ -14,7 +14,8 @@ var module = angular.module('sislegisapp',
         'checklist-model',
         'angularjs-dropdown-multiselect',
         'infinite-scroll',
-        'ui.mask'
+        'ui.mask',
+        'ngSanitize'
     ]);
 
 module.constant('BACKEND', 'http://BACKEND_SERVER/sislegis/rest');
@@ -38,6 +39,9 @@ var auth = {
     isAspar: function (ascendente) {
         return this.hasRole('ASPAR') || (ascendente && this.isEquipe(true));
 
+    },
+    isMinistro: function (ascendente) {
+        return this.hasRole('MINISTRO');
     },
     hasRole: function (role) {
         if (this.me != null && this.me.papeis != null) {
@@ -153,6 +157,15 @@ module.config(['$routeProvider', function ($routeProvider) {
                         configConsulta: function ($route) {
 
                             return {botoes:'GENERICO'};
+
+                        }
+                    }
+        })
+         .when('/Proposicao/despachoministro', { templateUrl: 'views/Proposicao/consultar-proposicao.html', controller: 'ConsultaProposicoesController',
+                resolve: {
+                        configConsulta: function ($route) {
+
+                            return {botoes:'MINISTRO'};
 
                         }
                     }

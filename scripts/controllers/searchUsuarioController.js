@@ -1,6 +1,6 @@
 
 
-angular.module('sislegisapp').controller('SearchUsuarioController', function ($scope, $http, UsuarioResource, EquipeResource, Auth) {
+angular.module('sislegisapp').controller('SearchUsuarioController', function ($scope, $http, UsuarioResource, EquipeResource, Auth, $confirm) {
     $scope.auth = Auth;
 
     $scope.search = {};
@@ -40,37 +40,37 @@ angular.module('sislegisapp').controller('SearchUsuarioController', function ($s
                 break;
             }
         }
+
+        var updateIt = function () {
+            UsuarioResource.update(user, function (ok) {
+
+            }, function (error) {
+                console.log("error", error);
+            })
+        }
         if (removing == false) {
             user.papeis.push(role);
-        }
-        UsuarioResource.update(user, function (ok) {
+        } else {
+            if (role == "ADMIN" && user.email == $scope.auth.me.email) {
+                $confirm({ text: 'Você está se removendo da função de administrador. Você tem certeza que deseja executar essa ação?', title: 'Remover papel admin', ok: 'Sim', cancel: 'Não' })
+                    .then(updateIt, function () {
+                        user.papeis.push("ADMIN");
+                    });
+                return;
 
-        }, function (error) {
-            console.log("error", error);
-        })
+            }
+        }
+        updateIt();
+
+
 
     }
 
-    // $scope.buscarPorEquipe = function () {
-    //     if ($scope.equipeSelecionada) {
-    //         angular.forEach($scope.listaEquipe, function (equipe) {
-    //             if (equipe.id == $scope.equipeSelecionada) {
-    //                 var listaUsuarios = [];
-    //                 angular.forEach(equipe.listaEquipeUsuario, function (value) {
-    //                     listaUsuarios.push(value.usuario);
-    //                 });
-    //                 $scope.searchResults = listaUsuarios;
-    //                 $scope.numberOfPages();
-    //             }
-    //         });
-    //     } else {
-    //         $scope.performSearch();
-    //     }
-    // }
+
 
     $scope.performSearch = function () {
         $scope.searchResults = UsuarioResource.queryAll(function () {
-            console.log($scope.searchResults)            
+            console.log($scope.searchResults)
             $scope.numberOfPages();
         });
     };
