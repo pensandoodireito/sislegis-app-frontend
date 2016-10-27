@@ -37,9 +37,11 @@
                                     <span class="ml-lg">
 										Data: {{item.dataCriacao | date:'dd/MM/yyyy'}}
 										<span class="ml-lg">
-											<a ng-click="openUpdate(item)"> Alterar</a>
+											<a ng-click="openUpdate(item)" ng-show="canUpdate(item)"> Alterar</a>
 											|
 											<a ng-click="ocultar(item)">Ocultar</a>
+                                            |
+                                            <a ng-click="remove(item)" ng-show="canUpdate(item)"> Remover</a>
 										</span>
                                     </span>
                                 </p>

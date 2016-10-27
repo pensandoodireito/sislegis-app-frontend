@@ -287,8 +287,7 @@ angular.module('sislegisapp')
             var deferred = $q.defer();
             $scope.validaPosicionamento(item, 'posicionamentoSupar');
             $scope.validaPosicionamento(item.posicionamentoAtual, 'posicionamento');
-
-            //$scope.validaEquipe(item);
+            $scope.validaEquipe(item);
 
 
             if (!msgSucesso) {
@@ -316,14 +315,23 @@ angular.module('sislegisapp')
 
 
         $scope.incluirComentario = function (item) {
+            
             var comentario = new ComentarioResource();
             comentario.descricao = item.comentarioTmp;
             item.comentarioTmp = null;
 
             var successCallback = function (data, responseHeaders) {
-                item.listaComentario.push(data);
-                item.totalComentarios++;
-                toaster.pop('success', 'Comentário inserido com sucesso');
+                if (item.listaComentario == null) {
+                    $scope.populaComentario(item, function (prop) {
+                        item.listaComentario = prop.listaComentario;
+                        item.totalComentarios=prop.listaComentario.length;
+                        toaster.pop('success', 'Comentário inserido com sucesso.');
+                    });
+                } else {
+                    item.listaComentario.push(data);
+                    item.totalComentarios++;
+                    toaster.pop('success', 'Comentário inserido com sucesso');
+                }
             };
             var errorCallback = function () {
                 toaster.pop('error', 'Falha ao realizar operação.');
@@ -1437,17 +1445,20 @@ angular.module('sislegisapp')
 
             }).controller('ModalComentariosController',
                 function ($scope, $http, $filter, $sce,$routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource,
-                    ProposicaoResource, UsuarioResource, ComentarioService) {
-
+                    ProposicaoResource, UsuarioResource, ComentarioService,Auth,$confirm) {
+                    $scope.auth = Auth;
                     var self = this;
-
-$scope.getHTML=function(valor){//TODO virar diretiva
-            var a= $sce.trustAsHtml(valor.replace(/\n\r?/g, '<br />'));
-            return a;
-        }
+                   
+                    $scope.getHTML=function(valor){//TODO virar diretiva
+                                var a= $sce.trustAsHtml(valor.replace(/\n\r?/g, '<br />'));
+                                return a;
+                            }
                     $scope.proposicao = proposicao || new ProposicaoResource();
                     $scope.comentario = $scope.comentario || new ComentarioResource();
-
+                    $scope.canUpdate=function(comentario){
+                        
+                        return $scope.auth.isAdmin() || comentario.autor.email==$scope.auth.me.email;
+                    }
                     $scope.ok = function () {
                         $modalInstance.close($scope.proposicao.listaComentario);
                     };
@@ -1463,15 +1474,37 @@ $scope.getHTML=function(valor){//TODO virar diretiva
                     $scope.openUpdate = function (item) {
                         $scope.comentario = item;
                     };
+                    $scope.remove = function (item) {
+                        var removeIt = function () {
+                            ComentarioResource.remove({ ComentarioId: item.id }, function () {
+                                var index = $scope.proposicao.listaComentario.indexOf(item);
+                                if (index > -1) {
+                                    $scope.proposicao.listaComentario.splice(index, 1);
+                                    $scope.proposicao.totalComentarios--;
+                                }
+                            },
+                                function (error) {
+                                    toaster.pop('error', 'Falha ao realizar operação.');
+                                });
+                        }
+                        $confirm({ text: 'Deseja realmente apagar esse comentário?', title: 'Apagar comentário', ok: 'Sim', cancel: 'Não' })
+                            .then(removeIt);
 
+                    }
                     $scope.update = function () {
                         var successCallback = function () {
                             $scope.comentario = new ComentarioResource();
                             toaster.pop('success', 'Comentário atualizado com sucesso');
                         };
-                        var errorCallback = function () {
-                            toaster.pop('error', 'Falha ao realizar operação.');
+                        var errorCallback = function (erro) {
+                            if (erro && erro.status == 403) {
+                                toaster.pop('error', 'Você não tem permissão para alterar esse comentário.');
+                            } else {
+                                toaster.pop('error', 'Falha ao realizar operação.');
+                            }
                         };
+                        console.log($scope.comentario)
+                        $scope.comentario.proposicao = { id: $scope.comentario.proposicao.id }
                         ComentarioResource.update($scope.comentario, successCallback, errorCallback);
                     };
 
