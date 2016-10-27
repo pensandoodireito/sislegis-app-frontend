@@ -727,6 +727,24 @@ angular.module('sislegisapp')
         ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
         EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
         TipoEncaminhamentoResource, Auth, TagResource, UploadService, $q, BACKEND, configConsulta, $sce,ComissaoService) {
+        
+        $scope.setCalendar = function () {
+            $scope.openCalendar = function ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+
+                $scope.opened = true;
+            };
+
+            $scope.dateOptions = {
+                formatYear: 'yy',
+                startingDay: 1
+            };
+
+            $scope.format = 'dd/MM/yyyy';
+        }
+
+        $scope.setCalendar();
         $scope.getAuthorization = function () {
             return 'Bearer ' + Auth.authz.token;
         }
@@ -838,7 +856,6 @@ angular.module('sislegisapp')
                  case 'SENADO':
                      $scope.comissoes = ComissaoService.getComissoesSenado();
                      return;
-
 
                  case 'CAMARA':
                      $scope.comissoes = ComissaoService.getComissoesCamara();
@@ -988,6 +1005,13 @@ angular.module('sislegisapp')
                 $rootScope.inactivateSpinner = false;
                 $scope.infiniteScroll.busy = false;
             };
+            var getDateStr=function(data){
+                if($scope.filtro.inseridaApos==null){
+                    return null;
+                }
+                var d = $scope.filtro.inseridaApos;
+                return d.getDate()+"-"+(d.getMonth()+1)+"-"+d.getFullYear();
+            }
             var filtroAtual =
                 {
                     sigla: $scope.filtro.sigla,
@@ -997,6 +1021,7 @@ angular.module('sislegisapp')
                     origem: $scope.filtro.origem,
                     isFavorita: $scope.filtro.isFavorita,
                     estado: $scope.filtro.estado,
+                    inseridaApos: getDateStr(),
                     comissao: $scope.filtro.comissao?$scope.filtro.comissao.sigla.trim():null,
                     macrotema: $scope.filtro.macrotema ? $scope.filtro.macrotema.tag : null,
                     idEquipe: $scope.filtro.equipe ? $scope.filtro.equipe.id : null,

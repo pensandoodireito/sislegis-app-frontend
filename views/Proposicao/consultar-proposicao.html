@@ -124,6 +124,7 @@
                                 </div>
                                 <div class="col-sm-3 col-xs-6">
                                     <label>Por autor:</label>
+
                                     <input typeahead-editable="true" ng-model="filtro.autor" type="text" placeholder="Filtro por autor" typeahead-min-length="2"
                                     typeahead="entrada.nome for entrada in  getAutores($viewValue) | limitTo:8" ng-model-options="{ debounce: 500 }"
                                     typeahead-on-select="filtrarConsulta()" class="form-control">
@@ -138,7 +139,20 @@
                                     typeahead-on-select="consultarProposicoes()" class="form-control">
 
                                 </div>
+                                <div class="col-sm-3 col-xs-6">
 
+
+                                    <div class="input-group date">
+                                        <label>Proposições inseridas após:</label>
+                                        <div class="input-group width-grid-2">
+                                            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="filtro.inseridaApos" date-type="string" is-open="opened"
+                                            min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Fechar"
+                                            readonly /> <span class="input-group-btn">
+							             <button type="button" class="btn btn-default" ng-click="openCalendar($event)">
+								                <i class="glyphicon glyphicon-calendar"></i></button></span>
+                                        </div>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
@@ -179,78 +193,89 @@
                             ng-click="setaEstado(item,'ANALISADA')">
                                 <i class="fa fa-check-circle-o"></i> Enviar para revisão
                             </button>
-                            <button ng-if="Auth.isDiretor(true) && item.estado=='ANALISADA'" type="button" class="btn btn-default btn-sm" title="Enviar para despacho do Secretário, em revisão desde {{item.foiAnalisada|date:'shortDate'}}""
-                            ng-click="setaEstado(item,'ADESPACHAR')">
+                            <button ng-if="Auth.isDiretor(true) && item.estado=='ANALISADA'" type="button" class="btn btn-default btn-sm" title="Enviar para despacho do Secretário, em revisão desde {{item.foiAnalisada|date:'shortDate'}}" 
+                            ng-click="setaEstado(item, 'ADESPACHAR')">
                                 <i class="fa fa-check-circle"></i> Enviar para despacho do Secretário
                             </button>
 
 
-                            <button ng-if="Auth.isSecretario(true) && item.estado=='ADESPACHAR'" type="button" class="btn btn-default btn-sm" title="Despachar, em despacho desde {{item.foiRevisada|date:'shortDate'}}"
-                            ng-click="setaEstado(item,'DESPACHADA')">
-                                <i class="fa fa-paper-plane"></i> Despachar
+                            <button ng-if="Auth.isSecretario(true) && item.estado=='ADESPACHAR' " type="button" class="btn btn-default btn-sm" title="Despachar, em despacho desde {{item.foiRevisada|date:'shortDate'}} "
+                            ng-click="setaEstado(item, 'DESPACHADA') ">
+                                <i class="fa fa-paper-plane "></i> Despachar
                             </button>
-                            <button ng-if="Auth.isEquipe(true)  && item.estado=='ADESPACHAR_PRESENCA'" type="button" class="btn btn-default btn-sm" title="Re enviar para despacho do secretário"
-                            ng-click="setaEstado(item,'ADESPACHAR')">
-                                <i class="fa fa-check-circle"></i> Enviar para despacho do Secretário
+                            <button ng-if="Auth.isEquipe(true) && item.estado=='ADESPACHAR_PRESENCA' " type="button
+                            " class="btn btn-default btn-sm " title="Re enviar para despacho do secretário"
+                            ng-click="setaEstado(item, 'ADESPACHAR') ">
+                                <i class="fa fa-check-circle "></i> Enviar para despacho do Secretário
                             </button>
-                            <button ng-if="Auth.isEquipe(true)  && item.estado=='ADESPACHAR_PRESENCA'" type="button" class="btn btn-default btn-sm" title="Enviar para re análise"
-                            ng-click="setaEstado(item,'EMANALISE')">
-                                <i class="fa fa-retweet"></i> Nova análise pelo técnico
-                            </button>
-
-                            <button ng-if="Auth.isDiretor(true) && (item.estado=='ANALISADA' || item.estado=='ADESPACHAR')" type="button" class="btn btn-default btn-sm"
-                            title="Enviar para re análise" ng-click="setaEstado(item,'EMANALISE')">
-                                <i class="fa fa-retweet"></i> Nova análise pelo técnico
+                            <button ng-if="Auth.isEquipe(true) && item.estado=='ADESPACHAR_PRESENCA' " type="button
+                            " class="btn btn-default btn-sm " title="Enviar para re análise "
+                            ng-click="setaEstado(item, 'EMANALISE') ">
+                                <i class="fa fa-retweet "></i> Nova análise pelo técnico
                             </button>
 
+                            <button ng-if="Auth.isDiretor(true) && (item.estado=='ANALISADA' || item.estado=='ADESPACHAR'
+                            ) " type="button " class="btn btn-default btn-sm "
+                            title="Enviar para re análise " ng-click="setaEstado(item, 'EMANALISE') ">
+                                <i class="fa fa-retweet "></i> Nova análise pelo técnico
+                            </button>
 
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+
+                            <button type="button " class="btn btn-box-tool " data-widget="collapse "><i class="fa fa-plus "></i>
                             </button>
                         </div>
-                        <div class="box-tools pull-right" ng-if="Auth.isSecretario(true) && configConsulta.botoes=='DESPACHO'" ng-hide="inactivateSpinner==true && item===savingItem">
+                        <div class="box-tools pull-right " ng-if="Auth.isSecretario(true) && configConsulta.botoes=='DESPACHO'
+                            " ng-hide="inactivateSpinner==true && item===savingItem ">
 
 
-                            <button ng-if="item.estado=='EMANALISE'" type="button" class="btn btn-default btn-sm" title="Desfazer" ng-click="setaEstado(item,'ADESPACHAR')">
-                                <i class="fa fa-undo"></i> Desfazer
+                            <button ng-if="item.estado=='EMANALISE' " type="button " class="btn btn-default btn-sm
+                            " title="Desfazer " ng-click="setaEstado(item, 'ADESPACHAR') ">
+                                <i class="fa fa-undo "></i> Desfazer
                             </button>
 
-                            <button ng-if="item.estado=='DESPACHADA'" type="button" class="btn btn-default btn-sm" title="Desfazer" ng-click="setaEstado(item,'ADESPACHAR')">
-                                <i class="fa fa-undo"></i> Desfazer
+                            <button ng-if="item.estado=='DESPACHADA' " type="button " class="btn btn-default btn-sm
+                            " title="Desfazer " ng-click="setaEstado(item, 'ADESPACHAR') ">
+                                <i class="fa fa-undo "></i> Desfazer
                             </button>
 
-                            <button ng-if=" item.estado=='ADESPACHAR'" type="button" class="btn btn-success btn-sm" title="Despachar" ng-click="setaEstado(item,'DESPACHADA')">
-                                <i class="fa fa-paper-plane"></i> Despachar
+                            <button ng-if=" item.estado=='ADESPACHAR' " type="button " class="btn btn-success btn-sm
+                            " title="Despachar " ng-click="setaEstado(item, 'DESPACHADA') ">
+                                <i class="fa fa-paper-plane "></i> Despachar
                             </button>
-                            <button ng-if="item.estado=='ADESPACHAR'" type="button" class="btn btn-info btn-sm" title="Despachar com técnico" ng-click="despachoPresencial(item)">
-                                <i class="fa fa-user"></i> Despacho presencial
+                            <button ng-if="item.estado=='ADESPACHAR' " type="button " class="btn btn-info btn-sm
+                            " title="Despachar com técnico " ng-click="despachoPresencial(item) ">
+                                <i class="fa fa-user "></i> Despacho presencial
                             </button>
 
-                            <button ng-if="(item.estado=='ANALISADA' || item.estado=='ADESPACHAR')" type="button" class="btn btn-warning btn-sm" title="Enviar para re análise"
-                            ng-click="setaEstado(item,'EMANALISE')">
-                                <i class="fa fa-retweet"></i> Re-Analisar
+                            <button ng-if="(item.estado=='ANALISADA' || item.estado=='ADESPACHAR' ) " type="button
+                            " class="btn btn-warning btn-sm " title="Enviar para re análise "
+                            ng-click="setaEstado(item, 'EMANALISE') ">
+                                <i class="fa fa-retweet "></i> Re-Analisar
                             </button>
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                            <button type="button " class="btn btn-box-tool " data-widget="collapse "><i class="fa fa-plus "></i>
                             </button>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-6 col-md-3 col-lg-3">
-                                <i class="fa fa-star-o" ng-show="!item.favorita" ng-click="item.favorita=true;save(item)"></i>
-                                <i class="fa fa-star" style="color: orange" ng-show="item.favorita" ng-click="item.favorita=false;save(item)"></i>
+                        <div class="row ">
+                            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                                <i class="fa fa-star-o " ng-show="!item.favorita " ng-click="item.favorita=true;save(item) "></i>
+                                <i class="fa fa-star " style="color: orange " ng-show="item.favorita " ng-click="item.favorita=false;save(item) "></i>
 
-                                <h3 class="box-title"><a href=""  data-widget="collapse" target="_blank"  title="{{item.sigla}} - {{item.estado}}">{{item.sigla}}</a></h3>
-                                <div style="cursor:default" class="time" ng-class="{'text-muted':item.pautaComissaoAtual.pautaReuniaoComissao.data<today}"
+                                <h3 class="box-title "><a href=" "  data-widget="collapse " target="_blank "  title="{{item.sigla}}
+                            - {{item.estado}} ">{{item.sigla}}</a></h3>
+                                <div style="cursor:default " class="time " ng-class="{ 'text-muted':item.pautaComissaoAtual.pautaReuniaoComissao.data<today} "
                                 ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.data>getSunday()" title="Pautada para {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'fullDate'}}">
-                                    <i class="fa fa-clock-o"></i> {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'EEE, H:mm'}} 
-                                </div>
-                            </div>
+                                <i class="fa fa-clock-o"></i> {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'EEE,
+                                H:mm'}}
+                        </div>
+                    </div>
 
-                            <div class="col-sm-6 col-md-3 col-lg-3">
-                                <strong>Relator: </strong><span ng-if="item.pautaComissaoAtual.relator==null">Não identificado</span>{{item.pautaComissaoAtual.relator}}
-                            </div>
-                            <div class="col-sm-6 col-md-2 col-lg-2">
+                    <div class="col-sm-6 col-md-3 col-lg-3">
+                        <strong>Relator: </strong><span ng-if="item.pautaComissaoAtual.relator==null">Não identificado</span>{{item.pautaComissaoAtual.relator}}
+                    </div>
+                    <div class="col-sm-6 col-md-2 col-lg-2">
 
 
-                                <span class="label" ng-class="{'bg-gray':item.posicionamentoAtual==null,
+                        <span class="label" ng-class="{'bg-gray':item.posicionamentoAtual==null,
                                                 'label-danger':(item.posicionamentoAtual.posicionamento.nome.indexOf('Contrário')>-1),
                                                 'label-info':(item.posicionamentoAtual.posicionamento.nome.indexOf('Nada')>-1)||(item.posicionamentoAtual.posicionamento.nome.indexOf('Monitorar')>-1),
                                                 'label-success':item.posicionamentoAtual.posicionamento.nome.indexOf('Favorável')>-1
@@ -258,36 +283,36 @@
 
 
 
-                            </div>
-                        </div>
-                        <div class="row">
+                    </div>
+                </div>
+                <div class="row">
 
-                            <div class="col-sm-12 col-lg-12 onlyclosed">
-                                <blockquote>
-                                    <small ng-if="item.explicacao!=null" title="Explicação da SAL"> {{item.explicacao}}</small>
-                                    <small ng-if="item.explicacao==null" title="Ementa"> {{item.ementa}}</small>
-                                </blockquote>
-
-                            </div>
-
-                        </div>
+                    <div class="col-sm-12 col-lg-12 onlyclosed">
+                        <blockquote>
+                            <small ng-if="item.explicacao!=null" title="Explicação da SAL"> {{item.explicacao}}</small>
+                            <small ng-if="item.explicacao==null" title="Ementa"> {{item.ementa}}</small>
+                        </blockquote>
 
                     </div>
-                    <div class="box-body">
-                        <div ng-include="'views/Proposicao/proposicao_fragment.html'" ng-controller="ProposicaoItemController" onload="proposicao = item;">
-                        </div>
 
-                    </div>
-                    <div class="box-footer clearfix" title="{{item.sigla}} (inserida {{item.created| date:'shortDate'}}, atualizada {{item.updated| date:'shortDate'}})"></div>
                 </div>
 
-
+            </div>
+            <div class="box-body">
+                <div ng-include="'views/Proposicao/proposicao_fragment.html'" ng-controller="ProposicaoItemController" onload="proposicao = item;">
+                </div>
 
             </div>
-            <div class="alert alert-info " ng-show="infiniteScroll.full">
-                <i class="icon fa fa-info"></i> Todos registros carregados baseado no filtro atual
-            </div>
+            <div class="box-footer clearfix" title="{{item.sigla}} (inserida {{item.created| date:'shortDate'}}, atualizada {{item.updated| date:'shortDate'}})"></div>
         </div>
+
+
+
     </div>
+    <div class="alert alert-info " ng-show="infiniteScroll.full">
+        <i class="icon fa fa-info"></i> Todos registros carregados baseado no filtro atual
+    </div>
+</div>
+</div>
 </div>
 </div>
