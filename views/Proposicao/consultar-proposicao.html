@@ -41,8 +41,8 @@
                         <div class="row" role="form">
 
                             <div class="col-sm-12 col-md-2 col-lg-2 col-xs-12">
-                                <label>Por tipo/número/ano:</label>
-                                <input name="sigla" type="text" class="form-control" ng-model="filtro.sigla" placeholder="Filtrar pelo tipo/número/ano" ng-model-options="{ debounce: 1000 }">
+                                <label>Por sigla:</label>
+                                <input name="sigla" type="text" class="form-control" ng-model="filtro.sigla" placeholder="tipo número/ano" ng-model-options="{ debounce: 1000 }">
                             </div>
                             <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6">
                                 <label>Por casa legislativa:</label>
@@ -94,7 +94,7 @@
                             </div>
                             <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6">
                                 <label>Por responsável:</label>
-                                <input typeahead-editable="false" ng-model="filtro.responsavel" type="text" placeholder="Filtro por responsável" typeahead="user as user.nome for user in getUsuarios($viewValue, false)"
+                                <input typeahead-editable="false" ng-model="filtro.responsavel" type="text" placeholder="Nome do responsável" typeahead="user as user.nome for user in getUsuarios($viewValue, false)"
                                 ng-model-options="{ debounce: 500 }" typeahead-on-select="consultarProposicoes()" class="form-control">
 
                             </div>
@@ -140,12 +140,12 @@
 
                                 <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6">
                                     <label>Pela ementa:</label>
-                                    <input name="ementa" type="text" class="form-control" ng-model="filtro.ementa" placeholder="Filtrar pela ementa">
+                                    <input name="ementa" type="text" class="form-control" ng-model="filtro.ementa" placeholder="Texto da ementa">
                                 </div>
                                 <div class="col-sm-3 col-xs-6">
                                     <label>Por autor:</label>
 
-                                    <input typeahead-editable="true" ng-model="filtro.autor" type="text" placeholder="Filtro por autor" typeahead-min-length="2"
+                                    <input typeahead-editable="true" ng-model="filtro.autor" type="text" placeholder="Nome do autor" typeahead-min-length="2"
                                     typeahead="entrada.nome for entrada in  getAutores($viewValue) | limitTo:8" ng-model-options="{ debounce: 500 }"
                                     typeahead-on-select="filtrarConsulta()" class="form-control">
 
@@ -154,7 +154,7 @@
 
                                 <div class="col-sm-3 col-xs-6">
                                     <label>Por relator:</label>
-                                    <input typeahead-editable="true" ng-model="filtro.relator" type="text" placeholder="Filtro por relator" typeahead-min-length="2"
+                                    <input typeahead-editable="true" ng-model="filtro.relator" type="text" placeholder="Nome do relator" typeahead-min-length="2"
                                     typeahead="entrada.nome for entrada in  getRelatores($viewValue) | limitTo:8" ng-model-options="{ debounce: 500 }"
                                     typeahead-on-select="consultarProposicoes()" class="form-control">
 
@@ -204,11 +204,11 @@
 
 
 
-                            <button ng-show="item.comAtencaoEspecial==null" type="button" class="btn bg-purple color-palette btn-sm" title="Marcar proposição para ter maior atenção"
+                            <button ng-show="item.comAtencaoEspecial==null" type="button" class="btn bg-olive-active color-palette btn-sm" title="Marcar proposição para ter maior atenção"
                             ng-click="marcarAtencaoEspecial(item)">
                                 Atenção especial
                             </button>
-                            <button ng-show="item.comAtencaoEspecial!=null" type="button" class="btn bg-purple color-palette btn-sm" title="Marcar proposição para ter maior atenção"
+                            <button ng-show="item.comAtencaoEspecial!=null" type="button" class="btn  bg-olive color-palette btn-sm" title="Marcar proposição para ter maior atenção"
                             ng-click="desmarcarAtencaoEspecial(item)">
                                 Remover atenção especial
                             </button>
@@ -282,8 +282,8 @@
                         <div class="row">
                             <div class="col-sm-6 col-md-3 col-lg-3">
                                 <span ng-if="Auth.isMinistro()">
-                                <i style="cursor:pointer" class="fa fa-flag text-red " ng-hide="item.comAtencaoEspecial==null" title="Marcar com Atenção Especial"  ng-click="marcarAtencaoEspecial(item)"></i>
-                                <i style="cursor:pointer" class="fa fa-flag-o " ng-show="item.comAtencaoEspecial==null" title="Remover Atenção Especial" ng-click="desmarcarAtencaoEspecial(item)"></i>
+                                <i style="cursor:pointer" class="fa fa-flag-o " ng-show="item.comAtencaoEspecial==null" title="Marcar com Atenção Especial"  ng-click="marcarAtencaoEspecial(item)"></i>
+                                <i style="cursor:pointer" class="fa  fa-flag text-red " ng-show="item.comAtencaoEspecial!=null" title="Remover Atenção Especial" ng-click="desmarcarAtencaoEspecial(item)"></i>
                                 </span>
                                 <span ng-if="!Auth.isMinistro()">
                                 <i class="fa fa-flag text-red " ng-hide="item.comAtencaoEspecial==null" title="Atenção Especial" ></i>
@@ -296,8 +296,7 @@
                                 <h3 class="box-title"><a   data-widget="collapse"   title="{{item.sigla}} - {{item.estado}}">{{item.sigla}}</a></h3>
                                 <div style="cursor:default" class="time" ng-class="{ 'text-muted':item.pautaComissaoAtual.pautaReuniaoComissao.data<today}"
                                 ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.data>getSunday()" title="Pautada para {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'fullDate'}}">
-                                    <i class="fa fa-clock-o"></i> {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'EEE,
-                                    H:mm'}}
+                                    <i class="fa fa-clock-o"></i> {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'EEE, H:mm'}}
                                 </div>
                             </div>
 
@@ -348,14 +347,10 @@
                     </div>
 
                 </div>
-
-
-
             </div>
             <div class="alert alert-info" ng-show="infiniteScroll.full">
                 <i class="icon fa fa-info"></i> Todos registros carregados baseado no filtro atual
             </div>
         </div>
     </div>
-</div>
 </div>

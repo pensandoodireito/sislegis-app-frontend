@@ -97,10 +97,10 @@
 
                 <div>
                     <strong>Explicação do posicionamento: </strong>
-                    
+
                     <div ng-bind-html="getHTML(proposicao.parecerSAL)" class="fakeHTML"><span ng-if="proposicao.parecerSAL==null">Sem parecer</span></div>
 
-                    
+
 
                 </div>
 
@@ -126,9 +126,9 @@
                                 <th>Análise documental SAL</th>
                             </tr>
                             <tr>
-                                <td><strong><a ng-click="abrirModalNotaTecnica(proposicao)">Resumo Analítico ({{proposicao.totalBriefings}})</a></strong></td>
-                                <td><strong><a ng-click="abrirModalNotaTecnica(proposicao)">Nota técnica ({{proposicao.totalNotasTecnicas}})</a></strong></td>
-                                <td><strong><a ng-click="abrirModalNotaTecnica(proposicao)">Emenda ({{proposicao.totalEmendas}})</a></strong></td>
+                                <td><strong><a ng-click="abrirModalNotaTecnica(proposicao,'brief')">Resumo Analítico ({{proposicao.totalBriefings}})</a></strong></td>
+                                <td><strong><a ng-click="abrirModalNotaTecnica(proposicao,'nota')">Nota técnica ({{proposicao.totalNotasTecnicas}})</a></strong></td>
+                                <td><strong><a ng-click="abrirModalNotaTecnica(proposicao,'emenda')">Emenda ({{proposicao.totalEmendas}})</a></strong></td>
                             </tr>
 
                         </tbody>
@@ -175,7 +175,7 @@
                 <label>Anotação ASPAR: </label>
                 <div class="form-group">
                     <div ng-bind-html="getHTML(proposicao.resultadoASPAR)" class="fakeHTML"></div>
-                    
+
 
                 </div>
             </div>

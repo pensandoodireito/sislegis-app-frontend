@@ -6,12 +6,14 @@ angular.module('sislegisapp')
         EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
         TipoEncaminhamentoResource, Auth, TagResource, $q,$sce, BACKEND) {
 
-        
-        $scope.baixarTemplate = function (item, tipo) {
-
-            var back = BACKEND.substr(0, BACKEND.length - 5);
-            window.open(back + "/template?id=" + item.id + "&type=" + tipo);
+        $scope.getAuthorization = function () {
+            return 'Bearer ' + Auth.authz.token;
         }
+        $scope.getFormTemplateURL = function () {
+            var back = BACKEND.substr(0, BACKEND.length - 5);
+            return $sce.trustAsResourceUrl(back + "/template")
+        }
+      
         $scope.abrirModalParecerAreaMerito = function (item, revisao) {
             if (item.revisoes == null) {
                 $scope.loadRevisoes(item);
@@ -76,12 +78,7 @@ angular.module('sislegisapp')
             }
         };
 
-        $scope.abrirModalNotaTecnica = function (item, cb) {
-
-            // if (cb != true && item.listaNotas == null || item.listaNotas.length != item.totalNotasTecnicas) {
-            //     $scope.populaNotas(item, function () { $scope.abrirModalNotaTecnica(item, true) });
-            // } else {
-
+        $scope.abrirModalNotaTecnica = function (item, tab) {
 
             var modalInstance = $modal.open({
                 templateUrl: 'views/modal-documentos.html',
@@ -90,6 +87,9 @@ angular.module('sislegisapp')
                 resolve: {
                     proposicao: function () {
                         return item;
+                    },
+                    tab: function () {
+                        return tab;
                     }
                 }
             });
@@ -245,9 +245,13 @@ angular.module('sislegisapp')
         };
         $scope.estadoHandler = $scope.$watch('proposicao.estado', $scope.trataAlteracaoDeEstado, true);
 
-        $scope.getHTML=function(valor){//TODO virar diretiva
-            var a= $sce.trustAsHtml(valor.replace(/\n\r?/g, '<br />'));
-            return a;
+        $scope.getHTML = function (valor) {//TODO virar diretiva
+            if (valor) {
+                var a = $sce.trustAsHtml(valor.replace(/\n\r?/g, '<br />'));
+                return a;
+            } else {
+                return "";
+            }
         }
         $scope.getPosicionamentos = function (current) {
             var copy = $scope.posicionamentos.slice(0);
@@ -1203,10 +1207,14 @@ angular.module('sislegisapp')
 
         $scope.get();
     }).controller('ModalNotaTecnicaController',
-        function ($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource,
+        function ($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, tab, ComentarioResource,
             ProposicaoResource, UsuarioResource, ComentarioService, UploadService, $confirm, BACKEND, $sce, Auth) {
 
-
+            if(tab!=null){
+                $scope.currTab=tab;
+            }else{
+                $scope.currTab='nota';
+            }
 
 
             var self = this;

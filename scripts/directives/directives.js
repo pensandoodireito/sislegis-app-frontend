@@ -32,4 +32,4 @@ angular.module('sislegisapp').directive('focusMe', function ($timeout) {
             });
         }
     }
-}])
+}]);

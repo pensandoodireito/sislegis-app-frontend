@@ -104,7 +104,8 @@ var libs = [
     'scripts/controllers/SituacaoLegislativaController.js',
     'scripts/services/locationParser.js',
     'scripts/services/VotacaoFactory.js',
-    'scripts/directives/directives.js'
+    'scripts/directives/directives.js',
+    'lib/angular-sanitize/angular-sanitize.js'
 
 ];
 
@@ -131,16 +132,13 @@ var generateHTMLs = function (){
     console.info("Gerando index-dev.html");
     var generateIndexDEVHtml = gulp.src(['template/index-source.html'])
         .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
+        .pipe(replace('BACKEND_SERVER', process.env.API_SERVER))
         .pipe(rename("index-dev.html"))
-        .pipe(gulp.dest('./'));
-    console.info("Gerando index-relatorio.html");
-    var generateIndexRelatorioHtml = gulp.src(['template/index-relatorio.html'])
-        .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
-        .pipe(rename("index-relatorio.html"))
-        .pipe(gulp.dest('./'));
+        .pipe(gulp.dest('./'));    
     console.info("Gerando index.html");
     var generateIndexHTML = gulp.src('template/index-source.html')
         .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
+        .pipe(replace('BACKEND_SERVER', process.env.API_SERVER))
         .pipe(htmlreplace({
             'js': 'scripts/all.js'
         }))

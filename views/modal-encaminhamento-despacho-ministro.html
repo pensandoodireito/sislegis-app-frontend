@@ -1,15 +1,15 @@
 <div class="modal-header">
-    <h4 class="modal-title" id="myModalLabel">Despacho com secretário</h4>
+    <h4 class="modal-title" id="myModalLabel">Marcar para atenção especial da SAL</h4>
 </div>
 <div class="modal-body">
     <div class="col-md-12">
         <div class="form-horizontal" role="form">
             <div ng-show="displayError" class="alert alert-danger">
                 <strong>Erro!</strong> Houve um erro inesperado, por favor tente novamente.
-            </div>            
+            </div>
         </div>
         <div class="form-group">
-            <label for="detalhes">Detalhes:</label>
+            <label for="detalhes">Comentário:</label>
             <textarea id="detalhes" class="form-control" rows="3" ng-model="encaminhamentoProposicao.detalhes"></textarea>
         </div>
 
@@ -35,6 +35,5 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="submit" class="btn btn-default" ng-disabled="isClean() || EncaminhamentoProposicaoForm.$invalid" ng-show="!encaminhamentoProposicao.id"
-    ng-click="save()">Enviar</button>
+    <button type="submit" class="btn bg-olive-active " ng-click="save()">Marcar</button>
 </div>
