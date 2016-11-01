@@ -221,8 +221,7 @@
 														class="fa fa-comment"></i> {{proposicao.totalComentarios}} comentários</a></strong>
                 </div>
                 <div class="col-md-6 text-right">
-                    <strong><a
-													ng-click="abrirModalEncaminhamentos(proposicao)">
+                    <strong><a ng-click="abrirModalEncaminhamentos(proposicao)">
 														{{proposicao.listaEncaminhamentoProposicao.length || proposicao.totalEncaminhamentos}}
 														encaminhamentos</a></strong>
                 </div>
@@ -245,7 +244,7 @@
                 <label>Efetividade SAL: </label>
                 <div class="form-group">
 
-                    <select ng-model="proposicao.efetividade">
+                    <select ng-model="proposicao.efetividade" class="form-control">
                         <option value="null"></option>
                         <option value="ACATADA">Acatada</option>
                         <option value="ACATADA_PONTOS_IMPORTANTES">Acatada Pontos Importantes</option>
@@ -258,12 +257,28 @@
 
             <div class="divider-top">
                 <label>Macrotema: </label>
-                <div class="form-group">
-                    <tags-input ng-model="proposicao.tags" ng-class="form-group" on-tag-added="save(proposicao)" on-tag-removed="save(proposicao)"
-                    min-length="1" placeholder="Adicione uma palavra chave" display-property="tag" add-from-autocomplete-only="true"
-                    maxTags="5">
-                        <auto-complete source="loadTags($query)"></auto-complete>
-                    </tags-input>
+
+                <div>
+                    
+                    
+                    <div  style="margin-bottom:3px;margin-right:3px;float: left;" ng-repeat="t in proposicao.tags|orderBy:'tag'"><small style="border-radius:2px;white-space:nowrap;padding: 2px 5px 2px 5px;" class="bg-blue"> {{t.tag}} <i class="fa fa-remove" ng-click="updateTag(t,true)" style="cursor:pointer"></i></small></div> 
+                </div>
+
+
+
+                <div class="col-md-12">
+                    <div class="col-md-3">
+                        Adicionar:
+                    </div>
+                    <div class="input-group">
+                        <select name="macrotema" class="form-control" ng-model="selectedMacrotema" ng-options="item as item.tag for item in macrotemas|filter:myFilter|orderBy:'tag'">
+                            <option value=""></option>
+                        </select>
+
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-success" ng-disabled="!selectedMacrotema||selectedMacrotema==null||selectedMacrotema==''"  ng-click="updateTag(selectedMacrotema,false);"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -4,8 +4,10 @@ angular.module('sislegisapp')
     .controller('ProposicaoItemController', function ($scope, $window, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
         ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
         EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
-        TipoEncaminhamentoResource, Auth, TagResource, $q,$sce, BACKEND) {
-
+        TipoEncaminhamentoResource, Auth, TagResourceCache, $q,$sce, BACKEND) {
+        
+        $scope.macrotemas = TagResourceCache.listarTodos();
+         
         $scope.getAuthorization = function () {
             return 'Bearer ' + Auth.authz.token;
         }
@@ -181,6 +183,35 @@ angular.module('sislegisapp')
                 $scope.scheduleSaveTimer(newValue, oldValue, scope);
             }
         }
+        
+        $scope.updateTag = function (tag, remove) {
+            if(!tag){
+                return;
+            }
+                
+            if (!remove) {
+                
+                for (var index = 0; index < $scope.proposicao.tags.length; index++) {
+                    var element = $scope.proposicao.tags[index];
+                    if(element.tag==tag.tag){
+                        return;
+                    }                    
+                }
+                var old = $scope.proposicao.tags;
+                $scope.proposicao.tags.push(tag);
+                $scope.scheduleSaveTimer(old, $scope.proposicao.tags, $scope);
+                $scope.selectedMacrotema=null;   
+            } else {
+                var index = $scope.proposicao.tags.indexOf(tag);
+                if (index > -1) {
+                    var old = $scope.proposicao.tags;
+                    $scope.proposicao.tags.splice(index, 1);
+                    $scope.scheduleSaveTimer(old, $scope.proposicao.tags, $scope);
+                    $scope.selectedMacrotema=null;  
+                }
+                
+            }
+        }
         $scope.lastSaveTimer = null;
         $scope.scheduleSaveTimer = function (newValue, oldValue, scope) {
             // console.log(oldValue===undefined,oldValue===null, "was", oldValue, "is", newValue);
@@ -269,6 +300,7 @@ angular.module('sislegisapp')
         $scope.loadTags = function (query) {
             return TagResource.buscarPorSufixo({ sufixo: query }).$promise;
         };
+        
         $scope.validaEquipe = function (item) {
             if (!item.equipe || item.equipe.id == null) {
                 item.equipe = null;
@@ -382,7 +414,22 @@ angular.module('sislegisapp')
             });
 
         };
-
+        $scope.myFilter = function (a) {
+            
+            if ($scope.proposicao == null) {
+                console.log("tag prop null",a)
+                return true;
+            }
+            for (var index2 = 0; index2 < $scope.proposicao.tags.length; index2++) {
+                var existing = $scope.proposicao.tags[index2];
+                if (existing.tag == a.tag) {
+                    
+                    return false;
+                }
+            }
+            return true;
+       
+        }
 
     })
 
@@ -743,6 +790,8 @@ angular.module('sislegisapp')
         EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
         TipoEncaminhamentoResource, Auth, TagResource, UploadService, $q, BACKEND, configConsulta, $sce,ComissaoService) {
         
+        $scope.macrotemas = TagResource.listarTodos();
+        
         $scope.setCalendar = function () {
             $scope.openCalendar = function ($event) {
                 $event.preventDefault();
@@ -820,7 +869,7 @@ angular.module('sislegisapp')
         $scope.Auth = Auth;
         $scope.posicionamentos = PosicionamentoResource.queryAll();
 
-        $scope.macrotemas = TagResource.listarTodos();
+        
         
         $scope.getRelatores = function(val){
              return ProposicaoResource.buscaRelator({ nome: val }, { nome: val },

@@ -102,7 +102,7 @@
                         </div>
                     </div>
                     <div class="panel-body line-7 rol-vert">
-                        <div class="list-group"  ng-show="proposicoesAvulsas.length>0">
+                        <div class="list-group" ng-show="proposicoesAvulsas.length>0">
 
                             <div class="list-group-item active">
                                 <h4 class="list-group-item-heading">Procura independente de pauta</h4>
@@ -146,10 +146,10 @@
 
                             <div class=" list-proposicao">
 
-                                <div class="list-proposicao-item" ng-repeat="proposicaoPauta in pauta.proposicoesDaPauta | filter:buscaPalavraChave" ng-click="adicionarProposicao(pauta,proposicaoPauta)">
+                                <div class="list-proposicao-item" ng-repeat="proposicaoPauta in pauta.proposicoesDaPauta | filter:buscaPalavraChave">
                                     <div class="clearfix">
                                         <div class="pull-left width-auto">
-                                            <h4 class="list-group-item-heading">{{proposicaoPauta.proposicao.sigla}}</h4>
+                                            <h4 class="list-group-item-heading" ng-click="adicionarProposicao(pauta,proposicaoPauta)">{{proposicaoPauta.proposicao.sigla}}</h4>
                                         </div>
 
                                         <div class="pull-right width-auto">
@@ -161,22 +161,24 @@
                                                 <i class="fa fa-external-link-square"></i> </a>
                                         </div>
                                     </div>
-                                    <p>{{proposicaoPauta.proposicao.ementa}}</p>
-                                    <p>
-                                        <strong>Origem: </strong>{{pauta.origem}}
-                                    </p>
-                                    <p>
-                                        <strong>Comissao: </strong>{{pauta.comissao}}
-                                    </p>
-                                    <p>
-                                        <strong>Ordem na Pauta: </strong>{{proposicaoPauta.ordemPauta}}
-                                    </p>
-                                    <p ng-show="proposicaoPauta.proposicao.ultimoComentario">
-                                        <strong>Último comentário: </strong> {{proposicaoPauta.proposicao.ultimoComentario.descricao}}
-                                        <p ng-show="proposicaoPauta.ultimoComentario">
-                                            <strong>Último comentário: </strong> {{proposicaoPauta.ultimoComentario.descricao}}
+                                    <div ng-click="adicionarProposicao(pauta,proposicaoPauta)">
+                                        <p>{{proposicaoPauta.proposicao.ementa}}</p>
+                                        <p>
+                                            <strong>Origem: </strong>{{pauta.origem}}
                                         </p>
-                                    </p>
+                                        <p>
+                                            <strong>Comissao: </strong>{{pauta.comissao}}
+                                        </p>
+                                        <p>
+                                            <strong>Ordem na Pauta: </strong>{{proposicaoPauta.ordemPauta}}
+                                        </p>
+                                        <p ng-show="proposicaoPauta.proposicao.ultimoComentario">
+                                            <strong>Último comentário: </strong> {{proposicaoPauta.proposicao.ultimoComentario.descricao}}
+                                            <p ng-show="proposicaoPauta.ultimoComentario">
+                                                <strong>Último comentário: </strong> {{proposicaoPauta.ultimoComentario.descricao}}
+                                            </p>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

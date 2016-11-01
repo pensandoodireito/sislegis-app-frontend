@@ -222,20 +222,31 @@
                             ng-click="setaEstado(item,'EMANALISE')">
                                 <i class="fa fa-mail-forward"></i> Fazer nova avaliação
                             </button>
+
                             <button ng-if="Auth.isEquipe(true) && item.estado=='EMANALISE'" type="button" class="btn btn-default btn-sm" title="Enviar para revisão, em análise desde {{item.foiEncaminhada|date:'shortDate'}}"
                             ng-click="setaEstado(item,'ANALISADA')">
                                 <i class="fa fa-check-circle-o"></i> Enviar para revisão
+                            </button>
+
+                            <button ng-if="Auth.isDiretor() && (item.estado=='ANALISADA'  || item.estado=='ADESPACHAR' )&& item.foiDespachada>0" type="button"
+                            class="btn btn-default btn-sm" title="Despacho sem necessidade de revisão do secretário" ng-click="setaEstado(item, 'DESPACHADA')">
+                                <i class="fa fa-paper-plane"></i> Despachar direto
                             </button>
                             <button ng-if="Auth.isDiretor(true) && item.estado=='ANALISADA'" type="button" class="btn btn-default btn-sm" title="Enviar para despacho do Secretário, em revisão desde {{item.foiAnalisada|date:'shortDate'}}"
                             ng-click="setaEstado(item, 'ADESPACHAR')">
                                 <i class="fa fa-check-circle"></i> Enviar para despacho do Secretário
                             </button>
-
+                            <button ng-if="Auth.isDiretor(true) && (item.estado=='ANALISADA' || item.estado=='ADESPACHAR')" type="button" class="btn btn-default btn-sm"
+                            title="Enviar para re análise" ng-click="setaEstado(item, 'EMANALISE')">
+                                <i class="fa fa-retweet"></i> Nova análise pelo técnico
+                            </button>
 
                             <button ng-if="Auth.isSecretario(true) && item.estado=='ADESPACHAR'" type="button" class="btn btn-default btn-sm" title="Despachar, em despacho desde {{item.foiRevisada|date:                           'shortDate'}}"
                             ng-click="setaEstado(item, 'DESPACHADA')">
                                 <i class="fa fa-paper-plane"></i> Despachar
                             </button>
+
+
                             <button ng-if="Auth.isEquipe(true) && item.estado=='ADESPACHAR_PRESENCA'" type="button" class="btn btn-default btn-sm" title="Re enviar para despacho do secretário"
                             ng-click="setaEstado(item, 'ADESPACHAR')">
                                 <i class="fa fa-check-circle"></i> Enviar para despacho do Secretário
@@ -245,10 +256,7 @@
                                 <i class="fa fa-retweet"></i> Nova análise pelo técnico
                             </button>
 
-                            <button ng-if="Auth.isDiretor(true) && (item.estado=='ANALISADA' || item.estado=='ADESPACHAR')" type="button" class="btn btn-default btn-sm"
-                            title="Enviar para re análise" ng-click="setaEstado(item, 'EMANALISE')">
-                                <i class="fa fa-retweet"></i> Nova análise pelo técnico
-                            </button>
+
 
 
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
@@ -296,7 +304,8 @@
                                 <h3 class="box-title"><a   data-widget="collapse"   title="{{item.sigla}} - {{item.estado}}">{{item.sigla}}</a></h3>
                                 <div style="cursor:default" class="time" ng-class="{ 'text-muted':item.pautaComissaoAtual.pautaReuniaoComissao.data<today}"
                                 ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.data>getSunday()" title="Pautada para {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'fullDate'}}">
-                                    <i class="fa fa-clock-o"></i> {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'EEE, H:mm'}}
+                                    <i class="fa fa-clock-o"></i> {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'EEE,
+                                    H:mm'}}
                                 </div>
                             </div>
 
