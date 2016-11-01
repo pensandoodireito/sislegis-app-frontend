@@ -4,14 +4,16 @@ angular.module('sislegisapp')
     .controller('ProposicaoItemController', function ($scope, $window, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
         ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
         EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
-        TipoEncaminhamentoResource, Auth, TagResource, $q, BACKEND) {
+        TipoEncaminhamentoResource, Auth, TagResource, $q,$sce, BACKEND) {
 
-
-        $scope.baixarTemplate = function (item, tipo) {
-
-            var back = BACKEND.substr(0, BACKEND.length - 5);
-            window.open(back + "/template?id=" + item.id + "&type=" + tipo);
+        $scope.getAuthorization = function () {
+            return 'Bearer ' + Auth.authz.token;
         }
+        $scope.getFormTemplateURL = function () {
+            var back = BACKEND.substr(0, BACKEND.length - 5);
+            return $sce.trustAsResourceUrl(back + "/template")
+        }
+      
         $scope.abrirModalParecerAreaMerito = function (item, revisao) {
             if (item.revisoes == null) {
                 $scope.loadRevisoes(item);
@@ -76,12 +78,7 @@ angular.module('sislegisapp')
             }
         };
 
-        $scope.abrirModalNotaTecnica = function (item, cb) {
-
-            // if (cb != true && item.listaNotas == null || item.listaNotas.length != item.totalNotasTecnicas) {
-            //     $scope.populaNotas(item, function () { $scope.abrirModalNotaTecnica(item, true) });
-            // } else {
-
+        $scope.abrirModalNotaTecnica = function (item, tab) {
 
             var modalInstance = $modal.open({
                 templateUrl: 'views/modal-documentos.html',
@@ -90,6 +87,9 @@ angular.module('sislegisapp')
                 resolve: {
                     proposicao: function () {
                         return item;
+                    },
+                    tab: function () {
+                        return tab;
                     }
                 }
             });
@@ -213,11 +213,27 @@ angular.module('sislegisapp')
                 if ($scope.lastSaveTimer != null) {
                     $timeout.cancel($scope.lastSaveTimer);
                 }
+                switch (newValue) {
+                    case "EMANALISE":
+                        $scope.proposicao.foiEncaminhada = new Date().getTime();
+                        break;
+                    case "ANALISADA":
+                        $scope.proposicao.foiAnalisada = new Date().getTime();
+                        break;
+                    case "ADESPACHAR":
+                        $scope.proposicao.foiRevisada = new Date().getTime();
+                        break;
+                    case "DESPACHADA":
+                        $scope.proposicao.foiDespachada = new Date().getTime();
+                        break;
 
-                $scope.save($scope.proposicao, "Estado alterado", "Falhou ao alterar estado").then(function (data) {
-                    console.log(data, $scope.estadoHandler);
+                    default:
+                        break;
+                }
                 
-                    // $scope.$watch('proposicao.estado', $scope.trataAlteracaoDeEstado, true);
+                $scope.save($scope.proposicao, "Estado alterado", "Falhou ao alterar estado").then(function (data) {
+                    console.log(data, $scope.estadoHandler);                
+                    
                 }, function () {
 
 
@@ -229,7 +245,14 @@ angular.module('sislegisapp')
         };
         $scope.estadoHandler = $scope.$watch('proposicao.estado', $scope.trataAlteracaoDeEstado, true);
 
-
+        $scope.getHTML = function (valor) {//TODO virar diretiva
+            if (valor) {
+                var a = $sce.trustAsHtml(valor.replace(/\n\r?/g, '<br />'));
+                return a;
+            } else {
+                return "";
+            }
+        }
         $scope.getPosicionamentos = function (current) {
             var copy = $scope.posicionamentos.slice(0);
             if (current) {
@@ -268,8 +291,7 @@ angular.module('sislegisapp')
             var deferred = $q.defer();
             $scope.validaPosicionamento(item, 'posicionamentoSupar');
             $scope.validaPosicionamento(item.posicionamentoAtual, 'posicionamento');
-
-            //$scope.validaEquipe(item);
+            $scope.validaEquipe(item);
 
 
             if (!msgSucesso) {
@@ -297,14 +319,23 @@ angular.module('sislegisapp')
 
 
         $scope.incluirComentario = function (item) {
+            
             var comentario = new ComentarioResource();
             comentario.descricao = item.comentarioTmp;
             item.comentarioTmp = null;
 
             var successCallback = function (data, responseHeaders) {
-                item.listaComentario.push(data);
-                item.totalComentarios++;
-                toaster.pop('success', 'Comentário inserido com sucesso');
+                if (item.listaComentario == null) {
+                    $scope.populaComentario(item, function (prop) {
+                        item.listaComentario = prop.listaComentario;
+                        item.totalComentarios=prop.listaComentario.length;
+                        toaster.pop('success', 'Comentário inserido com sucesso.');
+                    });
+                } else {
+                    item.listaComentario.push(data);
+                    item.totalComentarios++;
+                    toaster.pop('success', 'Comentário inserido com sucesso');
+                }
             };
             var errorCallback = function () {
                 toaster.pop('error', 'Falha ao realizar operação.');
@@ -360,6 +391,9 @@ angular.module('sislegisapp')
         $scope.Auth = Auth;
 
         $scope.update = function () {
+            if (!window.o) {
+                return;
+            }
             var origem = "c";
             var data = "10102016"
             if (window.o) {
@@ -368,7 +402,11 @@ angular.module('sislegisapp')
             if (window.s) {
                 data = window.s;
             }
-            $http.get(BACKEND + '/proposicaos/auto?o=' + origem + '&s=' + data);
+            var comissao ="";
+            if(window.c){
+                comissao="&c="+window.c;
+            }
+            $http.get(BACKEND + '/proposicaos/auto?o=' + origem + '&s=' + data+comissao);
         }
         $scope.go = function (url, p) {
             $location.path(url).search({ filter: p });;
@@ -385,7 +423,7 @@ angular.module('sislegisapp')
             for (var index = 0; index < $scope.info.equipes.length; index++) {
                 var equipe = $scope.info.equipes[index];
                 $scope.PieData.push({
-                    value: equipe.totalEmAnalise + equipe.totalAnalisada,
+                    value: equipe.totalEmAnalise + equipe.totalProcessada,
                     color: colorArray[index],//"#f56954",
                     highlight: colorArray[index],
                     label: equipe.e.nome,
@@ -411,7 +449,7 @@ angular.module('sislegisapp')
                 //Number - The width of each segment stroke
                 segmentStrokeWidth: 1,
                 //Number - The percentage of the chart that we cut out of the middle
-                percentageInnerCutout: 50, // This is 0 for Pie charts
+                percentageInnerCutout: 20, // This is 0 for Pie charts
                 //Number - Amount of animation steps
                 animationSteps: 100,
                 //String - Animation easing effect
@@ -427,7 +465,7 @@ angular.module('sislegisapp')
                 //String - A legend template
                 legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
                 //String - A tooltip template
-                tooltipTemplate: "<%=label%> <%=value %> projetos analisados no mês"
+                tooltipTemplate: "<%=label%> <%=value %> analisados no mês"
             };
             //Create pie or douhnut chart
             // You can switch between pie and douhnut using the method below.
@@ -703,11 +741,29 @@ angular.module('sislegisapp')
     .controller('ConsultaProposicoesController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
         ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
         EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
-        TipoEncaminhamentoResource, Auth, TagResource, UploadService, $q, BACKEND, configConsulta, $sce) {
+        TipoEncaminhamentoResource, Auth, TagResource, UploadService, $q, BACKEND, configConsulta, $sce,ComissaoService) {
+        
+        $scope.setCalendar = function () {
+            $scope.openCalendar = function ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+
+                $scope.opened = true;
+            };
+
+            $scope.dateOptions = {
+                formatYear: 'yy',
+                startingDay: 1
+            };
+
+            $scope.format = 'dd/MM/yyyy';
+        }
+
+        $scope.setCalendar();
         $scope.getAuthorization = function () {
             return 'Bearer ' + Auth.authz.token;
         }
-
+        
         $scope.getReportURL = function () {
             var back = BACKEND.substr(0, BACKEND.length - 5);
             return $sce.trustAsResourceUrl(back + "/relatorio");
@@ -737,6 +793,28 @@ angular.module('sislegisapp')
         } else {
             console.log(" nenhum pre filtro ativo");
         }
+        $scope.filtrosCol = false;
+        try {
+             
+            //por alguma razao só funcionou via jquery           
+            var fct1 = function () {
+                $scope.filtroExpandido = true ;                
+            };
+            var fct2 = function () {
+                $scope.filtroExpandido = false ;                
+            };
+            
+            $('#collapseFullFilters').on('shown.bs.collapse',function(){
+                $('#expandido').css('display','none');
+                $('#colapsado').css('display','block');
+            });
+            $('#collapseFullFilters').on('hidden.bs.collapse', function(){
+                $('#expandido').css('display','block');
+                $('#colapsado').css('display','none');
+            });
+        } catch (e) {
+            console.log(e)
+        }
 
         $scope.proposicoes = [];
         $scope.Auth = Auth;
@@ -744,6 +822,18 @@ angular.module('sislegisapp')
 
         $scope.macrotemas = TagResource.listarTodos();
         
+        $scope.getRelatores = function(val){
+             return ProposicaoResource.buscaRelator({ nome: val }, { nome: val },
+                function (data) { 
+                    
+                        $scope.relatores=data;
+                   
+                    
+                },
+                function (error) { 
+                toaster.pop('error', 'Falha ao buscar relatores'); }
+                ).$promise;
+        }
         $scope.getAutores  = function (val){
               return ProposicaoResource.buscaAutor({ nome: val }, { nome: val },
                 function (data) { 
@@ -768,6 +858,33 @@ angular.module('sislegisapp')
                 ).$promise;
 
         };
+        
+        $scope.posicionamentoFiltro = [{ id: -1, nome: "Sem posicionamento definido" }];
+         PosicionamentoResource.query({},function(data){
+            $scope.posicionamentoFiltro=$scope.posicionamentoFiltro.concat(data);
+         });
+         $scope.comissoes=[];
+        
+         $scope.updateComissoes = function () {
+             var origemSelecionada = $scope.filtro.origem;
+             $scope.filtro.comissao=null;
+             switch (origemSelecionada) {
+                 case 'SENADO':
+                     $scope.comissoes = ComissaoService.getComissoesSenado();
+                     return;
+
+                 case 'CAMARA':
+                     $scope.comissoes = ComissaoService.getComissoesCamara();
+                     return;
+                 default:
+                 
+                     $scope.comissoes = [];
+                     return;
+
+             }
+         }
+         
+         
         $scope.buscarProposicoes = function () {
             toaster.clear();
 
@@ -829,7 +946,37 @@ angular.module('sislegisapp')
 
             }
         });
+        $scope.desmarcarAtencaoEspecial=function(item){
+            $rootScope.savingItem = item;
+             $rootScope.inactivateSpinner = true;
+            
+                
+            ProposicaoResource.removerAtencaoEspecial({id:item.id},function(){
+                $rootScope.inactivateSpinner = false;
+                item.comAtencaoEspecial=null;
+            }, function(){
+                $rootScope.inactivateSpinner = false;
+                toaster.pop('error', 'Falha ao alterar o status da proposicao'); 
+            });
+        }
+        $scope.marcarAtencaoEspecial = function(item){
+             var modalInstance = $modal.open({
+                templateUrl: 'views/modal-encaminhamento-despacho-ministro.html',
+                controller: 'ModalEncaminhamentoDespachoMinistroController',
+                size: 'md',
+                resolve: {
+                    proposicao: function () {
+                        return item;
+                    }
+                }
+            });
 
+            modalInstance.result.then(function () {                
+                item.listaEncaminhamentoProposicao = EncaminhamentoProposicaoResource.findByProposicao({ ProposicaoId: item.id });
+                item.comAtencaoEspecial=1;
+            }, function () {
+            });
+        }
         $scope.despachoPresencial = function (item) {
 
             var modalInstance = $modal.open({
@@ -857,7 +1004,17 @@ angular.module('sislegisapp')
         }
 
         $scope.$watch('filtro', function (newValue, oldValue, scope) {
+            if(newValue.relator!=oldValue.relator && newValue.relator!=null && newValue.relator!='' && newValue.relator.length<4 ){
+                console.log("evitando watch por relator")
+                return;
+            }
+            if(newValue.autor!=oldValue.autor && newValue.autor!=null && newValue.autor!='' && newValue.autor.length<4 ){
+                console.log("evitando watch por autor")
+                return;
+            }
+            console.log("Limpou proposicoes");
             $scope.proposicoes = [];
+            
             $scope.infiniteScroll.busy = false;
             $scope.infiniteScroll.offset = 0;
             $scope.infiniteScroll.full = false;
@@ -879,18 +1036,7 @@ angular.module('sislegisapp')
                     $scope.infiniteScroll.full = true;
                     return;
                 };
-                // for (var index = 0; index < data.length; index++) {
-                //     var serverProp = data[index];
-                //     var indexOf = $scope.proposicoes.indexOf(serverProp);
-                //     if (indexOf != -1) {
-                //         $scope.proposicoes[indexOf] = data;
-                //         // $scope.proposicoes.push(data);
-                //     } else {
-
-                //         $scope.proposicoes.push(data);
-                //     }
-
-                // }
+               
                 $scope.proposicoes = $scope.proposicoes.concat(data);
 
                 if ($scope.proposicoes.length == 0) {
@@ -906,16 +1052,28 @@ angular.module('sislegisapp')
                 $rootScope.inactivateSpinner = false;
                 $scope.infiniteScroll.busy = false;
             };
+            var getDateStr=function(data){
+                if($scope.filtro.inseridaApos==null){
+                    return null;
+                }
+                var d = $scope.filtro.inseridaApos;
+                return d.getDate()+"-"+(d.getMonth()+1)+"-"+d.getFullYear();
+            }
             var filtroAtual =
                 {
                     sigla: $scope.filtro.sigla,
                     ementa: $scope.filtro.ementa,
                     autor: $scope.filtro.autor,
+                    relator: $scope.filtro.relator,
                     origem: $scope.filtro.origem,
                     isFavorita: $scope.filtro.isFavorita,
                     estado: $scope.filtro.estado,
+                    inseridaApos: getDateStr(),
+                    comAtencaoEspecial:$scope.filtro.comAtencaoEspecial,
+                    comissao: $scope.filtro.comissao?$scope.filtro.comissao.sigla.trim():null,
                     macrotema: $scope.filtro.macrotema ? $scope.filtro.macrotema.tag : null,
                     idEquipe: $scope.filtro.equipe ? $scope.filtro.equipe.id : null,
+                    idPosicionamento: $scope.filtro.posicionamento ? $scope.filtro.posicionamento.id : null,
                     idResponsavel: $scope.filtro.responsavel ? $scope.filtro.responsavel.id : null,
                     somentePautadas: $scope.filtro.somentePautadas,
                     limit: $scope.infiniteScroll.limit,
@@ -926,6 +1084,11 @@ angular.module('sislegisapp')
         }
 
     })
+//     .factory('$exceptionHandler', function() {
+//     return function(exception, cause) {
+//     console.log("opa",exception,cause);
+//     }
+//   })
     .controller('SearchAreaMeritoController', function ($scope, $http, AreaMeritoResource) {
 
         $scope.search = {};
@@ -1044,10 +1207,14 @@ angular.module('sislegisapp')
 
         $scope.get();
     }).controller('ModalNotaTecnicaController',
-        function ($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource,
+        function ($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, tab, ComentarioResource,
             ProposicaoResource, UsuarioResource, ComentarioService, UploadService, $confirm, BACKEND, $sce, Auth) {
 
-
+            if(tab!=null){
+                $scope.currTab=tab;
+            }else{
+                $scope.currTab='nota';
+            }
 
 
             var self = this;
@@ -1285,14 +1452,21 @@ angular.module('sislegisapp')
 
 
             }).controller('ModalComentariosController',
-                function ($scope, $http, $filter, $routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource,
-                    ProposicaoResource, UsuarioResource, ComentarioService) {
-
+                function ($scope, $http, $filter, $sce,$routeParams, $location, toaster, $modalInstance, proposicao, ComentarioResource,
+                    ProposicaoResource, UsuarioResource, ComentarioService,Auth,$confirm) {
+                    $scope.auth = Auth;
                     var self = this;
-
+                   
+                    $scope.getHTML=function(valor){//TODO virar diretiva
+                                var a= $sce.trustAsHtml(valor.replace(/\n\r?/g, '<br />'));
+                                return a;
+                            }
                     $scope.proposicao = proposicao || new ProposicaoResource();
                     $scope.comentario = $scope.comentario || new ComentarioResource();
-
+                    $scope.canUpdate=function(comentario){
+                        
+                        return $scope.auth.isAdmin() || comentario.autor.email==$scope.auth.me.email;
+                    }
                     $scope.ok = function () {
                         $modalInstance.close($scope.proposicao.listaComentario);
                     };
@@ -1308,15 +1482,37 @@ angular.module('sislegisapp')
                     $scope.openUpdate = function (item) {
                         $scope.comentario = item;
                     };
+                    $scope.remove = function (item) {
+                        var removeIt = function () {
+                            ComentarioResource.remove({ ComentarioId: item.id }, function () {
+                                var index = $scope.proposicao.listaComentario.indexOf(item);
+                                if (index > -1) {
+                                    $scope.proposicao.listaComentario.splice(index, 1);
+                                    $scope.proposicao.totalComentarios--;
+                                }
+                            },
+                                function (error) {
+                                    toaster.pop('error', 'Falha ao realizar operação.');
+                                });
+                        }
+                        $confirm({ text: 'Deseja realmente apagar esse comentário?', title: 'Apagar comentário', ok: 'Sim', cancel: 'Não' })
+                            .then(removeIt);
 
+                    }
                     $scope.update = function () {
                         var successCallback = function () {
                             $scope.comentario = new ComentarioResource();
                             toaster.pop('success', 'Comentário atualizado com sucesso');
                         };
-                        var errorCallback = function () {
-                            toaster.pop('error', 'Falha ao realizar operação.');
+                        var errorCallback = function (erro) {
+                            if (erro && erro.status == 403) {
+                                toaster.pop('error', 'Você não tem permissão para alterar esse comentário.');
+                            } else {
+                                toaster.pop('error', 'Falha ao realizar operação.');
+                            }
                         };
+                        console.log($scope.comentario)
+                        $scope.comentario.proposicao = { id: $scope.comentario.proposicao.id }
                         ComentarioResource.update($scope.comentario, successCallback, errorCallback);
                     };
 
@@ -1462,6 +1658,73 @@ angular.module('sislegisapp')
 
                     $scope.performSearch();
                 }).controller(
+                    'ModalEncaminhamentoDespachoMinistroController',
+                    function ($scope, $rootScope, $http, $filter, $routeParams, $location, $modalInstance, toaster, proposicao,
+                        TipoEncaminhamentoResource, ProposicaoResource, EncaminhamentoProposicaoResource, EncaminhamentoProposicaoHttp, UsuarioResource,
+                        ComentarioResource, BACKEND, $confirm) {
+
+                        var self = this;
+                        $scope.disabled = false;
+                        $scope.$location = $location;
+
+                        $scope.proposicao = proposicao || new ProposicaoResource();
+                        $scope.tipoEncaminhamento = new TipoEncaminhamentoResource();
+                        $scope.encaminhamentoProposicao = new EncaminhamentoProposicaoResource();
+                                               
+                       
+                        $scope.ok = function () {
+                            $modalInstance.close($scope.proposicao.listaEncaminhamentoProposicao);
+                        };
+
+                        $scope.cancel = function () {
+                            $modalInstance.dismiss('cancel');
+                        };
+
+                        $scope.isClean = function () {
+                            return angular.equals(self.original, $scope.encaminhamentoProposicao);
+                        };
+
+                        $scope.save = function () {
+
+                            $scope.encaminhamentoProposicao.proposicao = new ProposicaoResource();
+                            $scope.encaminhamentoProposicao.proposicao.id = $scope.proposicao.id;
+                            if ($scope.encaminhamentoProposicao.dataHoraLimite != null) {
+                                $scope.encaminhamentoProposicao.dataHoraLimite = $scope.encaminhamentoProposicao.dataHoraLimite
+                                    .getTime();
+                            }
+
+                            var successCallback = function (data, responseHeaders) {
+                                $modalInstance.close($scope.encaminhamentoProposicao);
+
+                                toaster.pop('success', 'Marcada para atenção especial');
+
+                            };
+                            var errorCallback = function () {
+                                toaster.pop('error', 'Falha ao realizar operação.');
+                            };
+                            EncaminhamentoProposicaoResource.saveAtencaoEspecial($scope.encaminhamentoProposicao, successCallback, errorCallback);
+                        };
+
+                        // CALENDARIO
+                        $scope.setCalendar = function () {
+                            $scope.openCalendar = function ($event) {
+                                $event.preventDefault();
+                                $event.stopPropagation();
+
+                                $scope.opened = true;
+                            };
+
+                            $scope.dateOptions = {
+                                formatYear: 'yy',
+                                startingDay: 1
+                            };
+
+                            $scope.format = 'dd/MM/yyyy';
+                        }
+
+                        $scope.setCalendar();
+
+                    }).controller(
                     'ModalEncaminhamentoDespachoController',
                     function ($scope, $rootScope, $http, $filter, $routeParams, $location, $modalInstance, toaster, proposicao,
                         TipoEncaminhamentoResource, ProposicaoResource, EncaminhamentoProposicaoResource, EncaminhamentoProposicaoHttp, UsuarioResource,
@@ -1541,4 +1804,4 @@ angular.module('sislegisapp')
 
                         $scope.setCalendar();
 
-                    });;
+                    });

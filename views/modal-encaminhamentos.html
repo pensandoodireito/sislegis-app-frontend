@@ -54,8 +54,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Encaminhamentos</div>
                 <div class="panel-body line-9 rol-vert fontsize-sm">
-                    <div class="list-group" ng-repeat="item in proposicao.listaEncaminhamentoProposicao">
-                        <div class="divider-bottom">
+                    <div class="list-group" ng-repeat="item in proposicao.listaEncaminhamentoProposicao|orderBy:'criadoEm':true">
+                        <div class="divider-bottom" >
+                            <div class="pull-right" title="Criado em {{item.criadoEm|date:'short'}}"><span style="color: #999;float: right;padding: 10px;font-size: 12px;" class="time"><i class="fa fa-clock-o"></i> {{item.criadoEm|date:'short'}}</span></div>
                             <p><strong>{{item.tipoEncaminhamento.nome}}</strong></p>
                             <p ng-show="item.responsavel.nome!=null"><strong>Responsável: </strong>{{item.responsavel.nome}}</p>
                             <p ng-show="item.responsavel.nome==null"><strong>Sem responsável associado</strong></p>

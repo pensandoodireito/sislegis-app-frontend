@@ -2,7 +2,7 @@
     <div style="border:none;border-radius:0px;border-top: 1px solid #ddd; border-bottom: 1px solid #eee;    padding: 15px;background-color:white;font-family:inherit;"
     ng-click="showTextArea=true;temaTxt=true;" title="Clique para editar" ng-hide="showTextArea || proposicao.explicacao==null || proposicao.explicacao==''"
     style="margin-bottom=0">{{proposicao.explicacao}}</div>
-    <textarea class="form-control fontsize-sm " rows="3" ng-show="showTextArea || proposicao.explicacao==null || proposicao.explicacao==''"
+    <textarea class="form-control fontsize-sm" rows="3" ng-show="showTextArea || proposicao.explicacao==null || proposicao.explicacao==''"
     placeholder="Sem tema SAL. Digite o tema da proposição..." ngTrim="true" ng-model="proposicao.explicacao" ng-focus="showTextArea=true;temaTxt=true;   setSelectedProposicao(proposicao)"
     ng-change="setUpdated('explicacao',proposicao)" ng-blur="checkUpdatedField('explicacao',proposicao);showTextArea=false;"
     focus-me="temaTxt" style="margin-bottom:5px;"></textarea>
@@ -93,7 +93,7 @@
 </div>
 <div class="col-sm-7">
     <div class="panel panel-primary">
-        <div class="panel-heading ">
+        <div class="panel-heading">
             SAL
         </div>
         <div class="panel-body">
@@ -116,9 +116,10 @@
 
                 <div>
                     <strong>Explicação do posicionamento: </strong>
-                    <pre title="Clique para editar" style="border:none;border-radius:0px;border-top: 1px solid #ddd; border-bottom: 1px solid #eee;    padding: 15px;background-color:white;font-family:inherit;"
-                    ng-click="showParecerTextArea=true;parecerTXT=true;" ng-hide="showParecerTextArea" style="margin-bottom=0"><span ng-if="proposicao.parecerSAL==null">Sem parecer</span>{{proposicao.parecerSAL}}</pre>
-                    <textarea class="form-control fontsize-sm " rows="3" ng-show="showParecerTextArea" placeholder="Descreva o parecer da SAL..."
+                    <div ng-click="showParecerTextArea=true;parecerTXT=true;" ng-hide="showParecerTextArea" ng-bind-html="getHTML(proposicao.parecerSAL)"
+                    class="fakeHTML"><span ng-if="proposicao.parecerSAL==null">Sem parecer</span></div>
+
+                    <textarea class="form-control fontsize-sm" rows="3" ng-show="showParecerTextArea" placeholder="Descreva o parecer da SAL..."
                     ngTrim="true" ng-model="proposicao.parecerSAL" ng-change="setUpdated('parecerSAL',proposicao)" ng-focus="setSelectedProposicao(proposicao)"
                     ng-blur="checkUpdatedField('parecerSAL',proposicao);showParecerTextArea=false;" focus-me="parecerTXT"
                     style="margin-bottom:5px;"></textarea>
@@ -140,8 +141,7 @@
                     <div>
                         <input typeahead-editable="false" type="text" ng-model="proposicao.responsavel" placeholder="Procurar usuário" ng-required="true"
                         typeahead="proposicao as proposicao.nome for proposicao in getUsuarios($viewValue, buscaGeral)" ng-focus="setSelectedProposicao(proposicao)"
-                        typeahead-focus-first="true" ng-model-options="{ debounce: 500 }" 
-                        typeahead-on-select="save(proposicao); responsavelNull=(proposicao.responsavel==null);proposicao.responsavelNaoDefinido = false;"
+                        typeahead-focus-first="true" ng-model-options="{ debounce: 500 }" typeahead-on-select="save(proposicao); responsavelNull=(proposicao.responsavel==null);proposicao.responsavelNaoDefinido = false;"
                         class="form-control">
                         <input type="checkbox" ng-model="proposicao.buscaGeral"> Buscar completa
                     </div>
@@ -158,21 +158,36 @@
                                 <th>Modelo</th>
                             </tr>
                             <tr>
-                                <td><strong><a ng-click="abrirModalNotaTecnica(proposicao)">Resumo Analítico ({{proposicao.totalBriefings}})</a></strong></td>
+                                <td><strong><a ng-click="abrirModalNotaTecnica(proposicao,'brief')">Resumo Analítico ({{proposicao.totalBriefings}})</a></strong></td>
                                 <td>
-                                    <button type="button" class="btn btn-default btn-sm" ng-click="baixarTemplate(proposicao,'briefing')"><i class="fa fa-download"></i></button>
+                                    <form action="{{getFormTemplateURL()}}" method="POST" target="_BLANK">
+                                        <input type="hidden" name="id" value="{{proposicao.id}}">
+                                        <input type="hidden" name="a" value="{{getAuthorization()}}">
+                                        <input type="hidden" name="type" value="{{'briefing'}}">
+                                        <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-download"></i></button>
+                                    </form>
                                 </td>
                             </tr>
                             <tr>
-                                <td><strong><a ng-click="abrirModalNotaTecnica(proposicao)">Nota técnica ({{proposicao.totalNotasTecnicas}})</a></strong></td>
+                                <td><strong><a ng-click="abrirModalNotaTecnica(proposicao,'nota')">Nota técnica ({{proposicao.totalNotasTecnicas}})</a></strong></td>
                                 <td>
-                                    <button type="button" class="btn btn-default btn-sm" ng-click="baixarTemplate(proposicao,'nota')"><i class="fa fa-download"></i></button>
+                                    <form action="{{getFormTemplateURL()}}" method="POST" target="_BLANK">
+                                        <input type="hidden" name="id" value="{{proposicao.id}}">
+                                        <input type="hidden" name="a" value="{{getAuthorization()}}">
+                                        <input type="hidden" name="type" value="{{'nota'}}">
+                                        <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-download"></i></button>
+                                    </form>
                                 </td>
                             </tr>
                             <tr>
-                                <td><strong><a ng-click="abrirModalNotaTecnica(proposicao)">Emenda ({{proposicao.totalEmendas}})</a></strong></td>
+                                <td><strong><a ng-click="abrirModalNotaTecnica(proposicao,'emenda')">Emenda ({{proposicao.totalEmendas}})</a></strong></td>
                                 <td>
-                                    <button type="button" class="btn btn-default btn-sm" ng-click="baixarTemplate(proposicao,'emenda')"><i class="fa fa-download"></i></button>
+                                    <form action="{{getFormTemplateURL()}}" method="POST" target="_BLANK">
+                                        <input type="hidden" name="id" value="{{proposicao.id}}">
+                                        <input type="hidden" name="a" value="{{getAuthorization()}}">
+                                        <input type="hidden" name="type" value="{{'emenda'}}">
+                                        <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-download"></i></button>
+                                    </form>
                                 </td>
                             </tr>
                         </tbody>
@@ -241,11 +256,12 @@
                 </div>
             </div>
 
-            <div class="divider-top ">
+            <div class="divider-top">
                 <label>Macrotema: </label>
                 <div class="form-group">
                     <tags-input ng-model="proposicao.tags" ng-class="form-group" on-tag-added="save(proposicao)" on-tag-removed="save(proposicao)"
-                    min-length="1" placeholder="Adicione uma palavra chave" display-property="tag">
+                    min-length="1" placeholder="Adicione uma palavra chave" display-property="tag" add-from-autocomplete-only="true"
+                    maxTags="5">
                         <auto-complete source="loadTags($query)"></auto-complete>
                     </tags-input>
                 </div>

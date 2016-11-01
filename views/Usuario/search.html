@@ -63,6 +63,8 @@
                                                     <button type="button" class="btn btn-xs" ng-class="{'btn-primary':hasRole(result,'DIRETOR')}" ng-click="setRole(result,'DIRETOR')">diretor</button>
                                                     <button type="button" class="btn btn-xs" ng-class="{'btn-primary':hasRole(result,'SECRETARIO')}" ng-click="setRole(result,'SECRETARIO')">secretário</button>
                                                     <button type="button" class="btn btn-xs" ng-class="{'btn-primary':hasRole(result,'ADMIN')}" ng-click="setRole(result,'ADMIN')">admin</button>
+                                                    |
+                                                    <button type="button" class="btn btn-xs" ng-class="{'btn-primary':hasRole(result,'MINISTRO')}" ng-click="setRole(result,'MINISTRO')">ministro</button>
                                                 </div>
                                                 <div ng-if="!auth.isAdmin()">
                                                     <button type="button" class="btn btn-xs btn-primary" ng-repeat="papel in result.papeis">{{papel}}</button> 
