@@ -788,17 +788,26 @@ angular.module('sislegisapp')
     .controller('ConsultaProposicoesController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
         ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
         EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
-        TipoEncaminhamentoResource, Auth, TagResource, UploadService, $q, BACKEND, configConsulta, $sce,ComissaoService) {
+        TipoEncaminhamentoResource, Auth, TagResource, UploadService, $q, BACKEND, configConsulta, $sce,ComissaoService, $parse) {
         
         $scope.macrotemas = TagResource.listarTodos();
         
         $scope.setCalendar = function () {
-            $scope.openCalendar = function ($event) {
-                $event.preventDefault();
-                $event.stopPropagation();
+            $scope.openCalendar = function($event, id) {
+					$event.preventDefault();
+					$event.stopPropagation();
+					var opened = 'opened_'+id;
+					var model = $parse(opened);
+					model.assign($scope, true);
+					$scope.apply;
+			
+				};
+            // $scope.openCalendar = function ($event) {
+            //     $event.preventDefault();
+            //     $event.stopPropagation();
 
-                $scope.opened = true;
-            };
+            //     $scope.opened = true;
+            // };
 
             $scope.dateOptions = {
                 formatYear: 'yy',
@@ -1062,16 +1071,20 @@ angular.module('sislegisapp')
             $scope.consultarProposicoes();
         }
         $scope.$watch('filtro', function (newValue, oldValue, scope) {
+            if(!$scope.firstquerydone){
+                console.log("evitando watch por query inicial")
+                return;
+            }
             if(newValue.relator!=oldValue.relator && newValue.relator!=null && newValue.relator!='' && newValue.relator.length<4 ){
-                console.log("evitando watch por relator")
+                console.log("evitando watch por relator");
                 return;
             }
             if(newValue.autor!=oldValue.autor && newValue.autor!=null && newValue.autor!='' && newValue.autor.length<4 ){
-                console.log("evitando watch por autor")
+                console.log("evitando watch por autor");
                 return;
             }
-            console.log("Limpou proposicoes");
             $timeout.cancel($scope.lastFiltroCalled);//tem q ser manual, versão do angular não suporta.
+            console.log("Cancelou filtro agendado",$scope.lastFiltroCalled);
             $scope.lastFiltroCalled = $timeout($scope.dispatchFiltro, 1000, true);
             
         }, true);
@@ -1081,14 +1094,14 @@ angular.module('sislegisapp')
             
                 
         $scope.today = new Date().getTime();
-
+        $scope.firstquerydone=false;
         $scope.consultarProposicoes = function () {
-
+            console.log("consultando..");
             if ($scope.infiniteScroll.busy || $scope.infiniteScroll.full) return;
 
             $scope.infiniteScroll.busy = true;
             $rootScope.inactivateSpinner = true;
-
+            
             var successCallback = function (data) {
                 $rootScope.inactivateSpinner = false;
                 $scope.infiniteScroll.busy = false;
@@ -1104,19 +1117,20 @@ angular.module('sislegisapp')
                     return;
                 }
                 $scope.infiniteScroll.offset += $scope.infiniteScroll.limit;
-
+                $scope.firstquerydone=true;
 
             };
             var errorCallback = function () {
                 toaster.pop('error', 'Falha ao consultar Proposição.');
                 $rootScope.inactivateSpinner = false;
                 $scope.infiniteScroll.busy = false;
+                $scope.firstquerydone=true;
             };
             var getDateStr=function(data){
-                if($scope.filtro.inseridaApos==null){
+                if(data==null){
                     return null;
                 }
-                var d = $scope.filtro.inseridaApos;
+                var d = data;
                 return d.getDate()+"-"+(d.getMonth()+1)+"-"+d.getFullYear();
             }
             var filtroAtual =
@@ -1128,14 +1142,18 @@ angular.module('sislegisapp')
                     origem: $scope.filtro.origem,
                     isFavorita: $scope.filtro.isFavorita,
                     estado: $scope.filtro.estado,
-                    inseridaApos: getDateStr(),
+                    inseridaApos: getDateStr($scope.filtro.inseridaApos),
+                    foiDespachadaApos:getDateStr($scope.filtro.foiDespachadaApos),
+                    foiDespachadaAte:getDateStr($scope.filtro.foiDespachadaAte),
                     comAtencaoEspecial:$scope.filtro.comAtencaoEspecial,
+                    comNotaTecnica:$scope.filtro.comNotaTecnica,
+                    
                     comissao: $scope.filtro.comissao?$scope.filtro.comissao.sigla.trim():null,
                     macrotema: $scope.filtro.macrotema ? $scope.filtro.macrotema.tag : null,
                     idEquipe: $scope.filtro.equipe ? $scope.filtro.equipe.id : null,
                     idPosicionamento: $scope.filtro.posicionamento ? $scope.filtro.posicionamento.id : null,
                     idResponsavel: $scope.filtro.responsavel ? $scope.filtro.responsavel.id : null,
-                    somentePautadas: $scope.filtro.somentePautadas,
+                    somentePautadas: $scope.filtro.somentePautadas,                    
                     limit: $scope.infiniteScroll.limit,
                     offset: $scope.infiniteScroll.offset
                 };
