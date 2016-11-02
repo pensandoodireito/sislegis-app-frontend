@@ -1052,6 +1052,15 @@ angular.module('sislegisapp')
             item.estado = estado;
         }
 
+        $scope.dispatchFiltro =function(){
+            console.log("Limpou proposicoes, disparando filtro");
+            $scope.proposicoes = [];
+                    
+            $scope.infiniteScroll.busy = false;
+            $scope.infiniteScroll.offset = 0;
+            $scope.infiniteScroll.full = false;
+            $scope.consultarProposicoes();
+        }
         $scope.$watch('filtro', function (newValue, oldValue, scope) {
             if(newValue.relator!=oldValue.relator && newValue.relator!=null && newValue.relator!='' && newValue.relator.length<4 ){
                 console.log("evitando watch por relator")
@@ -1062,13 +1071,15 @@ angular.module('sislegisapp')
                 return;
             }
             console.log("Limpou proposicoes");
-            $scope.proposicoes = [];
+            $timeout.cancel($scope.lastFiltroCalled);//tem q ser manual, versão do angular não suporta.
+            $scope.lastFiltroCalled = $timeout($scope.dispatchFiltro, 1000, true);
             
-            $scope.infiniteScroll.busy = false;
-            $scope.infiniteScroll.offset = 0;
-            $scope.infiniteScroll.full = false;
-            $scope.consultarProposicoes();
         }, true);
+        
+        
+        
+            
+                
         $scope.today = new Date().getTime();
 
         $scope.consultarProposicoes = function () {
