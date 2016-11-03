@@ -94,9 +94,9 @@
                             </div>
                             <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6">
                                 <label>Por responsável:</label>
-                                <input typeahead-editable="false" name="idResponsavel" ng-model="filtro.responsavel" type="text" placeholder="Nome do responsável" typeahead="user as user.nome for user in getUsuarios($viewValue, false)"
+                                <input typeahead-editable="false" ng-model="filtro.responsavel" type="text" placeholder="Nome do responsável" typeahead="user as user.nome for user in getUsuarios($viewValue, false) "
                                 ng-model-options="{ debounce: 500 }" class="form-control">
-
+                                   <input type="hidden" name="idResponsavel"  value="{{filtro.responsavel.id}}">
                             </div>
                             <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6">
                                 <label>Por posicionamento:</label>
