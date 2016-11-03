@@ -1,5 +1,4 @@
-angular.module('sislegisapp').factory('TagResource',
-    function ($resource, BACKEND) {
+angular.module('sislegisapp').factory('TagResource', function ($resource, BACKEND) {
         return $resource(BACKEND + '/tags/:TagId', {
             TagId: '@id'
         }, {
@@ -30,4 +29,11 @@ angular.module('sislegisapp').factory('TagResource',
                     isArray: true
                 }
             });
+    }).factory('TagResourceCache', function (TagResource, $rootScope) {
+        $rootScope.allTags = TagResource.listarTodos();
+        return {
+            listarTodos:function(){
+                return  $rootScope.allTags;
+            }
+        }
     });

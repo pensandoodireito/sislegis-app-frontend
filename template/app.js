@@ -27,7 +27,7 @@ var auth = {
         return this.hasRole('ADMIN') || (auth.authz != null && auth.authz.hasRealmRole("admin"));//part dois é para o admin via keycloak
     },
     isSecretario: function (ascendente) {
-        return this.hasRole('SECRETARIO') || (ascendente && this.isAdmin(true));
+        return this.hasRole('SECRETARIO') ;
     },
     isDiretor: function (ascendente) {
         return this.hasRole('DIRETOR') || (ascendente && this.isSecretario(true));
