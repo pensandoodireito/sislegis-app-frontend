@@ -816,7 +816,13 @@ angular.module('sislegisapp')
 
             $scope.format = 'dd/MM/yyyy';
         }
-
+        $scope.avoidSubmit=function(event){
+            console.log(event.keyCode)
+            if(event.keyCode==13){
+            event.preventDefault();
+            }
+            
+        }
         $scope.setCalendar();
         $scope.getAuthorization = function () {
             return 'Bearer ' + Auth.authz.token;
@@ -825,6 +831,27 @@ angular.module('sislegisapp')
         $scope.getReportURL = function () {
             var back = BACKEND.substr(0, BACKEND.length - 5);
             return $sce.trustAsResourceUrl(back + "/relatorio");
+        }
+        $scope.getNameEstado=function(estado){
+            switch (estado) {
+                case 'ADESPACHAR':
+                    return "A despachar";
+                case 'EMANALISE':
+                    return "Em análise";
+                case 'ANALISADA':
+                    return "Em revisão";
+                case 'FORADEPAUTA':
+                    return "Fora de competência";
+                case 'DESPACHADA':
+                    return "Despachada";
+                case 'ADESPACHAR_PRESENCA':
+                    return "A despachar presencialmente";                          
+                    
+                    
+            
+                default:
+                    return "";
+            }
         }
         $scope.getSunday = function () {
             var d = new Date();
