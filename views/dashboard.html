@@ -238,7 +238,7 @@
                             <tr ng-repeat="tarefa in tarefas |orderBy:['data']">
                                 <td> {{$index + 1}} </td>
                                 <td><i></i><a href="#/Tarefas/edit/{{tarefa.id}}">{{tarefa.encaminhamentoProposicao.tipoEncaminhamento.nome}}</a></td>
-                                <td><a  data-toggle="tooltip" title="{{tarefa.encaminhamentoProposicao.proposicao.ementa}}" href="go('/Proposicao/consultar',{sigla:tarefa.encaminhamentoProposicao.proposicao.sigla})">{{tarefa.encaminhamentoProposicao.proposicao.sigla}}</a></td>
+                                <td><a  data-toggle="tooltip" title="{{tarefa.encaminhamentoProposicao.proposicao.ementa}}" ng-click="go('/Proposicao/consultar',{sigla:tarefa.encaminhamentoProposicao.proposicao.sigla})">{{tarefa.encaminhamentoProposicao.proposicao.sigla}}</a></td>
                                 <td><i></i>{{tarefa.encaminhamentoProposicao.detalhes}}</td>
                                 <td><i></i>{{tarefa.data|date:'d/M'}}</td>
                                 <td><i></i>{{tarefa.encaminhamentoProposicao.dataHoraLimite|date}}</td>
