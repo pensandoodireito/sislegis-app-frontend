@@ -259,7 +259,7 @@
                             <button ng-if="Auth.isAspar(true) && item.estado!='FORADECOMPETENCIA'" type="button" class="btn btn-default btn-sm" title="Remover da lista de análise da SAL"
                             ng-click="setaEstado(item,'FORADECOMPETENCIA')"> <i class="fa fa-remove"></i> Fora de competência
                             </button>
-                            <button ng-if="Auth.isAspar(true) && item.estado=='FORADECOMPETENCIA'" type="button" class="btn btn-default btn-sm" title="Marcar análise SAL"
+                            <button ng-if="Auth.isAspar(true) && (item.estado=='FORADECOMPETENCIA' || item.estado=='INCLUIDO')" type="button" class="btn btn-default btn-sm" title="Marcar análise SAL"
                             ng-click="setaEstado(item,'EMANALISE')"> <i class="fa fa-mail-forward"></i> Marcar para análise da SAL
                             </button>
                             <button ng-if="Auth.isAspar(true) && item.estado=='DESPACHADA'" type="button" class="btn btn-default btn-sm" title="Fazer nova avaliação, despachada desde {{item.foiDespachada|date:'shortDate'}}"
