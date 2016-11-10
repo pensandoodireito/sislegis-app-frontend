@@ -840,7 +840,9 @@ angular.module('sislegisapp')
                     return "Em análise";
                 case 'ANALISADA':
                     return "Em revisão";
-                case 'FORADEPAUTA':
+                case 'INCLUIDO':
+                    return "Incluído no Sislegis";
+                case 'FORADECOMPETENCIA':
                     return "Fora de competência";
                 case 'DESPACHADA':
                     return "Despachada";
@@ -1024,10 +1026,10 @@ angular.module('sislegisapp')
         EquipeResource.queryAll(function (data) {
             for (var index = 0; index < data.length; index++) {
                 var element = data[index];
-                if (element.nome != "ASPAR") {
+                // if (element.nome != "ASPAR") {//Pelo requisito novo, deve ser permitido
                     $scope.equipes.push(element);
                     $scope.equipesFiltro.push(element);
-                }
+                // }
 
             }
         });
