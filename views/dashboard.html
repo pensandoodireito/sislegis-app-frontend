@@ -235,7 +235,7 @@
                         </thead>
                         <tbody>
 
-                            <tr ng-repeat="tarefa in tarefas |orderBy:['data']">
+                            <tr ng-repeat="tarefa in tarefas|filter:{finalizada:false} |orderBy:['data']">
                                 <td> {{$index + 1}} </td>
                                 <td><i></i><a href="#/Tarefas/edit/{{tarefa.id}}">{{tarefa.encaminhamentoProposicao.tipoEncaminhamento.nome}}</a></td>
                                 <td><a  data-toggle="tooltip" title="{{tarefa.encaminhamentoProposicao.proposicao.ementa}}" ng-click="go('/Proposicao/consultar',{sigla:tarefa.encaminhamentoProposicao.proposicao.sigla})">{{tarefa.encaminhamentoProposicao.proposicao.sigla}}</a></td>

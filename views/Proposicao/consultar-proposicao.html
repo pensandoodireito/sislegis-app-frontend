@@ -42,7 +42,8 @@
 
                             <div class="col-sm-12 col-md-2 col-lg-2 col-xs-12">
                                 <label>Por sigla:</label>
-                                <input name="sigla" type="text" class="form-control" ng-model="filtro.sigla" placeholder="tipo número/ano" ng-model-options="{ debounce: 1000 }">
+                                <input name="sigla" ng-keypress="avoidSubmit($event)" type="text" class="form-control" ng-model="filtro.sigla" placeholder="tipo número/ano"
+                                ng-model-options="{ debounce: 1000 }">
                             </div>
                             <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6">
                                 <label>Por casa legislativa:</label>
@@ -61,9 +62,10 @@
                             </div>
                             <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6" ng-if="configConsulta.botoes=='GENERICO'">
                                 <label>Pelo estado na SAL:</label>
-                                <select name="estado" ng-model="filtro.estado" class="form-control" >
+                                <select name="estado" ng-model="filtro.estado" class="form-control">
                                     <option value=""></option>
-                                    <option value="FORADEPAUTA">Fora de competência</option>
+                                    <option value="FORADECOMPETENCIA">Fora de competência</option>
+                                    <option value="INCLUIDO">Incluída pela ASPAR</option>
                                     <option value="EMANALISE">Em análise pelos técnicos</option>
                                     <option value="ANALISADA">Em revisão pelo diretor</option>
                                     <option value="ADESPACHAR">A despachar pelo secretário</option>
@@ -94,9 +96,10 @@
                             </div>
                             <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6">
                                 <label>Por responsável:</label>
-                                <input typeahead-editable="false" ng-model="filtro.responsavel" type="text" placeholder="Nome do responsável" typeahead="user as user.nome for user in getUsuarios($viewValue, false) "
-                                ng-model-options="{ debounce: 500 }" class="form-control">
-                                   <input type="hidden" name="idResponsavel"  value="{{filtro.responsavel.id}}">
+                                <input typeahead-editable="false" ng-keypress="avoidSubmit($event)" ng-model="filtro.responsavel" type="text" placeholder="Nome do responsável"
+                                typeahead="user as user.nome for user in getUsuarios($viewValue, false) " ng-model-options="{ debounce: 500 }"
+                                class="form-control">
+                                <input type="hidden" name="idResponsavel" value="{{filtro.responsavel.id}}">
                             </div>
                             <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6">
                                 <label>Por posicionamento:</label>
@@ -138,23 +141,23 @@
 
                                 <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6">
                                     <label>Pela ementa:</label>
-                                    <input name="ementa" type="text" class="form-control" ng-model="filtro.ementa" placeholder="Texto da ementa">
+                                    <input name="ementa" ng-keypress="avoidSubmit($event)" type="text" class="form-control" ng-model="filtro.ementa" placeholder="Texto da ementa">
                                 </div>
                                 <div class="col-sm-3 col-xs-6">
                                     <label>Por autor:</label>
 
-                                    <input typeahead-editable="true" ng-model="filtro.autor" type="text" placeholder="Nome do autor" typeahead-min-length="2"
-                                    typeahead="entrada.nome for entrada in  getAutores($viewValue) | limitTo:8" ng-model-options="{ debounce: 500 }"
-                                    class="form-control">
+                                    <input typeahead-editable="true" ng-model="filtro.autor" ng-keypress="avoidSubmit($event)" type="text" placeholder="Nome do autor"
+                                    typeahead-min-length="2" typeahead="entrada.nome for entrada in  getAutores($viewValue) | limitTo:8"
+                                    ng-model-options="{ debounce: 500 }" class="form-control">
 
                                 </div>
 
 
                                 <div class="col-sm-3 col-xs-6">
                                     <label>Por relator:</label>
-                                    <input typeahead-editable="true" ng-model="filtro.relator" type="text" placeholder="Nome do relator" typeahead-min-length="2"
-                                    typeahead="entrada.nome for entrada in  getRelatores($viewValue) | limitTo:8" ng-model-options="{ debounce: 500 }"
-                                    class="form-control">
+                                    <input typeahead-editable="true" ng-model="filtro.relator" ng-keypress="avoidSubmit($event)" type="text" placeholder="Nome do relator"
+                                    typeahead-min-length="2" typeahead="entrada.nome for entrada in  getRelatores($viewValue) | limitTo:8"
+                                    ng-model-options="{ debounce: 500 }" class="form-control">
 
                                 </div>
                                 <div class="col-sm-3 col-xs-6">
@@ -162,7 +165,8 @@
                                     <div class="input-group date">
                                         <label>Proposições inseridas após:</label>
                                         <div class="input-group width-grid-2">
-                                            <input type="text" class="form-control" name="inseridaApos" datepicker-popup="{{format}}" ng-model="filtro.inseridaApos" date-type="string" is-open="opened_inseridaApos"
+                                            <input type="text" class="form-control" name="inseridaApos" ng-keypress="avoidSubmit($event)" datepicker-popup="{{format}}"
+                                            ng-model="filtro.inseridaApos" date-type="string" is-open="opened_inseridaApos"
                                             min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Fechar"
                                             clear-text="Limpar" current-text="Hoje" readonly /> <span class="input-group-btn">
 							             <button type="button" class="btn btn-default" ng-click="openCalendar($event,'inseridaApos')">
@@ -181,10 +185,10 @@
                                         <div class="col-sm-6">
 
                                             <div class="input-group ">
-                                                <input type="text" class="form-control" name="foiDespachadaApos" datepicker-popup="{{format}}" ng-model="filtro.foiDespachadaApos" date-type="string"
-                                                is-open="opened_foiDespachadaApos" min-date="minDate" max-date="'2020-06-22'"
-                                                current-text="Hoje" datepicker-options="dateOptions" placeholder="Após" close-text="Fechar"
-                                                readonly clear-text="Limpar" /> <span class="input-group-btn">
+                                                <input type="text" class="form-control" ng-keypress="avoidSubmit($event)" name="foiDespachadaApos" datepicker-popup="{{format}}"
+                                                ng-model="filtro.foiDespachadaApos" date-type="string" is-open="opened_foiDespachadaApos"
+                                                min-date="minDate" max-date="'2020-06-22'" current-text="Hoje" datepicker-options="dateOptions"
+                                                placeholder="Desde" close-text="Fechar" readonly clear-text="Limpar" /> <span class="input-group-btn">
 							             <button type="button" class="btn btn-default" ng-click="openCalendar($event,'foiDespachadaApos')">
 								                <i class="glyphicon glyphicon-calendar"></i></button></span>
                                             </div>
@@ -192,10 +196,11 @@
                                         <div class="col-sm-6">
 
                                             <div class="input-group ">
-                                                <input type="text" class="form-control"  name="foiDespachadaAte" datepicker-popup="{{format}}" ng-model="filtro.foiDespachadaAte" date-type="string"
-                                                is-open="opened_foiDespachadaAte" min-date="filtro.foiDespachadaAte" max-date="'2020-06-22'"
-                                                current-text="Hoje" placeholder="Até" datepicker-options="dateOptions" close-text="Fechar"
-                                                readonly clear-text="Limpar" /> <span class="input-group-btn">
+                                                <input type="text" class="form-control" ng-keypress="avoidSubmit($event)" name="foiDespachadaAte" datepicker-popup="{{format}}"
+                                                ng-model="filtro.foiDespachadaAte" date-type="string" is-open="opened_foiDespachadaAte"
+                                                min-date="filtro.foiDespachadaAte" max-date="'2020-06-22'" current-text="Hoje"
+                                                placeholder="Até" datepicker-options="dateOptions" close-text="Fechar" readonly
+                                                clear-text="Limpar" /> <span class="input-group-btn">
 							             <button type="button" class="btn btn-default" ng-click="openCalendar($event,'foiDespachadaAte')">
 								                <i class="glyphicon glyphicon-calendar"></i></button></span>
                                             </div>
@@ -251,8 +256,10 @@
                             </button>
                         </div>
                         <div class="box-tools pull-right" ng-if="configConsulta.botoes=='GENERICO'" ng-hide="inactivateSpinner==true && item===savingItem">
-
-                            <button ng-if="Auth.isAspar(true) && item.estado=='FORADEPAUTA'" type="button" class="btn btn-default btn-sm" title="Marcar análise SAL"
+                            <button ng-if="Auth.isAspar(true) && item.estado!='FORADECOMPETENCIA'" type="button" class="btn btn-default btn-sm" title="Remover da lista de análise da SAL"
+                            ng-click="setaEstado(item,'FORADECOMPETENCIA')"> <i class="fa fa-remove"></i> Fora de competência
+                            </button>
+                            <button ng-if="Auth.isAspar(true) && (item.estado=='FORADECOMPETENCIA' || item.estado=='INCLUIDO')" type="button" class="btn btn-default btn-sm" title="Marcar análise SAL"
                             ng-click="setaEstado(item,'EMANALISE')"> <i class="fa fa-mail-forward"></i> Marcar para análise da SAL
                             </button>
                             <button ng-if="Auth.isAspar(true) && item.estado=='DESPACHADA'" type="button" class="btn btn-default btn-sm" title="Fazer nova avaliação, despachada desde {{item.foiDespachada|date:'shortDate'}}"
@@ -292,9 +299,6 @@
                             ng-click="setaEstado(item, 'EMANALISE')">
                                 <i class="fa fa-retweet"></i> Nova análise pelo técnico
                             </button>
-
-
-
 
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
                             </button>
@@ -338,7 +342,7 @@
                                 <i style="cursor:pointer" class="fa fa-star-o" ng-show="!item.favorita" ng-click="item.favorita=true;save(item)"></i>
                                 <i style="cursor:pointer;color: orange;" class="fa fa-star" ng-show="item.favorita" ng-click="item.favorita=false;save(item)"></i>
 
-                                <h3 class="box-title"><a   data-widget="collapse"   title="{{item.sigla}} - {{item.estado}}">{{item.sigla}}</a></h3>
+                                <h3 class="box-title"><a   data-widget="collapse"   title="{{item.sigla}} - {{getNameEstado(item.estado)}}">{{item.sigla}}</a></h3>
                                 <div style="cursor:default" class="time" ng-class="{ 'text-muted':item.pautaComissaoAtual.pautaReuniaoComissao.data<today}"
                                 ng-show="item.pautaComissaoAtual.pautaReuniaoComissao.data>getSunday()" title="Pautada para {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'fullDate'}}">
                                     <i class="fa fa-clock-o"></i> {{item.pautaComissaoAtual.pautaReuniaoComissao.data| date:'EEE,&nbsp;H:mm'}}
