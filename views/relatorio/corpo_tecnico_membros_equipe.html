@@ -1,0 +1,93 @@
+<style>
+    i {
+        margin-right: 2pt;
+    }
+    
+    .periodo {
+        font-style: italic;
+    }
+    
+    .nomeEquipe {
+        font-weight: bolder;
+        font-size: large;
+    }
+</style>
+<section class="invoice">
+    
+
+    <div class="row no-print">
+        <div class="col-xs-12">
+            <div class="col-sm-6 col-xs-6">
+                <label>Selecione o período:</label>
+                <div class="input-group date">
+
+
+                    <div class="col-sm-6">
+
+                        <div class="input-group ">
+                            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="inicio" date-type="string" is-open="opened_inicio"
+                            min-date="minDate" max-date="'2020-06-22'" current-text="Hoje" datepicker-options="dateOptions"
+                            placeholder="Início" close-text="Fechar" readonly clear-text="Limpar" /> <span class="input-group-btn">
+							             <button type="button" class="btn btn-default" ng-click="openCalendar($event,'inicio')">
+								                <i class="glyphicon glyphicon-calendar"></i></button></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+
+                        <div class="input-group ">
+                            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="fim" date-type="string" is-open="opened_fim"
+                            min-date="inicio" max-date="'2020-06-22'" current-text="Hoje" datepicker-options="dateOptions"
+                            placeholder="Fim" close-text="Fechar" readonly clear-text="Limpar" /> <span class="input-group-btn">
+							             <button type="button" class="btn btn-default" ng-click="openCalendar($event,'fim')">
+								                <i class="glyphicon glyphicon-calendar"></i></button></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <button type="button" class="btn btn-default " ng-click="filtrar()">  Filtrar</button>
+
+            <button type="button" class="btn btn-default " ng-click="printIt()"> <i class="fa fa-print"></i> Imprimir</button>
+
+        </div>
+    </div>
+</section>
+<h2>Desempenho Equipe</h2>
+<div class="periodo">Período {{inicio|date:'dd/MM/yyyy'}} a {{fim|date:'dd/MM/yyyy'}}</div>
+<hr>
+
+<h3>Resumo do desempenho dividido por equipe</h3>
+
+<div ng-repeat="equipe in report.equipes|orderBy:['nome']" style="page-break-inside: avoid; ">
+
+
+
+    <div class="nomeEquipe">{{equipe.nome}}</div>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Responsável</th>
+                <th>Projetos Analisados (qtde)</th>
+                <th>Tempo médio da análise</th>
+                <th>Tempo médio para a produção da nota técnica</th>
+                <th>Tempo médio para a produção da emenda</th>
+                <th>Percentagem dos posicionamentos</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="membro in equipe.membros|orderBy:['associadas','nome']">
+                <td>{{membro.nome}}</td>
+                <td style="text-align:center">{{membro.analisados}}</td>
+                <td style="text-align:center">{{formatTempo(membro.tempo.analise).v|number:1}} {{formatTempo(membro.tempo.analise).l}}</td>
+                <td style="text-align:center">{{formatTempo(membro.tempo.nota).v|number:1}} {{formatTempo(membro.tempo.nota).l}}</td>
+                <td style="text-align:center">{{formatTempo(membro.tempo.emenda).v|number:1}} {{formatTempo(membro.tempo.emenda).l}}</td>
+                <td>
+                    <div ng-repeat="posicionamento in membro.posicionamentos|orderBy:['nome']">{{(posicionamento.total*100)/membro.analisados|number:1}}% {{posicionamento.nome}}</div>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+    <br>
+</div>

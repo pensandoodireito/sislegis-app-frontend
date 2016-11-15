@@ -10,6 +10,10 @@ angular.module('sislegisapp').factory('AreaMeritoResource', function ($resource,
     return $resource(BACKEND + '/dashboard');
 
 })
+.service('RelatorioService', function ($http, $q, $resource, BACKEND) {
+    return $resource(BACKEND + '/report/:tipo');
+
+})
     .factory('UploadService', ['$http', '$q', '$resource', 'BACKEND', function ($http, $q, $resource, BACKEND) {
         return function (actionUrl, file, params) {
             var deferred = $q.defer();

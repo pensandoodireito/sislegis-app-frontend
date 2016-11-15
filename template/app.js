@@ -140,6 +140,10 @@ module.config(['$routeProvider', function ($routeProvider) {
                         }
                     }
         })
+        .when('/desempenhoSAL', { templateUrl: 'views/relatorio/desempenho_geral.html', controller: 'RelatorioDesempenhoSALController' })
+        .when('/corpotecnico_equipes', { templateUrl: 'views/relatorio/corpo_tecnico_membros_equipe.html', controller: 'RelatorioCorpoTecnicoController' })
+        .when('/corpotecnico_equipes_posicoes', { templateUrl: 'views/relatorio/corpo_tecnico_posicoes_equipe.html', controller: 'RelatorioCorpoTecnicoPosicoesController' })
+        
         .when('/notatecnica/:notaid', { templateUrl: 'views/relatorio/notatecnica.html', controller: 'NotaTecnicaController',
         
                  })   

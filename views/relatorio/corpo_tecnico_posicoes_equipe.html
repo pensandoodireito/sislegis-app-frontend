@@ -1,0 +1,129 @@
+<style>
+    i {
+        margin-right: 2pt;
+    }
+    
+    .periodo {
+        font-style: italic;
+    }
+    
+    .nomeEquipe {
+        font-weight: bolder;
+        font-size: large;
+    }
+    
+    th {
+        vertical-align: text-top;
+    }
+    
+    td {
+        text-align: center;
+    }
+    
+    .legend {
+        width: 20px;
+        height: 10px;
+    }
+    
+    @media print {
+        .legend {
+             
+            -webkit-print-color-adjust: exact;
+        }
+    }
+</style>
+<section class="invoice">
+
+
+    <div class="row no-print">
+        <div class="col-xs-12">
+            <div class="col-sm-6 col-xs-6">
+                <label>Selecione o período:</label>
+                <div class="input-group date">
+
+
+                    <div class="col-sm-6">
+
+                        <div class="input-group ">
+                            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="inicio" date-type="string" is-open="opened_inicio"
+                            min-date="minDate" max-date="'2020-06-22'" current-text="Hoje" datepicker-options="dateOptions"
+                            placeholder="Início" close-text="Fechar" readonly clear-text="Limpar" /> <span class="input-group-btn">
+							             <button type="button" class="btn btn-default" ng-click="openCalendar($event,'inicio')">
+								                <i class="glyphicon glyphicon-calendar"></i></button></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+
+                        <div class="input-group ">
+                            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="fim" date-type="string" is-open="opened_fim"
+                            min-date="inicio" max-date="'2020-06-22'" current-text="Hoje" datepicker-options="dateOptions"
+                            placeholder="Fim" close-text="Fechar" readonly clear-text="Limpar" /> <span class="input-group-btn">
+							             <button type="button" class="btn btn-default" ng-click="openCalendar($event,'fim')">
+								                <i class="glyphicon glyphicon-calendar"></i></button></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <button type="button" class="btn btn-default " ng-click="filtrar()"> Filtrar</button>
+
+            <button type="button" class="btn btn-default " ng-click="printIt()"> <i class="fa fa-print"></i> Imprimir</button>
+
+        </div>
+    </div>
+</section>
+<h2>Efetividade da SAL – Corpo técnico por equipe</h2>
+<div class="periodo">Efetividade por equipe de {{inicio|date:'dd/MM/yyyy'}} até {{fim|date:'dd/MM/yyyy'}}</div>
+<hr>
+
+<div>
+
+
+
+
+    <table style="width:100%">
+        <thead>
+            <tr>
+                <th>Equipe</th>
+                <th>Favoráveis
+                    <div class="legend" style="background-color:{{colors.favoravel}} !important"></div>
+                </th>
+                <th>Favoráveis com emendas
+                    <div class="legend" style="background-color:{{colors.favoravelEmendas}} !important"></div>
+                </th>
+                <th>Contrário
+                    <div class="legend" style="background-color:{{colors.contrario}} !important"></div>
+                </th>
+                <th>Monitorar
+                    <div class="legend" style="background-color:{{colors.monitorar}} !important"></div>
+                </th>
+                <th>Nada a opor
+                    <div class="legend" style="background-color:{{colors.nadaaopor}} !important"></div>
+                </th>
+                <th>Total analisado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="equipe in report.equipes|orderBy:['nome']">
+                <td>{{equipe.nome}}</td>
+
+                <td style="text-align:center">{{equipe.favoravel}} ({{equipe.favoravel/equipe.total|number:1}}%) </td>
+                <td style="text-align:center">{{equipe.favoravelEmendas}} ({{equipe.favoravelEmendas/equipe.total|number:1}}%)</td>
+                <td style="text-align:center">{{equipe.contrario}} ({{equipe.contrario/equipe.total|number:1}}%)</td>
+                <td style="text-align:center">{{equipe.monitorar}} ({{equipe.monitorar/equipe.total|number:1}}%)</td>
+                <td style="text-align:center">{{equipe.nadaaopor}} ({{equipe.nadaaopor/equipe.total|number:1}}%)</td>
+                <td style="text-align:center">{{equipe.total}} ({{equipe.total/equipe.total|number:1}}%)</td>
+            </tr>
+
+        </tbody>
+
+    </table>
+    <table style="width:100%">
+        <tr>
+            <td ng-repeat="equipe in report.equipes|orderBy:['nome']" style="width:30%;text-align:center;">
+                <canvas id="pieChart_{{equipe.id}}" height="120" width="120"></canvas>
+            </td>
+        </tr>
+    </table>
+    <br>
+</div>
