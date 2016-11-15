@@ -434,7 +434,54 @@ angular.module('sislegisapp')
         }
 
     })
+    .controller('RelatorioCorpoTecnicoResponsavelController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster, $window, UsuarioResource,
+        RelatorioService, Auth, $q, $parse, BACKEND) {
 
+        $scope.filtrar = function () {
+            $scope.report = RelatorioService.get({ tipo: 'corpoTecnicoResponsavel', r: $scope.responsavel.id, i: getDateStr($scope.inicio), f: getDateStr($scope.fim) },
+                function (data) {
+                    $timeout($scope.initAllCharts, 1000, true);
+                });
+        }
+
+        $scope.getUsuarios = function (val, buscaGeral) {
+            var method = 'find';
+            var params = { method: method, nome: val };
+            return UsuarioResource.buscaPorUsuario(params, params, function (data) { }).$promise;
+
+        };
+        var getDateStr = function (data) {
+            if (data == null) {
+                return null;
+            }
+            var d = data;
+            return d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
+        }
+        $scope.setCalendar = function () {
+            $scope.openCalendar = function ($event, id) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                var opened = 'opened_' + id;
+                var model = $parse(opened);
+                model.assign($scope, true);
+                $scope.apply;
+
+            };
+
+
+            $scope.dateOptions = {
+                formatYear: 'yy',
+                startingDay: 1
+            };
+
+            $scope.format = 'dd/MM/yyyy';
+        };
+        $scope.setCalendar();
+        $scope.printIt = function () {
+            $window.print();
+        };
+    }
+        )
     .controller('RelatorioCorpoTecnicoPosicoesController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster, $window,
         RelatorioService, Auth, $q, $parse, BACKEND) {
         $scope.printIt = function () {
