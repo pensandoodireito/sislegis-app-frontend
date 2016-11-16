@@ -20,9 +20,6 @@ angular.module('sislegisapp').controller('EquipeController', function ($scope, $
 
         if (typeof usuarioSelecionado != 'undefined') {
 
-
-
-
             $scope.equipe.listaEquipeUsuario.push(usuarioSelecionado);
         }
 

@@ -246,24 +246,7 @@ angular.module('sislegisapp')
                 if ($scope.lastSaveTimer != null) {
                     $timeout.cancel($scope.lastSaveTimer);
                 }
-                switch (newValue) {
-                    case "EMANALISE":
-                        $scope.proposicao.foiEncaminhada = new Date().getTime();
-                        break;
-                    case "ANALISADA":
-                        $scope.proposicao.foiAnalisada = new Date().getTime();
-                        break;
-                    case "ADESPACHAR":
-                        $scope.proposicao.foiRevisada = new Date().getTime();
-                        break;
-                    case "DESPACHADA":
-                        $scope.proposicao.foiDespachada = new Date().getTime();
-                        break;
-
-                    default:
-                        break;
-                }
-                
+               
                 $scope.save($scope.proposicao, "Estado alterado", "Falhou ao alterar estado").then(function (data) {
                     console.log(data, $scope.estadoHandler);                
                     
@@ -788,7 +771,7 @@ var getDateStr=function(data){
     .controller('DashboardController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster,
         DashboardService, Auth, $q, TarefaResource, BACKEND) {
         $scope.Auth = Auth;
-
+     
         $scope.update = function () {
             if (!window.o) {
                 return;
@@ -1219,7 +1202,13 @@ var getDateStr=function(data){
             $scope.filtro.sigla = $routeParams.filter.sigla;
             $scope.filtro.equipe = $routeParams.filter.equipe;
             $scope.filtro.estado = $routeParams.filter.estado;
-            $scope.filtro.responsavel = $routeParams.filter.responsavel;
+            if($routeParams.filter.responsavel){
+                $scope.filtro.responsavel = $routeParams.filter.responsavel;
+            }else if($routeParams.filter.idResponsavel){
+                $scope.filtro.responsavel = {
+                    id:$routeParams.filter.idResponsavel
+                    };
+            }
         } else {
             console.log(" nenhum parametro filtro ativo");
         }

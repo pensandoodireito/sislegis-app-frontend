@@ -11,6 +11,19 @@
         font-weight: bolder;
         font-size: large;
     }
+    .relatTable{
+        width:100%;
+    }
+     table.relatTable > thead >tr> th {
+        vertical-align: text-top;
+        text-align: center;
+        padding: 5px;
+    }
+    table.relatTable > tbody > tr > td
+    {
+        text-align: center;
+        padding: 5px;
+    }
 </style>
 <section class="invoice">
     
@@ -64,7 +77,7 @@
 
     <div class="nomeEquipe">{{equipe.nome}}</div>
     <br>
-    <table>
+    <table class="relatTable"  border=1>
         <thead>
             <tr>
                 <th>Responsável</th>

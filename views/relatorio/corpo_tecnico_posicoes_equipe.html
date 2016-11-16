@@ -12,22 +12,25 @@
         font-size: large;
     }
     
-    th {
+    table.relatTable > thead >tr> th {
         vertical-align: text-top;
-    }
-    
-    td {
         text-align: center;
+        padding: 5px;
+    }
+    table.relatTable > tbody > tr > td
+    {
+        text-align: center;
+        padding: 5px;
     }
     
     .legend {
         width: 20px;
         height: 10px;
+        margin: auto;
     }
     
     @media print {
         .legend {
-             
             -webkit-print-color-adjust: exact;
         }
     }
@@ -81,24 +84,19 @@
 
 
 
-    <table style="width:100%">
+    <table style="width:100%" border="1" class="relatTable">
         <thead>
             <tr>
                 <th>Equipe</th>
                 <th>Favoráveis
-                    <div class="legend" style="background-color:{{colors.favoravel}} !important"></div>
                 </th>
                 <th>Favoráveis com emendas
-                    <div class="legend" style="background-color:{{colors.favoravelEmendas}} !important"></div>
                 </th>
                 <th>Contrário
-                    <div class="legend" style="background-color:{{colors.contrario}} !important"></div>
                 </th>
                 <th>Monitorar
-                    <div class="legend" style="background-color:{{colors.monitorar}} !important"></div>
                 </th>
                 <th>Nada a opor
-                    <div class="legend" style="background-color:{{colors.nadaaopor}} !important"></div>
                 </th>
                 <th>Total analisado</th>
             </tr>
@@ -114,14 +112,39 @@
                 <td style="text-align:center">{{equipe.nadaaopor}} ({{equipe.nadaaopor/equipe.total|number:1}}%)</td>
                 <td style="text-align:center">{{equipe.total}} ({{equipe.total/equipe.total|number:1}}%)</td>
             </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="legend" style="background-color:{{colors.favoravel}} !important"></div>
+                </td>
+                <td>
+                    <div class="legend" style="background-color:{{colors.favoravelEmendas}} !important"></div>
+                </td>
+                <td>
+                    <div class="legend" style="background-color:{{colors.contrario}} !important"></div>
+                </td>
+                <td>
+                    <div class="legend" style="background-color:{{colors.monitorar}} !important"></div>
+                </td>
+                <td >
+                    <div class="legend" style="background-color:{{colors.nadaaopor}} !important"></div>
+                </td>
+                <td></td>
+
+            </tr>
 
         </tbody>
 
     </table>
-    <table style="width:100%">
+    <table style="width:100%" border="1" class="relatTable">
         <tr>
             <td ng-repeat="equipe in report.equipes|orderBy:['nome']" style="width:30%;text-align:center;">
                 <canvas id="pieChart_{{equipe.id}}" height="120" width="120"></canvas>
+            </td>
+        </tr>
+        <tr>
+            <td ng-repeat="equipe in report.equipes|orderBy:['nome']" style="width:30%;text-align:center;">
+                {{equipe.nome}}
             </td>
         </tr>
     </table>

@@ -7,18 +7,24 @@
         font-style: italic;
     }
     
-    td {
-        vertical-align: text-top;
-    }
-    
     .nomeEquipe {
         font-weight: bolder;
         font-size: large;
     }
     
-    th {
+    .relatTable {
+        width: 100%;
+    }
+    
+    table.relatTable > thead >tr> th {
         vertical-align: text-top;
         text-align: center;
+        padding: 5px;
+    }
+    
+    table.relatTable > tbody > tr > td {
+        text-align: center;
+        padding: 5px;
     }
 </style>
 <section class="invoice">
@@ -68,31 +74,30 @@
     </div>
 </section>
 <h2>Efetividade da SAL – Corpo técnico por responsável</h2>
-<div class="periodo">Efetividade {{responsavel.nome}} de {{inicio|date:'dd/MM/yyyy'}} a {{fim|date:'dd/MM/yyyy'}}</div>
 <hr>
 
 
 
 <div ng-repeat="posicionamento in report.posicionamentos|orderBy:['id']" style="page-break-inside: avoid;">
-
-    <div class="nomeEquipe">Posicionamento {{posicionamento.nome}} - {{posicionamento.total}} proposições<span ng-show="posicionamento.total>0"> - {{(posicionamento.tempoTotalGasto/(1000*60*60))/posicionamento.total|number:2}} horas para cada proposição</span></div>
-    <table style="width=100%" border=1 width="100%">
+    <div class="periodo">Efetividade {{responsavel.nome}} de {{inicio|date:'dd/MM/yyyy'}} a {{fim|date:'dd/MM/yyyy'}}</div>
+    <div class="nomeEquipe">Posicionamento {{posicionamento.nome}} - {{posicionamento.total}} proposições<span ng-show="posicionamento.total>0" title="{{posicionamento.tempoTotalGasto/(1000*60)|number:1}} minutos em média"> - {{(posicionamento.tempoTotalGasto/(1000*60*60))/posicionamento.total|number:2}} horas para cada proposição</span></div>
+    <table class=".relatTable" border=1 width="100%">
         <thead>
             <tr>
-                <th style="width:20%;">Projeto</th>
+                <th style="width:15%;">Projeto</th>
                 <th style="width:30%;">O que faz</th>
                 <th style="width:20%;">Comissão</th>
                 <th style="width:10%;">Casa</th>
-                <th style="width:20%;">O que foi elaborado</th>
+                <th style="width:25%;">O que foi elaborado</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="proposicao in posicionamento.proposicoes">
-                <td>{{proposicao.sigla}}</td>
+                <td style="vertical-align:text-top;">{{proposicao.sigla}}</td>
                 <td style="text-align:left;"><span ng-show="proposicao.tema!=null">{{proposicao.tema}}</span><span ng-show="proposicao.tema==null && proposicao.ementa!=null">{{proposicao.ementa}}</span></td>
                 <td style="text-align:center">{{proposicao.comissaoPorExtenso}}</td>
                 <td style="text-align:center"><span ng-show="proposicao.origem=='CAMARA'">Câmara dos Deputados</span><span ng-show="proposicao.origem=='SENADO'">Senado Federal</span></td>
-                <td style="text-align:center">
+                <td style="text-align:left">
                     <div>Nota técnica: {{proposicao.totais.notas}}</div>
                     <div>Emenda: {{proposicao.totais.emendas}}</div>
                     <div>Resumo analítico: {{proposicao.totais.briefings}}</div>
