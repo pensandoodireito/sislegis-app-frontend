@@ -519,11 +519,11 @@ angular.module('sislegisapp')
                  //Number - The percentage of the chart that we cut out of the middle
                  percentageInnerCutout: 20, // This is 0 for Pie charts
                  //Number - Amount of animation steps
-                 animationSteps: 100,
+                 animationSteps: 1,
                  //String - Animation easing effect
-                 animationEasing: "easeOutBounce",
+                //  animationEasing: "easeOutBounce",
                  //Boolean - Whether we animate the rotation of the Doughnut
-                 animateRotate: true,
+                 animateRotate: false,
                  //Boolean - Whether we animate scaling the Doughnut from the centre
                  animateScale: false,
                  //Boolean - whether to make the chart responsive to window resizing
