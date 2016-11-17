@@ -1,0 +1,111 @@
+<style>
+    i {
+        margin-right: 2pt;
+    }
+    
+    .periodo {
+        font-style: italic;
+    }
+    
+    .nomeEquipe {
+        font-weight: bolder;
+        font-size: large;
+    }
+    
+    .relatTable {
+        width: 100%;
+    }
+    
+    table.relatTable > thead >tr> th {
+        vertical-align: text-top;
+        text-align: center;
+        padding: 5px;
+    }
+    
+    table.relatTable > tbody > tr > td {
+        text-align: center;
+        padding: 5px;
+    }
+</style>
+<section class="invoice">
+
+
+    <div class="row no-print">
+        <div class="col-xs-12">
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-8">
+                <label>Por responsável:</label>
+                <input typeahead-editable="false" ng-model="responsavel" type="text" placeholder="Nome do responsável" typeahead="user as user.nome for user in getUsuarios($viewValue, false)"
+                class="form-control">
+
+            </div>
+            <div class="col-sm-6 col-xs-6">
+                <label>Selecione o período:</label>
+                <div class="input-group date">
+
+
+                    <div class="col-sm-6">
+
+                        <div class="input-group ">
+                            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="inicio" date-type="string" is-open="opened_inicio"
+                            min-date="minDate" max-date="'2020-06-22'" current-text="Hoje" datepicker-options="dateOptions"
+                            placeholder="Início" close-text="Fechar" readonly clear-text="Limpar" /> <span class="input-group-btn">
+							             <button type="button" class="btn btn-default" ng-click="openCalendar($event,'inicio')">
+								                <i class="glyphicon glyphicon-calendar"></i></button></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+
+                        <div class="input-group ">
+                            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="fim" date-type="string" is-open="opened_fim"
+                            min-date="inicio" max-date="'2020-06-22'" current-text="Hoje" datepicker-options="dateOptions"
+                            placeholder="Fim" close-text="Fechar" readonly clear-text="Limpar" /> <span class="input-group-btn">
+							             <button type="button" class="btn btn-default" ng-click="openCalendar($event,'fim')">
+								                <i class="glyphicon glyphicon-calendar"></i></button></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <button type="button" class="btn btn-default " ng-click="filtrar()"> Filtrar</button>
+
+            <button type="button" class="btn btn-default " ng-click="printIt()"> <i class="fa fa-print"></i> Imprimir</button>
+
+        </div>
+    </div>
+</section>
+<h2>Efetividade da SAL – Por responsável</h2>
+<hr>
+
+
+
+<div ng-repeat="posicionamento in report.posicionamentos|orderBy:['id']" style="page-break-inside: avoid;">
+    <div class="periodo">Efetividade {{responsavel.nome}} de {{inicio|date:'dd/MM/yyyy'}} a {{fim|date:'dd/MM/yyyy'}}</div>
+    <div class="nomeEquipe">Posicionamento {{posicionamento.nome}} - {{posicionamento.total}} proposições<span ng-show="posicionamento.total>0" title="{{posicionamento.tempoTotalGasto/(1000*60)|number:1}} minutos em média"> - {{(posicionamento.tempoTotalGasto/(1000*60*60))/posicionamento.total|number:2}} horas para cada proposição</span></div>
+    <table class=".relatTable" border=1 width="100%">
+        <thead>
+            <tr>
+                <th style="width:15%;">Projeto</th>
+                <th style="width:30%;">O que faz</th>
+                <th style="width:20%;">Comissão</th>
+                <th style="width:10%;">Casa</th>
+                <th style="width:25%;">O que foi elaborado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="proposicao in posicionamento.proposicoes">
+                <td style="vertical-align:text-top;">{{proposicao.sigla}}</td>
+                <td style="text-align:left;"><span ng-show="proposicao.tema!=null">{{proposicao.tema}}</span><span ng-show="proposicao.tema==null && proposicao.ementa!=null">{{proposicao.ementa}}</span></td>
+                <td style="text-align:center">{{proposicao.comissaoPorExtenso}}</td>
+                <td style="text-align:center"><span ng-show="proposicao.origem=='CAMARA'">Câmara dos Deputados</span><span ng-show="proposicao.origem=='SENADO'">Senado Federal</span></td>
+                <td style="text-align:left">
+                    <div>Nota técnica: {{proposicao.totais.notas}}</div>
+                    <div>Emenda: {{proposicao.totais.emendas}}</div>
+                    <div>Resumo analítico: {{proposicao.totais.briefings}}</div>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+    <br>
+    <br>
+</div>

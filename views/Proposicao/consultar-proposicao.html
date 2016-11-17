@@ -257,47 +257,43 @@
                         </div>
                         <div class="box-tools pull-right" ng-if="configConsulta.botoes=='GENERICO'" ng-hide="inactivateSpinner==true && item===savingItem">
                             <button ng-if="Auth.isAspar(true) && item.estado!='FORADECOMPETENCIA'" type="button" class="btn btn-default btn-sm" title="Remover da lista de análise da SAL"
-                            ng-click="setaEstado(item,'FORADECOMPETENCIA')"> <i class="fa fa-remove"></i> Fora de competência
+                            ng-mouseover="showBtnText='fc'" ng-mouseleave="showBtnText=null" ng-click="setaEstado(item,'FORADECOMPETENCIA')"> <i class="fa fa-remove"></i> <span ng-show="showBtnText=='fc'">Fora de competência</span>
                             </button>
                             <button ng-if="Auth.isAspar(true) && (item.estado=='FORADECOMPETENCIA' || item.estado=='INCLUIDO')" type="button" class="btn btn-default btn-sm" title="Marcar análise SAL"
-                            ng-click="setaEstado(item,'EMANALISE')"> <i class="fa fa-mail-forward"></i> Marcar para análise da SAL
+                            ng-click="setaEstado(item,'EMANALISE')" ng-mouseover="showBtnText='ma'" ng-mouseleave="showBtnText=null"> <i class="fa fa-mail-forward"></i> <span ng-show="showBtnText=='ma'">Marcar para análise da SAL</span>
                             </button>
                             <button ng-if="Auth.isAspar(true) && item.estado=='DESPACHADA'" type="button" class="btn btn-default btn-sm" title="Fazer nova avaliação, despachada desde {{item.foiDespachada|date:'shortDate'}}"
-                            ng-click="setaEstado(item,'EMANALISE')">
-                                <i class="fa fa-mail-forward"></i> Fazer nova avaliação
+                            ng-click="setaEstado(item,'EMANALISE')"  ng-mouseover="showBtnText='na'" ng-mouseleave="showBtnText=null">
+                                <i class="fa fa-mail-forward"></i> <span ng-show="showBtnText=='na'">Fazer nova avaliação</span>
                             </button>
 
                             <button ng-if="Auth.isEquipe(true) && item.estado=='EMANALISE'" type="button" class="btn btn-default btn-sm" title="Enviar para revisão, em análise desde {{item.foiEncaminhada|date:'shortDate'}}"
-                            ng-click="setaEstado(item,'ANALISADA')">
-                                <i class="fa fa-check-circle-o"></i> Enviar para revisão
+                            ng-click="setaEstado(item,'ANALISADA')" ng-mouseover="showBtnText='re'" ng-mouseleave="showBtnText=null">
+                                <i class="fa fa-check-circle-o"></i> <span ng-show="showBtnText=='re'">Enviar para revisão</span>
                             </button>
 
-                            <button ng-if="Auth.isDiretor() && (item.estado=='ANALISADA'  || item.estado=='ADESPACHAR' )&& item.foiDespachada>0" type="button"
-                            class="btn btn-default btn-sm" title="Despacho sem necessidade de revisão do secretário" ng-click="setaEstado(item, 'DESPACHADA')">
-                                <i class="fa fa-paper-plane"></i> Despachar direto
+                            <button ng-if="Auth.isDiretor() && (item.estado=='ANALISADA'  || item.estado=='ADESPACHAR' )&& item.foiDespachada>0" type="button" 
+                            class="btn btn-default btn-sm" title="Despacho sem necessidade de revisão do secretário" ng-click="setaEstado(item, 'DESPACHADA')"  ng-mouseover="showBtnText='dd'" ng-mouseleave="showBtnText=null">
+                                <i class="fa fa-paper-plane"></i> <span ng-show="showBtnText=='dd'">Despachar direto</span>
                             </button>
                             <button ng-if="Auth.isDiretor(true) && item.estado=='ANALISADA'" type="button" class="btn btn-default btn-sm" title="Enviar para despacho do Secretário, em revisão desde {{item.foiAnalisada|date:'shortDate'}}"
-                            ng-click="setaEstado(item, 'ADESPACHAR')">
-                                <i class="fa fa-check-circle"></i> Enviar para despacho do Secretário
+                            ng-click="setaEstado(item, 'ADESPACHAR')" ng-mouseover="showBtnText='ed'" ng-mouseleave="showBtnText=null">
+                                <i class="fa fa-check-circle"></i> <span ng-show="showBtnText=='ed'">Enviar para despacho do Secretário</span>
                             </button>
-                            <button ng-if="Auth.isDiretor(true) && (item.estado=='ANALISADA' || item.estado=='ADESPACHAR')" type="button" class="btn btn-default btn-sm"
-                            title="Enviar para re análise" ng-click="setaEstado(item, 'EMANALISE')">
-                                <i class="fa fa-retweet"></i> Nova análise pelo técnico
+                            <button ng-if="Auth.isEquipe(true) && (item.estado=='ANALISADA' || item.estado=='ADESPACHAR' || item.estado=='ADESPACHAR_PRESENCA')" type="button" class="btn btn-default btn-sm"
+                            title="Enviar para re análise" ng-click="setaEstado(item, 'EMANALISE')"  ng-mouseover="showBtnText='nt'" ng-mouseleave="showBtnText=null">
+                                <i class="fa fa-retweet"></i> <span ng-show="showBtnText=='nt'">Nova análise pelo técnico</span>
                             </button>
 
                             <button ng-if="Auth.isSecretario(true) && item.estado=='ADESPACHAR'" type="button" class="btn btn-default btn-sm" title="Despachar, em despacho desde {{item.foiRevisada|date:                           'shortDate'}}"
-                            ng-click="setaEstado(item, 'DESPACHADA')">
-                                <i class="fa fa-paper-plane"></i> Despachar
+                            ng-click="setaEstado(item, 'DESPACHADA')" ng-mouseover="showBtnText='de'" ng-mouseleave="showBtnText=null">
+                                <i class="fa fa-paper-plane"></i> <span ng-show="showBtnText=='de'">Despachar</span>
                             </button>
 
 
                             <button ng-if="Auth.isEquipe(true) && item.estado=='ADESPACHAR_PRESENCA'" type="button" class="btn btn-default btn-sm" title="Re enviar para despacho do secretário"
-                            ng-click="setaEstado(item, 'ADESPACHAR')">
-                                <i class="fa fa-check-circle"></i> Enviar para despacho do Secretário
-                            </button>
-                            <button ng-if="Auth.isEquipe(true) && item.estado=='ADESPACHAR_PRESENCA'" type="button" class="btn btn-default btn-sm" title="Enviar para re análise"
-                            ng-click="setaEstado(item, 'EMANALISE')">
-                                <i class="fa fa-retweet"></i> Nova análise pelo técnico
+                            ng-click="setaEstado(item, 'ADESPACHAR')" ng-mouseover="showBtnText='eds'" ng-mouseleave="showBtnText=null">
+                                <i class="fa fa-check-circle"></i> <span ng-show="showBtnText=='eds'">Enviar para despacho do Secretário</span>
                             </button>
 
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
@@ -390,7 +386,7 @@
                         </div>
                     </div>
                     <div class="box-footer">
-                        <div class="col-sm-12 col-lg-12  text-muted">
+                        <div class="col-sm-12 col-lg-12  text-muted" >
                             <small>Inserida  <cite style="font-style:italic" title="Inserida {{item.created| date:'shortDate'}}, atualizada {{item.updated| date:'shortDate'}}">{{item.created| date:'shortDate'}}</cite></small>
                         </div>
                     </div>

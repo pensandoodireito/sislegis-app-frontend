@@ -78,7 +78,12 @@
                             <i class="fa fa-book"></i> <span>Relatórios</span> <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="http://BACKEND_SERVER/sislegis/relatorio" target="_blank"><i class="fa fa-book"></i><span> Despachadas</span></a></li>
+                            <li><a href="http://BACKEND_SERVER/sislegis/relatorio" target="_blank"><i class="fa fa-book"></i><span>Despachadas</span></a></li>
+                            <li class="header" style="color: #fff;border-top: 1px solid grey;">Efetividade SAL</li>
+                            <li ng-class="{'active':itemMenu=='reports'}"><a href="#/desempenhoSAL" ng-click="itemMenu='report'"><i class="fa fa fa-circle-o"></i><span>Desempenho geral SAL</span></a></li>
+                            <li ng-class="{'active':itemMenu=='reports'}"><a href="#/corpotecnico_equipes_posicoes" ng-click="itemMenu='report'"><i class="fa fa fa-circle-o"></i><span>Posicionamento por equipe</span></a></li>
+                            <li ng-class="{'active':itemMenu=='reports'}"><a href="#/corpotecnico_equipes" ng-click="itemMenu='report'"><i class="fa fa fa-circle-o"></i><span>Resumo desempenho equipes</span></a></li>
+                            <li ng-class="{'active':itemMenu=='reports'}"><a href="#/corpotecnico_responsavel" ng-click="itemMenu='report'"><i class="fa fa fa-circle-o"></i><span>Por responsável</span></a></li>
                         </ul>
                     </li>
 
@@ -251,4 +256,4 @@
 
 </body>
 
-</html>1
+</html>
