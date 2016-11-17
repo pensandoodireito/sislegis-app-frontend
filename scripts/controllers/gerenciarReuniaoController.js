@@ -1,14 +1,39 @@
-angular.module('sislegisapp').controller(
+angular.module('sislegisapp')
+.directive('focusMe', function($timeout) {
+  return {
+    link: function(scope, element, attrs) {
+      scope.$watch(attrs.focusMe, function(value) {
+        if(value === true) { 
+          
+          $timeout(function() {
+              try{
+                   element[0].focus();
+                   scope[attrs.focusMe] = false;
+              }catch(e){
+                  console.log(e);
+              }
+          },100);
+        }
+      });
+    }
+  };
+}).controller(
 		'GerenciarReuniaoController',
 		function($scope, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
 				ReuniaoResource, ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
 				ReuniaoProposicaoResource, EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
-                TipoEncaminhamentoResource, ElaboracaoNormativaResource, BACKEND) {
+                TipoEncaminhamentoResource, ElaboracaoNormativaResource, Auth,TagResource, $q, BACKEND) {
+    console.log("RouteParams", $routeParams);
     
 	var self = this;
+    $scope.Auth=Auth;
 	$scope.listaReuniaoProposicoes = [];
 	$scope.filtro = new ProposicaoResource();
-
+    if($routeParams.filter){
+        $scope.filtro.sigla=$routeParams.filter.sigla;
+        $scope.filtro.equipe=$routeParams.filter.equipe;
+        $scope.filtro.estado=$routeParams.filter.estado;
+    }
     $scope.sidebarPath = "views/Reuniao/sidebar-search.html";
 
 	$scope.proposicoesSeguidas = [];
@@ -37,6 +62,17 @@ angular.module('sislegisapp').controller(
     $scope.allProposicoes = [];
     
     $scope.filtroTags = [];
+    $scope.macrotemas = TagResource.listarTodos();
+    $scope.equipes=[];
+     EquipeResource.queryAll(function(data){
+        for (var index = 0; index < data.length; index++) {
+            var element = data[index];
+            if(element.nome!="ASPAR"){
+                $scope.equipes.push(element);
+            }
+            
+        }
+    });
 
 	$scope.infiniteScroll = {
 			busy: false,
@@ -44,6 +80,12 @@ angular.module('sislegisapp').controller(
 			offset: 0
 	}
 
+    $scope.baixarTemplate = function (item) {
+
+            // http://localhost:8080/sislegis/rest/proposicaos/2047/templateBriefing
+            var back = BACKEND.substr(0, BACKEND.length - 5);
+            window.open(back + "/template?id=" + item.id);
+        };
     $scope.maisFiltros = function(){
         var selector = $($.AdminLTE.options.controlSidebarOptions.selector);
         $scope.isSidebarOpen = !$scope.isSidebarOpen;
@@ -65,6 +107,8 @@ angular.module('sislegisapp').controller(
 
 		    for (var i = 0; i < data.length; i++) {
 		    	$scope.listaReuniaoProposicoes.push(data[i]);
+                
+                
 		    }
 		    if ($scope.listaReuniaoProposicoes.length == 0) {
 		    	toaster.pop('info', 'Nenhuma Proposição encontrada.');
@@ -86,18 +130,25 @@ angular.module('sislegisapp').controller(
 					autor: $scope.filtro.autor,
 					origem: $scope.filtro.origem,
 					isFavorita: $scope.filtro.isFavorita,
+                    macrotema: $scope.filtro.macrotema?$scope.filtro.macrotema.tag : null,
+                    estado: $scope.filtro.estado!=""?$scope.filtro.estado:null,
+                    idEquipe: $scope.filtro.equipe?$scope.filtro.equipe.id:null,
 					limit: $scope.infiniteScroll.limit, 
 					offset: $scope.infiniteScroll.offset
 				},successCallback, errorCallback);
 	}
-	
+	$scope.loadRevisoes=function(item){
+        item.revisoes=ProposicaoResource.listaRevisoes({ ProposicaoId:item.id});
+    }
 	$scope.filtrarConsulta = function() {
 		$scope.listaReuniaoProposicoes = [];
 	    $scope.infiniteScroll.busy = false;
 	    $scope.infiniteScroll.offset = 0;
 		$scope.consultarProposicoes();
 	}
-    
+    $scope.loadTags = function(query) {
+    	return TagResource.buscarPorSufixo({sufixo: query}).$promise;
+    };
     $scope.loadProposicoes = function(query) {
     	return ProposicaoResource.buscarPorSufixo({sufixo: query}).$promise;
     };
@@ -106,8 +157,15 @@ angular.module('sislegisapp').controller(
     	return ElaboracaoNormativaResource.buscarPorSufixo({sufixo: query}).$promise;
     };
     
-    $scope.setSelectedProposicao = function(item) {
+    $scope.setSelectedProposicao = function(item,param) {
+        
     	$scope.responsavelNull = (item.responsavel==null);
+        $scope.initial = {
+            explicacao:item.explicacao
+        };
+        if(param){
+            $scope.initial[param]=item[param];
+        }
 		$scope.posicionamentoNull = (item.posicionamento==null);
     	$scope.selectedProposicao = item;
 	}
@@ -126,14 +184,39 @@ angular.module('sislegisapp').controller(
         return angular.equals(self.original, $scope.reuniao);
     };
     $scope.checkRemocaoResponsavel=function(item){
-    	if(!item.responsavel && $scope.responsavelNull==false){
-    		$scope.responsavelNull=false;
-    		$scope.save(item);		
+    	if(!item.responsavel && $scope.responsavelNull!=false){
+    		$scope.responsavelNull=(item.responsavel==null);
+    		$scope.save(item,"Responsável removido.");		
     	}
     };
+    $scope.updates = {};
+    $scope.setUpdated=function(field,item){
+        $scope.updates[field]=item;
+    }
 
-	
+    $scope.checkUpdatedField = function (field, item) {
+        var updated = $scope.updates[field];
+        
+        if (updated == item) {
+            if($scope.initial==null){
+                console.log("nao foi inicializado initial")
+            }
+            if ($scope.initial==null || item[field] != $scope.initial[field]) {
+                $scope.save(item);
+            }
+        }
 
+    };
+    $scope.setaEstado = function (item, estado) {
+        var oldState = item.estado;
+        item.estado = estado;
+        $scope.save(item,"Fluxo de trabalho da proposição alterado","Falhou ao alterar proposição").then(function(){
+            
+        },function(){
+            item.estado = oldState;
+        })
+    }
+    //usado para atualizar a proposicao na lista
     $scope.updateSingleProposicao = function(item,toastMsg){
     	for (var i = 0; i < $scope.listaReuniaoProposicoes.length; i++) {    			
 			if(item.id==$scope.listaReuniaoProposicoes[i].id){
@@ -146,82 +229,132 @@ angular.module('sislegisapp').controller(
 		}
     	return false;
     }
-    $scope.save = function(item) {
-    	if(item){
-    		$scope.setSelectedProposicao(item);
-    	}
-    		
-    	clear();
-    	
-    	$rootScope.inactivateSpinner = true;
-        var successCallback = function(){
-        	$rootScope.inactivateSpinner = false;
-        	 if($scope.updateSingleProposicao(item,'Proposição atualizada com sucesso.')){
-        		 return;
-        	 }
-        	console.log("Nao carregou a proposicao, recarregara a reuniao inteira");
-    		ReuniaoResource.buscarReuniaoPorData({data : $scope.dataFormatada()},
-        	function(response) {
-        		$scope.listaReuniaoProposicoes = response;
-        	}, function() {
-        		console.error('Erro ao carregar proposições');
-        	});
-    		toaster.pop('success', 'Proposição atualizada com sucesso.');
+    $scope.save = function (item, msgSucesso, msgErro) {
+        var deferred = $q.defer();
+        if (item) {
+            $scope.setSelectedProposicao(item);
+        }
+        if (!msgSucesso) {
+            msgSucesso = 'Proposição atualizada com sucesso.';
+        }
+        if (!msgErro) {
+            msgErro = 'Falha salvar proposição.';
+        }
+
+
+        clear();
+
+        $rootScope.inactivateSpinner = true;
+        var successCallback = function () {
+            $rootScope.inactivateSpinner = false;
+            if ($scope.updateSingleProposicao(item, msgSucesso)) {
+                deferred.resolve(item);
+                return;
+            }
+            console.log("Nao carregou a proposicao, recarregara a reuniao inteira");
+            ReuniaoResource.buscarReuniaoPorData({ data: $scope.dataFormatada() },
+                function (response) {
+                    $scope.listaReuniaoProposicoes = response;
+                    deferred.resolve(item);
+                }, function () {
+                    console.error('Erro ao carregar proposições');
+                    deferred.reject('Erro ao carregar proposições');
+                });
+            toaster.pop('success', msgSucesso);
         };
-        var errorCallback = function() {
-        	$rootScope.inactivateSpinner = false;
-        	toaster.pop('error', 'Falha salvar proposição.');
+        var errorCallback = function () {
+            $rootScope.inactivateSpinner = false;
+            toaster.pop('error', msgErro);
+            deferred.reject('Falha salvar proposição.');
         };
         ProposicaoResource.update($scope.selectedProposicao, successCallback, errorCallback);
+        return deferred.promise;
     };
     
-    $scope.checkRemocaoPosicionamento=function(item){
-		if(item.posicionamentoAtual && item.posicionamentoAtual.posicionamento==null){			
-			$scope.alterarPosicionamento(item,null);
-		}
-	};
+    
     $scope.previousPosicionamento=function(proposicao){
-    	console.log("entrou com ",proposicao.posicionamentoAtual)
+    	console.log("entrou o foco no posicionamento ",proposicao.posicionamentoAtual);
     	if(proposicao.posicionamentoAtual && proposicao.posicionamentoAtual.posicionamento){    		
     		proposicao.previousPosicionamentoNome = proposicao.posicionamentoAtual.posicionamento.nome;
     	}
     }
-	$scope.alterarPosicionamento = function(proposicao, posicionamentoSelecionado, $label) {
-		console.log(proposicao, posicionamentoSelecionado, $label)
-		if(proposicao){
-			$scope.setSelectedProposicao(proposicao);
+    $scope.checkAlteracaoSupar = function (item, left, $item, $model, $label) {
+        if (left == 1) {
+            item.posicionamentoSuparOld = item.posicionamentoSupar;
+        } else if (left == 2) {
+            console.log(item.posicionamentoSupar, $item, $model, $label);
+        
+        } else if (left == 4||left == 3) {
+            if(item.posicionamentoSuparOld!=item.posicionamentoSupar){
+                if(item.posicionamentoSupar==''){
+                    item.posicionamentoSupar=null;
+                }
+                console.log("tem q salvar",item.posicionamentoSupar);
+                $scope.save(item).then(function(){
+                    item.posicionamentoSuparOld = item.posicionamentoSupar;
+                },function(){
+                    item.posicionamentoSupar=item.posicionamentoSuparOld;
+                });
+            }else{
+                console.log("nada a fazer")
+            }
+        } else {
+            console.log("saiu...", left)
+        }
+    }
+    
+    $scope.checkRemocaoPosicionamento=function(item){
+        
+         
+		if(item.posicionamentoAtual && item.posicionamentoAtual.posicionamento==null){
+            
+			$scope.alterarPosicionamento(item,null);
 		}
+	};
+    $scope.alterarPosicionamento = function (proposicao, posicionamentoSelecionado, $label) {
+        
+        if (proposicao) {
+            $scope.setSelectedProposicao(proposicao);
+        }
+
+        if (posicionamentoSelecionado != null) {
+            if (proposicao.previousPosicionamentoNome && proposicao.previousPosicionamentoNome == posicionamentoSelecionado.nome) {
+                console.log("não alterou o posicionamento")
+                return;
+            }
+        } else if (proposicao.previousPosicionamentoNome == null) {
+            console.log("não alterou o posicionamento")
+            return;
+        }
 
 
-        if(posicionamentoSelecionado!=null){
-			if(proposicao.previousPosicionamentoNome && proposicao.previousPosicionamentoNome==posicionamentoSelecionado.nome){
-				console.log("não alterou o posicionamento")
-				return;
-			}	
-		}else if (proposicao.previousPosicionamentoNome==null){
-			console.log("não alterou o posicionamento")
-			return;
-		}
-		
-				
 
-		clear();
+        if (posicionamentoSelecionado && posicionamentoSelecionado.nome != null && posicionamentoSelecionado.id == null) {
+            toaster.pop('error', 'Selecione um posicionamento válido.');
+            return;
+        }
+        clear();
 
-		var successCallback = function(){
-			toaster.pop('success', 'Posicionamento atualizado com sucesso.');
-		};
-		var errorCallback = function() {
-			toaster.pop('error', 'Falha ao atualizar posicionamento.');
-		};
+        
+        var errorCallback = function () {
+            toaster.pop('error', 'Falha ao atualizar posicionamento.');
+        };
 
-        var isPreliminar =  posicionamentoSelecionado && posicionamentoSelecionado.nome.indexOf('Previamente ') != -1;
-		var idPosicionamento = null;
-		if(posicionamentoSelecionado){
-			idPosicionamento=posicionamentoSelecionado.id;
-		}
-		ProposicaoResource.alterarPosicionamento({id: $scope.selectedProposicao.id, idPosicionamento: idPosicionamento, preliminar: isPreliminar}, successCallback, errorCallback);
+        var isPreliminar = posicionamentoSelecionado && posicionamentoSelecionado.nome.indexOf('Previamente ') != -1;
+        var idPosicionamento = null;
+        var successCallback = function () {
+            toaster.pop('success', 'Posicionamento removido com sucesso.');
+        };
+        if (posicionamentoSelecionado && posicionamentoSelecionado.id != null) {
+            idPosicionamento = posicionamentoSelecionado.id;
+            successCallback = function () {
+                toaster.pop('success', 'Posicionamento atualizado com sucesso.');
+            };
+        }
+        ProposicaoResource.alterarPosicionamento({ id: $scope.selectedProposicao.id, idPosicionamento: idPosicionamento, preliminar: isPreliminar }, successCallback, errorCallback);
 
-	}
+
+    }
     
     var clear = function() {
     	delete $scope.selectedProposicao.comentarioTmp;
@@ -375,14 +508,8 @@ angular.module('sislegisapp').controller(
     
 	$scope.getUsuarios = function(val, buscaGeral) {
         var method = (buscaGeral) ? 'ldapSearch' : 'find';
-
-        return $http.get(BACKEND + '/usuarios/' + method, {
-	      params: {
-	        nome: val
-	      }
-	    }).then(function(response){
-            return (response.data.length == 0)?[]:response.data;
-	    });
+return UsuarioResource.buscaPorUsuario({ method: method, nome: val },{ method: method, nome: val },function(data){console.log("aee",data)}).$promise;
+    
 	  };
 
     $scope.abrirModalBuscaProposicaoAvulsa = function () {
@@ -400,38 +527,7 @@ angular.module('sislegisapp').controller(
         });
     };
 
-		$scope.populaModalComentario = function(lista)
-		{
-			$scope.selectedProposicao.listaComentario=lista;
-			var modalInstance = $modal.open({
-				templateUrl: 'views/modal-comentarios.html',
-				controller: 'ModalComentariosController',
-				size: 'lg',
-				resolve: {
-					proposicao: function () {
-						return $scope.selectedProposicao;
-					}
-				}
-			});
-
-			modalInstance.result.then(function (listaComentario) {
-				$scope.selectedProposicao.listaComentario = listaComentario;
-			}, function () {
-				$log.info('Modal dismissed at: ' + new Date());
-			});
-		}
-
-		$scope.abrirModalComentarios = function (item) {
-			$scope.selectedProposicao = item;
-			if ($scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios) {
-				ComentarioResource.findByProposicao({
-					ProposicaoId: $scope.selectedProposicao.id},$scope.populaModalComentario
-				);
-			} else {
-				$scope.populaModalComentario($scope.selectedProposicao.listaComentario);
-
-			}
-		};
+	
 	    
     /**
      * MODALs
@@ -440,8 +536,9 @@ angular.module('sislegisapp').controller(
     	toaster.clear();
     	
     	if($scope.reuniao.data == null){
-    		toaster.pop('info', 'Selecione a data da reunião.');
-    		return;
+            $scope.reuniao.data=new Date();
+    		// toaster.pop('info', 'Selecione a data da reunião.');
+    		// return;
     	}
     	
         var modalInstance = $modal.open({
@@ -489,39 +586,119 @@ angular.module('sislegisapp').controller(
 		ComentarioService.save(comentario, item.id).then(successCallback, errorCallback);
     }
 
+    // $scope.populaProposicao=function(item){
+    //     if (item.listaComentario == null || item.listaComentario.length != item.totalComentarios) {
+    //         $scope.populaComentario(item);    
+    //     }
+    // }
+   
+    
+     $scope.populaNotas = function (prop, callbackFct) {
+        ProposicaoResource.listNotaTecnicas({ ProposicaoId: prop.id }, function (lista) {
+            prop.listaNotas = lista;
+            if (callbackFct != null) {
+                callbackFct();
+            }
+        }
+            );
+    }
+	$scope.abrirModalParecerAreaMerito= function (item,revisao) {
+        $scope.selectedProposicao= item;
+          var modalInstance = $modal.open({
+                templateUrl: 'views/modal-parecer-areamerito.html',
+                controller: 'ModalParecerAreaMeritoController',
+                size: 'lg',
+                resolve: {
+                    proposicao: function () {
+                        return item;
+                    },
+                     revisao: function () {
+                        return revisao;
+                    }
+                }
+            });
 
-	$scope.populaModalComentario = function(lista)
-	{
-		$scope.selectedProposicao.listaComentario=lista;
-		var modalInstance = $modal.open({
-			templateUrl: 'views/modal-comentarios.html',
-			controller: 'ModalComentariosController',
-			size: 'lg',
-			resolve: {
-				proposicao: function () {
-					return $scope.selectedProposicao;
-				}
-			}
-		});
+            modalInstance.result.then(function (listaNotas) {
+                $scope.selectedProposicao.listaNotas = listaNotas;
+                console.log(listaNotas)
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+    }	
+    $scope.populaNotas = function (prop, callbackFct) {
+        ProposicaoResource.listNotaTecnicas({ ProposicaoId: prop.id }, function (lista) {
+            prop.listaNotas = lista;
+            if (callbackFct != null) {
+                callbackFct();
+            }
+        }
+            );
+    }
+    $scope.abrirModalNotaTecnica = function (item) {
+       $scope.selectedProposicao= item;
+        if ($scope.selectedProposicao.listaNotas == null || $scope.selectedProposicao.listaNotas.length != $scope.selectedProposicao.totalNotasTecnicas) {
+            $scope.populaNotas(item, function () { $scope.abrirModalNotaTecnica(item) });
+        } else {
 
-		modalInstance.result.then(function (listaComentario) {
-			$scope.selectedProposicao.listaComentario = listaComentario;
-		}, function () {
-			$log.info('Modal dismissed at: ' + new Date());
-		});
-	}
 
-	$scope.abrirModalComentarios = function (item) {
-		$scope.selectedProposicao = item;
-		if ($scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios) {
-			ComentarioResource.findByProposicao({
-				ProposicaoId: $scope.selectedProposicao.id},$scope.populaModalComentario
-			);
-		} else {
-			$scope.populaModalComentario($scope.selectedProposicao.listaComentario);
+            var modalInstance = $modal.open({
+                templateUrl: 'views/modal-notatecnicas.html',
+                controller: 'ModalNotaTecnicaController',
+                size: 'lg',
+                resolve: {
+                    proposicao: function () {
+                        return $scope.selectedProposicao;
+                    }
+                }
+            });
 
-		}
-	};
+            modalInstance.result.then(function (prop) {
+                $scope.selectedProposicao = prop;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        }
+    }
+    $scope.populaComentario = function (prop, callbackFct) {
+        ComentarioResource.findByProposicao({ ProposicaoId: prop.id },
+            function (lista) {
+                prop.listaComentario = lista;
+                if (callbackFct != null) {
+                    callbackFct(prop);
+                }
+            }
+            );
+    };
+    $scope.abrirModalComentarios = function (item,cb) {
+        $scope.selectedProposicao = item;
+        if (cb!=true && ( $scope.selectedProposicao.listaComentario == null || $scope.selectedProposicao.listaComentario.length != $scope.selectedProposicao.totalComentarios)) {
+            $scope.populaComentario(item, function (prop) { 
+                $scope.abrirModalComentarios(prop,true); 
+              }
+             );
+        } else {
+
+
+            var modalInstance = $modal.open({
+                templateUrl: 'views/modal-comentarios.html',
+                controller: 'ModalComentariosController',
+                size: 'lg',
+                resolve: {
+                    proposicao: function () {
+                        return $scope.selectedProposicao;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (listaComentario) {
+                $scope.selectedProposicao.listaComentario = listaComentario;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        }
+    }
+
+	
     
     $scope.abrirModalRemoverProposicao = function(item) {
     	$scope.selectedProposicao = item;

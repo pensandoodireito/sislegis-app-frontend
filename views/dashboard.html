@@ -1,0 +1,263 @@
+<div class="content">
+    <h3 ng-click="update()">Painel de Controle</h3>
+    <div class="row" ng-show="Auth.isSecretario()">
+        <div class="col-md-6">
+            <div class="info-box" ng-cloak ng-click="go('/Proposicao/despachar')" style="cursor:pointer;">
+                <span class="info-box-icon bg-aqua"><i class="glyphicon glyphicon-inbox"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Proposições a despachar</span>
+                    <span class="info-box-number">{{info.totalProposicoesADespachar}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="info-box bg-green" ng-show="Auth.isSecretario()" ng-cloak>
+                <span class="info-box-icon"><i class="glyphicon glyphicon-send"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Proposições despachadas no mês</span>
+                    <span class="info-box-number">{{info.totalProposicoesDespachadasNoMes}}</span>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: {{(info.totalProposicoesDespachadasNoMes*100)/info.totalProposicoesDespachadasNoAno}}%"></div>
+                    </div>
+                    <span class="progress-description">
+                    {{(info.totalProposicoesDespachadasNoMes*100)/info.totalProposicoesDespachadasNoAno | number:1}}% de todos despachos do ano
+                  </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Distribuição por equipe</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+
+                        <div class="col-md-7">
+                            <ul class="chart-legend clearfix nav nav-pills nav-stacked">
+                                <li>Equipe <span class="pull-right ">Total em análise / Total atribuído à equipe no mês</span></li>
+                                <li ng-repeat="dados in PieData" ng-click="go('/Proposicao/consultar',{equipe:dados.equipe.e, estado:(dados.label=='Sem Equipe'?null:'EMANALISE')})" style="cursor:pointer;">
+                                    <i class="fa fa-circle-o " style="color:{{dados.color}}"></i> {{dados.label}} <span class="pull-right ">
+                                    <i class="fa "></i> <span ng-hide="dados.label=='Sem Equipe'">{{dados.equipe.totalEmAnalise}}/{{(dados.equipe.totalProcessada+dados.equipe.totalEmAnalise)}} ({{(dados.equipe.totalEmAnalise*100)/(dados.equipe.totalProcessada+dados.equipe.totalEmAnalise) | number:1}}%)</span>
+                                    <span ng-show="dados.label=='Sem Equipe'">{{dados.value}}</span>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="chart-responsive">
+                                <canvas id="pieChart" height="310" width="292" style="width: 146px; height: 155px;"></canvas>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="box-footer no-padding">
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="row" ng-cloak ng-show="Auth.isDiretor()">
+        <div class="col-md-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Minha equipe {{info.minhaEquipe.equipe.nome}}</h3>
+                    <h3 class="box-title" ng-if="info.error">{{info.error}}</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body" ng-hide="info.error!=null">
+
+                    <div class="col-md-4">
+                        <!-- small box -->
+                        <div class="small-box small-box bg-light-blue">
+                            <div class="inner">
+                                <h3>{{info.minhaEquipe.totalEmAnalise}}</h3>
+
+                                <p>Proposições em análise associadas à equipe</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-university"></i>
+                            </div>
+                            <a ng-click="go('/Proposicao/consultar',{equipe:info.minhaEquipe.equipe,estado:'EMANALISE'})" class="small-box-footer">Abrir proposições <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                        <div class="small-box bg-light-blue">
+                            <div class="inner">
+                                <h3>{{info.minhaEquipe.totalSemResponsavel}}</h3>
+
+                                <p>Proposições em análise associadas à equipe sem responsável</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person-add"></i>
+                            </div>
+                            <a ng-click="go('/Proposicao/consultar',{equipe:info.minhaEquipe.equipe,estado:'EMANALISE',responsavel:{id:-1,nome:'Sem Responsável Associado'}})" class="small-box-footer">Abrir proposições <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                        <div class="small-box bg-light-blue">
+                            <div class="inner">
+                                <h3>{{info.minhaEquipe.totalEmRevisao}}</h3>
+
+                                <p>Proposições para revisão do diretor</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-ios-search-strong"></i>
+                            </div>
+                            <a ng-click="go('/Proposicao/consultar',{equipe:info.minhaEquipe.equipe,estado:'ANALISADA'})" class="small-box-footer">Abrir proposições <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        <p class="text-center">
+                            <strong>Proposições em análise por membro da equipe</strong>
+                        </p>
+                        <div class="progress-group" ng-repeat="pessoal in info.minhaEquipe.pessoal|orderBy:['totalEmAnalise']:[true]">
+                            <span class="progress-text" style="cursor:pointer" ng-click="go('/Proposicao/consultar',{equipe:info.minhaEquipe.equipe,estado:'EMANALISE',responsavel:pessoal})">{{pessoal.nome}}</span>
+                            <span class="progress-number"><b>{{pessoal.totalEmAnalise}}</b>/{{info.minhaEquipe.totalEmAnalise}}</span>
+
+                            <div class="progress sm">
+                                <div class="progress-bar " ng-class="{
+                                'progress-bar-aqua':((pessoal.totalEmAnalise*100)/info.minhaEquipe.totalEmAnalise)<50,
+                                'progress-bar-red':((pessoal.totalEmAnalise*100)/info.minhaEquipe.totalEmAnalise)>80 
+                                }" style="width: {{(pessoal.totalEmAnalise*100)/info.minhaEquipe.totalEmAnalise}}%"></div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <p class="text-center">
+                            <strong>Proposições analisadas por membro da equipe no mês </strong>
+                        </p>
+                        <div class="progress-group" ng-repeat="pessoal in info.minhaEquipe.pessoal|orderBy:['totalProcessada']:[true]">
+                            <span class="progress-text">{{pessoal.nome}}</span>
+                            <span class="progress-number"><b>{{pessoal.totalProcessada}}</b>/{{info.minhaEquipe.totalProcessada}}</span>
+
+                            <div class="progress sm">
+                                <div class="progress-bar " ng-class="{
+                                'progress-bar-aqua':((pessoal.totalProcessada*100)/info.minhaEquipe.totalProcessada)<50,
+                                'progress-bar-red':((pessoal.totalProcessada*100)/info.minhaEquipe.totalProcessada)>80 }"
+                                style="width: {{(pessoal.totalProcessada*100)/info.minhaEquipe.totalProcessada}}%"></div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                <div class="box-footer no-padding">
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="col-md-5">
+
+
+            <div class="info-box" ng-cloak ng-click="go('/Proposicao/consultar',{estado:'EMANALISE'})" style="cursor:pointer;">
+                <span class="info-box-icon bg-yellow"><i class="glyphicon glyphicon-folder-open"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Proposições em análise na SAL</span>
+                    <span class="info-box-number">{{info.totalProposicoesEmAnalise}}</span>
+                </div>
+
+            </div>
+
+            <div class="info-box bg-yellow" ng-cloak>
+                <span class="info-box-icon"><i class="glyphicon glyphicon-file"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Proposições trabalhadas pela SAL no mês</span>
+                    <span class="info-box-number">{{info.totalProposicoesAlteradasNoMes}}</span>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: {{(info.totalProposicoesAlteradasNoMes*100)/info.totalProposicoesAlteradasNoAno}}%"></div>
+                    </div>
+                    <span class="progress-description">
+                    {{(info.totalProposicoesAlteradasNoMes*100)/info.totalProposicoesAlteradasNoAno | number:1}}% de todas do ano
+                  </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+
+        </div>
+        <div class="col-md-7" ng-cloak>
+
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Encaminhamentos (Tarefas)</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Tipo</th>
+                                <th>Proposição</th>
+                                <th>Detalhes</th>
+                                <th>Criada</th>
+                                <th>Prazo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr ng-repeat="tarefa in tarefas|filter:{finalizada:false} |orderBy:['data']">
+                                <td> {{$index + 1}} </td>
+                                <td><i></i><a href="#/Tarefas/edit/{{tarefa.id}}">{{tarefa.encaminhamentoProposicao.tipoEncaminhamento.nome}}</a></td>
+                                <td><a  data-toggle="tooltip" title="{{tarefa.encaminhamentoProposicao.proposicao.ementa}}" ng-click="go('/Proposicao/consultar',{sigla:tarefa.encaminhamentoProposicao.proposicao.sigla})">{{tarefa.encaminhamentoProposicao.proposicao.sigla}}</a></td>
+                                <td><i></i>{{tarefa.encaminhamentoProposicao.detalhes}}</td>
+                                <td><i></i>{{tarefa.data|date:'d/M'}}</td>
+                                <td><i></i>{{tarefa.encaminhamentoProposicao.dataHoraLimite|date}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer text-black">
+
+
+                </div>
+                <!-- /.box-body -->
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>

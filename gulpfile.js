@@ -13,6 +13,7 @@ var libs = [
     'lib/off-bower/pace.min.js',
     'lib/angular/angular.min.js',
     'lib/angular-route/angular-route.min.js',
+    'lib/angular-cookies/angular-cookies.min.js',
     'lib/angular-resource/angular-resource.min.js',
     'lib/angular-bootstrap/ui-bootstrap.min.js',
     'lib/angular-bootstrap/ui-bootstrap-tpls.min.js',
@@ -29,6 +30,7 @@ var libs = [
     'lib/angular-i18n/angular-locale_pt-br.js',
     'lib/modernizr/modernizr.js',
     'lib/checklist-model/checklist-model.js',
+    'lib/admin-lte/plugins/chartjs/Chart.min.js',
     'scripts/app.js',
     'scripts/offcanvas.js',
     'scripts/directives/datepicker.js',
@@ -42,12 +44,15 @@ var libs = [
     'scripts/controllers/gerenciarReuniaoController.js',
     'scripts/controllers/modalBuscarProposicaoController.js',
     'scripts/controllers/modalAddProposicaoController.js',
-    'scripts/controllers/modalComentariosController.js',
+    
+    'scripts/controllers/modalParecerAreaMeritoController.js',
     'scripts/controllers/modalEncaminhamentosController.js',
     'scripts/controllers/modalRelatorioReuniaoController.js',
     'scripts/controllers/modalRelatorioProposicaoController.js',
     'scripts/controllers/proposicaoController.js',
+    'scripts/controllers/SislegisControllers.js',
     'scripts/services/ComentarioFactory.js',
+    'scripts/services/SislegisFactories.js',
     'scripts/services/ComentarioService.js',
     'scripts/services/EncaminhamentoProposicaoFactory.js',
     'scripts/services/ComissaoFactory.js',
@@ -98,58 +103,69 @@ var libs = [
     'scripts/services/SituacaoLegislativaFactory.js',
     'scripts/controllers/SituacaoLegislativaController.js',
     'scripts/services/locationParser.js',
-    'scripts/services/VotacaoFactory.js'
+    'scripts/services/VotacaoFactory.js',
+    'scripts/directives/directives.js',
+    'lib/angular-sanitize/angular-sanitize.js'
 
 ];
 
-var compilacao = function() {
+var compilacao = function () {
     console.info("Compilação executada");
     return gulp.src(libs)
         .pipe(ngAnnotate())
-        .pipe(uglify())
+    //   .pipe(uglify())
         .pipe(concat('all.js'))
+        .pipe(uglify())
         .pipe(gulp.dest('./scripts'));
 }
-var generateHTMLs = function(){
+var generateHTMLs = function (){
 	 console.info("Atualizando entradas do keycloak para apontar para: "+process.env.KEYCLOAK_SERVER);
 	 if(!process.env.KEYCLOAK_SERVER){
-		throw "Variável de ambiente KEYCLOAKSERVER não foi encontrada. Sete o valor de KEYCLOAKSERVER e tente novamente";
+		throw "Variável de ambiente KEYCLOAK_SERVER não foi encontrada. Defina o valor de KEYCLOAK_SERVER e tente novamente";
 	 }
-    console.info("Gerando index-dev.html");
-	 var generateIndexDEVHtml = gulp.src(['template/index-source.html'])
-	    .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
-	    .pipe(rename("index-dev.html"))
-	    .pipe(gulp.dest('./'));	 
-     console.info("Gerando index.html");
-     var generateIndexHTML = gulp.src('template/index-source.html')
-	   .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
-       .pipe(htmlreplace({
-         		'js': 'scripts/all.js'
-        	}))
-       .pipe(rename("index.html"))
-       .pipe(gulp.dest('./'));
-      console.info("Gerando keycloak.json"); 
-	 var generateFinalKeycloak = gulp.src(['template/keycloak.json'])
-	    .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
-	    .pipe(gulp.dest('./'));	 
-      console.info("Gerando scripts/app.js");
 
-var generateFinalappjs = gulp.src(['template/app.js'])
-        .pipe(replace('BACKEND_SERVER', process.env.KEYCLOAK_SERVER))
+	 console.info("Atualizando app.js para apontar para a API Sislegis: "+process.env.API_SERVER);
+	 if(!process.env.API_SERVER){
+		throw "Variável de ambiente API_SERVER não foi encontrada. Defina o valor de API_SERVER e tente novamente";
+	 }
+
+    console.info("Gerando index-dev.html");
+    var generateIndexDEVHtml = gulp.src(['template/index-source.html'])
+        .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
+        .pipe(replace('BACKEND_SERVER', process.env.API_SERVER))
+        .pipe(rename("index-dev.html"))
+        .pipe(gulp.dest('./'));    
+    console.info("Gerando index.html");
+    var generateIndexHTML = gulp.src('template/index-source.html')
+        .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
+        .pipe(replace('BACKEND_SERVER', process.env.API_SERVER))
+        .pipe(htmlreplace({
+            'js': 'scripts/all.js'
+        }))
+        .pipe(rename("index.html"))
+        .pipe(gulp.dest('./'));
+    console.info("Gerando keycloak.json");
+    var generateFinalKeycloak = gulp.src(['template/keycloak.json'])
+        .pipe(replace('KEYCLOAK_SERVER', process.env.KEYCLOAK_SERVER))
+        .pipe(gulp.dest('./'));
+    console.info("Gerando scripts/app.js");
+
+    var generateFinalappjs = gulp.src(['template/app.js'])
+        .pipe(replace('BACKEND_SERVER', process.env.API_SERVER))
         .pipe(gulp.dest('./scripts/'));	    
 	 
 };
-gulp.task('generateHTMLs',generateHTMLs);
+gulp.task('generateHTMLs', generateHTMLs);
 
 
 gulp.task('compress', compilacao);
 
-gulp.task('watch', function() {
-    watch('scripts/**/*.js',compilacao);
+gulp.task('watch', function () {
+    watch('scripts/**/*.js', compilacao);
     watch('template/*.*', generateHTMLs);
 });
 
 
-gulp.task('default', ['generateHTMLs', 'compress'], function() {
-  // place code for your default task here
+gulp.task('default', ['generateHTMLs', 'compress'], function () {
+    // place code for your default task here
 });

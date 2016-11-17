@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "homepage": "https://github.com/pensandoodireito/sislegis-app",
   "authors": [
+    "Rafael Coutinho <rafael.coutinho@gmail.com>",
     "Guilherme Hott <guilhermehott@gmail.com>",
     "Aman Rathie <amanrathie@gmail.com>",
     "Raphael Santos <raphaelbsb1@gmail.com>",
@@ -26,8 +27,9 @@
     "angular-bootstrap": "~0.11.2",
     "angular-ui-utils": "0.1.1",
     "angular-filter": "0.5.1",
+    "angular-cookies": "1.2.15",
     "angular-confirm-modal": "1.1.2",
-    "ng-tags-input": "2.1.1",
+    "ng-tags-input": "2.3.0",
     "angular-file-upload": "1.1.1",
     "angularjs-toaster": "~0.4.9",
     "angular-animate": "1.2.15",
@@ -41,7 +43,8 @@
     "jquery-ui": "1.10.3",
     "components-font-awesome": "4.4.0",
     "ionicons": "2.0.1",
-    "bootstrap": "3.2.0"
+    "bootstrap": "3.2.0",
+    "angular-sanitize": "^1.5.8"
   },
   "moduleType": [
     "node"

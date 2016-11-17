@@ -1,0 +1,82 @@
+<div class="box box-default no-print">
+    <div class="box-header with-border">
+        <h3 class="box-title">Selecione um relatório</h3>
+    </div>
+    <div class="box-body">
+        <button type="button" class="btn btn-default " ng-click="selecionaTipo('Padrao_Despachos')">Relatório Padrão Despachos</button>
+    </div>
+</div>
+<div class="col-xs-12 text-center no-print" ng-iaf="carregando==true">
+    <div class=" ajax" title="Carregando">
+        <i class="fa fa-spin fa-refresh"></i>&nbsp; Carregando...
+    </div>
+</div>
+<button type="button" class="btn btn-default btn-block no-print" ng-click="printIt()" ng-show="proposicoes.length>0"><i class="fa fa-print"></i> Imprimir</button>
+
+
+
+<div style="width:100%;" ng-repeat="(origem, proposicoesPorOrigem) in props=(proposicoes | filter:pautadas(true))| groupBy:
+'origem'|orderBy:[ 'origem'] ">
+
+    <div style="page-break-after:always; " ng-repeat="(comissao, proposicoesPorComissao) in proposicoesPorOrigem| groupBy:
+'comissao' ">
+
+
+        <table width="100% ">
+            <thead>
+                <tr>
+                    <th class="divider-top ">
+                        <h2>Em pauta</h2>
+                        <h3 ng-if="origem=='CAMARA' ">Câmara dos Deputados - {{getNomeComissao('CAMARA',comissao)}} ({{proposicoesPorComissao.length}})</h3>
+                        <h3 ng-if="origem=='SENADO' ">Senado Federal - {{getNomeComissao('SENADO',comissao)}} ({{proposicoesPorComissao.length}})</h3>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="divider-top " style="page-break-inside: avoid; " ng-repeat="item in proposicoesPorComissao |orderBy:['pautaComissaoAtual.pautaReuniaoComissao.data', 'numero'] ">
+                    <td>
+                        <h3><a >{{item.sigla}}</a> (<span ng-if="item.posicionamentoAtual==null ">Sem posicionamento</span>{{item.posicionamentoAtual.posicionamento.nome}})</h3>
+                        <div class="ementaMax " ng-if="item.explicacao!=null && item.explicacao.length>0">{{item.explicacao}}</div>
+                        <div class="ementaMax" ng-if="item.explicacao==null || item.explicacao.length==0">{{item.ementa}}</div>
+                        <div><strong>Relator:</strong> {{item.pautaComissaoAtual.relator}}</div>
+                        <div><strong>Pauta prevista: </strong>{{item.pautaComissaoAtual.pautaReuniaoComissao.data|date}}</div>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+
+<div style="page-break-before:always"></div>
+<div style="width:100%" ng-repeat="(origem, proposicoesPorOrigem) in props =(proposicoes | filter:pautadas(false))| groupBy: 'origem'">
+    <div ng-repeat="(comissao, proposicoesPorComissao) in proposicoesPorOrigem| groupBy: 'comissao'">
+        <table width="100%" style="page-break-before:always">
+            <thead>
+                <tr>
+                    <th class="divider-top" style="margin-top:-20px">
+                        <h2>Projetos que não constam da pauta da semana</h2>
+                        <h3 ng-if="origem=='CAMARA'">Câmara dos Deputados - {{getNomeComissao('SENADO',comissao)}}, ({{proposicoesPorComissao.length}})</h3>
+                        <h3 ng-if="origem=='SENADO'">Senado Federal - {{getNomeComissao('SENADO',comissao)}}, ({{proposicoesPorComissao.length}})</h3>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="divider-top" style="page-break-inside: avoid;" ng-repeat="item in proposicoesPorComissao |orderBy:['pautaComissaoAtual.pautaReuniaoComissao.data','numero']">
+                    <td>
+
+                        <h3><a >{{item.sigla}}</a> (<span ng-if="item.posicionamentoAtual==null">Sem posicionamento</span>{{item.posicionamentoAtual.posicionamento.nome}})</h3>
+                        <div class="ementaMax" ng-if="item.explicacao!=null && item.explicacao.length>0">{{item.explicacao}}</div>
+                        <div class="ementaMax" ng-if="item.explicacao==null || item.explicacao.length==0">{{item.ementa}}</div>
+                        <div><strong>Autor:</strong> {{item.autor}}</div>
+
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

@@ -1,4 +1,7 @@
 <div class="container">
+    <div class="row" ng-show="listaTarefas.length == 0">
+        Você não possui nenhuma tarefa em aberto.
+    </div>
     <div class="row" ng-show="listaTarefas.length > 0 && !editTarefaId">
         <div class="col-xs-12">
             <h4 class="mt-0">Você possui <strong class="text-red">{{(listaTarefas | filter:{finalizada:false}).length}}</strong> novas tarefas</h4>
@@ -24,7 +27,7 @@
     <div class="tarefas mt-md">
         <!-- tipos: conc, nova, ok, urgente -->
         <div class="tarefa-{{tarefa.finalizada === true ? 'conc' : 'nova'}} mb-md" ng-repeat="tarefa in listaTarefas | orderBy:['finalizada','encaminhamentoProposicao.dataHoraLimite'] | filter : filtroTarefa | filter: {finalizada : filtroStatusTarefa, id : editTarefaId}">
- 			<div class="panel panel-default">
+            <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="clearfix">
                         <div class="col-sm-6">
@@ -43,15 +46,29 @@
                         <div class="clearfix tarefa-opcoes">
                             <div class="col-sm-7">
                                 <p class="fontsize-sm">Data de registro da tarefa: {{tarefa.data | date:'dd/MM/yyyy'}}</p>
-                                <p>{{tarefa.encaminhamentoProposicao.proposicao.sigla}}</p>
-                                <p>{{tarefa.encaminhamentoProposicao.proposicao.ementa}}</p>
+                                <div class="box-body">
+
+                                    <dl>
+                                        <dt>Detalhes</dt>
+                                        <dd>{{tarefa.encaminhamentoProposicao.detalhes}}</dd>
+                                        <dt>Proposição</dt>
+                                        <dd ng-cloak><a ng-click="go('/Proposicao/consultar',{sigla:tarefa.encaminhamentoProposicao.proposicao.sigla})">{{tarefa.encaminhamentoProposicao.proposicao.sigla}}</a>
+                                        </dd>
+
+
+                                        <dd>{{tarefa.encaminhamentoProposicao.proposicao.ementa}}</dd>
+                                    </dl>
+                                </div>
+
                             </div>
                             <div class="col-sm-4 divider-left">
                                 <a ng-show="!tarefa.finalizada" ng-click="abrirModalComentarios(tarefa.encaminhamentoProposicao.proposicao.id, tarefa)"><i class="fa fa-thumbs-o-up"></i> Marcar como finalizada</a>
                                 <div class="{{tarefa.finalizada ? '' : 'divider-top' }}">
-                                    <p><a ng-click="abrirModalComentarios(tarefa.encaminhamentoProposicao.proposicao.id, false)"><i class="fa fa-comments"></i> Comentários</a>
+                                    <p>
+                                        <a ng-click="abrirModalComentarios(tarefa.encaminhamentoProposicao.proposicao.id, false)"><i class="fa fa-comments"></i> Comentários</a>
                                     </p>
-                                    <p><a class="mt-sm" ng-click="abrirModalEncaminhamentos(tarefa.encaminhamentoProposicao.proposicao.id)"><i class="fa fa-share-square-o"></i> Outros encaminhamentos desta proposição</a>
+                                    <p>
+                                        <a class="mt-sm" ng-click="abrirModalEncaminhamentos(tarefa.encaminhamentoProposicao.proposicao.id)"><i class="fa fa-share-square-o"></i> Outros encaminhamentos desta proposição</a>
                                     </p>
                                 </div>
                             </div>
@@ -60,4 +77,4 @@
                 </div>
             </div>
         </div>
-</div>
+    </div>

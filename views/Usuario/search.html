@@ -7,7 +7,8 @@
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Listagem</h3>
-                </div><!-- /.box-header -->
+                </div>
+                <!-- /.box-header -->
                 <div class="box-body">
                     <div class="dataTables_wrapper form-inline dt-bootstrap">
                         <div class="row">
@@ -16,18 +17,23 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="dataTables_filter">
-                                    <label>Nome:&nbsp;<input id="nome" name="nome" class="form-control" type="text" ng-model="search.nome" placeholder="Buscar pelo nome" /></label>
+                                    <label>Nome:&nbsp;
+                                        <input id="nome" name="nome" class="form-control" type="text" ng-model="search.nome" placeholder="Buscar pelo nome" />
+                                    </label>
                                 </div>
                             </div>
                             <div class="col-sm-3">
                                 <div class="dataTables_filter">
-                                    <label>E-mail:&nbsp;<input id="email" name="email" class="form-control" type="text" ng-model="search.email" placeholder="Buscar pelo e-mail" /></label>
+                                    <label>E-mail:&nbsp;
+                                        <input id="email" name="email" class="form-control" type="text" ng-model="search.email" placeholder="Buscar pelo e-mail"
+                                        />
+                                    </label>
                                 </div>
                             </div>
                             <div class="col-sm-3">
                                 <div class="dataTables_filter">
                                     <label>Equipe:&nbsp;
-                                        <select ng-model="equipeSelecionada" ng-options="item.id as item.nome for item in listaEquipe" class="form-control" ng-change="buscarPorEquipe()">
+                                        <select ng-model="search.equipe.id" ng-options="item.id as item.nome for item in listaEquipe" class="form-control" ng-change="buscarPorEquipe()">
                                             <option value=""></option>
                                         </select>
                                     </label>
@@ -38,16 +44,33 @@
                             <div class="col-sm-12">
                                 <table class="table table-bordered table-hover">
                                     <thead>
-                                    <tr>
-                                        <th>Nome</th>
-                                        <th>E-mail</th>
-                                    </tr>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>E-mail</th>
+                                            <th>Equipe</th>
+                                            <th>Papéis</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="result in searchResults | searchFilter:searchResults | startFrom:currentPage*pageSize | limitTo:pageSize">
-                                        <td><a href="#/Usuarios/edit/{{result.id}}">{{result.nome}}</a></td>
-                                        <td><a href="#/Usuarios/edit/{{result.id}}">{{result.email}}</a></td>
-                                    </tr>
+                                        <tr ng-repeat="result in searchResults | searchFilter:search | orderBy:['nome','email'] | startFrom:currentPage*pageSize | limitTo:pageSize ">
+                                            <td><a href="#/Usuarios/edit/{{result.id}}">{{result.nome}}</a></td>
+                                            <td><a href="#/Usuarios/edit/{{result.id}}">{{result.email}}</a></td>
+                                            <td><a href="#/Usuarios/edit/{{result.id}}">{{result.equipe.nome}}</a></td>
+                                            <td>
+                                                <div ng-if="auth.isAdmin()">
+                                                    <button type="button" class="btn btn-xs" ng-class="{'btn-primary':hasRole(result,'ASPAR')}" ng-click="setRole(result,'ASPAR')">aspar</button>
+                                                    <button type="button" class="btn btn-xs" ng-class="{'btn-primary':hasRole(result,'EQUIPE')}" ng-click="setRole(result,'EQUIPE')">equipe</button>
+                                                    <button type="button" class="btn btn-xs" ng-class="{'btn-primary':hasRole(result,'DIRETOR')}" ng-click="setRole(result,'DIRETOR')">diretor</button>
+                                                    <button type="button" class="btn btn-xs" ng-class="{'btn-primary':hasRole(result,'SECRETARIO')}" ng-click="setRole(result,'SECRETARIO')">secretário</button>
+                                                    <button type="button" class="btn btn-xs" ng-class="{'btn-primary':hasRole(result,'ADMIN')}" ng-click="setRole(result,'ADMIN')">admin</button>
+                                                    |
+                                                    <button type="button" class="btn btn-xs" ng-class="{'btn-primary':hasRole(result,'MINISTRO')}" ng-click="setRole(result,'MINISTRO')">ministro</button>
+                                                </div>
+                                                <div ng-if="!auth.isAdmin()">
+                                                    <button type="button" class="btn btn-xs btn-primary" ng-repeat="papel in result.papeis">{{papel}}</button> 
+                                                </div>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
 
@@ -65,8 +88,10 @@
                             </div>
                         </div>
                     </div>
-                </div><!-- /.box-body -->
-            </div><!-- /.box -->
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
         </div>
     </div>
 </section>

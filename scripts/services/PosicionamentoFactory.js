@@ -7,20 +7,11 @@ angular.module('sislegisapp').factory(
 					}, {
 						'queryAll' : {
 							method : 'GET',
-							isArray : true,
-                            transformResponse : function(data){
-                                var json = JSON.parse(data);
-                                angular.forEach(json, function(value, key){
-                                    var newValue = angular.copy(value);
-                                    newValue.nome = 'Previamente '+newValue.nome;
-                                    json.push(newValue);
-                                });
-                                return json;
-                            }
+							isArray : true
 						},
 						'query' : {
 							method : 'GET',
-							isArray : false
+							isArray : true
 						},
 						'update' : {
 							method : 'PUT'

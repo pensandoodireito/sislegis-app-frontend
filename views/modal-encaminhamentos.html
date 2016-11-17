@@ -1,87 +1,92 @@
 <!-- Modal Encaminhamentos -->
 <div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal" ng-click="ok()">
-		<span aria-hidden="true">&times;</span> <span class="sr-only">Fechar</span>
-	</button>
-	<h4 class="modal-title" id="myModalLabel">Encaminhamentos</h4>
+    <button type="button" class="close" data-dismiss="modal" ng-click="ok()">
+        <span aria-hidden="true">&times;</span> <span class="sr-only">Fechar</span>
+    </button>
+    <h4 class="modal-title" id="myModalLabel">Encaminhamentos</h4>
 </div>
 <div class="modal-body">
-	<div class="row">
-		<form id="EncaminhamentoProposicaoForm" name="EncaminhamentoProposicaoForm" role="form">
-			<div class="col-md-4">
-					<div class="form-horizontal" role="form">
-				    <div ng-show="displayError" class="alert alert-danger">
-				        <strong>Error!</strong> Something broke. Retry, or cancel and start afresh.
-				    </div>
-					<div class="input-group">
-						<label for="tipo-encaminhamento">Tipo de Encaminhamento</label>
-						<select id="tipo-encaminhamento" ng-model="encaminhamentoProposicao.tipoEncaminhamento"
-                                ng-options="tipoEncaminhamento.nome for tipoEncaminhamento in listaEncaminhamento track by tipoEncaminhamento.id | orderBy:'nome'" class="form-control" ng-required="true"></select>
-					</div>
-					<br/>
-					<div class="input-group">
-						<label for="responsavel">Responsável:</label>
+    <div class="row">
+        <form id="EncaminhamentoProposicaoForm" name="EncaminhamentoProposicaoForm" role="form">
+            <div class="col-md-4">
+                <div class="form-horizontal" role="form">
+                    <div ng-show="displayError" class="alert alert-danger">
+                        <strong>Erro!</strong> Houve um erro inesperado, por favor tente novamente.
+                    </div>
+                    <div class="input-group">
+                        <label for="tipo-encaminhamento">Tipo de Encaminhamento</label>
+                        <select id="tipo-encaminhamento" ng-model="encaminhamentoProposicao.tipoEncaminhamento" ng-options="tipoEncaminhamento.nome for tipoEncaminhamento in listaEncaminhamento track by tipoEncaminhamento.id | orderBy:'nome'"
+                        class="form-control" ng-required="true"></select>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <label for="responsavel">Responsável:</label>
                         <input id="responsavel" autocomplete="off" type="text" ng-model="encaminhamentoProposicao.responsavel" placeholder="Procurar usuário..."
-                               typeahead="item as item.nome for item in getUsuarios($viewValue)" class="form-control">
-					</div>
-					<br/>
-					<label for="prazo">Data e Hora Limite:</label>
-					<div class="input-group">
-						<input id="prazo" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="encaminhamentoProposicao.dataHoraLimite" is-open="opened" min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Close" readonly/>
-			              <span class="input-group-btn">
+                        typeahead="item as item.nome for item in getUsuarios($viewValue)" class="form-control">
+                    </div>
+                    <br/>
+                    <label for="prazo">Data e Hora Limite:</label>
+                    <div class="input-group">
+                        <input id="prazo" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="encaminhamentoProposicao.dataHoraLimite"
+                        is-open="opened" min-date="minDate" max-date="'2020-06-22'" datepicker-options="dateOptions" close-text="Close"
+                        readonly/>
+                        <span class="input-group-btn">
 			                <button type="button" class="btn btn-default" ng-click="openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 			              </span>
-		          	</div>    
-					<div class="input-group">
-			              <timepicker ng-model="encaminhamentoProposicao.dataHoraLimite" show-meridian="false"></timepicker>
-					</div>
-					<br/>
-					<div class="input-group">
-                    <label for="detalhes">Detalhes:</label>
-						<textarea id="detalhes" class="form-control" rows="3" ng-model="encaminhamentoProposicao.detalhes"></textarea>
-					</div>
-					<br/>
-					
-					<button type="submit" class="btn btn-default" ng-disabled="isClean() || EncaminhamentoProposicaoForm.$invalid" ng-show="!encaminhamentoProposicao.id" ng-click="save()">Adicionar</button>
-					<button type="submit" class="btn btn-default" ng-show="encaminhamentoProposicao.id" ng-click="update()">Alterar</button>
-				</div>
-			</div>
-		</form>
-		<div class="col-md-8">
-			<div class="panel panel-default">
-				<div class="panel-heading">Encaminhamentos</div>
-				<div class="panel-body line-9 rol-vert fontsize-sm">
-					<div class="list-group" ng-repeat="item in proposicao.listaEncaminhamentoProposicao">
-						<div class="divider-bottom">
-							<p><strong>{{item.tipoEncaminhamento.nome}}</strong></p>
-							<p  ng-show="item.responsavel.nome!=null" ><strong>Responsável: </strong>{{item.responsavel.nome}}</p>
-							<p ng-show="item.responsavel.nome==null" ><strong>Sem responsável associado</strong></p>
-							<p ng-show="item.dataHoraLimite!=null"><strong>Data e Hora Limite: </strong>{{item.dataHoraLimite | date: 'dd/MM/yyyy HH:mm'}}</p>
-							<p ng-show="item.dataHoraLimite==null" ><strong>Sem data limite associada</strong></p>
+                    </div>
+                    <div class="input-group">
+                        <timepicker ng-model="encaminhamentoProposicao.dataHoraLimite" show-meridian="false"></timepicker>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <label for="detalhes">Detalhes:</label>
+                        <textarea id="detalhes" class="form-control" rows="3" ng-model="encaminhamentoProposicao.detalhes"></textarea>
+                    </div>
+                    <br/>
 
-							<div ng-show="item.detalhes" >
-								<strong>Detalhes: </strong>
-								<pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">{{item.detalhes}}</pre>
-								<br/>
-							</div>
+                    <button type="submit" class="btn btn-default" ng-disabled="isClean() || EncaminhamentoProposicaoForm.$invalid" ng-show="!encaminhamentoProposicao.id"
+                    ng-click="save()">Adicionar</button>
+                    <button type="submit" class="btn btn-default" ng-show="encaminhamentoProposicao.id" ng-click="update()">Alterar</button>
+                </div>
+            </div>
+        </form>
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">Encaminhamentos</div>
+                <div class="panel-body line-9 rol-vert fontsize-sm">
+                    <div class="list-group" ng-repeat="item in proposicao.listaEncaminhamentoProposicao|orderBy:'criadoEm':true">
+                        <div class="divider-bottom" >
+                            <div class="pull-right" title="Criado em {{item.criadoEm|date:'short'}}"><span style="color: #999;float: right;padding: 10px;font-size: 12px;" class="time"><i class="fa fa-clock-o"></i> {{item.criadoEm|date:'short'}}</span></div>
+                            <p><strong>{{item.tipoEncaminhamento.nome}}</strong></p>
+                            <p ng-show="item.responsavel.nome!=null"><strong>Responsável: </strong>{{item.responsavel.nome}}</p>
+                            <p ng-show="item.responsavel.nome==null"><strong>Sem responsável associado</strong></p>
+                            <p ng-show="item.dataHoraLimite!=null"><strong>Data e Hora Limite: </strong>{{item.dataHoraLimite | date: 'dd/MM/yyyy HH:mm'}}</p>
+                            <p ng-show="item.dataHoraLimite==null"><strong>Sem data limite associada</strong></p>
 
-							<div class="mt-sm" ng-show="item.comentarioFinalizacao">
+                            <div ng-show="item.detalhes">
+                                <strong>Detalhes: </strong>
+                                <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">{{item.detalhes}}</pre>
+                                <br/>
+                            </div>
+
+                            <div class="mt-sm" ng-show="item.comentarioFinalizacao">
                                 <p>Feito por: <strong>{{item.comentarioFinalizacao.autor.nome}}</strong></p>
                                 <p>Data: {{item.comentarioFinalizacao.dataCriacao | date: 'dd/MM/yyyy'}}</p>
-								<p ng-show="item.comentarioFinalizacao.descricao">Comentário: {{item.comentarioFinalizacao.descricao}}</p>
+                                <p ng-show="item.comentarioFinalizacao.descricao">Comentário: {{item.comentarioFinalizacao.descricao}}</p>
                             </div>
                             <p ng-show="!item.finalizado">
-								<span class="ml-lg"><a ng-click="openUpdate(item)"> Alterar</a></span>
-								<br/><br/>
-								<textarea class="form-control" ng-model="item.descricaoComentario"></textarea>
-								<button class="btn btn-default" ng-click="finalizar(item)">Finalizar</button>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
+                                <span class="ml-lg"><a ng-click="openUpdate(item)"> Alterar</a></span>
+                                <br/>
+                                <br/>
+                                <textarea class="form-control" ng-model="item.descricaoComentario"></textarea>
+                                <button class="btn btn-default" ng-click="finalizar(item)">Finalizar</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-		</div>
-	</div>
+        </div>
+    </div>
 </div>
 <!-- /Modal Encaminhamentos -->

@@ -63,10 +63,9 @@
                     <div class="form-inline">
                         <p class="form-control-static mr-sm">Procurar proposições pelo número:</p>
                         <div class="form-group">
-                            <select ng-model="origem" ng-change="selectOrigem()" ng-options="origem.displayName for origem in origens" class="form-control">
+                            <select ng-model="origem" ng-change="selectOrigemComissoes()" ng-options="origem.displayName for origem in origens" class="form-control">
                                 <option value="" selected>Casa legislativa</option>
-                                <option value="CAMARA">CAMARA</option>
-                                <option value="SENADO">SENADO</option>
+
                             </select>
                         </div>
                         <div class="form-group">
@@ -110,10 +109,10 @@
 
                             <div class=" list-proposicao">
                                 <div class=" list-proposicao">
-                                    <div class="list-proposicao-item" ng-repeat="proposicao in proposicoesAvulsas | filter:buscaPalavraChave" ng-click="adicionarProposicaoAvulsa(proposicao)">
+                                    <div class="list-proposicao-item" ng-repeat="proposicao in proposicoesAvulsas | filter:buscaPalavraChave">
                                         <div class="clearfix">
                                             <div class="pull-left width-auto">
-                                                <h4 class="list-group-item-heading">{{proposicao.sigla}}</h4>
+                                                <h4 ng-click="adicionarProposicao(proposicao)" class="list-group-item-heading">{{proposicao.sigla}}</h4>
                                             </div>
 
                                             <div class="pull-right width-auto">
@@ -124,16 +123,18 @@
 
                                             </div>
                                         </div>
-                                        <p>{{proposicao.ementa}}</p>
-                                        <p>
-                                            <strong>Origem: </strong>{{proposicao.origem}}
-                                        </p>
-                                        <p>
-                                            <strong>Comissao: </strong>{{proposicao.comissao}}
-                                        </p>
-                                        <p ng-show="proposicao.ultimoComentario">
-                                            <strong>Último comentário: </strong> {{proposicao.ultimoComentario.descricao}}
-                                        </p>
+                                        <div ng-click="adicionarProposicao(proposicao)">
+                                            <p>{{proposicao.ementa}}</p>
+                                            <p>
+                                                <strong>Origem: </strong>{{proposicao.origem}}
+                                            </p>
+                                            <p>
+                                                <strong>Comissao: </strong>{{proposicao.comissao}}
+                                            </p>
+                                            <p ng-show="proposicao.ultimoComentario">
+                                                <strong>Último comentário: </strong> {{proposicao.ultimoComentario.descricao}}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -149,7 +150,7 @@
                                 <div class="list-proposicao-item" ng-repeat="proposicaoPauta in pauta.proposicoesDaPauta | filter:buscaPalavraChave">
                                     <div class="clearfix">
                                         <div class="pull-left width-auto">
-                                            <h4 class="list-group-item-heading" ng-click="adicionarProposicao(pauta,proposicaoPauta)">{{proposicaoPauta.proposicao.sigla}}</h4>
+                                            <h4 class="list-group-item-heading" ng-click="adicionarProposicao(proposicaoPauta.proposicao,pauta)">{{proposicaoPauta.proposicao.sigla}}</h4>
                                         </div>
 
                                         <div class="pull-right width-auto">
@@ -161,7 +162,7 @@
                                                 <i class="fa fa-external-link-square"></i> </a>
                                         </div>
                                     </div>
-                                    <div ng-click="adicionarProposicao(pauta,proposicaoPauta)">
+                                    <div ng-click="adicionarProposicao(proposicaoPauta.proposicao,pauta)">
                                         <p>{{proposicaoPauta.proposicao.ementa}}</p>
                                         <p>
                                             <strong>Origem: </strong>{{pauta.origem}}

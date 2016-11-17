@@ -4,5 +4,6 @@ node_modules
 scripts/all.js
 index.html
 index-dev.html
+index-relatorio.html
 keycloak.json
 scripts/app.js

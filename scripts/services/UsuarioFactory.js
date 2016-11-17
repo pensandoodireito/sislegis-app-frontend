@@ -10,6 +10,11 @@ angular.module('sislegisapp').factory('UsuarioResource', function($resource, BAC
 			method : 'GET',
 			isArray : false
 		},
+        'me' : {
+			method : 'GET',
+			isArray : false,
+            url : BACKEND + "/usuarios/me",
+		},
 		'update' : {
 			method : 'PUT'
 		},
@@ -22,7 +27,12 @@ angular.module('sislegisapp').factory('UsuarioResource', function($resource, BAC
 			url : BACKEND + "/usuarios/proposicoesSeguidas",
 			method : 'GET',
 			isArray : true
-		}
+		},
+        'buscaPorUsuario':{
+            url : BACKEND + "/usuarios/:method",
+			method : 'GET',
+			isArray : true
+        }
 		
 		
 	});
