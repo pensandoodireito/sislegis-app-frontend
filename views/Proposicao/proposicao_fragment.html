@@ -137,7 +137,7 @@
                     </div>
                 </div>
                 <div>
-                    <label>Responsável: </label>
+                    <label title="Atribuída em {{proposicao.foiAtribuida| date:'shortDate'}} - analisada em {{proposicao.foiAnalisada| date:'shortDate'}}">Responsável: </label>
                     <div>
                         <input typeahead-editable="false" type="text" ng-model="proposicao.responsavel" placeholder="Procurar usuário" ng-required="true"
                         typeahead="proposicao as proposicao.nome for proposicao in getUsuarios($viewValue, buscaGeral)" ng-focus="setSelectedProposicao(proposicao)"

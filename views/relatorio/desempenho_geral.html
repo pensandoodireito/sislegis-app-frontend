@@ -1,0 +1,98 @@
+<style>
+    i {
+        margin-right: 2pt;
+    }
+    
+    .periodo {
+        font-style: italic;
+    }
+    
+    .nomeEquipe {
+        font-weight: bolder;
+        font-size: large;
+    }
+     .legend {
+        width: 20px;
+        height: 10px;
+    }
+    
+    @media print {
+        .legend {
+             
+            -webkit-print-color-adjust: exact;
+        }
+    }
+</style>
+<section class="invoice">
+    
+    <div class="row no-print">
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-default " ng-click="printIt()"> <i class="fa fa-print"></i> Imprimir</button>
+
+        </div>
+    </div>
+</section>
+<h2>Efetividade da SAL - Desempenho Geral SAL</h2>
+<hr>
+
+<h3>Distribuição por equipe</h3>
+<table>
+
+    <tr>
+        <td style="vertical-align: top;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:300pt">Equipe</th>
+                        <th style="width:120pt">Total atribuído à equipe / Total Silegis</th>
+                        <th></th>
+                    </tr>
+
+                </thead>
+                <tbody>
+
+                    <tr ng-repeat="dados in PieData|orderBy:['label']">
+                        <td>{{dados.label}}
+                        </td>
+                        <td ng-show="dados.label!='Sem Equipe'" style="text-align:right">{{dados.equipe.totalEquipe}}/{{report.totalNoSislegis}} ({{(dados.equipe.totalEquipe*100)/(report.totalNoSislegis)|
+                            number:1}}%)
+                        </td>
+                        <td ng-show="dados.label=='Sem Equipe'" style="text-align:right">{{dados.value}}</td>
+                        <td>
+                            <div class="legend" style="background-color:{{dados.color}} !important"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </td>
+        <td style="padding-left:20px">
+            <canvas id="pieChart" height="120" width="120"></canvas>
+        </td>
+    </tr>
+
+</table>
+<hr>
+<h3>Proposições analisadas por membro da equipe no total/total atribuído a equipe</h3>
+<br>
+<div ng-repeat="equipe in report.equipes|orderBy:['nome']" style="page-break-inside: avoid; ">
+    <div class="nomeEquipe">{{equipe.nome}}</div>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th style="width:200pt">Nome</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="membro in equipe.membros|orderBy:['associadas','nome']">
+                <td>{{membro.nome}}</td>
+                <td style="text-align:right">{{membro.associadas}}/{{equipe.totalEquipe}}</td>
+            </tr>
+        </tbody>
+
+    </table>
+    <br>
+</div>

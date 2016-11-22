@@ -4,7 +4,7 @@ angular.module('sislegisapp')
     .controller('ProposicaoItemController', function ($scope, $window, $rootScope, $http, $filter, $routeParams, $location, $modal, $log, $timeout, toaster,
         ProposicaoResource, ComentarioResource, PosicionamentoResource, EquipeResource,
         EncaminhamentoProposicaoResource, ComentarioService, UsuarioResource,
-        TipoEncaminhamentoResource, Auth, TagResourceCache, $q,$sce, BACKEND) {
+        TipoEncaminhamentoResource, Auth, TagResource, TagResourceCache, $q,$sce, BACKEND) {
         
         $scope.macrotemas = TagResourceCache.listarTodos();
          
@@ -230,11 +230,13 @@ angular.module('sislegisapp')
         $scope.$watch('proposicao.explicacao', $scope.scheduleSaveTimer, true);
         $scope.$watch('proposicao.posicionamento', $scope.scheduleSaveTimer, true);
         $scope.$watch('proposicao.efetividade', $scope.scheduleSaveTimer, true);
-        $scope.$watch('proposicao.responsavel', $scope.scheduleSaveTimer, true);
+        
         $scope.$watch('proposicao.posicionamentoSupar', $scope.scheduleSaveTimer, true);
         $scope.$watch('proposicao.posicionamentoAtual', $scope.scheduleSaveTimer, true);
         $scope.$watch('proposicao.parecerSAL', $scope.scheduleSaveTimer, true);
         $scope.$watch('proposicao.equipe', $scope.validaEquipeSaver, true);
+        $scope.$watch('proposicao.responsavel', $scope.scheduleSaveTimer, true);
+
 
         $scope.trataAlteracaoDeEstado = function (newValue, oldValue, scope) {
 
@@ -244,24 +246,7 @@ angular.module('sislegisapp')
                 if ($scope.lastSaveTimer != null) {
                     $timeout.cancel($scope.lastSaveTimer);
                 }
-                switch (newValue) {
-                    case "EMANALISE":
-                        $scope.proposicao.foiEncaminhada = new Date().getTime();
-                        break;
-                    case "ANALISADA":
-                        $scope.proposicao.foiAnalisada = new Date().getTime();
-                        break;
-                    case "ADESPACHAR":
-                        $scope.proposicao.foiRevisada = new Date().getTime();
-                        break;
-                    case "DESPACHADA":
-                        $scope.proposicao.foiDespachada = new Date().getTime();
-                        break;
-
-                    default:
-                        break;
-                }
-                
+               
                 $scope.save($scope.proposicao, "Estado alterado", "Falhou ao alterar estado").then(function (data) {
                     console.log(data, $scope.estadoHandler);                
                     
@@ -432,11 +417,361 @@ angular.module('sislegisapp')
         }
 
     })
+    .controller('RelatorioCorpoTecnicoResponsavelController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster, $window, UsuarioResource,
+        RelatorioService, Auth, $q, $parse, BACKEND) {
+
+        $scope.filtrar = function () {
+            $scope.report = RelatorioService.get({ tipo: 'corpoTecnicoResponsavel', r: $scope.responsavel.id, i: getDateStr($scope.inicio), f: getDateStr($scope.fim) },
+                function (data) {
+                    $timeout($scope.initAllCharts, 1000, true);
+                });
+        }
+
+        $scope.getUsuarios = function (val, buscaGeral) {
+            var method = 'find';
+            var params = { method: method, nome: val };
+            return UsuarioResource.buscaPorUsuario(params, params, function (data) { }).$promise;
+
+        };
+        var getDateStr = function (data) {
+            if (data == null) {
+                return null;
+            }
+            var d = data;
+            return d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
+        }
+        $scope.setCalendar = function () {
+            $scope.openCalendar = function ($event, id) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                var opened = 'opened_' + id;
+                var model = $parse(opened);
+                model.assign($scope, true);
+                $scope.apply;
+
+            };
+
+
+            $scope.dateOptions = {
+                formatYear: 'yy',
+                startingDay: 1
+            };
+
+            $scope.format = 'dd/MM/yyyy';
+        };
+        $scope.setCalendar();
+        $scope.printIt = function () {
+            $window.print();
+        };
+    }
+        )
+    .controller('RelatorioCorpoTecnicoPosicoesController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster, $window,
+        RelatorioService, Auth, $q, $parse, BACKEND) {
+        $scope.printIt = function () {
+            $window.print();
+        };
+        $scope.initAllCharts=function(){
+            for (var index = 0; index < $scope.report.equipes.length; index++) {
+                        var element = $scope.report.equipes[index];
+                        $scope.initChart(element);
+            }
+        }
+        $scope.filtrar = function () {
+            $scope.report = RelatorioService.get({ tipo: 'corpoTecnicoPosicoes', i: getDateStr($scope.inicio), f: getDateStr($scope.fim) },
+                function (data) {
+                    $timeout($scope.initAllCharts, 1000, true);                    
+                });
+        }
+        
+        $scope.colors={'favoravel':'#f56954', 'favoravelEmendas':'#00a65a', 'contrario':'#f39c12', 'nadaaopor':'#00c0ef', 'monitorar':'#3c8dbc'};;
+        $scope.initChart = function (dados) {
+            console.log(dados);
+            if(!dados){return;}
+             //#d2d6de
+             var PieData = [];
+             var colorArray = $scope.colors;
+             // Get context with jQuery - using jQuery's .get() method.
+             var pieChartCanvas = $("#pieChart_"+dados.id).get(0).getContext("2d");
+             var pieChart = new Chart(pieChartCanvas);
+             
+             for (var posicao in dados) {
+                 if(!colorArray[posicao]){
+                     continue;
+                 }
+                 var totalPosicao = dados[posicao];
+                 PieData.push({
+                     value: totalPosicao,
+                     color: colorArray[posicao],
+                     highlight: colorArray[posicao],
+                     label:posicao
+                 });
+
+             }
+             
+
+             var pieOptions = {
+                 //Boolean - Whether we should show a stroke on each segment
+                 segmentShowStroke: true,
+                 //String - The colour of each segment stroke
+                 segmentStrokeColor: "#fff",
+                 //Number - The width of each segment stroke
+                 segmentStrokeWidth: 1,
+                 //Number - The percentage of the chart that we cut out of the middle
+                 percentageInnerCutout: 20, // This is 0 for Pie charts
+                 //Number - Amount of animation steps
+                 animationSteps: 1,
+                 //String - Animation easing effect
+                //  animationEasing: "easeOutBounce",
+                 //Boolean - Whether we animate the rotation of the Doughnut
+                 animateRotate: false,
+                 //Boolean - Whether we animate scaling the Doughnut from the centre
+                 animateScale: false,
+                 //Boolean - whether to make the chart responsive to window resizing
+                 responsive: false,
+                 // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+                 maintainAspectRatio: true,
+                 //String - A legend template
+                 legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
+                 //String - A tooltip template
+                 tooltipTemplate: "<%=label%> <%=value %>"
+             };
+             //Create pie or douhnut chart
+             // You can switch between pie and douhnut using the method below.
+             pieChart.Doughnut(PieData, pieOptions);
+         };
+            
+      
+        var getDateStr = function (data) {
+            if (data == null) {
+                return null;
+            }
+            var d = data;
+            return d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
+        }
+        $scope.setCalendar = function () {
+            $scope.openCalendar = function ($event, id) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                var opened = 'opened_' + id;
+                var model = $parse(opened);
+                model.assign($scope, true);
+                $scope.apply;
+
+            };
+
+
+            $scope.dateOptions = {
+                formatYear: 'yy',
+                startingDay: 1
+            };
+
+            $scope.format = 'dd/MM/yyyy';
+        };
+        $scope.setCalendar();
+    }
+     )
+    .controller('RelatorioCorpoTecnicoController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster, $window,
+        RelatorioService, Auth, $q, TarefaResource,$parse, BACKEND) {
+        $scope.printIt = function () {
+            $window.print();
+        };
+        $scope.formatTempo = function(t){
+            if(!t){
+                return  {
+                         v:null,
+                         l:"ND"
+                     }  ;
+            }else{
+                if(t>(60*24*1000*60)){
+                    //em dias
+                    var dias = t/(60*24*1000*60);
+                     return {
+                         v:dias,
+                         l:"dias"
+                     }  
+                }else{
+                    //em horas
+                    var horas = t/(60*60*1000);
+                    return {
+                         v:horas,
+                         l:"horas"
+                     }                      
+                }
+            }
+        }
+        $scope.filtrar = function(){
+        $scope.report = RelatorioService.get({ tipo: 'corpoTecnico',i:getDateStr($scope.inicio),f:getDateStr($scope.fim) },
+            function (data) {
+
+            });
+        }
+var getDateStr=function(data){
+                if(data==null){
+                    return null;
+                }
+                var d = data;
+                return d.getDate()+"-"+(d.getMonth()+1)+"-"+d.getFullYear();
+            }
+        $scope.setCalendar = function () {
+            $scope.openCalendar = function ($event, id) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                var opened = 'opened_' + id;
+                var model = $parse(opened);
+                model.assign($scope, true);
+                $scope.apply;
+
+            };
+
+
+            $scope.dateOptions = {
+                formatYear: 'yy',
+                startingDay: 1
+            };
+
+            $scope.format = 'dd/MM/yyyy';
+        };
+         $scope.setCalendar();
+        }
+        )
+     .controller('RelatorioDesempenhoSALController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster,$window,
+        RelatorioService, Auth, $q, TarefaResource, BACKEND) {
+         $scope.printIt = function () {
+             $window.print();
+         };
+         $scope.report = RelatorioService.get({ tipo: 'desempenho' },
+             function (data) {
+                 $scope.initChart(data);
+             });
+         $scope.PieData = [];
+         $scope.initChart = function (dados) {
+             //#d2d6de
+             var colorArray = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc'];
+             // Get context with jQuery - using jQuery's .get() method.
+             var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
+             var pieChart = new Chart(pieChartCanvas);
+             var equipes = dados.equipes;
+             for (var index = 0; index < equipes.length; index++) {
+                 var equipe = equipes[index];
+                 $scope.PieData.push({
+                     value: equipe.totalEquipe,
+                     color: colorArray[index],//"#f56954",
+                     highlight: colorArray[index],
+                     label: equipe.nome,
+                     equipe: equipe
+                 });
+
+             }
+             $scope.PieData.push({
+                 value: dados.semEquipe,
+                 color: "#d2d6de",
+                 highlight: "#d2d6de",
+                 label: "Sem Equipe",
+                 equipe: { e: { id: -1 } }
+             });
+
+
+
+             var pieOptions = {
+                 //Boolean - Whether we should show a stroke on each segment
+                 segmentShowStroke: true,
+                 //String - The colour of each segment stroke
+                 segmentStrokeColor: "#fff",
+                 //Number - The width of each segment stroke
+                 segmentStrokeWidth: 1,
+                 //Number - The percentage of the chart that we cut out of the middle
+                 percentageInnerCutout: 20, // This is 0 for Pie charts
+                 //Number - Amount of animation steps
+                 animationSteps: 100,
+                 //String - Animation easing effect
+                 animationEasing: "easeOutBounce",
+                 //Boolean - Whether we animate the rotation of the Doughnut
+                 animateRotate: true,
+                 //Boolean - Whether we animate scaling the Doughnut from the centre
+                 animateScale: false,
+                 //Boolean - whether to make the chart responsive to window resizing
+                 responsive: false,
+                 // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+                 maintainAspectRatio: true,
+                 //String - A legend template
+                 legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
+                 //String - A tooltip template
+                 tooltipTemplate: "<%=label%> <%=value %> analisados no mês"
+             };
+             //Create pie or douhnut chart
+             // You can switch between pie and douhnut using the method below.
+             pieChart.Doughnut($scope.PieData, pieOptions);
+         };
+            
+      })
+     .controller('RelatorioController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster,
+        DashboardService, Auth, $q, TarefaResource, BACKEND) {
+             $scope.PieData = [];
+        $scope.initChart = function () {
+            //#d2d6de
+            var colorArray = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc'];
+            // Get context with jQuery - using jQuery's .get() method.
+            var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
+            var pieChart = new Chart(pieChartCanvas);
+
+            for (var index = 0; index < $scope.info.equipes.length; index++) {
+                var equipe = $scope.info.equipes[index];
+                $scope.PieData.push({
+                    value: equipe.totalEmAnalise + equipe.totalProcessada,
+                    color: colorArray[index],//"#f56954",
+                    highlight: colorArray[index],
+                    label: equipe.e.nome,
+                    equipe: equipe
+                });
+
+            }
+            $scope.PieData.push({
+                value: $scope.info.semEquipe,
+                color: "#d2d6de",
+                highlight: "#d2d6de",
+                label: "Sem Equipe",
+                equipe: {e:{id:-1}}
+            });
+
+
+
+            var pieOptions = {
+                //Boolean - Whether we should show a stroke on each segment
+                segmentShowStroke: true,
+                //String - The colour of each segment stroke
+                segmentStrokeColor: "#fff",
+                //Number - The width of each segment stroke
+                segmentStrokeWidth: 1,
+                //Number - The percentage of the chart that we cut out of the middle
+                percentageInnerCutout: 20, // This is 0 for Pie charts
+                //Number - Amount of animation steps
+                animationSteps: 100,
+                //String - Animation easing effect
+                animationEasing: "easeOutBounce",
+                //Boolean - Whether we animate the rotation of the Doughnut
+                animateRotate: true,
+                //Boolean - Whether we animate scaling the Doughnut from the centre
+                animateScale: false,
+                //Boolean - whether to make the chart responsive to window resizing
+                responsive: true,
+                // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+                maintainAspectRatio: false,
+                //String - A legend template
+                legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
+                //String - A tooltip template
+                tooltipTemplate: "<%=label%> <%=value %> analisados no mês"
+            };
+            //Create pie or douhnut chart
+            // You can switch between pie and douhnut using the method below.
+            pieChart.Doughnut($scope.PieData, pieOptions);
+        }
+        $scope.info = DashboardService.get($scope.initChart);
+        })
 
     .controller('DashboardController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster,
         DashboardService, Auth, $q, TarefaResource, BACKEND) {
         $scope.Auth = Auth;
-
+     
         $scope.update = function () {
             if (!window.o) {
                 return;
@@ -867,7 +1202,13 @@ angular.module('sislegisapp')
             $scope.filtro.sigla = $routeParams.filter.sigla;
             $scope.filtro.equipe = $routeParams.filter.equipe;
             $scope.filtro.estado = $routeParams.filter.estado;
-            $scope.filtro.responsavel = $routeParams.filter.responsavel;
+            if($routeParams.filter.responsavel){
+                $scope.filtro.responsavel = $routeParams.filter.responsavel;
+            }else if($routeParams.filter.idResponsavel){
+                $scope.filtro.responsavel = {
+                    id:$routeParams.filter.idResponsavel
+                    };
+            }
         } else {
             console.log(" nenhum parametro filtro ativo");
         }
