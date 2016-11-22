@@ -230,6 +230,7 @@ angular.module('sislegisapp')
         $scope.$watch('proposicao.explicacao', $scope.scheduleSaveTimer, true);
         $scope.$watch('proposicao.posicionamento', $scope.scheduleSaveTimer, true);
         $scope.$watch('proposicao.efetividade', $scope.scheduleSaveTimer, true);
+        $scope.$watch('proposicao.resultadoCongresso', $scope.scheduleSaveTimer, true);
         
         $scope.$watch('proposicao.posicionamentoSupar', $scope.scheduleSaveTimer, true);
         $scope.$watch('proposicao.posicionamentoAtual', $scope.scheduleSaveTimer, true);
@@ -320,9 +321,17 @@ angular.module('sislegisapp')
 
             $rootScope.savingItem = item;
             $rootScope.inactivateSpinner = true;
-            var successCallback = function () {
+            var successCallback = function (prop) {
                 $rootScope.inactivateSpinner = false;
                 toaster.pop('success', msgSucesso);
+                if((item.equipe==null && prop.equipe!=null) || (item.equipe!=null && prop.equipe!=null && prop.equipe.id!=item.equipe.id)) {
+                    item.equipe=prop.equipe;
+                }
+                item.totalEncaminhamentos=prop.totalEncaminhamentos;
+                item.totalComentarios=prop.totalComentarios;
+                item.totalBriefings=prop.totalBriefings;
+                item.totalNotasTecnicas=prop.totalNotasTecnicas;
+                item.totalEmendas=prop.totalEmendas;
                 deferred.resolve(item);
             };
             var errorCallback = function () {
@@ -336,7 +345,10 @@ angular.module('sislegisapp')
 
 
         $scope.incluirComentario = function (item) {
-            
+            if(item.comentarioTmp==null || item.comentarioTmp.trim().length==0){
+                toaster.pop('error', 'Digite um texto para criar o comentário');
+                return;
+            }
             var comentario = new ComentarioResource();
             comentario.descricao = item.comentarioTmp;
             item.comentarioTmp = null;
@@ -465,6 +477,136 @@ angular.module('sislegisapp')
         };
     }
         )
+        
+         .controller('RelatorioEfetividadeCongressoController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster, $window,
+        RelatorioService, Auth, $q, $parse, BACKEND) {
+        $scope.printIt = function () {
+            $window.print();
+        };
+        $scope.initAllCharts=function(){
+            for (var index = 0; index < $scope.report.posicionamentos.length; index++) {
+                        var element = $scope.report.posicionamentos[index];
+                        $scope.initChart(element);
+            }
+        }
+        $scope.filtrar = function () {
+            $scope.report = RelatorioService.get({ tipo: 'efetividadeCongresso', i: getDateStr($scope.inicio), f: getDateStr($scope.fim) },
+                function (data) {
+                    $timeout($scope.initAllCharts, 1000, true);                    
+                });
+        }
+        $scope.getXlated = function (res) {
+            switch (res) {
+                case 'APROVADA':
+                    return "Aprovado";
+                case 'NAO_APROVADA':
+                    return "Rejeitado";
+                case 'NAO_AVANCOU':
+                    return "Projeto não avançou na Comissão";
+
+
+                default:
+                    break;
+            }
+        }
+        
+        $scope.colors={'APROVADA':'#00a65a', 'NAO_APROVADA':'#f56954', 'NAO_AVANCOU':'#f39c12'};
+        $scope.initChart = function (posicionamento) {
+            
+            if(!posicionamento){return;}
+             
+                 
+                 var PieData = [];
+                 var colorArray = $scope.colors;
+                 // Get context with jQuery - using jQuery's .get() method.
+                 var pieChartCanvas = $("#pieChart_" + posicionamento.id).get(0).getContext("2d");
+                 var pieChart = new Chart(pieChartCanvas);
+
+
+
+                 PieData.push({
+                     value: posicionamento.APROVADA,
+                     color: colorArray['APROVADA'],
+                     highlight: colorArray['APROVADA'],
+                     label: 'Aprovados'
+                 });
+                 PieData.push({
+                     value: posicionamento.NAO_APROVADA,
+                     color: colorArray['NAO_APROVADA'],
+                     highlight: colorArray['NAO_APROVADA'],
+                     label: 'Rejeitados'
+                 });
+                 PieData.push({
+                     value: posicionamento.NAO_AVANCOU,
+                     color: colorArray['NAO_AVANCOU'],
+                     highlight: colorArray['NAO_AVANCOU'],
+                     label: 'Não avançou'
+                 });
+                 
+
+
+                 var pieOptions = {
+                     //Boolean - Whether we should show a stroke on each segment
+                     segmentShowStroke: true,
+                     //String - The colour of each segment stroke
+                     segmentStrokeColor: "#fff",
+                     //Number - The width of each segment stroke
+                     segmentStrokeWidth: 1,
+                     //Number - The percentage of the chart that we cut out of the middle
+                     percentageInnerCutout: 20, // This is 0 for Pie charts
+                     //Number - Amount of animation steps
+                     animationSteps: 1,
+                     //String - Animation easing effect
+                     //  animationEasing: "easeOutBounce",
+                     //Boolean - Whether we animate the rotation of the Doughnut
+                     animateRotate: false,
+                     //Boolean - Whether we animate scaling the Doughnut from the centre
+                     animateScale: false,
+                     //Boolean - whether to make the chart responsive to window resizing
+                     responsive: false,
+                     // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+                     maintainAspectRatio: true,
+                     //String - A legend template
+                     legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
+                     //String - A tooltip template
+                     tooltipTemplate: "<%=label%> <%=value %>"
+                 };
+                 //Create pie or douhnut chart
+                 // You can switch between pie and douhnut using the method below.
+                 pieChart.Doughnut(PieData, pieOptions);
+             
+         };
+            
+      
+        var getDateStr = function (data) {
+            if (data == null) {
+                return null;
+            }
+            var d = data;
+            return d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
+        }
+        $scope.setCalendar = function () {
+            $scope.openCalendar = function ($event, id) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                var opened = 'opened_' + id;
+                var model = $parse(opened);
+                model.assign($scope, true);
+                $scope.apply;
+
+            };
+
+
+            $scope.dateOptions = {
+                formatYear: 'yy',
+                startingDay: 1
+            };
+
+            $scope.format = 'dd/MM/yyyy';
+        };
+        $scope.setCalendar();
+    }
+     )
     .controller('RelatorioCorpoTecnicoPosicoesController', function ($scope, $rootScope, $http, $filter, $routeParams, $location, $log, $timeout, toaster, $window,
         RelatorioService, Auth, $q, $parse, BACKEND) {
         $scope.printIt = function () {

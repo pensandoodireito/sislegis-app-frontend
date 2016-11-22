@@ -145,6 +145,8 @@ module.config(['$routeProvider', function ($routeProvider) {
         .when('/corpotecnico_equipes_posicoes', { templateUrl: 'views/relatorio/corpo_tecnico_posicoes_equipe.html', controller: 'RelatorioCorpoTecnicoPosicoesController' })
         .when('/corpotecnico_responsavel', { templateUrl: 'views/relatorio/corpo_tecnico_detalhe_membro.html', controller: 'RelatorioCorpoTecnicoResponsavelController' })
         
+        .when('/efetividade_congresso', { templateUrl: 'views/relatorio/efetividade_congresso.html', controller: 'RelatorioEfetividadeCongressoController' })
+        
         .when('/notatecnica/:notaid', { templateUrl: 'views/relatorio/notatecnica.html', controller: 'NotaTecnicaController',
         
                  })   

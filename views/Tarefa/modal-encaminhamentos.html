@@ -11,14 +11,14 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Encaminhamentos</div>
 				<div class="panel-body line-9 rol-vert fontsize-sm">
-					<div class="list-group" ng-repeat="item in encaminhamentos">
+					<div class="list-group" ng-repeat="item in encaminhamentos|filter:filtro">
 						<div class="divider-bottom">
 							<p><strong>{{item.tipoEncaminhamento.nome}}</strong></p>
-							<p><strong>Responsável: </strong>{{item.responsavel.nome}}</p>
+							<p><strong>Associado para: </strong>{{item.responsavel.nome}}</p>
 							<p ng-show="item.dataHoraLimite"><strong>Prazo: </strong>{{item.dataHoraLimite | date: 'dd/MM/yyyy HH:mm'}}</p>
 							<p ng-show="item.descricao">{{item.descricao}}</p>
 							<div class="mt-sm" ng-show="item.comentarioFinalizacao">
-								<p>Feito por: <strong>{{item.comentarioFinalizacao.autor.nome}}</strong></p>
+								<p>Finalizado por: <strong>{{item.comentarioFinalizacao.autor.nome}}</strong></p>
                                 <p>Data: {{item.comentarioFinalizacao.dataCriacao | date: 'dd/MM/yyyy'}}</p>
                                 <p ng-show="item.comentarioFinalizacao.descricao">Comentário: {{item.comentarioFinalizacao.descricao}}</p>
 							</div>
