@@ -1,0 +1,196 @@
+<style>
+    i {
+        margin-right: 2pt;
+    }
+    
+    .periodo {
+        font-style: italic;
+    }
+    
+    .nomeEquipe {
+        font-weight: bolder;
+        font-size: large;
+    }
+    
+    .relatTable {
+        width: 100%;
+    }
+    
+    table.relatTable > thead >tr> th {
+        vertical-align: text-top;
+        text-align: center;
+        padding: 5px;
+    }
+    
+    table.relatTable > tbody > tr > td {
+        text-align: center;
+        padding: 5px;
+    }
+    
+    .legend {
+        width: 20px;
+        height: 10px;
+        margin-left: 5px;
+    }
+    
+    @media print {
+        .legend {
+            -webkit-print-color-adjust: exact;
+        }
+    }
+</style>
+<section class="invoice">
+
+
+    <div class="row no-print">
+        <div class="col-xs-12">
+
+            <div class="col-sm-6 col-xs-6">
+                <label>Selecione o período:</label>
+                <div class="input-group date">
+                    <div class="col-sm-6">
+                        <div class="input-group ">
+                            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="inicio" date-type="string" is-open="opened_inicio"
+                            min-date="minDate" max-date="'2020-06-22'" current-text="Hoje" datepicker-options="dateOptions"
+                            placeholder="Início" close-text="Fechar" readonly clear-text="Limpar" /> <span class="input-group-btn">
+							             <button type="button" class="btn btn-default" ng-click="openCalendar($event,'inicio')">
+								                <i class="glyphicon glyphicon-calendar"></i></button></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+
+                        <div class="input-group ">
+                            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="fim" date-type="string" is-open="opened_fim"
+                            min-date="inicio" max-date="'2020-06-22'" current-text="Hoje" datepicker-options="dateOptions"
+                            placeholder="Fim" close-text="Fechar" readonly clear-text="Limpar" /> <span class="input-group-btn">
+							             <button type="button" class="btn btn-default" ng-click="openCalendar($event,'fim')">
+								                <i class="glyphicon glyphicon-calendar"></i></button></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <button type="button" class="btn btn-default " ng-click="filtrar()"> Filtrar</button>
+
+            <button type="button" class="btn btn-default " ng-click="printIt()"> <i class="fa fa-print"></i> Imprimir</button>
+
+        </div>
+    </div>
+</section>
+<h2>Efetividade da SAL – Desempenho Congresso</h2>
+<hr>
+
+
+
+<div ng-repeat="posicionamento in report.posicionamentos|orderBy:['id']" style="page-break-inside: avoid;">
+    <div class="periodo">Efetividade {{inicio|date:'dd/MM/yyyy'}} a {{fim|date:'dd/MM/yyyy'}}</div>
+    <div class="nomeEquipe">Posicionamento {{posicionamento.nome}} - {{posicionamento.total}} proposições</div>
+    <table class=".relatTable" border=1 width="100%">
+        <thead>
+            <tr>
+                <th style="width:15%;">Projeto</th>
+                <th style="width:30%;">O que faz</th>
+                <th style="width:10%;">Equipe</th>
+                <th style="width:10%;">Responsável</th>
+                <th style="width:15%;">Comissão</th>
+                <th style="width:10%;">Casa</th>
+                <th style="width:30%;">Resultado Votação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="proposicao in posicionamento.proposicoes">
+                <td style="vertical-align:text-top;">{{proposicao.sigla}}</td>
+                <td style="text-align:left;"><span ng-show="proposicao.tema!=null">{{proposicao.tema}}</span><span ng-show="proposicao.tema==null && proposicao.ementa!=null">{{proposicao.ementa}}</span></td>
+                <td style="text-align:center">{{proposicao.equipe}}</td>
+                <td style="text-align:center">{{proposicao.responsavel}}</td>
+                <td style="text-align:center">{{proposicao.comissaoPorExtenso}}</td>
+                <td style="text-align:center"><span ng-show="proposicao.origem=='CAMARA'">Câmara dos Deputados</span><span ng-show="proposicao.origem=='SENADO'">Senado Federal</span></td>
+                <td style="text-align:left">
+                    {{getXlated(proposicao.resultadoCongresso)}}
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+    <br>
+    <table ng-show="posicionamento.proposicoes.length>0">
+        <tbody>
+            <tr>
+                <td>
+                    <canvas label="{{posicionamento.id}}" id="pieChart_{{posicionamento.id}}" height="120" width="120"></canvas>
+                </td>
+                <td>
+                    <table style="margin-left:10px">
+                        <tr ng-repeat="(chave,cor) in colors">
+                            <td>{{getXlated(chave)}}</td>
+                            <td>
+                                <div class="legend" style="background-color:{{cor}} !important"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+</div>
+<div>
+    <div style="page-break-before: always;page-break-inside: avoid;">
+        <h3>Resumo do desempenho</h3>
+        <div class="periodo">Efetividade {{inicio|date:'dd/MM/yyyy'}} a {{fim|date:'dd/MM/yyyy'}}</div>
+        <table class=".relatTable" border=1>
+            <thead>
+                <tr>
+                    <th style="width:55%;"></th>
+                    <th style="width:45%;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Projetos contrários não aprovados</td>
+                    <td>{{report.totalContrarioNaoAprovado}} / {{report.totalComResultados}}</td>
+                </tr>
+                <tr>
+                    <td>Projetos contrários que não avançaram</td>
+                    <td>{{report.totalContrarioNaoAvancou}} / {{report.totalComResultados}}</td>
+                </tr>
+                <tr>
+                    <td>Projetos contrários aprovados</td>
+                    <td>{{report.totalContrarioAprovados}} / {{report.totalComResultados}}</td>
+                </tr>
+                <tr>
+                    <td>Projetos favoráveis aprovados</td>
+                    <td>{{report.totalFavoravelAprovados}} / {{report.totalComResultados}}</td>
+                </tr>
+                <tr>
+                    <td>Projetos favorávei que não avançaram</td>
+                    <td>{{report.totalFavoravelNaoAvancou}} / {{report.totalComResultados}}</td>
+                </tr>
+                <tr>
+                    <td>Projetos favoráveis não aprovados</td>
+                    <td>{{report.totalFavoravelNaoAprovados}} / {{report.totalComResultados}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <br/>
+        <table class=".relatTable" border=1>
+            <thead>
+                <tr>
+                    <th style="width:55%;"></th>
+                    <th style="width:45%;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Projetos com emendas acatadas</td>
+                    <td>{{report.totalEmendasAcatadas}} / {{report.totalComResultados}}</td>
+                </tr>
+                <tr>
+                    <td>Projetos com emendas acatadas pontos importantes</td>
+                    <td>{{report.totalEmendasPontosImportantes}} / {{report.totalComResultados}}</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+    </div>

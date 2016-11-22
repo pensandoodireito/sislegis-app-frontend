@@ -52,25 +52,31 @@
         </form>
         <div class="col-md-8">
             <div class="panel panel-default">
-                <div class="panel-heading">Encaminhamentos</div>
+                <div class="panel-heading">Encaminhamentos
+                    <div class="pull-right">
+                        <input name="filtro" type="checkbox" ng-model="showCompleted" ng-change="filtraLista()" id="showCompleted">
+                        <label for="showCompleted">Exibir finalizados</label>
+                    </div>
+                </div>
                 <div class="panel-body line-9 rol-vert fontsize-sm">
-                    <div class="list-group" ng-repeat="item in proposicao.listaEncaminhamentoProposicao|orderBy:'criadoEm':true">
-                        <div class="divider-bottom" >
+                    <div class="list-group" ng-repeat="item in proposicao.listaEncaminhamentoProposicao|filter:filtro|orderBy:'criadoEm':true">
+                        <div class="divider-bottom">
                             <div class="pull-right" title="Criado em {{item.criadoEm|date:'short'}}"><span style="color: #999;float: right;padding: 10px;font-size: 12px;" class="time"><i class="fa fa-clock-o"></i> {{item.criadoEm|date:'short'}}</span></div>
                             <p><strong>{{item.tipoEncaminhamento.nome}}</strong></p>
-                            <p ng-show="item.responsavel.nome!=null"><strong>Responsável: </strong>{{item.responsavel.nome}}</p>
+                            <p ng-show="item.responsavel.nome!=null"><strong>Associado para: </strong>{{item.responsavel.nome}}</p>
                             <p ng-show="item.responsavel.nome==null"><strong>Sem responsável associado</strong></p>
                             <p ng-show="item.dataHoraLimite!=null"><strong>Data e Hora Limite: </strong>{{item.dataHoraLimite | date: 'dd/MM/yyyy HH:mm'}}</p>
                             <p ng-show="item.dataHoraLimite==null"><strong>Sem data limite associada</strong></p>
 
                             <div ng-show="item.detalhes">
                                 <strong>Detalhes: </strong>
-                                <pre style="font-family: inherit; font-size: inherit; background: inherit; border: inherit; padding: inherit; color: inherit; margin: inherit; line-height: inherit;">{{item.detalhes}}</pre>
+                                <p ng-bind-html="getHTML(item.detalhes)" class="fakeHTML"></p>
                                 <br/>
                             </div>
 
-                            <div class="mt-sm" ng-show="item.comentarioFinalizacao">
-                                <p>Feito por: <strong>{{item.comentarioFinalizacao.autor.nome}}</strong></p>
+                            <div class="mt-sm" ng-show="item.finalizado==true">
+                                <p>Encaminhamento finalizado</p>
+                                <p>Finalizado por: <strong>{{item.comentarioFinalizacao.autor.nome}}</strong></p>
                                 <p>Data: {{item.comentarioFinalizacao.dataCriacao | date: 'dd/MM/yyyy'}}</p>
                                 <p ng-show="item.comentarioFinalizacao.descricao">Comentário: {{item.comentarioFinalizacao.descricao}}</p>
                             </div>
