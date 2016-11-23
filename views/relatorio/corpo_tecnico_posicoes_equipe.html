@@ -105,12 +105,12 @@
             <tr ng-repeat="equipe in report.equipes|orderBy:['nome']">
                 <td>{{equipe.nome}}</td>
 
-                <td style="text-align:center">{{equipe.favoravel}} ({{equipe.favoravel/equipe.total|number:1}}%) </td>
-                <td style="text-align:center">{{equipe.favoravelEmendas}} ({{equipe.favoravelEmendas/equipe.total|number:1}}%)</td>
-                <td style="text-align:center">{{equipe.contrario}} ({{equipe.contrario/equipe.total|number:1}}%)</td>
-                <td style="text-align:center">{{equipe.monitorar}} ({{equipe.monitorar/equipe.total|number:1}}%)</td>
-                <td style="text-align:center">{{equipe.nadaaopor}} ({{equipe.nadaaopor/equipe.total|number:1}}%)</td>
-                <td style="text-align:center">{{equipe.total}} ({{equipe.total/equipe.total|number:1}}%)</td>
+                <td style="text-align:center">{{equipe.favoravel}} ({{(equipe.favoravel*100)/equipe.total|number:1}}%) </td>
+                <td style="text-align:center">{{equipe.favoravelEmendas}} ({{(equipe.favoravelEmendas*100)/equipe.total|number:1}}%)</td>
+                <td style="text-align:center">{{equipe.contrario}} ({{(equipe.contrario*100)/equipe.total|number:1}}%)</td>
+                <td style="text-align:center">{{equipe.monitorar}} ({{(equipe.monitorar*100)/equipe.total|number:1}}%)</td>
+                <td style="text-align:center">{{equipe.nadaaopor}} ({{(equipe.nadaaopor*100)/equipe.total|number:1}}%)</td>
+                <td style="text-align:center">{{equipe.total}} ({{(equipe.total*100)/equipe.total|number:1}}%)</td>
             </tr>
             <tr>
                 <td></td>
