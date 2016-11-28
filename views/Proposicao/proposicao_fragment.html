@@ -137,7 +137,8 @@
                     </div>
                 </div>
                 <div>
-                    <label title="Atribuída em {{proposicao.foiAtribuida| date:'shortDate'}} - analisada em {{proposicao.foiAnalisada| date:'shortDate'}}">Responsável: </label>
+                    <label title="Atribuída em {{proposicao.foiAtribuida| date:'shortDate'}} - analisada em {{proposicao.foiAnalisada| date:'shortDate'}}">Responsável: </label> <span class="pull-right" style="font-size: 8pt;
+    color: #f39c12 !important;" ng-show="proposicao.responsavel!=null && proposicao.responsavel.equipe.id!=proposicao.equipe.id"> <i class="fa fa-warning"></i> Responsável está em equipe diferente da equipe da proposição</span>
                     <div>
                         <input typeahead-editable="false" type="text" ng-model="proposicao.responsavel" placeholder="Procurar usuário" ng-required="true"
                         typeahead="proposicao as proposicao.nome for proposicao in getUsuarios($viewValue, buscaGeral)" ng-focus="setSelectedProposicao(proposicao)"
@@ -243,7 +244,7 @@
             <div>
                 <label>Efetividade SAL: </label>
                 <div class="form-group">
-
+                    <label>Resultado emendas: </label>
                     <select ng-model="proposicao.efetividade" class="form-control">
                         <option value="null"></option>
                         <option value="ACATADA">Acatada</option>
@@ -253,15 +254,25 @@
 
                     </select>
                 </div>
+                <div class="form-group">
+                    <label>Resultado votação: </label>
+                    <select ng-model="proposicao.resultadoCongresso" class="form-control">
+                        <option value="EM_TRAMITACAO"></option>
+                        <option value="APROVADA">Aprovada</option>
+                        <option value="NAO_APROVADA">Rejeitada</option>
+                        <option value="NAO_AVANCOU">Não avançou</option>
+
+                    </select>
+                </div>
             </div>
 
             <div class="divider-top">
                 <label>Macrotema: </label>
 
                 <div>
-                    
-                    
-                    <div  style="margin-bottom:3px;margin-right:3px;float: left;" ng-repeat="t in proposicao.tags|orderBy:'tag'"><small style="border-radius:2px;white-space:nowrap;padding: 2px 5px 2px 5px;" class="bg-blue"> {{t.tag}} <i class="fa fa-remove" ng-click="updateTag(t,true)" style="cursor:pointer"></i></small></div> 
+
+
+                    <div style="margin-bottom:3px;margin-right:3px;float: left;" ng-repeat="t in proposicao.tags|orderBy:'tag'"><small style="border-radius:2px;white-space:nowrap;padding: 2px 5px 2px 5px;" class="bg-blue"> {{t.tag}} <i class="fa fa-remove" ng-click="updateTag(t,true)" style="cursor:pointer"></i></small></div>
                 </div>
 
 
@@ -276,7 +287,8 @@
                         </select>
 
                         <div class="input-group-btn">
-                            <button type="button" class="btn btn-success" ng-disabled="!selectedMacrotema||selectedMacrotema==null||selectedMacrotema==''"  ng-click="updateTag(selectedMacrotema,false);"><i class="fa fa-plus"></i></button>
+                            <button type="button" class="btn btn-success" ng-disabled="!selectedMacrotema||selectedMacrotema==null||selectedMacrotema==''"
+                            ng-click="updateTag(selectedMacrotema,false);"><i class="fa fa-plus"></i></button>
                         </div>
                     </div>
                 </div>
