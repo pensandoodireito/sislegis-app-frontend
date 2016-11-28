@@ -32,7 +32,7 @@
         <div class="panel panel-default" style="background-color:transparent;">
             <div class="panel-heading">
                 <div class="clearfix">
-                    <form action="{{getReportURL()}}" ng-submit="token=getAuthorization()" target="_relatorio" method="POST">
+                    <form action="{{getReportURL()}}" ng-submit="token=getAuthorization()" target="_relatorio" method="POST" enctype="application/x-www-form-urlencoded;utf-8">
                         <div class="box-tools pull-right">
                             <button type="submit" class="btn btn-default" title="Relatório"> <i class="fa  fa-file-word-o"></i> Gerar Relatório
                             </button>
@@ -111,7 +111,7 @@
 
                             <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6">
                                 <label>Por macrotema:</label>
-                                <select name="macrotema" ng-model="filtro.macrotema" class="form-control" ng-options="item as item.tag for item in macrotemas|orderBy:'tag'">
+                                <select name="macrotema" ng-model="filtro.macrotema" class="form-control" ng-options="item as item.tag for item in macrotemas |orderBy:'tag' track by item.tag">
                                     <option value=""></option>
                                 </select>
                             </div>
