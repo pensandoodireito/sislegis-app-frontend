@@ -138,7 +138,7 @@
                 </div>
                 <div>
                     <label title="Atribuída em {{proposicao.foiAtribuida| date:'shortDate'}} - analisada em {{proposicao.foiAnalisada| date:'shortDate'}}">Responsável: </label> <span class="pull-right" style="font-size: 8pt;
-    color: #f39c12 !important;" ng-show="proposicao.responsavel.equipe.id!=proposicao.equipe.id"> <i class="fa fa-warning"></i> Responsável está em equipe diferente da equipe da proposição</span>
+    color: #f39c12 !important;" ng-show="proposicao.responsavel!=null && proposicao.responsavel.equipe.id!=proposicao.equipe.id"> <i class="fa fa-warning"></i> Responsável está em equipe diferente da equipe da proposição</span>
                     <div>
                         <input typeahead-editable="false" type="text" ng-model="proposicao.responsavel" placeholder="Procurar usuário" ng-required="true"
                         typeahead="proposicao as proposicao.nome for proposicao in getUsuarios($viewValue, buscaGeral)" ng-focus="setSelectedProposicao(proposicao)"
