@@ -93,7 +93,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="proposicao in posicionamento.proposicoes">
-                <td style="vertical-align:text-top;">{{proposicao.sigla}}</td>
+                <td style="vertical-align:text-top;" title="Atribuída em {{proposicao.foiAtribuida|date:'short'}}, enviada para revisão em {{proposicao.foiAnalisada|date:'short'}} - Tempo para análise {{(proposicao.foiAnalisada-proposicao.foiAtribuida)/(1000*60)|number:1}} minutos">{{proposicao.sigla}}</td>
                 <td style="text-align:left;"><span ng-show="proposicao.tema!=null">{{proposicao.tema}}</span><span ng-show="proposicao.tema==null && proposicao.ementa!=null">{{proposicao.ementa}}</span></td>
                 <td style="text-align:center">{{proposicao.comissaoPorExtenso}}</td>
                 <td style="text-align:center"><span ng-show="proposicao.origem=='CAMARA'">Câmara dos Deputados</span><span ng-show="proposicao.origem=='SENADO'">Senado Federal</span></td>
