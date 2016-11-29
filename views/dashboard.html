@@ -1,3 +1,9 @@
+<style>
+    .me {
+        font-weight: bold;
+        font-size: 13pt;
+    }
+</style>
 <div class="content">
     <h3 ng-click="update()">Painel de Controle</h3>
     <div class="row" ng-show="Auth.isSecretario()">
@@ -78,7 +84,48 @@
 
         </div>
     </div>
-    <div class="row" ng-cloak ng-show="Auth.isDiretor()">
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="col-md-4">
+
+                <div class="info-box" ng-cloak ng-click="go('/Proposicao/consultar',{estado:'EMANALISE',responsavel:Auth.me})" style="cursor:pointer;">
+                    <span class="info-box-icon bg-olive"><i class="glyphicon glyphicon glyphicon-info-sign"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Proposições a analisar</span>
+                        <span class="info-box-number">{{info.totalProposicoesEmAnaliseParaMim}}</span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="info-box" ng-cloak ng-click="go('/Proposicao/consultar',{estado:'ANALISADA',responsavel:Auth.me})" style="cursor:pointer;">
+                    <span class="info-box-icon bg-olive"><i class="fa  fa-check-circle-o"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Proposições em revisão pelo Diretor</span>
+                        <span class="info-box-number">{{info.totalMinhasProposicoesEmRevisao}}</span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="info-box" ng-cloak ng-click="go('/Proposicao/consultar',{estado:'ADESPACHAR',responsavel:Auth.me})" style="cursor:pointer;">
+                    <span class="info-box-icon bg-olive"><i class="fa fa-check-circle"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Proposições a despachar pelo Secretário</span>
+                        <span class="info-box-number">{{info.totalMinhasProposicoesEmDespacho}}</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row" ng-cloak ng-show="Auth.isDiretor()||Auth.isEquipe()">
         <div class="col-md-12">
             <div class="box box-default">
                 <div class="box-header with-border">
@@ -135,7 +182,8 @@
                             <strong>Proposições em análise por membro da equipe</strong>
                         </p>
                         <div class="progress-group" ng-repeat="pessoal in info.minhaEquipe.pessoal|orderBy:['totalEmAnalise']:[true]">
-                            <span class="progress-text" style="cursor:pointer" ng-click="go('/Proposicao/consultar',{equipe:info.minhaEquipe.equipe,estado:'EMANALISE',responsavel:pessoal})">{{pessoal.nome}}</span>
+                            <span class="progress-text" style="cursor:pointer" ng-click="go('/Proposicao/consultar',{equipe:info.minhaEquipe.equipe,estado:'EMANALISE',responsavel:pessoal})">
+                            <span class="progress-text" ng-class="{'me':Auth.me.id==pessoal.id}">{{pessoal.nome}}</span>
                             <span class="progress-number"><b>{{pessoal.totalEmAnalise}}</b>/{{info.minhaEquipe.totalEmAnalise}}</span>
 
                             <div class="progress sm">
@@ -155,7 +203,7 @@
                             <strong>Proposições analisadas por membro da equipe no mês </strong>
                         </p>
                         <div class="progress-group" ng-repeat="pessoal in info.minhaEquipe.pessoal|orderBy:['totalProcessada']:[true]">
-                            <span class="progress-text">{{pessoal.nome}}</span>
+                            <span class="progress-text" ng-class="{'me':Auth.me.id==pessoal.id}">{{pessoal.nome}}</span>
                             <span class="progress-number"><b>{{pessoal.totalProcessada}}</b>/{{info.minhaEquipe.totalProcessada}}</span>
 
                             <div class="progress sm">
@@ -179,23 +227,12 @@
             </div>
         </div>
     </div>
-
-
 </div>
 <div class="row">
     <div class="col-md-12">
 
         <div class="col-md-5">
 
-            <div class="info-box" ng-cloak ng-click="go('/Proposicao/consultar',{estado:'EMANALISE',responsavel:Auth.me})" style="cursor:pointer;">
-                <span class="info-box-icon bg-olive"><i class="glyphicon glyphicon glyphicon-info-sign"></i></span>
-
-                <div class="info-box-content">
-                    <span class="info-box-text">Proposições em análise associadas a mim</span>
-                    <span class="info-box-number">{{info.totalProposicoesEmAnaliseParaMim}}</span>
-                </div>
-
-            </div>
             <div class="info-box" ng-cloak ng-click="go('/Proposicao/consultar',{estado:'EMANALISE'})" style="cursor:pointer;">
                 <span class="info-box-icon bg-yellow"><i class="glyphicon glyphicon-folder-open"></i></span>
 
